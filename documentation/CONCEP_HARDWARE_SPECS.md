@@ -18,8 +18,23 @@ This document outlines the hardware specifications for the Sipeed Tang Nano 4K d
 - **Camera Interface**: Supported via DVP interface.
 - **User I/O**: 44 pins across 4 banks.
 
+## Memory Map (Cortex-M3)
+- **ITCM/Flash**: 0x00000000 - 0x00007FFF (32KB)
+- **SRAM**: 0x20000000 - 0x200057FF (22KB)
+- **Peripherals**: 0x40000000
+
+## Peripheral Register Mapping
+### UART0 (Base: 0x40000000)
+| Register | Offset | Description |
+| --- | --- | --- |
+| DATA | 0x00 | Data register (R/W) |
+| STATE | 0x04 | Status register (R/W) |
+| CTRL | 0x08 | Control register (R/W) |
+| INTSTATUS | 0x0C | Interrupt status (R/W) |
+| BAUDDIV | 0x10 | Baudrate divider (R/W) |
+
 ## Implementation Status
 - [x] Research target hardware specifications.
 - [x] Document basic specifications.
-- [ ] Detailed memory map for Cortex-M3.
-- [ ] Peripheral register mapping.
+- [x] Detailed memory map for Cortex-M3.
+- [x] Peripheral register mapping.
