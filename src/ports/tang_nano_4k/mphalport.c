@@ -1,23 +1,30 @@
 /* mphalport.c */
 #include "py/stream.h"
 #include "mphalport.h"
+#include "uart.h"
 
 void mp_hal_init(void) {
-    // UART init
+    uart_init(115200);
 }
 
 void mp_hal_stdout_tx_strn(const char *str, mp_uint_t len) {
-    // UART tx
+    for (mp_uint_t i = 0; i < len; i++) {
+        uart_tx_char(str[i]);
+    }
 }
 
 int mp_hal_stdin_rx_chr(void) {
-    // UART rx
-    return 0;
+    return uart_rx_char();
 }
 
 void mp_hal_delay_ms(mp_uint_t ms) {
+    // Simple delay loop for now
+    for (volatile uint32_t i = 0; i < ms * 1000; i++) {
+        __asm__("nop");
+    }
 }
 
 mp_uint_t mp_hal_ticks_ms(void) {
+    // Return 0 as no timer is implemented yet
     return 0;
 }

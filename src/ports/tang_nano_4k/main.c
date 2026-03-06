@@ -4,12 +4,14 @@
 #include "py/gc.h"
 #include "py/stackctrl.h"
 #include "shared/runtime/pyexec.h"
+#include "mphalport.h"
 
-void mp_hal_init(void);
+// Heap for MicroPython
+static char heap[16 * 1024];
 
 int main(int argc, char **argv) {
     mp_stack_set_limit(2048);
-    // gc_init(heap, heap + sizeof(heap));
+    gc_init(heap, heap + sizeof(heap));
     mp_init();
     mp_hal_init();
 
