@@ -72,6 +72,8 @@ local variable referenced before assignment
 
 long int not supported in this build
 
+memory allocation failed, heap is locked
+
 module not found
 
 multiple bases have instance lay-out conflict

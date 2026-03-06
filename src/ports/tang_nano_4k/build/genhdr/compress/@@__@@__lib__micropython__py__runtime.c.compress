@@ -17,4 +17,5 @@ object not an iterator
 generator raised StopIteration
 exceptions must derive from BaseException
 can't import name %q
+memory allocation failed, heap is locked
 can't convert to int

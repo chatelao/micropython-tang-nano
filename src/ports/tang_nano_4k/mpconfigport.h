@@ -4,6 +4,16 @@
 // options to control how MicroPython is built
 #define MICROPY_CONFIG_ROM_LEVEL (MICROPY_CONFIG_ROM_LEVEL_MINIMUM)
 
+// Enable GC and REPL
+#define MICROPY_ENABLE_GC (1)
+#define MICROPY_HELPER_REPL (1)
+
+// Reduce error reporting to save space
+#define MICROPY_ERROR_REPORTING (MICROPY_ERROR_REPORTING_TERSE)
+
+// Disable float to save space
+#define MICROPY_PY_BUILTINS_FLOAT (0)
+
 // type definitions for the specific machine
 typedef intptr_t mp_int_t; // must be pointer size
 typedef uintptr_t mp_uint_t; // must be pointer size

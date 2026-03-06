@@ -30,6 +30,8 @@ SECTIONS
         *(.bss*)
         *(COMMON)
         _ebss = .;
+        _end = .;
+        end = .;
     } > SRAM
 
     .stack :
