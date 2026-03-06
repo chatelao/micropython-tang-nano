@@ -1,0 +1,18 @@
+# Build artifacts
+build/
+src/ports/tang_nano_4k/build/
+
+# External dependencies
+src/lib/micropython/
+
+# Temporary files
+*.o
+*.P
+*.map
+*.elf
+*.bin
+*.txt.log
+*.log
+
+# Git files
+.DS_Store
