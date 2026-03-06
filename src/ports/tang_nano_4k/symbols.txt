@@ -1,0 +1,7 @@
+00000800 A STACK_SIZE
+20000000 B _ebss
+20000000 B _edata
+20000800 B _estack
+00000000 B _etext
+20000000 B _sbss
+20000000 B _sdata

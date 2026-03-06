@@ -2,13 +2,11 @@
 
 Next steps for the MicroPython for Tang Nano 4K project:
 
-- [ ] 4. Integrate MicroPython core and generate required headers (QSTRs, version, etc.).
-- [ ] 5. Resolve compilation issues in `main.c`, `mphalport.c`, and `uart.c`.
-- [ ] 6. Successfully link the firmware and generate `firmware.bin`.
-- [ ] 7. Implement basic GPIO and LED control (Machine.Pin class).
-- [ ] 8. Implement timer and delay using Cortex-M3 SysTick (Machine.Timer class).
-- [ ] 9. Implement basic machine module with UART class.
-- [ ] 10. Research and document external flash interface for MicroPython filesystem.
+- [ ] 7. Integrate MicroPython core and generate required headers (QSTRs, version, etc.).
+- [ ] 8. Resolve compilation issues in `main.c`, `mphalport.c`, and `uart.c`.
+- [ ] 9. Successfully link the firmware and generate `firmware.bin`.
+- [ ] 10. Implement basic GPIO and LED control (Machine.Pin class).
+- [ ] 11. Implement timer and delay using Cortex-M3 SysTick (Machine.Timer class).
 
 ## Past Steps
 - [x] 1. Initialize project structure and documentation.

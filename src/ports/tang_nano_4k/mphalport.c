@@ -7,10 +7,11 @@ void mp_hal_init(void) {
     uart_init(115200);
 }
 
-void mp_hal_stdout_tx_strn(const char *str, mp_uint_t len) {
-    for (mp_uint_t i = 0; i < len; i++) {
+mp_uint_t mp_hal_stdout_tx_strn(const char *str, size_t len) {
+    for (size_t i = 0; i < len; i++) {
         uart_tx_char(str[i]);
     }
+    return len;
 }
 
 int mp_hal_stdin_rx_chr(void) {

@@ -1,0 +1,58 @@
+build/py/modio.o: ../../lib/micropython/py/modio.c \
+ /usr/include/newlib/assert.h /usr/include/newlib/_ansi.h \
+ /usr/include/newlib/newlib.h /usr/include/newlib/_newlib_version.h \
+ /usr/include/newlib/sys/config.h /usr/include/newlib/machine/ieeefp.h \
+ /usr/include/newlib/sys/features.h /usr/include/newlib/string.h \
+ /usr/include/newlib/sys/reent.h /usr/include/newlib/_ansi.h \
+ /usr/lib/gcc/arm-none-eabi/13.2.1/include/stddef.h \
+ /usr/include/newlib/sys/cdefs.h \
+ /usr/include/newlib/machine/_default_types.h \
+ /usr/include/newlib/sys/_types.h /usr/include/newlib/machine/_types.h \
+ /usr/include/newlib/sys/lock.h /usr/include/newlib/sys/string.h \
+ ../../lib/micropython/py/runtime.h ../../lib/micropython/py/mpstate.h \
+ /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h \
+ ../../lib/micropython/py/mpconfig.h \
+ /usr/lib/gcc/arm-none-eabi/13.2.1/include/limits.h mpconfigport.h \
+ ../../lib/micropython/py/mpthread.h ../../lib/micropython/py/misc.h \
+ /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdbool.h \
+ build/genhdr/compressed.data.h ../../lib/micropython/py/nlr.h \
+ ../../lib/micropython/py/obj.h ../../lib/micropython/py/qstr.h \
+ build/genhdr/qstrdefs.generated.h ../../lib/micropython/py/mpprint.h \
+ ../../lib/micropython/py/runtime0.h ../../lib/micropython/py/objlist.h \
+ ../../lib/micropython/py/objexcept.h ../../lib/micropython/py/objtuple.h \
+ build/genhdr/root_pointers.h ../../lib/micropython/py/pystack.h \
+ ../../lib/micropython/py/cstack.h ../../lib/micropython/py/builtin.h \
+ ../../lib/micropython/py/stream.h ../../lib/micropython/py/mperrno.h \
+ /usr/include/newlib/errno.h /usr/include/newlib/sys/errno.h \
+ ../../lib/micropython/py/binary.h ../../lib/micropython/py/objarray.h \
+ ../../lib/micropython/py/objstringio.h \
+ ../../lib/micropython/py/frozenmod.h
+../../lib/micropython/py/modio.c :
+ /usr/include/newlib/assert.h /usr/include/newlib/_ansi.h :
+ /usr/include/newlib/newlib.h /usr/include/newlib/_newlib_version.h :
+ /usr/include/newlib/sys/config.h /usr/include/newlib/machine/ieeefp.h :
+ /usr/include/newlib/sys/features.h /usr/include/newlib/string.h :
+ /usr/include/newlib/sys/reent.h /usr/include/newlib/_ansi.h :
+ /usr/lib/gcc/arm-none-eabi/13.2.1/include/stddef.h :
+ /usr/include/newlib/sys/cdefs.h :
+ /usr/include/newlib/machine/_default_types.h :
+ /usr/include/newlib/sys/_types.h /usr/include/newlib/machine/_types.h :
+ /usr/include/newlib/sys/lock.h /usr/include/newlib/sys/string.h :
+ ../../lib/micropython/py/runtime.h ../../lib/micropython/py/mpstate.h :
+ /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h :
+ ../../lib/micropython/py/mpconfig.h :
+ /usr/lib/gcc/arm-none-eabi/13.2.1/include/limits.h mpconfigport.h :
+ ../../lib/micropython/py/mpthread.h ../../lib/micropython/py/misc.h :
+ /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdbool.h :
+ build/genhdr/compressed.data.h ../../lib/micropython/py/nlr.h :
+ ../../lib/micropython/py/obj.h ../../lib/micropython/py/qstr.h :
+ build/genhdr/qstrdefs.generated.h ../../lib/micropython/py/mpprint.h :
+ ../../lib/micropython/py/runtime0.h ../../lib/micropython/py/objlist.h :
+ ../../lib/micropython/py/objexcept.h ../../lib/micropython/py/objtuple.h :
+ build/genhdr/root_pointers.h ../../lib/micropython/py/pystack.h :
+ ../../lib/micropython/py/cstack.h ../../lib/micropython/py/builtin.h :
+ ../../lib/micropython/py/stream.h ../../lib/micropython/py/mperrno.h :
+ /usr/include/newlib/errno.h /usr/include/newlib/sys/errno.h :
+ ../../lib/micropython/py/binary.h ../../lib/micropython/py/objarray.h :
+ ../../lib/micropython/py/objstringio.h :
+ ../../lib/micropython/py/frozenmod.h :

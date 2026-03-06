@@ -1,36 +1,56 @@
-# Makefile for MicroPython on Tang Nano 4K
+include ../../lib/micropython/py/mkenv.mk
+
+# qstr definitions (must come before including py.mk)
+QSTR_DEFS = qstrdefsport.h
+
+# MicroPython feature configurations
+MICROPY_ROM_TEXT_COMPRESSION ?= 1
+
+# include py core make definitions
+include $(TOP)/py/py.mk
 
 CROSS_COMPILE ?= arm-none-eabi-
 
-CC = $(CROSS_COMPILE)gcc
-LD = $(CROSS_COMPILE)ld
-OBJCOPY = $(CROSS_COMPILE)objcopy
-SIZE = $(CROSS_COMPILE)size
+INC += -I.
+INC += -I$(TOP)
+INC += -I$(BUILD)
 
-CFLAGS = -mcpu=cortex-m3 -mthumb -Wall -Werror -O2
-CFLAGS += -I. -I../../ -I../../lib/micropython/
-CFLAGS += -DNDEBUG
-CFLAGS += -ffunction-sections -fdata-sections
+CFLAGS_CORTEX_M3 = -mthumb -mcpu=cortex-m3
+CFLAGS += $(INC) -Wall -Werror -std=c99 $(CFLAGS_CORTEX_M3) $(COPT)
+LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs
 
-LDFLAGS = -T tang_nano_4k.ld -Wl,--gc-sections
+# Tune for Debugging or Optimization
+CFLAGS += -g  # always include debug info in the ELF
+ifeq ($(DEBUG), 1)
+CFLAGS += -O0
+else
+CFLAGS += -Os -DNDEBUG
+CFLAGS += -fdata-sections -ffunction-sections
+endif
 
-SRC_C = main.c \
-        mphalport.c \
-        uart.c
+SRC_C = \
+	main.c \
+	mphalport.c \
+	uart.c \
+	$(TOP)/shared/libc/printf.c \
+	$(TOP)/shared/readline/readline.c \
+	$(TOP)/shared/runtime/pyexec.c \
+	$(TOP)/shared/runtime/stdout_helpers.c \
 
-OBJ = $(SRC_C:.c=.o)
+SRC_QSTR += $(TOP)/shared/readline/readline.c $(TOP)/shared/runtime/pyexec.c
 
-all: firmware.bin
+OBJ += $(PY_CORE_O)
+OBJ += $(addprefix $(BUILD)/, $(filter-out $(TOP)/%, $(SRC_C:.c=.o)))
+OBJ += $(addprefix $(BUILD)/, $(patsubst $(TOP)/%, %, $(filter $(TOP)/%, $(SRC_C:.c=.o))))
 
-firmware.elf: $(OBJ)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
-	$(SIZE) $@
+all: $(BUILD)/firmware.bin
 
-%.bin: %.elf
-	$(OBJCOPY) -O binary $< $@
+$(BUILD)/firmware.elf: $(OBJ)
+	$(ECHO) "LINK $@"
+	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+	$(Q)$(SIZE) $@
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+$(BUILD)/firmware.bin: $(BUILD)/firmware.elf
+	$(Q)$(OBJCOPY) -O binary $^ $@
 
-clean:
-	rm -f *.o *.elf *.bin
+include $(TOP)/py/mkrules.mk
