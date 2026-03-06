@@ -1,0 +1,16 @@
+# tang_nano_4k.resc
+
+using sysbus
+mach create "tang_nano_4k"
+machine LoadPlatformDescription @test/tang_nano_4k.repl
+
+$bin?=@src/ports/tang_nano_4k/build/firmware.elf
+
+showAnalyzer uart0
+
+macro reset
+"""
+    sysbus LoadELF $bin
+"""
+
+runMacro $reset

@@ -5,6 +5,10 @@ QSTR_DEFS = qstrdefsport.h
 
 # MicroPython feature configurations
 MICROPY_ROM_TEXT_COMPRESSION ?= 1
+MICROPY_PY_BUILTINS_FLOAT ?= 0
+MICROPY_PY_MATH ?= 0
+MICROPY_ENABLE_COMPILER ?= 0
+MICROPY_PY_SYS_STDFILES ?= 0
 
 # include py core make definitions
 include $(TOP)/py/py.mk
@@ -33,11 +37,15 @@ SRC_C = \
 	mphalport.c \
 	uart.c \
 	$(TOP)/shared/libc/printf.c \
-	$(TOP)/shared/readline/readline.c \
-	$(TOP)/shared/runtime/pyexec.c \
 	$(TOP)/shared/runtime/stdout_helpers.c \
 
+# Include REPL and compiler only if enabled
+ifeq ($(MICROPY_ENABLE_COMPILER), 1)
+SRC_C += \
+	$(TOP)/shared/readline/readline.c \
+	$(TOP)/shared/runtime/pyexec.c
 SRC_QSTR += $(TOP)/shared/readline/readline.c $(TOP)/shared/runtime/pyexec.c
+endif
 
 OBJ += $(PY_CORE_O)
 OBJ += $(addprefix $(BUILD)/, $(filter-out $(TOP)/%, $(SRC_C:.c=.o)))
