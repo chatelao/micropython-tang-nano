@@ -1,0 +1,14 @@
+/* mpconfigport.h */
+#include <stdint.h>
+
+// options to control how MicroPython is built
+#define MICROPY_CONFIG_ROM_LEVEL (MICROPY_CONFIG_ROM_LEVEL_MINIMUM)
+
+// type definitions for the specific machine
+typedef intptr_t mp_int_t; // must be pointer size
+typedef uintptr_t mp_uint_t; // must be pointer size
+typedef long mp_off_t;
+
+// board specifics
+#define MICROPY_HW_BOARD_NAME "Tang Nano 4K"
+#define MICROPY_HW_MCU_NAME   "GW1NSR-LV4C"
