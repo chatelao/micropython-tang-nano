@@ -37,7 +37,7 @@ jobs:
           make -C src/ports/tang_nano_4k/
 
       - name: Run Renode tests
-        uses: antmicro/renode-test-action@v1
+        uses: antmicro/renode-test-action@v5
         with:
           tests-to-run: test/tang_nano_4k.robot
 
