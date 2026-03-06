@@ -1,0 +1,9 @@
+00000000 T __fatal_error
+         U gc_init
+00000000 b heap
+00000000 T main
+         U mp_deinit
+         U mp_hal_init
+         U mp_init
+00000000 T nlr_jump_fail
+         U pyexec_friendly_repl

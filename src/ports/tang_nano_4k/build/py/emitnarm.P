@@ -1,0 +1,8 @@
+build/py/emitnarm.o: ../../lib/micropython/py/emitnarm.c \
+ ../../lib/micropython/py/mpconfig.h \
+ /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h \
+ /usr/lib/gcc/arm-none-eabi/13.2.1/include/limits.h mpconfigport.h
+../../lib/micropython/py/emitnarm.c :
+ ../../lib/micropython/py/mpconfig.h :
+ /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h :
+ /usr/lib/gcc/arm-none-eabi/13.2.1/include/limits.h mpconfigport.h :

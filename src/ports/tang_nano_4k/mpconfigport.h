@@ -12,3 +12,11 @@ typedef long mp_off_t;
 // board specifics
 #define MICROPY_HW_BOARD_NAME "Tang Nano 4K"
 #define MICROPY_HW_MCU_NAME   "GW1NSR-LV4C"
+
+#define MICROPY_NO_ALLOCA (1)
+
+// Root pointers
+#define MICROPY_PORT_ROOT_POINTERS \
+    const char *readline_hist[8];
+
+#define MP_STATE_PORT MP_STATE_VM

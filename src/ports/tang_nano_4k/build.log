@@ -1,0 +1,182 @@
+Use make V=1 or set BUILD_VERBOSE in your environment to increase build verbosity.
+mkdir -p build/genhdr
+GEN build/genhdr/mpversion.h
+GEN build/genhdr/qstr.i.last
+GEN build/genhdr/qstr.split
+GEN build/genhdr/qstrdefs.collected.h
+QSTR updated
+GEN build/genhdr/qstrdefs.generated.h
+GEN build/genhdr/moduledefs.split
+GEN build/genhdr/moduledefs.collected
+Module registrations updated
+GEN build/genhdr/moduledefs.h
+GEN build/genhdr/root_pointers.split
+GEN build/genhdr/root_pointers.collected
+Root pointer registrations updated
+GEN build/genhdr/root_pointers.h
+GEN build/genhdr/compressed.split
+GEN build/genhdr/compressed.collected
+Compressed data updated
+GEN build/genhdr/compressed.data.h
+mkdir -p build/py/
+mkdir -p build/shared/libc/
+mkdir -p build/shared/readline/
+mkdir -p build/shared/runtime/
+CC ../../lib/micropython/py/mpstate.c
+CC ../../lib/micropython/py/nlr.c
+CC ../../lib/micropython/py/nlrx86.c
+CC ../../lib/micropython/py/nlrx64.c
+CC ../../lib/micropython/py/nlrthumb.c
+CC ../../lib/micropython/py/nlraarch64.c
+CC ../../lib/micropython/py/nlrmips.c
+CC ../../lib/micropython/py/nlrpowerpc.c
+CC ../../lib/micropython/py/nlrxtensa.c
+CC ../../lib/micropython/py/nlrrv32.c
+CC ../../lib/micropython/py/nlrrv64.c
+CC ../../lib/micropython/py/nlrsetjmp.c
+CC ../../lib/micropython/py/malloc.c
+CC ../../lib/micropython/py/gc.c
+CC ../../lib/micropython/py/pystack.c
+CC ../../lib/micropython/py/qstr.c
+CC ../../lib/micropython/py/vstr.c
+CC ../../lib/micropython/py/mpprint.c
+CC ../../lib/micropython/py/unicode.c
+CC ../../lib/micropython/py/mpz.c
+CC ../../lib/micropython/py/reader.c
+CC ../../lib/micropython/py/lexer.c
+CC ../../lib/micropython/py/parse.c
+CC ../../lib/micropython/py/scope.c
+CC ../../lib/micropython/py/compile.c
+CC ../../lib/micropython/py/emitcommon.c
+CC ../../lib/micropython/py/emitbc.c
+CC ../../lib/micropython/py/asmbase.c
+CC ../../lib/micropython/py/asmx64.c
+CC ../../lib/micropython/py/emitnx64.c
+CC ../../lib/micropython/py/asmx86.c
+CC ../../lib/micropython/py/emitnx86.c
+CC ../../lib/micropython/py/asmthumb.c
+CC ../../lib/micropython/py/emitnthumb.c
+CC ../../lib/micropython/py/emitinlinethumb.c
+CC ../../lib/micropython/py/asmarm.c
+CC ../../lib/micropython/py/emitnarm.c
+CC ../../lib/micropython/py/asmxtensa.c
+CC ../../lib/micropython/py/emitnxtensa.c
+CC ../../lib/micropython/py/emitinlinextensa.c
+CC ../../lib/micropython/py/emitnxtensawin.c
+CC ../../lib/micropython/py/asmrv32.c
+CC ../../lib/micropython/py/emitnrv32.c
+CC ../../lib/micropython/py/emitinlinerv32.c
+CC ../../lib/micropython/py/emitndebug.c
+CC ../../lib/micropython/py/formatfloat.c
+CC ../../lib/micropython/py/parsenumbase.c
+CC ../../lib/micropython/py/parsenum.c
+CC ../../lib/micropython/py/emitglue.c
+CC ../../lib/micropython/py/persistentcode.c
+CC ../../lib/micropython/py/runtime.c
+CC ../../lib/micropython/py/runtime_utils.c
+CC ../../lib/micropython/py/scheduler.c
+CC ../../lib/micropython/py/nativeglue.c
+CC ../../lib/micropython/py/pairheap.c
+CC ../../lib/micropython/py/ringbuf.c
+CC ../../lib/micropython/py/cstack.c
+CC ../../lib/micropython/py/stackctrl.c
+CC ../../lib/micropython/py/argcheck.c
+CC ../../lib/micropython/py/warning.c
+CC ../../lib/micropython/py/profile.c
+CC ../../lib/micropython/py/map.c
+CC ../../lib/micropython/py/obj.c
+CC ../../lib/micropython/py/objarray.c
+CC ../../lib/micropython/py/objattrtuple.c
+CC ../../lib/micropython/py/objbool.c
+CC ../../lib/micropython/py/objboundmeth.c
+CC ../../lib/micropython/py/objcell.c
+CC ../../lib/micropython/py/objclosure.c
+CC ../../lib/micropython/py/objcode.c
+CC ../../lib/micropython/py/objcomplex.c
+CC ../../lib/micropython/py/objdeque.c
+CC ../../lib/micropython/py/objdict.c
+CC ../../lib/micropython/py/objenumerate.c
+CC ../../lib/micropython/py/objexcept.c
+CC ../../lib/micropython/py/objfilter.c
+CC ../../lib/micropython/py/objfloat.c
+CC ../../lib/micropython/py/objfun.c
+CC ../../lib/micropython/py/objgenerator.c
+CC ../../lib/micropython/py/objgetitemiter.c
+CC ../../lib/micropython/py/objint.c
+CC ../../lib/micropython/py/objint_longlong.c
+CC ../../lib/micropython/py/objint_mpz.c
+CC ../../lib/micropython/py/objlist.c
+CC ../../lib/micropython/py/objmap.c
+CC ../../lib/micropython/py/objmodule.c
+CC ../../lib/micropython/py/objobject.c
+CC ../../lib/micropython/py/objpolyiter.c
+CC ../../lib/micropython/py/objproperty.c
+CC ../../lib/micropython/py/objnone.c
+CC ../../lib/micropython/py/objnamedtuple.c
+CC ../../lib/micropython/py/objrange.c
+CC ../../lib/micropython/py/objreversed.c
+CC ../../lib/micropython/py/objringio.c
+CC ../../lib/micropython/py/objset.c
+CC ../../lib/micropython/py/objsingleton.c
+CC ../../lib/micropython/py/objslice.c
+CC ../../lib/micropython/py/objstr.c
+CC ../../lib/micropython/py/objstrunicode.c
+CC ../../lib/micropython/py/objstringio.c
+CC ../../lib/micropython/py/objtuple.c
+CC ../../lib/micropython/py/objtype.c
+CC ../../lib/micropython/py/objzip.c
+CC ../../lib/micropython/py/opmethods.c
+CC ../../lib/micropython/py/sequence.c
+CC ../../lib/micropython/py/stream.c
+CC ../../lib/micropython/py/binary.c
+CC ../../lib/micropython/py/builtinimport.c
+CC ../../lib/micropython/py/builtinevex.c
+CC ../../lib/micropython/py/builtinhelp.c
+CC ../../lib/micropython/py/modarray.c
+CC ../../lib/micropython/py/modbuiltins.c
+CC ../../lib/micropython/py/modcollections.c
+CC ../../lib/micropython/py/modgc.c
+CC ../../lib/micropython/py/modio.c
+CC ../../lib/micropython/py/modmath.c
+CC ../../lib/micropython/py/modcmath.c
+CC ../../lib/micropython/py/modmicropython.c
+CC ../../lib/micropython/py/modstruct.c
+CC ../../lib/micropython/py/modsys.c
+CC ../../lib/micropython/py/moderrno.c
+CC ../../lib/micropython/py/modthread.c
+CC ../../lib/micropython/py/vm.c
+CC ../../lib/micropython/py/bc.c
+CC ../../lib/micropython/py/showbc.c
+CC ../../lib/micropython/py/repl.c
+CC ../../lib/micropython/py/smallint.c
+CC ../../lib/micropython/py/frozenmod.c
+CC main.c
+CC mphalport.c
+CC uart.c
+CC ../../lib/micropython/shared/libc/printf.c
+CC ../../lib/micropython/shared/readline/readline.c
+CC ../../lib/micropython/shared/runtime/pyexec.c
+CC ../../lib/micropython/shared/runtime/stdout_helpers.c
+LINK build/firmware.elf
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libg.a(libc_a-closer.o): in function `_close_r':
+/build/newlib-38V0JC/newlib-4.4.0.20231231/build/arm-none-eabi/thumb/v7-m/nofp/newlib/../../../../../../newlib/libc/reent/closer.c:47:(.text+0xc): warning: _close is not implemented and will always fail
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libg.a(libc_a-closer.o): note: the message above does not take linker garbage collection into account
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libg.a(libc_a-lseekr.o): in function `_lseek_r':
+/build/newlib-38V0JC/newlib-4.4.0.20231231/build/arm-none-eabi/thumb/v7-m/nofp/newlib/../../../../../../newlib/libc/reent/lseekr.c:49:(.text+0x14): warning: _lseek is not implemented and will always fail
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libg.a(libc_a-lseekr.o): note: the message above does not take linker garbage collection into account
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libg.a(libc_a-readr.o): in function `_read_r':
+/build/newlib-38V0JC/newlib-4.4.0.20231231/build/arm-none-eabi/thumb/v7-m/nofp/newlib/../../../../../../newlib/libc/reent/readr.c:49:(.text+0x14): warning: _read is not implemented and will always fail
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libg.a(libc_a-readr.o): note: the message above does not take linker garbage collection into account
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libg.a(libc_a-writer.o): in function `_write_r':
+/build/newlib-38V0JC/newlib-4.4.0.20231231/build/arm-none-eabi/thumb/v7-m/nofp/newlib/../../../../../../newlib/libc/reent/writer.c:49:(.text+0x14): warning: _write is not implemented and will always fail
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libg.a(libc_a-writer.o): note: the message above does not take linker garbage collection into account
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: build/firmware.elf section `.text' will not fit in region `FLASH'
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: section .init LMA [00008118,0000811b] overlaps section .data LMA [00008118,0000864f]
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: region `FLASH' overflowed by 296 bytes
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: build/main.o: in function `main':
+/app/src/ports/tang_nano_4k/main.c:25:(.text.startup.main+0xe): undefined reference to `gc_init'
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: /app/src/ports/tang_nano_4k/main.c:30:(.text.startup.main+0x1a): undefined reference to `pyexec_friendly_repl'
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libnosys.a(sbrk.o): in function `_sbrk':
+/build/newlib-38V0JC/newlib-4.4.0.20231231/build/arm-none-eabi/thumb/v7-m/nofp/libgloss/../../../../../../libgloss/libnosys/sbrk.c:21:(.text+0x18): undefined reference to `end'
+collect2: error: ld returned 1 exit status
+make: *** [Makefile:50: build/firmware.elf] Error 1
