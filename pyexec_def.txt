@@ -1,0 +1,11 @@
+612-        }
+613-        mp_hal_stdio_mode_raw();
+614-    }
+615-}
+616-
+617:int pyexec_friendly_repl(void) {
+618-    vstr_t line;
+619-    vstr_init(&line, 32);
+620-
+621-    mp_hal_stdio_mode_raw();
+622-

@@ -1,0 +1,6 @@
+342:static int pyexec_friendly_repl_process_char(int c);
+353:        pyexec_friendly_repl_process_char(CHAR_CTRL_B);
+375:        pyexec_friendly_repl_process_char(CHAR_CTRL_B);
+411:static int pyexec_friendly_repl_process_char(int c) {
+532:        res = pyexec_friendly_repl_process_char(c);
+617:int pyexec_friendly_repl(void) {

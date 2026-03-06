@@ -78,15 +78,9 @@ typedef long long unsigned int uintmax_t;
 # 35 "../../lib/micropython/py/mpconfig.h" 2
 # 100 "../../lib/micropython/py/mpconfig.h"
 # 1 "./mpconfigport.h" 1
+# 14 "./mpconfigport.h"
 
-
-
-
-
-
-
-
-# 8 "./mpconfigport.h"
+# 14 "./mpconfigport.h"
 typedef intptr_t mp_int_t;
 typedef uintptr_t mp_uint_t;
 typedef long mp_off_t;

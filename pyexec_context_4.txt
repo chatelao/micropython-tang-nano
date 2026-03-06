@@ -1,0 +1,10 @@
+        if (ret & PYEXEC_FORCED_EXIT) {
+            return ret;
+        }
+        mp_hal_stdio_mode_raw();
+    }
+}
+
+int pyexec_friendly_repl(void) {
+    vstr_t line;
+    vstr_init(&line, 32);

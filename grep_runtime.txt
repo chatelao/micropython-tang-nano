@@ -1,0 +1,7 @@
+src/lib/micropython/shared/runtime/pyexec.h:int pyexec_friendly_repl(void);
+src/lib/micropython/shared/runtime/pyexec.c:static int pyexec_friendly_repl_process_char(int c);
+src/lib/micropython/shared/runtime/pyexec.c:        pyexec_friendly_repl_process_char(CHAR_CTRL_B);
+src/lib/micropython/shared/runtime/pyexec.c:        pyexec_friendly_repl_process_char(CHAR_CTRL_B);
+src/lib/micropython/shared/runtime/pyexec.c:static int pyexec_friendly_repl_process_char(int c) {
+src/lib/micropython/shared/runtime/pyexec.c:        res = pyexec_friendly_repl_process_char(c);
+src/lib/micropython/shared/runtime/pyexec.c:int pyexec_friendly_repl(void) {

@@ -1,0 +1,40 @@
+                vstr_clear(&line);
+                pyexec_mode_kind = PYEXEC_MODE_FRIENDLY_REPL;
+                mp_hal_stdio_mode_orig();
+                return 0;
+            } else if (c == CHAR_CTRL_C) {
+                // clear line
+                vstr_reset(&line);
+            } else if (c == CHAR_CTRL_D) {
+                // input finished
+                break;
+            } else {
+                // let through any other raw 8-bit value
+                vstr_add_byte(&line, c);
+            }
+        }
+
+        // indicate reception of command
+        mp_hal_stdout_tx_str("OK");
+
+        if (line.len == 0) {
+            // exit for a soft reset
+            mp_hal_stdout_tx_str("\r\n");
+            vstr_clear(&line);
+            mp_hal_stdio_mode_orig();
+            return PYEXEC_FORCED_EXIT;
+        }
+
+        // Switch to original terminal mode to execute code, eg to support keyboard interrupt (SIGINT).
+        mp_hal_stdio_mode_orig();
+        int ret = parse_compile_execute(&line, MP_PARSE_FILE_INPUT, EXEC_FLAG_PRINT_EOF | EXEC_FLAG_SOURCE_IS_VSTR);
+        if (ret & PYEXEC_FORCED_EXIT) {
+            return ret;
+        }
+        mp_hal_stdio_mode_raw();
+    }
+}
+
+int pyexec_friendly_repl(void) {
+    vstr_t line;
+    vstr_init(&line, 32);
