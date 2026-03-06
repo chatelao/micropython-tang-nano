@@ -1963,7 +1963,7 @@ Discarded input sections
  .rodata.mp_sys_exit_obj
                 0x00000000        0xc build/py/modsys.o
  .rodata.str1.1
-                0x00000000       0x4b build/py/modsys.o
+                0x00000000       0x60 build/py/modsys.o
  .data.mp_sys_executable_obj
                 0x00000000       0x10 build/py/modsys.o
  .rodata.mp_sys_implementation_obj
