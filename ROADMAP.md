@@ -1,12 +1,14 @@
 # Roadmap
 
-Next 5 steps for the MicroPython for Tang Nano 4K project:
+Next steps for the MicroPython for Tang Nano 4K project:
 
-- [ ] 4. Fix build system and generate required MicroPython headers.
-- [ ] 5. Implement basic GPIO and LED control.
-- [ ] 6. Implement timer and delay using Cortex-M3 SysTick.
-- [ ] 7. Implement basic machine module with UART and PIN classes.
-- [ ] 8. Research and document external flash interface for MicroPython filesystem.
+- [ ] 4. Integrate MicroPython core and generate required headers (QSTRs, version, etc.).
+- [ ] 5. Resolve compilation issues in `main.c`, `mphalport.c`, and `uart.c`.
+- [ ] 6. Successfully link the firmware and generate `firmware.bin`.
+- [ ] 7. Implement basic GPIO and LED control (Machine.Pin class).
+- [ ] 8. Implement timer and delay using Cortex-M3 SysTick (Machine.Timer class).
+- [ ] 9. Implement basic machine module with UART class.
+- [ ] 10. Research and document external flash interface for MicroPython filesystem.
 
 ## Past Steps
 - [x] 1. Initialize project structure and documentation.
@@ -16,3 +18,5 @@ Next 5 steps for the MicroPython for Tang Nano 4K project:
 - [x] 5. Document detailed memory map for Cortex-M3.
 - [x] 6. Document peripheral register mapping.
 - [x] Initial setup and project organization.
+- [x] Install ARM GNU Toolchain and clone MicroPython core.
+- [x] Create port-specific configuration and header stubs.
