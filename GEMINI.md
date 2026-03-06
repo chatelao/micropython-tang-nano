@@ -8,5 +8,6 @@
 - /definitions - Datasheets and Standards to be used, download and extract text, but don't extend
 - /documentation - Keep "CONCEP_xxx.md" for different areas of work, mark the implementation progress within the concepts
 - /src - Source files
+- /test - Unit, System and End-2-End test concepts and cases to be executed after each change
 - /.github - Workflows for CICD
 - README.md - Update overview of the product
