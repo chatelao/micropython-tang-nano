@@ -17,7 +17,12 @@ INC += -I$(BUILD)
 
 CFLAGS_CORTEX_M3 = -mthumb -mcpu=cortex-m3
 CFLAGS += $(INC) -Wall -Werror -std=c99 $(CFLAGS_CORTEX_M3) $(COPT)
+
+ifeq ($(QEMU), 1)
+LDFLAGS += -T qemu.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs
+else
 LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs
+endif
 
 # Tune for Debugging or Optimization
 CFLAGS += -g  # always include debug info in the ELF
@@ -28,10 +33,16 @@ CFLAGS += -Os -DNDEBUG
 CFLAGS += -fdata-sections -ffunction-sections
 endif
 
+ifeq ($(QEMU), 1)
+UART_SRC = mock_uart.c
+else
+UART_SRC = uart.c
+endif
+
 SRC_C = \
 	main.c \
 	mphalport.c \
-	uart.c \
+	$(UART_SRC) \
 	$(TOP)/shared/libc/printf.c \
 	$(TOP)/shared/readline/readline.c \
 	$(TOP)/shared/runtime/pyexec.c \

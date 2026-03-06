@@ -6,8 +6,9 @@ Next steps for the MicroPython for Tang Nano 4K project:
 - [x] 8. Resolve compilation issues in `main.c`, `mphalport.c`, and `uart.c`.
 - [/] 9. Successfully link the firmware and generate `firmware.bin` (In progress, FLASH overflow issues).
 - [x] 10. Implement GitHub Actions for build and release CI/CD.
-- [ ] 11. Implement basic GPIO and LED control (Machine.Pin class).
-- [ ] 12. Implement timer and delay using Cortex-M3 SysTick (Machine.Timer class).
+- [x] 11. Implement QEMU-based CI testing with mock peripherals.
+- [ ] 12. Implement basic GPIO and LED control (Machine.Pin class).
+- [ ] 13. Implement timer and delay using Cortex-M3 SysTick (Machine.Timer class).
 
 ## Past Steps
 - [x] 1. Initialize project structure and documentation.
