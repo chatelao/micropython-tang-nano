@@ -1,8 +1,0 @@
-build/py/emitnrv32.o: ../../lib/micropython/py/emitnrv32.c \
- ../../lib/micropython/py/mpconfig.h \
- /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h \
- /usr/lib/gcc/arm-none-eabi/13.2.1/include/limits.h mpconfigport.h
-../../lib/micropython/py/emitnrv32.c :
- ../../lib/micropython/py/mpconfig.h :
- /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h :
- /usr/lib/gcc/arm-none-eabi/13.2.1/include/limits.h mpconfigport.h :

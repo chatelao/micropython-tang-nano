@@ -1,4 +1,0 @@
-build/uart.o: uart.c uart.h \
- /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h
-uart.c uart.h :
- /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h :
