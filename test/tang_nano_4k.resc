@@ -2,9 +2,11 @@
 
 using sysbus
 mach create "tang_nano_4k"
-machine LoadPlatformDescription @test/tang_nano_4k.repl
 
+$repl?=@test/tang_nano_4k.repl
 $bin?=@src/ports/tang_nano_4k/build/firmware.elf
+
+machine LoadPlatformDescription $repl
 
 showAnalyzer uart0
 

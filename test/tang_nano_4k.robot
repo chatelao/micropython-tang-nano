@@ -5,12 +5,16 @@ Test Setup      Reset Emulation
 Resource        ${RENODEKEYWORDS}
 
 *** Variables ***
+${RESC}         ${CURDIR}/tang_nano_4k.resc
+${REPL}         ${CURDIR}/tang_nano_4k.repl
+${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
 
 *** Test Cases ***
 Should Boot Successfully and Interaction with REPL
-    Execute Command         $bin = @src/ports/tang_nano_4k/build/firmware.elf
-    Execute Command         include @test/tang_nano_4k.resc
+    Execute Command         $repl = @${REPL}
+    Execute Command         $bin = @${BIN}
+    Execute Command         include @${RESC}
     Create Terminal Tester  ${UART}
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
