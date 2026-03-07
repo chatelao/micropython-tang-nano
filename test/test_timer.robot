@@ -1,4 +1,5 @@
 *** Settings ***
+Library         OperatingSystem
 Suite Setup     Setup
 Suite Teardown  Teardown
 Test Setup      Reset Emulation
@@ -22,23 +23,22 @@ Should Run Timer Test
     Create Terminal Tester  ${UART}
     Start Emulation
 
-    Wait For Text On Uart   MicroPython started on Tang Nano 4K
-    Wait For Text On Uart   >>>
+    Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
     # Read the test script and write it to the REPL
     ${script}=              Get File  ${TEST_SCRIPT}
     Write Line To Uart      ${script}
 
-    Wait For Text On Uart   Testing machine.Timer...
-    Wait For Text On Uart   Timer started. Waiting 3.5 seconds...
+    Wait For Line On Uart   Testing machine.Timer...
+    Wait For Line On Uart   Timer started. Waiting 3.5 seconds...
 
     # We expect 3 ticks in 3.5 seconds (at 1s, 2s, 3s)
-    Wait For Text On Uart   Timer periodic tick
-    Wait For Text On Uart   Timer periodic tick
-    Wait For Text On Uart   Timer periodic tick
+    Wait For Line On Uart   Timer periodic tick
+    Wait For Line On Uart   Timer periodic tick
+    Wait For Line On Uart   Timer periodic tick
 
-    Wait For Text On Uart   Deinitializing timer...
-    Wait For Text On Uart   Testing one-shot timer (2 seconds)...
+    Wait For Line On Uart   Deinitializing timer...
+    Wait For Line On Uart   Testing one-shot timer (2 seconds)...
 
-    Wait For Text On Uart   One-shot timer fired!
-    Wait For Text On Uart   Test complete.
+    Wait For Line On Uart   One-shot timer fired!
+    Wait For Line On Uart   Test complete.

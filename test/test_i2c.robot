@@ -1,4 +1,5 @@
 *** Settings ***
+Library         OperatingSystem
 Suite Setup     Setup
 Suite Teardown  Teardown
 Test Setup      Reset Emulation
@@ -22,11 +23,8 @@ Verify SoftI2C Instantiation and Scan
     Create Terminal Tester  ${UART}
     Start Emulation
 
-    # Wait for REPL prompt
-    Wait For Text On Uart    >>>
+    Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
-    # Send the test script line by line or as a block if the REPL supports it.
-    # For simplicity, we'll send it as a block of code.
     ${script}=    Get File    ${TEST_I2C}
     Write Line To Uart      ${script}
 
