@@ -16,6 +16,7 @@ typedef long mp_off_t;
 // board specifics
 #define MICROPY_HW_BOARD_NAME "Tang Nano 4K"
 #define MICROPY_HW_MCU_NAME   "GW1NSR-LV4C"
+#define CPU_FREQ              (27000000)
 
 #define MICROPY_NO_ALLOCA (1)
 
@@ -28,3 +29,5 @@ typedef long mp_off_t;
 extern const struct _mp_obj_module_t mp_module_machine;
 #define MICROPY_PORT_BUILTIN_MODULES \
     { MP_ROM_QSTR(MP_QSTR_machine), MP_ROM_PTR(&mp_module_machine) },
+
+#define MICROPY_ENABLE_SCHEDULER (1)

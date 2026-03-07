@@ -31,3 +31,10 @@ char uart_rx_char(void) {
     while (!(UART0->STATE & 0x2)); // Wait if RX buffer empty
     return UART0->DATA;
 }
+
+int uart_rx_char_nonblocking(void) {
+    if (UART0->STATE & 0x2) {
+        return UART0->DATA;
+    }
+    return -1;
+}
