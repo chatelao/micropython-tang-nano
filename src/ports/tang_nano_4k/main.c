@@ -13,6 +13,7 @@
 #include "shared/runtime/pyexec.h"
 #include "mphalport.h"
 #include "timer.h"
+#include "pwm.h"
 
 // Heap for MicroPython
 static char heap[16 * 1024];
@@ -42,6 +43,12 @@ extern volatile mp_uint_t ticks_ms;
 void SysTick_Handler(void) {
     ticks_ms++;
     machine_timer_tick_all();
+}
+
+#define TIMER1_INTCLEAR (*(volatile uint32_t *)(0x4000100C))
+void TIMER1_Handler(void) {
+    TIMER1_INTCLEAR = 1;
+    machine_pwm_tick();
 }
 
 void gc_collect(void) {
@@ -97,5 +104,15 @@ const uint32_t isr_vector[] __attribute__((section(".isr_vector"))) = {
     (uint32_t)&_estack,
     (uint32_t)&Reset_Handler,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    (uint32_t)&SysTick_Handler,
+    (uint32_t)&SysTick_Handler,     // 0x3C
+    0, // UART0_Handler             // 0x40
+    0, // USER_INT0_Handler
+    0, // UART1_Handler
+    0, // USER_INT1_Handler
+    0, // USER_INT2_Handler
+    0, // Reserved
+    0, // PORT0_COMB_Handler
+    0, // USER_INT3_Handler
+    0, // TIMER0_Handler            // 0x60
+    (uint32_t)&TIMER1_Handler,      // 0x64
 };

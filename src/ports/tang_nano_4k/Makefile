@@ -49,6 +49,7 @@ SRC_C = \
 	uart.c \
 	pin.c \
 	timer.c \
+	pwm.c \
 	modmachine.c \
 	$(TOP)/shared/libc/printf.c \
 	$(TOP)/shared/runtime/stdout_helpers.c \
