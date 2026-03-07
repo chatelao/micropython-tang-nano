@@ -15,6 +15,9 @@ Should Boot To MicroPython REPL
     Execute Command           machine LoadPlatformDescription @${REPL}
     Execute Command           sysbus LoadELF @${BIN}
 
+    # Ensure we start from the reset handler
+    Execute Command           cpu PC `sysbus GetSymbolAddress "Reset_Handler"`
+
     Create Terminal Tester    ${UART}
 
     Start Emulation

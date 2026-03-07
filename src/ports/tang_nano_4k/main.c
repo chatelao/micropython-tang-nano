@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     mp_init();
     mp_hal_init();
 
-    printf("MicroPython started on Tang Nano 4K\n");
+    printf("\nMicroPython started on Tang Nano 4K\n");
 
     for (;;) {
         if (pyexec_friendly_repl() != 0) {
