@@ -1,4 +1,6 @@
 /* tang_nano_4k.ld */
+ENTRY(Reset_Handler)
+
 MEMORY
 {
     FLASH (rx) : ORIGIN = 0x60000000, LENGTH = 4M
