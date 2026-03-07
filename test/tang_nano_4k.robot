@@ -22,6 +22,6 @@ Should Boot Successfully and Interaction with REPL
     Create Terminal Tester  ${UART}
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
-    Wait For Text On Uart   >>>
+    Wait For Line On Uart   Tang Nano 4K with GW1NSR-LV4C
     Write Line To Uart      print("Hello from external Flash")
     Wait For Line On Uart   Hello from external Flash
