@@ -25,6 +25,7 @@ int main(int argc, char **argv) {
     gc_init(heap, heap + sizeof(heap));
     mp_init();
     mp_hal_init();
+    printf("MicroPython started on Tang Nano 4K\n");
 
     for (;;) {
         if (pyexec_friendly_repl() != 0) {
