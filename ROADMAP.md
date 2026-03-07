@@ -8,7 +8,7 @@ Next steps for the MicroPython for Tang Nano 4K project:
 - [x] 10. Implement GitHub Actions for build and release CI/CD.
 - [x] 11. Implement basic GPIO and LED control (Machine.Pin class).
 - [x] 12. Implement timer and delay using Cortex-M3 SysTick (Machine.Timer class).
-- [ ] 13. Implement PWM support (Machine.PWM class).
+- [x] 13. Implement PWM support (Machine.PWM class).
 
 ## Past Steps
 - [x] 1. Initialize project structure and documentation.
