@@ -24,3 +24,7 @@ typedef long mp_off_t;
     const char *readline_hist[8];
 
 #define MP_STATE_PORT MP_STATE_VM
+
+extern const struct _mp_obj_module_t mp_module_machine;
+#define MICROPY_PORT_BUILTIN_MODULES \
+    { MP_ROM_QSTR(MP_QSTR_machine), MP_ROM_PTR(&mp_module_machine) },

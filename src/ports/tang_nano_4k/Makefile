@@ -47,6 +47,8 @@ SRC_C = \
 	main.c \
 	mphalport.c \
 	uart.c \
+	pin.c \
+	modmachine.c \
 	$(TOP)/shared/libc/printf.c \
 	$(TOP)/shared/runtime/stdout_helpers.c \
 
