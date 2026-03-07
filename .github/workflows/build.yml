@@ -32,9 +32,9 @@ jobs:
         run: |
           make -C src/lib/micropython/mpy-cross
 
-      - name: Build Tang Nano 4K port
+      - name: Build Tang Nano 4K port (Simulation variant)
         run: |
-          make -C src/ports/tang_nano_4k/
+          make -C src/ports/tang_nano_4k/ SIMULATION=1
 
       - name: Run Renode tests
         uses: antmicro/renode-test-action@v5

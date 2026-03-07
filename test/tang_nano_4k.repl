@@ -1,7 +1,10 @@
 // tang_nano_4k.repl
 
+nvic: IRQControllers.NVIC @ sysbus 0xE000E000
+
 cpu: CPU.CortexM @ sysbus
     cpuType: "cortex-m3"
+    nvic: nvic
 
 // Internal Flash (User Flash) - 32KB
 flash: Memory.MappedMemory @ sysbus 0x00000000
@@ -12,7 +15,8 @@ sram: Memory.MappedMemory @ sysbus 0x20000000
     size: 0x5800
 
 // CMSDK UART - Mocked at 0x40000000
-uart0: UART.CMSDK_UART @ sysbus 0x40000000
+uart0: UART.CMSDK_APB_UART @ sysbus 0x40000000
+    frequency: 27000000
 
 // External SPI NOR Flash - 4MB
 // Mapped at 0x60000000 for simulation purposes

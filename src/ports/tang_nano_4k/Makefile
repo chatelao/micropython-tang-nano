@@ -21,7 +21,18 @@ INC += -I$(BUILD)
 
 CFLAGS_CORTEX_M3 = -mthumb -mcpu=cortex-m3
 CFLAGS += $(INC) -Wall -Werror -std=c99 $(CFLAGS_CORTEX_M3) $(COPT)
+
+# Simulation support
+ifeq ($(SIMULATION), 1)
+FLASH_ORIGIN = 0x60000000
+FLASH_LENGTH = 4M
+else
+FLASH_ORIGIN = 0x00000000
+FLASH_LENGTH = 32K
+endif
+
 LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs
+LDFLAGS += -Wl,--defsym=FLASH_ORIGIN=$(FLASH_ORIGIN),--defsym=FLASH_LENGTH=$(FLASH_LENGTH)
 
 # Tune for Debugging or Optimization
 CFLAGS += -g  # always include debug info in the ELF
