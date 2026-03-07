@@ -13,6 +13,11 @@ showAnalyzer uart0
 macro reset
 """
     sysbus LoadELF $bin
+    # Set VTOR to the beginning of the flash where the vector table is located
+    sysbus.cpu VectorTableOffset 0x60000000
+    # Set PC and SP from the vector table
+    sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
+    sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
 """
 
 runMacro $reset

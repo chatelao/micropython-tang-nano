@@ -19,9 +19,19 @@ INC += -I.
 INC += -I$(TOP)
 INC += -I$(BUILD)
 
+# Simulation target (4MB external flash) or Hardware target (32KB internal flash)
+ifeq ($(SIMULATION), 1)
+FLASH_ORIGIN = 0x60000000
+FLASH_LENGTH = 4M
+else
+FLASH_ORIGIN = 0x00000000
+FLASH_LENGTH = 32K
+endif
+
 CFLAGS_CORTEX_M3 = -mthumb -mcpu=cortex-m3
 CFLAGS += $(INC) -Wall -Werror -std=c99 $(CFLAGS_CORTEX_M3) $(COPT)
 LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs
+LDFLAGS += -Wl,--defsym,FLASH_ORIGIN=$(FLASH_ORIGIN) -Wl,--defsym,FLASH_LENGTH=$(FLASH_LENGTH)
 
 # Tune for Debugging or Optimization
 CFLAGS += -g  # always include debug info in the ELF
