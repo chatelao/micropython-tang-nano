@@ -4,6 +4,12 @@
 // options to control how MicroPython is built
 #define MICROPY_CONFIG_ROM_LEVEL (MICROPY_CONFIG_ROM_LEVEL_MINIMUM)
 
+#define MICROPY_ENABLE_GC           (1)
+#define MICROPY_HELPER_REPL         (1)
+#define MICROPY_HELPER_REPL_BOOT_AUTO_INDENT (1)
+#define MICROPY_PY_BUILTINS_FLOAT   (0)
+#define MICROPY_PY_MATH             (0)
+
 // type definitions for the specific machine
 typedef intptr_t mp_int_t; // must be pointer size
 typedef uintptr_t mp_uint_t; // must be pointer size

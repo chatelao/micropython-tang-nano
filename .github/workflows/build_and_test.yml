@@ -1,0 +1,36 @@
+name: Build and Test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install Toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi
+
+      - name: Clone MicroPython
+        run: |
+          git clone --depth 1 https://github.com/micropython/micropython.git src/lib/micropython
+
+      - name: Build Firmware
+        run: |
+          cd src/ports/tang_nano_4k
+          make
+
+      - name: Install Renode
+        run: |
+          wget https://github.com/renode/renode/releases/download/v1.15.0/renode-1.15.0.linux-portable.tar.gz
+          tar -xzf renode-1.15.0.linux-portable.tar.gz
+          echo "$(pwd)/renode_1.15.0_portable" >> $GITHUB_PATH
+
+      - name: Run Simulation Test
+        run: |
+          # Headless renode needs a display or specific flags, usually handled in the test script
+          python3 test/test_simulation.py

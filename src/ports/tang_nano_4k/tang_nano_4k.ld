@@ -1,4 +1,6 @@
 /* tang_nano_4k.ld */
+ENTRY(Reset_Handler)
+
 MEMORY
 {
     FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 32K
@@ -11,9 +13,13 @@ SECTIONS
 {
     .text :
     {
+        . = ALIGN(4);
         KEEP(*(.isr_vector))
         *(.text*)
         *(.rodata*)
+        *(.init)
+        *(.fini)
+        . = ALIGN(4);
         _etext = .;
     } > FLASH
 

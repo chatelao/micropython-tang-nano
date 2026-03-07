@@ -1,0 +1,9 @@
+build/
+*.o
+*.P
+*.elf
+*.bin
+*.map
+size.txt
+nm.txt
+build_full.log

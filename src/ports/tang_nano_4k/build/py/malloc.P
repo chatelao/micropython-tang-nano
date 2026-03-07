@@ -22,7 +22,8 @@ build/py/malloc.o: ../../lib/micropython/py/malloc.c \
  ../../lib/micropython/py/qstr.h build/genhdr/qstrdefs.generated.h \
  ../../lib/micropython/py/mpprint.h ../../lib/micropython/py/runtime0.h \
  ../../lib/micropython/py/objlist.h ../../lib/micropython/py/objexcept.h \
- ../../lib/micropython/py/objtuple.h build/genhdr/root_pointers.h
+ ../../lib/micropython/py/objtuple.h build/genhdr/root_pointers.h \
+ ../../lib/micropython/py/gc.h
 ../../lib/micropython/py/malloc.c :
  /usr/include/newlib/stdio.h /usr/include/newlib/_ansi.h :
  /usr/include/newlib/newlib.h /usr/include/newlib/_newlib_version.h :
@@ -48,3 +49,4 @@ build/py/malloc.o: ../../lib/micropython/py/malloc.c \
  ../../lib/micropython/py/mpprint.h ../../lib/micropython/py/runtime0.h :
  ../../lib/micropython/py/objlist.h ../../lib/micropython/py/objexcept.h :
  ../../lib/micropython/py/objtuple.h build/genhdr/root_pointers.h :
+ ../../lib/micropython/py/gc.h :

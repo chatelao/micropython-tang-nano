@@ -1,0 +1,14 @@
+using sysbus
+mach create
+machine LoadPlatformDescription @test/tang_nano_4k.repl
+
+sysbus LoadELF @src/ports/tang_nano_4k/build/firmware.elf
+
+macro reset
+"""
+    sysbus WriteDoubleWord 0x00000000 0x20005800
+    sysbus WriteDoubleWord 0x00000004 0x000000ed
+    cpu Reset
+"""
+
+runMacro $reset

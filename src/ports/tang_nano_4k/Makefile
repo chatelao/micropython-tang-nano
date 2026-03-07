@@ -16,8 +16,8 @@ INC += -I$(TOP)
 INC += -I$(BUILD)
 
 CFLAGS_CORTEX_M3 = -mthumb -mcpu=cortex-m3
-CFLAGS += $(INC) -Wall -Werror -std=c99 $(CFLAGS_CORTEX_M3) $(COPT)
-LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs
+CFLAGS += $(INC) -Wall -Werror -std=c99 $(CFLAGS_CORTEX_M3) $(COPT) -flto
+LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs -flto
 
 # Tune for Debugging or Optimization
 CFLAGS += -g  # always include debug info in the ELF
