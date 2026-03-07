@@ -1,0 +1,19 @@
+// Tang Nano 4K platform definition
+
+nvic: IRQControllers.NVIC @ sysbus 0xE000E000
+
+cpu: CPU.CortexM @ sysbus
+    cpuType: "cortex-m3"
+    nvic: nvic
+
+flash: Memory.MappedMemory @ sysbus 0x0
+    size: 0x8000
+
+sram: Memory.MappedMemory @ sysbus 0x20000000
+    size: 0x5800
+
+external_flash: Memory.MappedMemory @ sysbus 0x60000000
+    size: 0x400000
+
+uart0: UART.CMSDK_APB_UART @ sysbus 0x40000000
+    frequency: 27000000
