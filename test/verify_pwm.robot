@@ -24,12 +24,17 @@ Should Verify PWM Interface
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
     Write Line To Uart      from machine import PWM, Pin
-    Write Line To Uart      pwm = PWM(Pin(0), freq=2000, duty=256)
-    Write Line To Uart      print("PWM" + "_OBJECT:", pwm)
+    Write Line To Uart      print("P" + "WM_IMPORT_OK")
+    Wait For Line On Uart   PWM_IMPORT_OK
 
+    Write Line To Uart      pwm = PWM(Pin(0), freq=2000, duty=256)
+    Write Line To Uart      print("P" + "WM_CREATED_OK")
+    Wait For Line On Uart   PWM_CREATED_OK
+
+    Write Line To Uart      print("PW" + "M_REPR:", pwm)
     # Our implementation prints PWM(pin=0, freq=2000, duty=256)
     Wait For Line On Uart   PWM(pin=0, freq=2000, duty=256)
 
     Write Line To Uart      pwm.deinit()
-    Write Line To Uart      print("PWM_" + "DEINIT_SUCCESS")
-    Wait For Line On Uart   PWM_DEINIT_SUCCESS
+    Write Line To Uart      print("P" + "WM_DEINIT_OK")
+    Wait For Line On Uart   PWM_DEINIT_OK

@@ -33,6 +33,7 @@ endif
 
 LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs
 LDFLAGS += -Wl,--defsym=FLASH_ORIGIN=$(FLASH_ORIGIN),--defsym=FLASH_LENGTH=$(FLASH_LENGTH)
+CFLAGS += -DFLASH_ORIGIN=$(FLASH_ORIGIN)
 
 # Tune for Debugging or Optimization
 CFLAGS += -g  # always include debug info in the ELF

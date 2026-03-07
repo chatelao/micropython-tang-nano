@@ -87,6 +87,11 @@ void Reset_Handler(void) __attribute__((naked));
 void Reset_Handler(void) {
     // set stack pointer
     __asm volatile ("ldr sp, =_estack");
+
+    // Set VTOR to the start of isr_vector
+    // Use the absolute address provided by FLASH_ORIGIN
+    *(volatile uint32_t *)0xE000ED08 = FLASH_ORIGIN;
+
     // copy .data section from flash to RAM
     for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
         *dest++ = *src++;
@@ -100,7 +105,7 @@ void Reset_Handler(void) {
     for (;;);
 }
 
-const uint32_t isr_vector[] __attribute__((section(".isr_vector"))) = {
+const uint32_t isr_vector[] __attribute__((section(".isr_vector"), aligned(256))) = {
     (uint32_t)&_estack,
     (uint32_t)&Reset_Handler,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

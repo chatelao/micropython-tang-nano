@@ -5,6 +5,7 @@ nvic: IRQControllers.NVIC @ sysbus 0xE000E000
 cpu: CPU.CortexM @ sysbus
     cpuType: "cortex-m3"
     nvic: nvic
+    performanceInMips: 27
 
 // Internal Flash (User Flash) - 32KB
 flash: Memory.MappedMemory @ sysbus 0x00000000
