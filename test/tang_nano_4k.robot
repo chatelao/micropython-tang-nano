@@ -15,10 +15,16 @@ Should Boot To MicroPython REPL
     Execute Command           machine LoadPlatformDescription @${REPL}
     Execute Command           sysbus LoadELF @${BIN}
 
-    # Ensure we start from the reset handler
-    Execute Command           cpu PC `sysbus GetSymbolAddress "Reset_Handler"`
+    # Set VTOR to the start of FLASH
+    Execute Command           sysbus.cpu SetVectorTableOffset 0x60000000
 
-    Create Terminal Tester    ${UART}
+    # Set PC to Reset_Handler
+    Execute Command           sysbus.cpu PC `sysbus GetSymbolAddress "Reset_Handler"`
+
+    # Set SP to the top of stack
+    Execute Command           sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
+
+    Create Terminal Tester    ${UART}    timeout=10
 
     Start Emulation
 

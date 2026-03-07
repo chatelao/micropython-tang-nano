@@ -18,15 +18,17 @@ static char heap[16 * 1024];
 static char *stack_top;
 
 int main(int argc, char **argv) {
+    mp_hal_init();
+    printf("\n--- MicroPython Entry ---\n");
+
     int stack_dummy;
     stack_top = (char *)&stack_dummy;
     mp_stack_set_limit(2048);
 
     gc_init(heap, heap + sizeof(heap));
     mp_init();
-    mp_hal_init();
 
-    printf("\nMicroPython started on Tang Nano 4K\n");
+    printf("MicroPython started on Tang Nano 4K\n");
 
     for (;;) {
         if (pyexec_friendly_repl() != 0) {
