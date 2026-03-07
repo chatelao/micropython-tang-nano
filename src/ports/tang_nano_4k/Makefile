@@ -5,10 +5,10 @@ QSTR_DEFS = qstrdefsport.h
 
 # MicroPython feature configurations
 MICROPY_ROM_TEXT_COMPRESSION ?= 1
-MICROPY_PY_BUILTINS_FLOAT ?= 0
-MICROPY_PY_MATH ?= 0
-MICROPY_ENABLE_COMPILER ?= 0
-MICROPY_PY_SYS_STDFILES ?= 0
+MICROPY_PY_BUILTINS_FLOAT ?= 1
+MICROPY_PY_MATH ?= 1
+MICROPY_ENABLE_COMPILER ?= 1
+MICROPY_PY_SYS_STDFILES ?= 1
 
 # include py core make definitions
 include $(TOP)/py/py.mk

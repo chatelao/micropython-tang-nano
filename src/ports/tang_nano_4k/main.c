@@ -27,16 +27,11 @@ int main(int argc, char **argv) {
     mp_hal_init();
     printf("MicroPython started on Tang Nano 4K\n");
 
-#if MICROPY_ENABLE_COMPILER
     for (;;) {
         if (pyexec_friendly_repl() != 0) {
             break;
         }
     }
-#else
-    for (;;) {
-    }
-#endif
 
     mp_deinit();
     return 0;

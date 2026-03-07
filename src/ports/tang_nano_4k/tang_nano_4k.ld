@@ -1,7 +1,7 @@
 /* tang_nano_4k.ld */
 MEMORY
 {
-    FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 32K
+    FLASH (rx) : ORIGIN = 0x60000000, LENGTH = 4M
     SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 22K
 }
 
