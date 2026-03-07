@@ -2,6 +2,8 @@
 #include "py/runtime.h"
 #include "py/mphal.h"
 #include "pin.h"
+#include "extmod/virtpin.h"
+#include "extmod/modmachine.h"
 
 #define GPIO_BASE (0x40010000)
 #define GPIO_REG(off) (*(volatile uint32_t *)(GPIO_BASE + (off)))
@@ -112,6 +114,37 @@ static mp_obj_t machine_pin_init(size_t n_args, const mp_obj_t *args, mp_map_t *
 }
 static MP_DEFINE_CONST_FUN_OBJ_KW(machine_pin_init_obj, 1, machine_pin_init);
 
+
+static mp_uint_t machine_pin_ioctl(mp_obj_t self_in, mp_uint_t request, uintptr_t arg, int *errcode) {
+    (void)errcode;
+    machine_pin_obj_t *self = MP_OBJ_TO_PTR(self_in);
+
+    switch (request) {
+        case MP_PIN_READ:
+            return (REG_DATA >> self->pin_id) & 1;
+        case MP_PIN_WRITE:
+            if (arg) {
+                REG_DATAOUT |= (1 << self->pin_id);
+            } else {
+                REG_DATAOUT &= ~(1 << self->pin_id);
+            }
+            return 0;
+        case MP_PIN_INPUT:
+            REG_OUTENCLR = (1 << self->pin_id);
+            REG_ALTFUNCCLR = (1 << self->pin_id);
+            return 0;
+        case MP_PIN_OUTPUT:
+            REG_OUTENSET = (1 << self->pin_id);
+            REG_ALTFUNCCLR = (1 << self->pin_id);
+            return 0;
+    }
+    return -1;
+}
+
+static const mp_pin_p_t machine_pin_protocol = {
+    .ioctl = machine_pin_ioctl,
+};
+
 static const mp_rom_map_elem_t machine_pin_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_init), MP_ROM_PTR(&machine_pin_init_obj) },
     { MP_ROM_QSTR(MP_QSTR_value), MP_ROM_PTR(&machine_pin_value_obj) },
@@ -123,11 +156,33 @@ static const mp_rom_map_elem_t machine_pin_locals_dict_table[] = {
 };
 static MP_DEFINE_CONST_DICT(machine_pin_locals_dict, machine_pin_locals_dict_table);
 
+void mp_hal_pin_od_low(mp_hal_pin_obj_t pin_obj) {
+    machine_pin_obj_t *pin = MP_OBJ_TO_PTR(pin_obj);
+    REG_DATAOUT &= ~(1 << pin->pin_id);
+    REG_OUTENSET = (1 << pin->pin_id);
+    REG_ALTFUNCCLR = (1 << pin->pin_id);
+}
+
+void mp_hal_pin_od_high(mp_hal_pin_obj_t pin_obj) {
+    machine_pin_obj_t *pin = MP_OBJ_TO_PTR(pin_obj);
+    REG_OUTENCLR = (1 << pin->pin_id);
+    REG_ALTFUNCCLR = (1 << pin->pin_id);
+}
+
+void mp_hal_pin_open_drain(mp_hal_pin_obj_t pin_obj) {
+    mp_hal_pin_od_high(pin_obj);
+}
+
+uint32_t mp_hal_pin_name(mp_hal_pin_obj_t p) {
+    return ((machine_pin_obj_t *)MP_OBJ_TO_PTR(p))->pin_id;
+}
+
 MP_DEFINE_CONST_OBJ_TYPE(
     machine_pin_type,
     MP_QSTR_Pin,
     MP_TYPE_FLAG_NONE,
     make_new, machine_pin_make_new,
     print, machine_pin_print,
+    protocol, &machine_pin_protocol,
     locals_dict, &machine_pin_locals_dict
     );

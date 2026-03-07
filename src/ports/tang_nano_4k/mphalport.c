@@ -51,3 +51,15 @@ void mp_hal_delay_ms(mp_uint_t ms) {
 mp_uint_t mp_hal_ticks_ms(void) {
     return ticks_ms;
 }
+
+void mp_hal_delay_us(mp_uint_t us) {
+    // Basic busy-wait for us delay
+    // 27MHz = 27 cycles per us.
+    // Each loop iteration takes some cycles.
+    // 27 cycles is roughly 9 iterations if each loop is 3 cycles.
+    // Let's use a safe approximation for now.
+    volatile uint32_t count = us * (CPU_FREQ / 4000000); // Very rough
+    while (count--) {
+        __asm__("nop");
+    }
+}
