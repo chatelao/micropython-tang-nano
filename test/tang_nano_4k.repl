@@ -1,7 +1,10 @@
 // Tang Nano 4K platform definition
 
+nvic: IRQControllers.NVIC @ sysbus 0xE000E000
+
 cpu: CPU.CortexM @ sysbus
     cpuType: "cortex-m3"
+    nvic: nvic
 
 flash: Memory.MappedMemory @ sysbus 0x0
     size: 0x8000
