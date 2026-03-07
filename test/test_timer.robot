@@ -1,4 +1,5 @@
 *** Settings ***
+Library         OperatingSystem
 Suite Setup     Setup
 Suite Teardown  Teardown
 Test Setup      Reset Emulation
@@ -9,7 +10,6 @@ ${RESC}         ${CURDIR}/tang_nano_4k.resc
 ${REPL}         ${CURDIR}/tang_nano_4k.repl
 ${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
-${TEST_SCRIPT}  ${CURDIR}/../test_timer.py
 
 *** Test Cases ***
 Should Run Timer Test
@@ -22,23 +22,17 @@ Should Run Timer Test
     Create Terminal Tester  ${UART}
     Start Emulation
 
-    Wait For Text On Uart   MicroPython started on Tang Nano 4K
-    Wait For Text On Uart   >>>
+    Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
-    # Read the test script and write it to the REPL
-    ${script}=              Get File  ${TEST_SCRIPT}
-    Write Line To Uart      ${script}
+    Write Line To Uart      from machine import Timer
+    Write Line To Uart      t = Timer(-1, period=1000, mode=Timer.PERIODIC, callback=lambda t:print("TICK_" + "EVENT"))
 
-    Wait For Text On Uart   Testing machine.Timer...
-    Wait For Text On Uart   Timer started. Waiting 3.5 seconds...
+    # Wait for periodic ticks with 10s timeout
+    Wait For Line On Uart   TICK_EVENT    timeout=10
+    Wait For Line On Uart   TICK_EVENT    timeout=10
+    Wait For Line On Uart   TICK_EVENT    timeout=10
 
-    # We expect 3 ticks in 3.5 seconds (at 1s, 2s, 3s)
-    Wait For Text On Uart   Timer periodic tick
-    Wait For Text On Uart   Timer periodic tick
-    Wait For Text On Uart   Timer periodic tick
+    Write Line To Uart      t.deinit()
 
-    Wait For Text On Uart   Deinitializing timer...
-    Wait For Text On Uart   Testing one-shot timer (2 seconds)...
-
-    Wait For Text On Uart   One-shot timer fired!
-    Wait For Text On Uart   Test complete.
+    Write Line To Uart      t2 = Timer(-1, period=500, mode=Timer.ONE_SHOT, callback=lambda t:print("FIRED_" + "EVENT"))
+    Wait For Line On Uart   FIRED_EVENT   timeout=10

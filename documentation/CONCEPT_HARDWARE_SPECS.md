@@ -40,3 +40,8 @@ This document outlines the hardware specifications for the Sipeed Tang Nano 4K d
 - [x] Document basic specifications.
 - [x] Detailed memory map for Cortex-M3.
 - [x] Peripheral register mapping.
+ - [x] Implement SoftI2C support.
+- [ ] Implement SPI support.
+- [ ] Implement ADC support.
+- [ ] Implement Virtual File System (VFS).
+- [ ] Implement Hardware Interrupts (GPIO).

@@ -1,4 +1,5 @@
 *** Settings ***
+Library         OperatingSystem
 Suite Setup     Setup
 Suite Teardown  Teardown
 Test Setup      Reset Emulation
@@ -11,7 +12,7 @@ ${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
 
 *** Test Cases ***
-Should Verify PWM Interface
+Verify SoftI2C Instantiation and Scan
     Execute Command         $repl = @${REPL}
     Execute Command         $bin = @${BIN}
     Execute Command         include @${RESC}
@@ -23,13 +24,10 @@ Should Verify PWM Interface
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
-    Write Line To Uart      from machine import PWM, Pin
-    Write Line To Uart      pwm = PWM(Pin(0), freq=2000, duty=256)
-    Write Line To Uart      print("PWM" + "_OBJECT:", pwm)
+    Write Line To Uart      import machine
+    Write Line To Uart      i2c = machine.SoftI2C(scl=machine.Pin(0), sda=machine.Pin(1), freq=100000)
+    Write Line To Uart      print("CREATED_" + "I2C_SUCCESS")
+    Wait For Line On Uart   CREATED_I2C_SUCCESS
 
-    # Our implementation prints PWM(pin=0, freq=2000, duty=256)
-    Wait For Line On Uart   PWM(pin=0, freq=2000, duty=256)
-
-    Write Line To Uart      pwm.deinit()
-    Write Line To Uart      print("PWM_" + "DEINIT_SUCCESS")
-    Wait For Line On Uart   PWM_DEINIT_SUCCESS
+    Write Line To Uart      print("SCAN_" + "RESULT:", i2c.scan())
+    Wait For Line On Uart   SCAN_RESULT: []

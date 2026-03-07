@@ -31,6 +31,8 @@ typedef struct _machine_pwm_obj_t {
     bool active;
 } machine_pwm_obj_t;
 
+static mp_obj_t machine_pwm_init_helper(machine_pwm_obj_t *self, size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args);
+
 static uint32_t pwm_tick_counter = 0;
 
 static void update_timer_freq(uint32_t freq) {
@@ -63,37 +65,6 @@ static void machine_pwm_print(const mp_print_t *print, mp_obj_t self_in, mp_prin
     machine_pwm_obj_t *self = MP_OBJ_TO_PTR(self_in);
     mp_printf(print, "PWM(pin=%u, freq=%u, duty=%u)",
         (unsigned int)self->pin_id, (unsigned int)self->freq, (unsigned int)self->duty);
-}
-
-static mp_obj_t machine_pwm_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
-    mp_arg_check_num(n_args, n_kw, 1, 1, false);
-
-    // Pin should be passed as the first argument
-    uint32_t pin_id;
-    if (mp_obj_is_type(args[0], &machine_pin_type)) {
-        machine_pin_obj_t *pin = MP_OBJ_TO_PTR(args[0]);
-        pin_id = pin->pin_id;
-    } else {
-        pin_id = mp_obj_get_int(args[0]);
-    }
-
-    if (pin_id >= 16) {
-        mp_raise_ValueError(MP_ERROR_TEXT("invalid pin"));
-    }
-
-    machine_pwm_obj_t *self = mp_obj_malloc(machine_pwm_obj_t, &machine_pwm_type);
-    self->base.type = &machine_pwm_type;
-    self->pin_id = pin_id;
-    self->freq = 1000;
-    self->duty = 512;
-    self->threshold = (self->duty * PWM_RESOLUTION) / 1024;
-    self->active = false;
-
-    // Set pin to output and clear alt func
-    REG_OUTENSET = (1 << self->pin_id);
-    REG_ALTFUNCCLR = (1 << self->pin_id);
-
-    return MP_OBJ_FROM_PTR(self);
 }
 
 static mp_obj_t machine_pwm_init_helper(machine_pwm_obj_t *self, size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
@@ -140,6 +111,44 @@ static mp_obj_t machine_pwm_init_helper(machine_pwm_obj_t *self, size_t n_args, 
     NVIC_ISER0 |= (1 << 9); // Enable IRQ 9 (TIMER1)
 
     return mp_const_none;
+}
+
+static mp_obj_t machine_pwm_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
+    mp_arg_check_num(n_args, n_kw, 1, MP_OBJ_FUN_ARGS_MAX, true);
+
+    // Pin should be passed as the first argument
+    uint32_t pin_id;
+    if (mp_obj_is_type(args[0], &machine_pin_type)) {
+        machine_pin_obj_t *pin = MP_OBJ_TO_PTR(args[0]);
+        pin_id = pin->pin_id;
+    } else {
+        pin_id = mp_obj_get_int(args[0]);
+    }
+
+    if (pin_id >= 16) {
+        mp_raise_ValueError(MP_ERROR_TEXT("invalid pin"));
+    }
+
+    machine_pwm_obj_t *self = mp_obj_malloc(machine_pwm_obj_t, &machine_pwm_type);
+    self->base.type = &machine_pwm_type;
+    self->pin_id = pin_id;
+    self->freq = 1000;
+    self->duty = 512;
+    self->threshold = (self->duty * PWM_RESOLUTION) / 1024;
+    self->active = false;
+
+    // Set pin to output and clear alt func
+    REG_OUTENSET = (1 << self->pin_id);
+    REG_ALTFUNCCLR = (1 << self->pin_id);
+
+    if (n_args > 1 || n_kw > 0) {
+        // Handle PWM initialization
+        mp_map_t kw_args;
+        mp_map_init_fixed_table(&kw_args, n_kw, args + n_args);
+        machine_pwm_init_helper(self, n_args - 1, args + 1, &kw_args);
+    }
+
+    return MP_OBJ_FROM_PTR(self);
 }
 
 static mp_obj_t machine_pwm_init(size_t n_args, const mp_obj_t *args, mp_map_t *kw_args) {
