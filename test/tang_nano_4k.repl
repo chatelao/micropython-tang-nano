@@ -16,3 +16,4 @@ external_flash: Memory.MappedMemory @ sysbus 0x60000000
     size: 0x400000
 
 uart0: UART.CMSDK_APB_UART @ sysbus 0x40000000
+    frequency: 27000000

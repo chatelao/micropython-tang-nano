@@ -20,5 +20,5 @@ Should Boot To MicroPython REPL
     Start Emulation
 
     # Check for the MicroPython banner and REPL prompt
-    Wait For Line On Uart     MicroPython
+    Wait For Line On Uart     MicroPython started on Tang Nano 4K
     Wait For Line On Uart     >>>
