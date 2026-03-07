@@ -44,37 +44,7 @@ static void machine_timer_print(const mp_print_t *print, mp_obj_t self_in, mp_pr
         (unsigned int)self->period, (unsigned int)self->mode, (unsigned int)self->active);
 }
 
-static mp_obj_t machine_timer_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
-    mp_arg_check_num(n_args, n_kw, 0, 1, false);
-
-    machine_timer_obj_t *self = mp_obj_malloc(machine_timer_obj_t, &machine_timer_type);
-    self->base.type = &machine_timer_type;
-    self->active = false;
-    self->callback = mp_const_none;
-
-    if (n_args > 0) {
-        // timer_id is currently ignored as we use a software pool
-        mp_obj_get_int(args[0]);
-    }
-
-    // Find a slot for the timer
-    int slot = -1;
-    for (int i = 0; i < MAX_TIMERS; i++) {
-        if (MP_STATE_PORT(active_timers)[i] == NULL) {
-            slot = i;
-            break;
-        }
-    }
-
-    if (slot == -1) {
-        mp_raise_OSError(MP_ENOMEM);
-    }
-
-    MP_STATE_PORT(active_timers)[slot] = self;
-    return MP_OBJ_FROM_PTR(self);
-}
-
-static mp_obj_t machine_timer_init_helper(machine_timer_obj_t *self, mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
+static mp_obj_t machine_timer_init_helper(machine_timer_obj_t *self, size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     enum { ARG_period, ARG_mode, ARG_callback };
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_period, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 1000} },
@@ -113,6 +83,44 @@ static mp_obj_t machine_timer_init_helper(machine_timer_obj_t *self, mp_uint_t n
     self->active = true;
 
     return mp_const_none;
+}
+
+static mp_obj_t machine_timer_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
+    mp_arg_check_num(n_args, n_kw, 0, MP_OBJ_FUN_ARGS_MAX, true);
+
+    machine_timer_obj_t *self = mp_obj_malloc(machine_timer_obj_t, &machine_timer_type);
+    self->base.type = &machine_timer_type;
+    self->active = false;
+    self->callback = mp_const_none;
+
+    if (n_args > 0) {
+        // timer_id is currently ignored as we use a software pool
+        mp_obj_get_int(args[0]);
+    }
+
+    // Find a slot for the timer
+    int slot = -1;
+    for (int i = 0; i < MAX_TIMERS; i++) {
+        if (MP_STATE_PORT(active_timers)[i] == NULL) {
+            slot = i;
+            break;
+        }
+    }
+
+    if (slot == -1) {
+        mp_raise_OSError(MP_ENOMEM);
+    }
+
+    MP_STATE_PORT(active_timers)[slot] = self;
+
+    if (n_args > 1 || n_kw > 0) {
+        // Handle timer initialization
+        mp_map_t kw_args;
+        mp_map_init_fixed_table(&kw_args, n_kw, args + n_args);
+        machine_timer_init_helper(self, n_args - 1, args + 1, &kw_args);
+    }
+
+    return MP_OBJ_FROM_PTR(self);
 }
 
 static mp_obj_t machine_timer_init(size_t n_args, const mp_obj_t *args, mp_map_t *kw_args) {

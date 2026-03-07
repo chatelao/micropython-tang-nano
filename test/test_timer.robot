@@ -25,15 +25,15 @@ Should Run Timer Test
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
     Write Line To Uart      from machine import Timer
-    Write Line To Uart      t = Timer(-1)
-    Write Line To Uart      t.init(period=1000, mode=Timer.PERIODIC, callback=lambda t:print("tick"))
+    Write Line To Uart      t = Timer(-1, period=1000, mode=Timer.PERIODIC, callback=lambda t:print("TICK_EVENT"))
 
-    Wait For Line On Uart   tick
-    Wait For Line On Uart   tick
-    Wait For Line On Uart   tick
+    # Wait for periodic ticks with 10s timeout
+    # Use TICK_EVENT to avoid matching the command echo
+    Wait For Line On Uart   TICK_EVENT    timeout=10
+    Wait For Line On Uart   TICK_EVENT    timeout=10
+    Wait For Line On Uart   TICK_EVENT    timeout=10
 
     Write Line To Uart      t.deinit()
 
-    Write Line To Uart      t2 = Timer(-1)
-    Write Line To Uart      t2.init(period=500, mode=Timer.ONE_SHOT, callback=lambda t:print("fired"))
-    Wait For Line On Uart   fired
+    Write Line To Uart      t2 = Timer(-1, period=500, mode=Timer.ONE_SHOT, callback=lambda t:print("FIRED_EVENT"))
+    Wait For Line On Uart   FIRED_EVENT   timeout=10

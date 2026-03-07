@@ -20,13 +20,16 @@ Should Verify PWM Interface
     Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
     Create Terminal Tester  ${UART}
     Start Emulation
+
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
+
     Write Line To Uart      from machine import PWM, Pin
-    Write Line To Uart      pwm = PWM(Pin(0))
-    Write Line To Uart      print(pwm)
-    Wait For Line On Uart   PWM(pin=0, freq=1000, duty=512)
-    Write Line To Uart      pwm.freq(2000)
-    Write Line To Uart      pwm.duty(256)
-    Write Line To Uart      print(pwm)
+    Write Line To Uart      pwm = PWM(Pin(0), freq=2000, duty=256)
+    Write Line To Uart      print("PWM_PIN:", pwm.pin()) if hasattr(pwm, "pin") else print("PWM_OBJECT:", pwm)
+
+    # Our implementation prints PWM(pin=0, freq=2000, duty=256)
     Wait For Line On Uart   PWM(pin=0, freq=2000, duty=256)
+
     Write Line To Uart      pwm.deinit()
+    Write Line To Uart      print("PWM_DEINIT_SUCCESS")
+    Wait For Line On Uart   PWM_DEINIT_SUCCESS

@@ -2,7 +2,7 @@
 
 Next steps for the MicroPython for Tang Nano 4K project:
 
-- [ ] 14. Implement SoftI2C support.
+- [x] 14. Implement SoftI2C support.
 - [ ] 15. Implement SPI support.
 - [ ] 16. Implement ADC support.
 - [ ] 17. Implement Virtual File System (VFS).
