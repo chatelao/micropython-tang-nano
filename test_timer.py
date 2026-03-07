@@ -18,4 +18,12 @@ print("Testing one-shot timer (2 seconds)...")
 tim.init(period=2000, mode=machine.Timer.ONE_SHOT, callback=lambda t: print("One-shot timer fired!"))
 
 time.sleep(3)
+
+print("Testing slot reuse...")
+for i in range(10):
+    t = machine.Timer(-1)
+    t.init(period=100, callback=lambda x: None)
+    t.deinit()
+print("Slot reuse test passed.")
+
 print("Test complete.")

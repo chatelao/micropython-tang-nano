@@ -53,6 +53,8 @@ SRC_C = \
 	$(TOP)/shared/libc/printf.c \
 	$(TOP)/shared/runtime/stdout_helpers.c \
 
+SRC_QSTR += $(SRC_C)
+
 # Include REPL and compiler only if enabled
 ifeq ($(MICROPY_ENABLE_COMPILER), 1)
 SRC_C += \

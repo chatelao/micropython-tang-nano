@@ -7,8 +7,6 @@
 #define MAX_TIMERS 4
 MP_REGISTER_ROOT_POINTER(struct _machine_timer_obj_t *active_timers[4]);
 
-#include "genhdr/root_pointers.h"
-
 typedef enum {
     TIMER_MODE_ONE_SHOT,
     TIMER_MODE_PERIODIC,
@@ -91,6 +89,27 @@ static mp_obj_t machine_timer_init_helper(machine_timer_obj_t *self, mp_uint_t n
     self->mode = vals[ARG_mode].u_int;
     self->callback = vals[ARG_callback].u_obj;
     self->last_tick = mp_hal_ticks_ms();
+
+    // Re-register in the pool if not present (e.g. after deinit)
+    bool found = false;
+    int first_empty = -1;
+    for (int i = 0; i < MAX_TIMERS; i++) {
+        if (MP_STATE_PORT(active_timers)[i] == self) {
+            found = true;
+            break;
+        }
+        if (first_empty == -1 && MP_STATE_PORT(active_timers)[i] == NULL) {
+            first_empty = i;
+        }
+    }
+
+    if (!found) {
+        if (first_empty == -1) {
+            mp_raise_OSError(MP_ENOMEM);
+        }
+        MP_STATE_PORT(active_timers)[first_empty] = self;
+    }
+
     self->active = true;
 
     return mp_const_none;
