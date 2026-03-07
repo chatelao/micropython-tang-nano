@@ -31,6 +31,8 @@ typedef struct _machine_pwm_obj_t {
     bool active;
 } machine_pwm_obj_t;
 
+static mp_obj_t machine_pwm_init_helper(machine_pwm_obj_t *self, size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args);
+
 static uint32_t pwm_tick_counter = 0;
 
 static void update_timer_freq(uint32_t freq) {

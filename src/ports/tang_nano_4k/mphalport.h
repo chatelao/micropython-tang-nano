@@ -17,6 +17,8 @@ void mp_hal_delay_us(mp_uint_t us);
 #define mp_hal_delay_us_fast(us) mp_hal_delay_us(us)
 
 mp_uint_t mp_hal_ticks_ms(void);
+mp_uint_t mp_hal_ticks_us(void);
+mp_uint_t mp_hal_ticks_cpu(void);
 
 #define MP_HAL_PIN_FMT "Pin(%u)"
 uint32_t mp_hal_pin_name(mp_hal_pin_obj_t p);

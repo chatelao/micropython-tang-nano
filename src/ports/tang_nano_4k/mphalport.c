@@ -52,6 +52,14 @@ mp_uint_t mp_hal_ticks_ms(void) {
     return ticks_ms;
 }
 
+mp_uint_t mp_hal_ticks_us(void) {
+    return ticks_ms * 1000;
+}
+
+mp_uint_t mp_hal_ticks_cpu(void) {
+    return ticks_ms * 1000;
+}
+
 void mp_hal_delay_us(mp_uint_t us) {
     // Basic busy-wait for us delay
     // 27MHz = 27 cycles per us.

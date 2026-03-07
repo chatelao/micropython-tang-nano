@@ -21,6 +21,8 @@ typedef struct _machine_timer_obj_t {
     bool active;
 } machine_timer_obj_t;
 
+static mp_obj_t machine_timer_init_helper(machine_timer_obj_t *self, size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args);
+
 void machine_timer_tick_all(void) {
     uint32_t current_tick = mp_hal_ticks_ms();
     for (int i = 0; i < MAX_TIMERS; i++) {

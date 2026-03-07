@@ -25,11 +25,11 @@ Should Verify PWM Interface
 
     Write Line To Uart      from machine import PWM, Pin
     Write Line To Uart      pwm = PWM(Pin(0), freq=2000, duty=256)
-    Write Line To Uart      print("PWM_PIN:", pwm.pin()) if hasattr(pwm, "pin") else print("PWM_OBJECT:", pwm)
+    Write Line To Uart      print("PWM" + "_OBJECT:", pwm)
 
     # Our implementation prints PWM(pin=0, freq=2000, duty=256)
     Wait For Line On Uart   PWM(pin=0, freq=2000, duty=256)
 
     Write Line To Uart      pwm.deinit()
-    Write Line To Uart      print("PWM_DEINIT_SUCCESS")
+    Write Line To Uart      print("PWM_" + "DEINIT_SUCCESS")
     Wait For Line On Uart   PWM_DEINIT_SUCCESS

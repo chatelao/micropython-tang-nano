@@ -26,8 +26,8 @@ Verify SoftI2C Instantiation and Scan
 
     Write Line To Uart      import machine
     Write Line To Uart      i2c = machine.SoftI2C(scl=machine.Pin(0), sda=machine.Pin(1), freq=100000)
-    Write Line To Uart      print("CREATED_I2C_SUCCESS")
+    Write Line To Uart      print("CREATED_" + "I2C_SUCCESS")
     Wait For Line On Uart   CREATED_I2C_SUCCESS
 
-    Write Line To Uart      print("SCAN_RESULT:", i2c.scan())
+    Write Line To Uart      print("SCAN_" + "RESULT:", i2c.scan())
     Wait For Line On Uart   SCAN_RESULT: []

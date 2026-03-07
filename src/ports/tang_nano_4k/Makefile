@@ -53,6 +53,7 @@ SRC_C = \
 	modmachine.c \
 	$(TOP)/extmod/machine_i2c.c \
 	$(TOP)/extmod/virtpin.c \
+	$(TOP)/extmod/modtime.c \
 	$(TOP)/shared/libc/printf.c \
 	$(TOP)/shared/runtime/stdout_helpers.c \
 
