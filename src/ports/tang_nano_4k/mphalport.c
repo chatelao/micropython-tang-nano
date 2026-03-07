@@ -2,9 +2,11 @@
 #include "py/stream.h"
 #include "mphalport.h"
 #include "uart.h"
+#include "pin.h"
 
 void mp_hal_init(void) {
     uart_init(115200);
+    pin_init();
 }
 
 mp_uint_t mp_hal_stdout_tx_strn(const char *str, size_t len) {
