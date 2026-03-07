@@ -1,9 +1,7 @@
 # MicroPython for Tang Nano 4K
 
-This project aims to create a working MicroPython implementation for the Sipeed Tang Nano 4K FPGA development board.
-
-## Project Goal
-- Create a working MicroPython implementation for Tang Nano 4K.
+## Goal
+This project aims to port MicroPython to the "Sipeed Tang Nano 4K" FPGA development board.
 
 ## Project Structure
 - `/definitions` - Datasheets and Standards to be used.
@@ -14,4 +12,4 @@ This project aims to create a working MicroPython implementation for the Sipeed 
 - `ROADMAP.md` - Progress tracking and future steps.
 
 ## Progress
-See `ROADMAP.md` for the current status and upcoming tasks.
+Update `ROADMAP.md` for the current status and upcoming tasks.

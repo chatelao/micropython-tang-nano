@@ -10,7 +10,8 @@ This document outlines the hardware specifications for the Sipeed Tang Nano 4K d
 
 ## Memory
 - **Block SRAM**: 180K bits
-- **User Flash**: 256K bits
+- **User Flash (Internal)**: 256K bits (32KB)
+- **External Flash**: 32Mbit (4MB) SPI NOR Flash (Default)
 
 ## Connectivity and Interfaces
 - **USB-JTAG**: Onboard debugger for bitstream burning and MCU debugging.
@@ -19,8 +20,9 @@ This document outlines the hardware specifications for the Sipeed Tang Nano 4K d
 - **User I/O**: 44 pins across 4 banks.
 
 ## Memory Map (Cortex-M3)
-- **ITCM/Flash**: 0x00000000 - 0x00007FFF (32KB)
+- **ITCM/Flash (Internal)**: 0x00000000 - 0x00007FFF (32KB)
 - **SRAM**: 0x20000000 - 0x200057FF (22KB)
+- **External Flash (via SPI)**: Not directly memory-mapped, accessible via SPI controller.
 - **Peripherals**: 0x40000000
 
 ## Peripheral Register Mapping
