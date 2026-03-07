@@ -10,7 +10,6 @@ ${RESC}         ${CURDIR}/tang_nano_4k.resc
 ${REPL}         ${CURDIR}/tang_nano_4k.repl
 ${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
-${TEST_SCRIPT}  ${CURDIR}/../test_timer.py
 
 *** Test Cases ***
 Should Run Timer Test
@@ -25,20 +24,16 @@ Should Run Timer Test
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
-    # Read the test script and write it to the REPL
-    ${script}=              Get File  ${TEST_SCRIPT}
-    Write Line To Uart      ${script}
+    Write Line To Uart      from machine import Timer
+    Write Line To Uart      t = Timer(-1)
+    Write Line To Uart      t.init(period=1000, mode=Timer.PERIODIC, callback=lambda t:print("tick"))
 
-    Wait For Line On Uart   Testing machine.Timer...
-    Wait For Line On Uart   Timer started. Waiting 3.5 seconds...
+    Wait For Line On Uart   tick
+    Wait For Line On Uart   tick
+    Wait For Line On Uart   tick
 
-    # We expect 3 ticks in 3.5 seconds (at 1s, 2s, 3s)
-    Wait For Line On Uart   Timer periodic tick
-    Wait For Line On Uart   Timer periodic tick
-    Wait For Line On Uart   Timer periodic tick
+    Write Line To Uart      t.deinit()
 
-    Wait For Line On Uart   Deinitializing timer...
-    Wait For Line On Uart   Testing one-shot timer (2 seconds)...
-
-    Wait For Line On Uart   One-shot timer fired!
-    Wait For Line On Uart   Test complete.
+    Write Line To Uart      t2 = Timer(-1)
+    Write Line To Uart      t2.init(period=500, mode=Timer.ONE_SHOT, callback=lambda t:print("fired"))
+    Wait For Line On Uart   fired

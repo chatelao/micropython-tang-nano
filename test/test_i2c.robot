@@ -10,7 +10,6 @@ ${RESC}         ${CURDIR}/tang_nano_4k.resc
 ${REPL}         ${CURDIR}/tang_nano_4k.repl
 ${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
-${TEST_I2C}     ${CURDIR}/test_i2c.py
 
 *** Test Cases ***
 Verify SoftI2C Instantiation and Scan
@@ -25,11 +24,12 @@ Verify SoftI2C Instantiation and Scan
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
-    ${script}=    Get File    ${TEST_I2C}
-    Write Line To Uart      ${script}
+    Write Line To Uart      import machine
+    Write Line To Uart      scl = machine.Pin(0)
+    Write Line To Uart      sda = machine.Pin(1)
+    Write Line To Uart      i2c = machine.SoftI2C(scl=scl, sda=sda, freq=100000)
+    Write Line To Uart      print("Created:", i2c)
+    Wait For Line On Uart   Created: SoftI2C(scl=Pin(0), sda=Pin(1), freq=100000)
 
-    Wait For Line On Uart   Testing SoftI2C instantiation...
-    Wait For Line On Uart   SoftI2C object created successfully: SoftI2C(scl=Pin(0), sda=Pin(1), freq=100000)
-    Wait For Line On Uart   Scanning I2C bus...
-    Wait For Line On Uart   Scan complete. Devices found: []
-    Wait For Line On Uart   I2C test script finished.
+    Write Line To Uart      print("Scan:", i2c.scan())
+    Wait For Line On Uart   Scan: []
