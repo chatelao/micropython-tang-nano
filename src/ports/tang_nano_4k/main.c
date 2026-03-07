@@ -12,6 +12,7 @@
 #include "py/stackctrl.h"
 #include "shared/runtime/pyexec.h"
 #include "mphalport.h"
+#include "timer.h"
 
 // Heap for MicroPython
 static char heap[16 * 1024];
@@ -35,6 +36,12 @@ int main(int argc, char **argv) {
 
     mp_deinit();
     return 0;
+}
+
+extern volatile mp_uint_t ticks_ms;
+void SysTick_Handler(void) {
+    ticks_ms++;
+    machine_timer_tick_all();
 }
 
 void gc_collect(void) {
@@ -89,5 +96,6 @@ void Reset_Handler(void) {
 const uint32_t isr_vector[] __attribute__((section(".isr_vector"))) = {
     (uint32_t)&_estack,
     (uint32_t)&Reset_Handler,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    (uint32_t)&SysTick_Handler,
 };
