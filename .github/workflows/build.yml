@@ -34,9 +34,12 @@ jobs:
 
       - name: Build Tang Nano 4K port
         run: |
-          # We expect this to fail currently due to FLASH overflow, so we ignore the error for now
-          # but we still want to see the output in the logs.
-          make -C src/ports/tang_nano_4k/ || true
+          make -C src/ports/tang_nano_4k/
+
+      - name: Run Renode tests
+        uses: antmicro/renode-test-action@v5
+        with:
+          tests-to-run: test/tang_nano_4k.robot
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

@@ -1,0 +1,16 @@
+// Tang Nano 4K platform definition
+
+cpu: CPU.CortexM @ sysbus
+    cpuType: "cortex-m3"
+
+flash: Memory.MappedMemory @ sysbus 0x0
+    size: 0x8000
+
+sram: Memory.MappedMemory @ sysbus 0x20000000
+    size: 0x5800
+
+external_flash: Memory.MappedMemory @ sysbus 0x60000000
+    size: 0x400000
+
+uart0: UART.CMSDK_APB_UART @ sysbus 0x40000000
+    iterationDelay: 100
