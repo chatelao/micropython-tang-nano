@@ -18,10 +18,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install ARM GNU Toolchain
+      - name: Install ARM GNU Toolchain and QEMU
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi
+          sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi qemu-system-arm
 
       - name: Clone MicroPython core
         run: |
@@ -32,11 +32,21 @@ jobs:
         run: |
           make -C src/lib/micropython/mpy-cross
 
-      - name: Build Tang Nano 4K port
+      - name: Build Tang Nano 4K port (Hardware)
         run: |
           # We expect this to fail currently due to FLASH overflow, so we ignore the error for now
           # but we still want to see the output in the logs.
           make -C src/ports/tang_nano_4k/ || true
+
+      - name: Build Tang Nano 4K port (QEMU Mock)
+        run: |
+          # Clean hardware build first to avoid object file conflicts if any
+          make -C src/ports/tang_nano_4k/ clean
+          make -C src/ports/tang_nano_4k/ QEMU=1
+
+      - name: Run QEMU Test
+        run: |
+          python3 test/run_qemu_test.py
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
