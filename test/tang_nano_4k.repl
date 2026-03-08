@@ -1,24 +1,31 @@
-// tang_nano_4k.repl
+// tang_nano_4k_rectified.repl
 
 nvic: IRQControllers.NVIC @ sysbus 0xE000E000
 
 cpu: CPU.CortexM @ sysbus
-    cpuType: "cortex-m3"
-    nvic: nvic
+cpuType: "cortex-m3"
+nvic: nvic
 
-// Internal Flash (User Flash) - 32KB
+// Internal Flash (User Flash) - 32KB Programming Space
 flash: Memory.MappedMemory @ sysbus 0x00000000
-    size: 0x8000
+size: 0x8000
 
-// Internal SRAM - 22KB
+// Internal SRAM - Defensively Bounded to 22KB against 180Kbit Physical Limit
 sram: Memory.MappedMemory @ sysbus 0x20000000
-    size: 0x5800
+size: 0x5800
 
-// CMSDK UART - Mocked at 0x40000000
-uart0: UART.CMSDK_APB_UART @ sysbus 0x40000000
-    frequency: 27000000
+// System Timer 0 - Mapped to the primary peripheral space
+timer0: Timers.CMSDK_APB_Timer @ sysbus 0x40000000
+frequency: 27000000
 
-// External SPI NOR Flash - 4MB
-// Mapped at 0x60000000 for simulation purposes
+// CMSDK UART - Corrected Base Address corresponding to Gowin UART0
+uart0: UART.CMSDK_APB_UART @ sysbus 0x40004000
+frequency: 27000000
+
+// External SPI NOR Flash - 4MB mapped via APB Master 1 for XIP
 external_flash: Memory.MappedMemory @ sysbus 0x60000000
-    size: 0x400000
+size: 0x400000
+
+// External PSRAM Expansion - 8MB mapped via AHB PSRAM Memory Interface
+psram: Memory.MappedMemory @ sysbus 0x82000000
+size: 0x800000
