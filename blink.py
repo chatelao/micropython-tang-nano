@@ -7,9 +7,9 @@ print("Starting " + "blink test...")
 for i in range(5):
     led.on()
     print("LED " + "ON")
-    time.sleep(0.5)
+    time.sleep_ms(500)
     led.off()
     print("LED " + "OFF")
-    time.sleep(0.5)
+    time.sleep_ms(500)
 
 print("Blink " + "test complete.")

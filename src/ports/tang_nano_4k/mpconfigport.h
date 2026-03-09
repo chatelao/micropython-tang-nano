@@ -7,6 +7,8 @@
 #define MICROPY_ENABLE_GC (1)
 #define MICROPY_HELPER_REPL (1)
 #define MICROPY_ENABLE_COMPILER (1)
+#define MICROPY_PY_BUILTINS_FLOAT (1)
+#define MICROPY_PY_TIME (1)
 
 // type definitions for the specific machine
 typedef intptr_t mp_int_t; // must be pointer size
