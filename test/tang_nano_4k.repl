@@ -22,3 +22,7 @@ uart0: UART.CMSDK_APB_UART @ sysbus 0x40004000
 // Mapped at 0x60000000 for simulation purposes
 external_flash: Memory.MappedMemory @ sysbus 0x60000000
     size: 0x400000
+
+// CMSDK GPIO - 16-bit
+gpio0: GPIO.CMSDK_GPIO @ sysbus 0x40010000
+    -> nvic @ 6
