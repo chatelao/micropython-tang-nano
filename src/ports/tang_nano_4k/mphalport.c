@@ -54,6 +54,28 @@ mp_uint_t mp_hal_ticks_ms(void) {
     return ticks_ms;
 }
 
+mp_uint_t mp_hal_ticks_us(void) {
+    uint32_t load = SYSTICK_LOAD;
+    uint32_t ms = ticks_ms;
+    uint32_t val = SYSTICK_VAL;
+    if (SYSTICK_CTRL & (1 << 16)) {
+        ms = ticks_ms;
+        val = SYSTICK_VAL;
+    }
+    return ms * 1000 + (load - val) / (CPU_FREQ / 1000000);
+}
+
+mp_uint_t mp_hal_ticks_cpu(void) {
+    uint32_t load = SYSTICK_LOAD;
+    uint32_t ms = ticks_ms;
+    uint32_t val = SYSTICK_VAL;
+    if (SYSTICK_CTRL & (1 << 16)) {
+        ms = ticks_ms;
+        val = SYSTICK_VAL;
+    }
+    return ms * (load + 1) + (load - val);
+}
+
 void mp_hal_delay_us(mp_uint_t us) {
     // Assuming CPU_FREQ is in Hz, calculate cycles per us
     uint32_t cycles_per_us = CPU_FREQ / 1000000;
