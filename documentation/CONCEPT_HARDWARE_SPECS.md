@@ -23,10 +23,22 @@ This document outlines the hardware specifications for the Sipeed Tang Nano 4K d
 - **ITCM/Flash (Internal)**: 0x00000000 - 0x00007FFF (32KB)
 - **SRAM**: 0x20000000 - 0x200057FF (22KB)
 - **External Flash (via SPI)**: Not directly memory-mapped, accessible via SPI controller.
-- **Peripherals**: 0x40000000
+- **Peripherals**: 0x40000000 - 0x4001FFFF
 
 ## Peripheral Register Mapping
-### UART0 (Base: 0x40000000)
+### Peripheral Base Addresses
+| Peripheral | Base Address |
+| --- | --- |
+| Timer 0 | 0x40000000 |
+| Timer 1 | 0x40001000 |
+| UART 0 | 0x40004000 |
+| UART 1 | 0x40005000 |
+| RTC | 0x40006000 |
+| Watchdog | 0x40008000 |
+| GPIO | 0x40010000 |
+| SYSCON | 0x4001F000 |
+
+### UART0 (Base: 0x40004000)
 | Register | Offset | Description |
 | --- | --- | --- |
 | DATA | 0x00 | Data register (R/W) |

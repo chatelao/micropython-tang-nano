@@ -1,7 +1,7 @@
 /* uart.c */
 #include "uart.h"
 
-#define UART0_BASE 0x40000000
+#define UART0_BASE 0x40004000
 
 typedef struct {
     volatile uint32_t DATA;

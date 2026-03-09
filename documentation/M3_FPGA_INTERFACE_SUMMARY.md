@@ -30,10 +30,19 @@ A 16-bit GPIO block connects the AHB bus to the FPGA fabric. This allows the M3 
   - `INTENSET` (0x20) / `INTENCLR` (0x24): Interrupt enable control.
 
 ### 2.3 Hard-Core Peripherals (APB1)
-While these are "hard" peripherals, their I/O signals are routed to the FPGA fabric rather than directly to pins:
-- **UART0 & UART1**: TX/RX signals are connected directly to the FPGA fabric.
-- **Timer0 & Timer1**: 32-bit down-counters. `EXTIN` signals for these timers are hard-wired to GPIO[1] and GPIO[6] respectively.
-- **Watchdog**: 32-bit down-counter for system recovery.
+While these are "hard" peripherals, their I/O signals are routed to the FPGA fabric rather than directly to pins.
+
+#### Peripheral Base Addresses (Cortex-M3)
+| Peripheral | Base Address | IRQ # | Description |
+| :--- | :--- | :--- | :--- |
+| Timer0 | `0x40000000` | 8 | 32-bit down-counter (EXTIN: GPIO[1]) |
+| Timer1 | `0x40001000` | 9 | 32-bit down-counter (EXTIN: GPIO[6]) |
+| UART0 | `0x40004000` | 0 | Hard-core UART 0 |
+| UART1 | `0x40005000` | 2 | Hard-core UART 1 |
+| RTC | `0x40006000` | 5 | Real-time Clock |
+| Watchdog | `0x40008000` | - | 32-bit down-counter |
+| GPIO | `0x40010000` | 6 | 16-bit GPIO bridge |
+| SYSCON | `0x4001F000` | - | System Control |
 
 ### 2.4 APB2 User Interface
 The **APB2 bus** provides a standard interface for custom register-mapped peripherals in the FPGA.
