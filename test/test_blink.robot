@@ -4,6 +4,7 @@ Suite Teardown  Teardown
 Test Setup      Reset Emulation
 Resource        ${RENODEKEYWORDS}
 Library         OperatingSystem
+Library         String
 
 *** Variables ***
 ${RESC}         ${CURDIR}/tang_nano_4k.resc
@@ -26,15 +27,18 @@ Should Blink Pin 0
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
     Wait For Line On Uart   Tang Nano 4K with GW1NSR-LV4C
 
-    # Enter Paste Mode
-    Write Char On Uart      \x05
+    # Enter Paste Mode (Ctrl-E)
+    Execute Command         ${UART} WriteChar 5
 
-    # Read the test script and write it to the REPL
+    # Read the test script and write it to the REPL line-by-line
     ${script}=              Get File  ${TEST_SCRIPT}
-    Write Line To Uart      ${script}
+    @{lines}=               Split To Lines  ${script}
+    FOR    ${line}    IN    @{lines}
+        Write Line To Uart  ${line}
+    END
 
-    # Execute Paste Mode
-    Write Char On Uart      \x04
+    # Execute Paste Mode (Ctrl-D)
+    Execute Command         ${UART} WriteChar 4
 
     Wait For Line On Uart   Starting blink test...
 
