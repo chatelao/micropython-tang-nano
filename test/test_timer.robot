@@ -28,26 +28,27 @@ Should Run Timer Test
     Wait For Line On Uart   Testing machine.Timer...
 
     Write Line To Uart      tim = machine.Timer(0)
-    Write Line To Uart      tim.init(period=1000, mode=machine.Timer.PERIODIC, callback=lambda t: print("Timer periodic tick"))
-    Write Line To Uart      print("Timer started. Waiting 3.5 seconds...")
-    Wait For Line On Uart   Timer started. Waiting 3.5 seconds...
+    Write Line To Uart      tim.init(period=1000, mode=machine.Timer.PERIODIC, callback=lambda t: print("TICK_EVENT"))
+    Write Line To Uart      print("Timer started. Waiting for ticks...")
+    Wait For Line On Uart   Timer started. Waiting for ticks...
 
-    # We expect 3 ticks in 3.5 seconds (at 1s, 2s, 3s)
-    Wait For Line On Uart   Timer periodic tick
-    Wait For Line On Uart   Timer periodic tick
-    Wait For Line On Uart   Timer periodic tick
+    # We expect 3 ticks
+    Wait For Line On Uart   TICK_EVENT
+    Wait For Line On Uart   TICK_EVENT
+    Wait For Line On Uart   TICK_EVENT
 
     Write Line To Uart      print("Deinitializing timer...")
     Write Line To Uart      tim.deinit()
     Wait For Line On Uart   Deinitializing timer...
 
     Write Line To Uart      print("Testing one-shot timer (2 seconds)...")
-    Write Line To Uart      tim.init(period=2000, mode=machine.Timer.ONE_SHOT, callback=lambda t: print("One-shot timer fired!"))
+    Write Line To Uart      tim.init(period=2000, mode=machine.Timer.ONE_SHOT, callback=lambda t: print("ONESHOT_EVENT"))
+    Write Line To Uart      print("Testing one-shot timer (2 seconds)...")
     Wait For Line On Uart   Testing one-shot timer (2 seconds)...
 
     # In Renode simulation, we need to wait for the timer to fire.
     # Since we are not using time.sleep() (which would require the time module),
     # we just wait for the UART output.
-    Wait For Line On Uart   One-shot timer fired!
+    Wait For Line On Uart   ONESHOT_EVENT
     Write Line To Uart      print("Test complete.")
     Wait For Line On Uart   Test complete.
