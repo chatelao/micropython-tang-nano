@@ -9,7 +9,6 @@ ${RESC}         ${CURDIR}/tang_nano_4k.resc
 ${REPL}         ${CURDIR}/tang_nano_4k.repl
 ${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
-${TEST_SCRIPT}  ${CURDIR}/../test_timer.py
 
 *** Test Cases ***
 Should Run Timer Test
@@ -24,20 +23,31 @@ Should Run Timer Test
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
-    # Read the test script and write it to the REPL
-    ${script}=              Get File  ${TEST_SCRIPT}
-    Write Line To Uart      ${script}
-
+    Write Line To Uart      import machine
+    Write Line To Uart      import time
+    Write Line To Uart      print("Testing machine.Timer...")
     Wait For Line On Uart   Testing machine.Timer...
-    Wait For Line On Uart   Timer started. Waiting 3.5 seconds...
+
+    # Create a periodic timer that prints a message every 1 second
+    Write Line To Uart      tim = machine.Timer(0)
+    Write Line To Uart      tim.init(period=1000, mode=machine.Timer.PERIODIC, callback=lambda t: print("TICK_EVENT"))
+    Write Line To Uart      print("Timer started")
+    Wait For Line On Uart   Timer started
 
     # We expect 3 ticks in 3.5 seconds (at 1s, 2s, 3s)
-    Wait For Line On Uart   Timer periodic tick
-    Wait For Line On Uart   Timer periodic tick
-    Wait For Line On Uart   Timer periodic tick
+    Wait For Line On Uart   TICK_EVENT
+    Wait For Line On Uart   TICK_EVENT
+    Wait For Line On Uart   TICK_EVENT
 
-    Wait For Line On Uart   Deinitializing timer...
-    Wait For Line On Uart   Testing one-shot timer (2 seconds)...
+    Write Line To Uart      tim.deinit()
+    Write Line To Uart      print("Timer stopped")
+    Wait For Line On Uart   Timer stopped
 
-    Wait For Line On Uart   One-shot timer fired!
+    # Create a one-shot timer
+    Write Line To Uart      print("Testing one-shot")
+    Wait For Line On Uart   Testing one-shot
+    Write Line To Uart      tim.init(period=2000, mode=machine.Timer.ONE_SHOT, callback=lambda t: print("FIRE_EVENT"))
+    Wait For Line On Uart   FIRE_EVENT
+
+    Write Line To Uart      print("Test complete.")
     Wait For Line On Uart   Test complete.
