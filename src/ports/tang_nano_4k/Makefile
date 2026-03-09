@@ -55,6 +55,7 @@ SRC_C = \
 	$(TOP)/extmod/virtpin.c \
 	$(TOP)/shared/libc/printf.c \
 	$(TOP)/shared/runtime/stdout_helpers.c \
+	$(TOP)/extmod/modtime.c \
 
 SRC_QSTR += $(SRC_C)
 

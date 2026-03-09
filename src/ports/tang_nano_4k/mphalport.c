@@ -20,6 +20,8 @@ void mp_hal_init(void) {
     SYSTICK_LOAD = (CPU_FREQ / 1000) - 1;
     SYSTICK_VAL = 0;
     SYSTICK_CTRL = 0x07; // Enable, Source=Processor, Interrupt=Enable
+
+    __asm__ volatile ("cpsie i");
 }
 
 mp_uint_t mp_hal_stdout_tx_strn(const char *str, size_t len) {

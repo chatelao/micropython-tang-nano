@@ -24,7 +24,6 @@ Should Run Timer Test
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
     Write Line To Uart      import machine
-    Write Line To Uart      import time
     Write Line To Uart      print("Testing machine.Timer...")
     Wait For Line On Uart   Testing machine.Timer...
 
@@ -46,6 +45,9 @@ Should Run Timer Test
     Write Line To Uart      tim.init(period=2000, mode=machine.Timer.ONE_SHOT, callback=lambda t: print("One-shot timer fired!"))
     Wait For Line On Uart   Testing one-shot timer (2 seconds)...
 
+    # In Renode simulation, we need to wait for the timer to fire.
+    # Since we are not using time.sleep() (which would require the time module),
+    # we just wait for the UART output.
     Wait For Line On Uart   One-shot timer fired!
     Write Line To Uart      print("Test complete.")
     Wait For Line On Uart   Test complete.
