@@ -51,3 +51,11 @@ void mp_hal_delay_ms(mp_uint_t ms) {
 mp_uint_t mp_hal_ticks_ms(void) {
     return ticks_ms;
 }
+
+void mp_hal_delay_us(mp_uint_t us) {
+    // Assuming CPU_FREQ is in Hz, calculate cycles per us
+    uint32_t cycles_per_us = CPU_FREQ / 1000000;
+    for (volatile uint32_t i = 0; i < us * cycles_per_us / 4; i++) {
+        __asm__("nop");
+    }
+}
