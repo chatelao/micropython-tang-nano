@@ -38,7 +38,6 @@ int mp_hal_stdin_rx_chr(void) {
             return c;
         }
         mp_handle_pending(true);
-        __asm__("wfi");
     }
 }
 
@@ -46,7 +45,6 @@ void mp_hal_delay_ms(mp_uint_t ms) {
     uint32_t start = mp_hal_ticks_ms();
     while (mp_hal_ticks_ms() - start < ms) {
         mp_handle_pending(true);
-        __asm__("wfi");
     }
 }
 

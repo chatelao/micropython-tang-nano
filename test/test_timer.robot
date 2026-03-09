@@ -24,29 +24,38 @@ Should Run Timer Test
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
     Write Line To Uart      import machine
-    Write Line To Uart      print("Testing machine.Timer...")
-    Wait For Line On Uart   Testing machine.Timer...
+    Wait For Line On Uart   >>>
+    Write Line To Uart      import time
+    Wait For Line On Uart   >>>
+    Write Line To Uart      def cb(t): print('TICK_EVENT')
+    Wait For Line On Uart   >>>
+    Write Line To Uart      print('TICKS_START:', time.ticks_ms())
+    Wait For Line On Uart   TICKS_START:
 
-    # Create a periodic timer that prints a message every 1 second
+    # Create a periodic timer
     Write Line To Uart      tim = machine.Timer(0)
-    Write Line To Uart      tim.init(period=1000, mode=machine.Timer.PERIODIC, callback=lambda t: print("TICK_EVENT"))
-    Write Line To Uart      print("START_SIGNAL")
+    Wait For Line On Uart   >>>
+    Write Line To Uart      tim.init(period=500, mode=machine.Timer.PERIODIC, callback=cb)
+    Wait For Line On Uart   >>>
+    Write Line To Uart      print('START_SIGNAL')
     Wait For Line On Uart   START_SIGNAL
 
-    # We expect 3 ticks in a few seconds
+    # We expect 3 ticks
     Wait For Line On Uart   TICK_EVENT
     Wait For Line On Uart   TICK_EVENT
     Wait For Line On Uart   TICK_EVENT
 
     Write Line To Uart      tim.deinit()
-    Write Line To Uart      print("STOP_SIGNAL")
-    Wait For Line On Uart   STOP_SIGNAL
+    Wait For Line On Uart   >>>
+    Write Line To Uart      print('TICKS_END:', time.ticks_ms())
+    Wait For Line On Uart   TICKS_END:
 
     # Create a one-shot timer
-    Write Line To Uart      print("ONESHOT_SIGNAL")
+    Write Line To Uart      print('ONESHOT_SIGNAL')
     Wait For Line On Uart   ONESHOT_SIGNAL
-    Write Line To Uart      tim.init(period=1000, mode=machine.Timer.ONE_SHOT, callback=lambda t: print("FIRE_EVENT"))
-    Wait For Line On Uart   FIRE_EVENT
+    Write Line To Uart      tim.init(period=500, mode=machine.Timer.ONE_SHOT, callback=cb)
+    Wait For Line On Uart   >>>
+    Wait For Line On Uart   TICK_EVENT
 
-    Write Line To Uart      print("DONE_SIGNAL")
+    Write Line To Uart      print('DONE_SIGNAL')
     Wait For Line On Uart   DONE_SIGNAL
