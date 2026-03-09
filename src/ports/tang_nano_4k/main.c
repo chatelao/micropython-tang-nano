@@ -15,8 +15,8 @@
 #include "timer.h"
 #include "pwm.h"
 
-// Heap for MicroPython
-static char heap[8 * 1024];
+// Heap for MicroPython - Reduced to 4KB for absolute stability in 22KB RAM
+static char heap[4 * 1024];
 static char *stack_top;
 
 int main(int argc, char **argv) {
@@ -93,7 +93,7 @@ void Reset_Handler(void) {
     __asm volatile ("ldr sp, =_estack");
     // set VTOR to the start of the interrupt vector table
     #define SCB_VTOR (*(volatile uint32_t *)0xE000ED08)
-    extern const uint32_t isr_vector[];
+    extern const uint32_t isr_vector[] __attribute__((aligned(256)));
     SCB_VTOR = (uint32_t)isr_vector;
     // copy .data section from flash to RAM
     for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
