@@ -15,6 +15,9 @@
 #include "timer.h"
 #include "pwm.h"
 
+void SysTick_Handler(void) __attribute__((used));
+void TIMER1_Handler(void) __attribute__((used));
+
 // Heap for MicroPython
 static char heap[16 * 1024];
 static char *stack_top;
@@ -82,11 +85,18 @@ void MP_WEAK __assert_func(const char *file, int line, const char *func, const c
 
 // Cortex-M3 Startup Code
 extern uint32_t _estack, _etext, _sdata, _edata, _sbss, _ebss;
+extern const uint32_t isr_vector[];
+
+#define SCB_VTOR (*(volatile uint32_t *)0xE000ED08)
 
 void Reset_Handler(void) __attribute__((naked));
 void Reset_Handler(void) {
     // set stack pointer
     __asm volatile ("ldr sp, =_estack");
+
+    // Set VTOR to point to our isr_vector
+    SCB_VTOR = (uint32_t)isr_vector;
+
     // copy .data section from flash to RAM
     for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
         *dest++ = *src++;
@@ -100,7 +110,7 @@ void Reset_Handler(void) {
     for (;;);
 }
 
-const uint32_t isr_vector[] __attribute__((section(".isr_vector"))) = {
+const uint32_t isr_vector[] __attribute__((section(".isr_vector"), aligned(512))) = {
     (uint32_t)&_estack,
     (uint32_t)&Reset_Handler,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

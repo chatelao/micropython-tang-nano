@@ -36,10 +36,19 @@ jobs:
         run: |
           make -C src/ports/tang_nano_4k/ SIMULATION=1
 
+      - name: Run project structure verification
+        run: |
+          python3 test/verify_structure.py
+
       - name: Run Renode tests
         uses: antmicro/renode-test-action@v5
         with:
-          tests-to-run: test/tang_nano_4k.robot
+          tests-to-run: |
+            test/tang_nano_4k.robot
+            test/test_pin.robot
+            test/test_i2c.robot
+            test/test_timer.robot
+            test/verify_pwm.robot
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
