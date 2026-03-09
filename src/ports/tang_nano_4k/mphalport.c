@@ -54,6 +54,14 @@ mp_uint_t mp_hal_ticks_ms(void) {
     return ticks_ms;
 }
 
+mp_uint_t mp_hal_ticks_us(void) {
+    return ticks_ms * 1000;
+}
+
+mp_uint_t mp_hal_ticks_cpu(void) {
+    return ticks_ms * 1000;
+}
+
 void mp_hal_delay_us(mp_uint_t us) {
     // Assuming CPU_FREQ is in Hz, calculate cycles per us
     uint32_t cycles_per_us = CPU_FREQ / 1000000;
