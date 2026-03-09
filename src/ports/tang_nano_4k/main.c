@@ -93,7 +93,7 @@ void Reset_Handler(void) {
     __asm volatile ("ldr sp, =_estack");
     // set VTOR to the start of the interrupt vector table
     #define SCB_VTOR (*(volatile uint32_t *)0xE000ED08)
-    extern uint32_t isr_vector[];
+    extern const uint32_t isr_vector[];
     SCB_VTOR = (uint32_t)isr_vector;
     // copy .data section from flash to RAM
     for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
