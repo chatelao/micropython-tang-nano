@@ -23,18 +23,24 @@ Should Blink Pin 0
     Create Terminal Tester  ${UART}
     Start Emulation
 
-    Wait For Text On Uart   MicroPython started on Tang Nano 4K
-    Wait For Text On Uart   >>>
+    Wait For Line On Uart   MicroPython started on Tang Nano 4K
+    Wait For Line On Uart   Tang Nano 4K with GW1NSR-LV4C
+
+    # Enter Paste Mode
+    Write Char On Uart      \x05
 
     # Read the test script and write it to the REPL
     ${script}=              Get File  ${TEST_SCRIPT}
     Write Line To Uart      ${script}
 
-    Wait For Text On Uart   Starting blink test...
+    # Execute Paste Mode
+    Write Char On Uart      \x04
+
+    Wait For Line On Uart   Starting blink test...
 
     FOR    ${INDEX}    IN RANGE    5
-        Wait For Text On Uart   LED ON
-        Wait For Text On Uart   LED OFF
+        Wait For Line On Uart   LED ON
+        Wait For Line On Uart   LED OFF
     END
 
-    Wait For Text On Uart   Blink test complete.
+    Wait For Line On Uart   Blink test complete.
