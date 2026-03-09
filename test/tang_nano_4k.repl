@@ -14,22 +14,9 @@ flash: Memory.MappedMemory @ sysbus 0x00000000
 sram: Memory.MappedMemory @ sysbus 0x20000000
     size: 0x5800
 
-// CMSDK Timer0
-timer0: Timers.CMSDK_APB_Timer @ sysbus 0x40000000
-    -> nvic@8
-
-// CMSDK Timer1
-timer1: Timers.CMSDK_APB_Timer @ sysbus 0x40001000
-    -> nvic@9
-
-// CMSDK UART0
+// CMSDK UART0 - Moved to correct hardware base address
 uart0: UART.CMSDK_APB_UART @ sysbus 0x40004000
     frequency: 27000000
-    -> nvic@0
-
-// GPIO
-gpio0: GPIOPort.CMSDK_APB_GPIO @ sysbus 0x40010000
-    -> nvic@6
 
 // External SPI NOR Flash - 4MB
 // Mapped at 0x60000000 for simulation purposes
