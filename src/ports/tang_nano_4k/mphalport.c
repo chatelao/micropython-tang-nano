@@ -20,6 +20,9 @@ void mp_hal_init(void) {
     SYSTICK_LOAD = (CPU_FREQ / 1000) - 1;
     SYSTICK_VAL = 0;
     SYSTICK_CTRL = 0x07; // Enable, Source=Processor, Interrupt=Enable
+
+    // Enable global interrupts
+    __asm__ volatile ("cpsie i");
 }
 
 mp_uint_t mp_hal_stdout_tx_strn(const char *str, size_t len) {
@@ -36,7 +39,7 @@ int mp_hal_stdin_rx_chr(void) {
             return c;
         }
         mp_handle_pending(true);
-        __asm__("wfi");
+        // Removed WFI for better simulation stability
     }
 }
 
@@ -44,7 +47,7 @@ void mp_hal_delay_ms(mp_uint_t ms) {
     uint32_t start = mp_hal_ticks_ms();
     while (mp_hal_ticks_ms() - start < ms) {
         mp_handle_pending(true);
-        __asm__("wfi");
+        // Removed WFI for better simulation stability
     }
 }
 
@@ -52,10 +55,30 @@ mp_uint_t mp_hal_ticks_ms(void) {
     return ticks_ms;
 }
 
+mp_uint_t mp_hal_ticks_us(void) {
+    uint32_t irq_state = disable_irq();
+    uint32_t counter = SYSTICK_VAL;
+    uint32_t milliseconds = ticks_ms;
+    uint32_t status = SYSTICK_CTRL;
+    enable_irq(irq_state);
+
+    // Check if SysTick interrupt is pending
+    if ((status & (1 << 16)) && counter > (SYSTICK_LOAD / 2)) {
+        milliseconds++;
+    }
+
+    uint32_t load = SYSTICK_LOAD + 1;
+    uint32_t us = counter / (CPU_FREQ / 1000000);
+    return milliseconds * 1000 + (1000 - us);
+}
+
+mp_uint_t mp_hal_ticks_cpu(void) {
+    return mp_hal_ticks_us() * (CPU_FREQ / 1000000);
+}
+
 void mp_hal_delay_us(mp_uint_t us) {
-    // Assuming CPU_FREQ is in Hz, calculate cycles per us
-    uint32_t cycles_per_us = CPU_FREQ / 1000000;
-    for (volatile uint32_t i = 0; i < us * cycles_per_us / 4; i++) {
-        __asm__("nop");
+    uint32_t start = mp_hal_ticks_us();
+    while (mp_hal_ticks_us() - start < us) {
+        mp_handle_pending(true);
     }
 }
