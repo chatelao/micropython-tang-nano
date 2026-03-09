@@ -15,7 +15,7 @@
 #include "timer.h"
 #include "pwm.h"
 
-// Heap for MicroPython - Reduced to 8KB to fit in 22KB RAM with BSS
+// Heap for MicroPython
 static char heap[8 * 1024];
 static char *stack_top;
 
@@ -55,6 +55,10 @@ void gc_collect(void) {
     void *dummy;
     gc_collect_start();
     gc_collect_root(&dummy, ((mp_uint_t)stack_top - (mp_uint_t)&dummy) / sizeof(mp_uint_t));
+    // Scan .data and .bss sections for roots
+    extern uint32_t _sdata, _edata, _sbss, _ebss;
+    gc_collect_root((void**)&_sdata, (&_edata - &_sdata));
+    gc_collect_root((void**)&_sbss, (&_ebss - &_sbss));
     gc_collect_end();
 }
 
@@ -87,6 +91,10 @@ void Reset_Handler(void) __attribute__((naked));
 void Reset_Handler(void) {
     // set stack pointer
     __asm volatile ("ldr sp, =_estack");
+    // set VTOR to the start of the interrupt vector table
+    #define SCB_VTOR (*(volatile uint32_t *)0xE000ED08)
+    extern uint32_t isr_vector[];
+    SCB_VTOR = (uint32_t)isr_vector;
     // copy .data section from flash to RAM
     for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
         *dest++ = *src++;
@@ -100,7 +108,7 @@ void Reset_Handler(void) {
     for (;;);
 }
 
-const uint32_t isr_vector[] __attribute__((section(".isr_vector"))) = {
+const uint32_t isr_vector[] __attribute__((section(".isr_vector"), aligned(256))) = {
     (uint32_t)&_estack,
     (uint32_t)&Reset_Handler,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

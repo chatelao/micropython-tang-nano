@@ -39,7 +39,7 @@ int mp_hal_stdin_rx_chr(void) {
             return c;
         }
         mp_handle_pending(true);
-        // Removed WFI for better simulation stability
+        __asm__("wfi");
     }
 }
 
@@ -47,7 +47,7 @@ void mp_hal_delay_ms(mp_uint_t ms) {
     uint32_t start = mp_hal_ticks_ms();
     while (mp_hal_ticks_ms() - start < ms) {
         mp_handle_pending(true);
-        // Removed WFI for better simulation stability
+        __asm__("wfi");
     }
 }
 
@@ -63,12 +63,16 @@ mp_uint_t mp_hal_ticks_us(void) {
     enable_irq(irq_state);
 
     // Check if SysTick interrupt is pending (COUNTFLAG set)
-    if ((status & (1 << 16)) && counter > (SYSTICK_LOAD / 2)) {
+    // If it is, then milliseconds might be one behind.
+    if (status & (1 << 16)) {
         milliseconds++;
+        // Read counter again in case it wrapped just as we read status
+        counter = SYSTICK_VAL;
     }
 
+    uint32_t load = SYSTICK_LOAD + 1;
     uint32_t us_per_tick = CPU_FREQ / 1000000;
-    return milliseconds * 1000 + (SYSTICK_LOAD - counter) / us_per_tick;
+    return milliseconds * 1000 + (load - counter) / us_per_tick;
 }
 
 mp_uint_t mp_hal_ticks_cpu(void) {

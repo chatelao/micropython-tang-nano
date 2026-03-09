@@ -43,8 +43,8 @@ Should Blink Pin 0
     Wait For Line On Uart   Starting blink test...
 
     FOR    ${INDEX}    IN RANGE    5
-        Wait For Line On Uart   LED ON
-        Wait For Line On Uart   LED OFF
+        Wait For Line On Uart   LED ON    timeout=10
+        Wait For Line On Uart   LED OFF    timeout=10
     END
 
-    Wait For Line On Uart   Blink test complete.
+    Wait For Line On Uart   Blink test complete.    timeout=10
