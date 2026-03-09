@@ -55,24 +55,29 @@ mp_uint_t mp_hal_ticks_ms(void) {
 }
 
 mp_uint_t mp_hal_ticks_us(void) {
+    uint32_t irq_state = disable_irq();
     uint32_t load = SYSTICK_LOAD;
     uint32_t ms = ticks_ms;
     uint32_t val = SYSTICK_VAL;
     if (SYSTICK_CTRL & (1 << 16)) {
-        ms = ticks_ms;
+        // If the SysTick interrupt is pending, ms might be one off
+        ms = ticks_ms + 1;
         val = SYSTICK_VAL;
     }
+    enable_irq(irq_state);
     return ms * 1000 + (load - val) / (CPU_FREQ / 1000000);
 }
 
 mp_uint_t mp_hal_ticks_cpu(void) {
+    uint32_t irq_state = disable_irq();
     uint32_t load = SYSTICK_LOAD;
     uint32_t ms = ticks_ms;
     uint32_t val = SYSTICK_VAL;
     if (SYSTICK_CTRL & (1 << 16)) {
-        ms = ticks_ms;
+        ms = ticks_ms + 1;
         val = SYSTICK_VAL;
     }
+    enable_irq(irq_state);
     return ms * (load + 1) + (load - val);
 }
 

@@ -25,17 +25,17 @@ Should Verify Pin Functionality
 
     Write Line To Uart      from machine import Pin
     Write Line To Uart      led = Pin(0, Pin.OUT)
-    Write Line To Uart      print("Toggling Pin 0...")
-    Wait For Line On Uart   Toggling Pin 0...
+    Write Line To Uart      print("TOGGLE_START")
+    Wait For Line On Uart   TOGGLE_START
 
     Write Line To Uart      led.value(1)
-    Write Line To Uart      print("Pin 0 is ON")
-    Wait For Line On Uart   Pin 0 is ON
+    Write Line To Uart      print("PIN_ON")
+    Wait For Line On Uart   PIN_ON
 
     Write Line To Uart      led.value(0)
-    Write Line To Uart      print("Pin 0 is OFF")
-    Wait For Line On Uart   Pin 0 is OFF
+    Write Line To Uart      print("PIN_OFF")
+    Wait For Line On Uart   PIN_OFF
 
     Write Line To Uart      in_pin = Pin(1, Pin.IN)
-    Write Line To Uart      print("Pin 1 value:", in_pin.value())
-    Wait For Line On Uart   Pin 1 value: 0
+    Write Line To Uart      print("PIN_VAL:", in_pin.value())
+    Wait For Line On Uart   PIN_VAL: 0

@@ -17,6 +17,17 @@ mp_uint_t mp_hal_ticks_ms(void);
 mp_uint_t mp_hal_ticks_us(void);
 mp_uint_t mp_hal_ticks_cpu(void);
 
+static inline uint32_t disable_irq(void) {
+    uint32_t state;
+    __asm__ volatile ("mrs %0, primask" : "=r" (state));
+    __asm__ volatile ("cpsid i");
+    return state;
+}
+
+static inline void enable_irq(uint32_t state) {
+    __asm__ volatile ("msr primask, %0" : : "r" (state));
+}
+
 #include "extmod/virtpin.h"
 
 #define mp_hal_pin_obj_t mp_obj_t

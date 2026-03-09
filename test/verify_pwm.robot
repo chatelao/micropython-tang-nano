@@ -33,5 +33,5 @@ Should Verify PWM Interface
     Wait For Line On Uart   PWM(pin=0, freq=2000, duty=256)
 
     Write Line To Uart      pwm.deinit()
-    Write Line To Uart      print("PWM_DEINIT_OK")
-    Wait For Line On Uart   PWM_DEINIT_OK
+    Write Line To Uart      print("PWM_DONE")
+    Wait For Line On Uart   PWM_DONE

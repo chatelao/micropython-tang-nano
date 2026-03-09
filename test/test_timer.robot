@@ -27,6 +27,10 @@ Should Run Timer Test
     Write Line To Uart      print("Testing machine.Timer...")
     Wait For Line On Uart   Testing machine.Timer...
 
+    Write Line To Uart      import time
+    Write Line To Uart      print("TIME_START:", time.ticks_ms())
+    Wait For Line On Uart   TIME_START:
+
     Write Line To Uart      tim = machine.Timer(0)
     Write Line To Uart      tim.init(period=1000, mode=machine.Timer.PERIODIC, callback=lambda t: print("TICK_EVENT"))
     Write Line To Uart      print("Timer started. Waiting for ticks...")
@@ -43,12 +47,15 @@ Should Run Timer Test
 
     Write Line To Uart      print("Testing one-shot timer (2 seconds)...")
     Write Line To Uart      tim.init(period=2000, mode=machine.Timer.ONE_SHOT, callback=lambda t: print("ONESHOT_EVENT"))
-    Write Line To Uart      print("Testing one-shot timer (2 seconds)...")
     Wait For Line On Uart   Testing one-shot timer (2 seconds)...
 
     # In Renode simulation, we need to wait for the timer to fire.
     # Since we are not using time.sleep() (which would require the time module),
     # we just wait for the UART output.
     Wait For Line On Uart   ONESHOT_EVENT
+
+    Write Line To Uart      print("TIME_END:", time.ticks_ms())
+    Wait For Line On Uart   TIME_END:
+
     Write Line To Uart      print("Test complete.")
     Wait For Line On Uart   Test complete.
