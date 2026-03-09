@@ -51,7 +51,10 @@ SRC_C = \
 	timer.c \
 	pwm.c \
 	modmachine.c \
+	$(TOP)/extmod/modtime.c \
 	$(TOP)/extmod/machine_i2c.c \
+	$(TOP)/extmod/machine_spi.c \
+	$(TOP)/drivers/bus/softspi.c \
 	$(TOP)/extmod/virtpin.c \
 	$(TOP)/shared/libc/printf.c \
 	$(TOP)/shared/runtime/stdout_helpers.c \

@@ -5,6 +5,8 @@ nvic: IRQControllers.NVIC @ sysbus 0xE000E000
 cpu: CPU.CortexM @ sysbus
     cpuType: "cortex-m3"
     nvic: nvic
+    performanceInMips: 27
+    clockFrequency: 27000000
 
 // Internal Flash (User Flash) - 32KB
 flash: Memory.MappedMemory @ sysbus 0x00000000
@@ -15,8 +17,17 @@ sram: Memory.MappedMemory @ sysbus 0x20000000
     size: 0x5800
 
 // CMSDK UART - Mocked at 0x40000000
-uart0: UART.CMSDK_APB_UART @ sysbus 0x40000000
+timer0: Timer.CMSDK_APB_Timer @ sysbus 0x40000000
+    -> nvic@8
+
+timer1: Timer.CMSDK_APB_Timer @ sysbus 0x40001000
+    -> nvic@9
+
+uart0: UART.CMSDK_APB_UART @ sysbus 0x40004000
     frequency: 27000000
+
+gpio0: GPIOPort.CMSDK_APB_GPIO @ sysbus 0x40010000
+    -> nvic@6
 
 // External SPI NOR Flash - 4MB
 // Mapped at 0x60000000 for simulation purposes

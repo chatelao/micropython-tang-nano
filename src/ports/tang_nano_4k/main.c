@@ -55,6 +55,9 @@ void gc_collect(void) {
     void *dummy;
     gc_collect_start();
     gc_collect_root(&dummy, ((mp_uint_t)stack_top - (mp_uint_t)&dummy) / sizeof(mp_uint_t));
+    #if MICROPY_ENABLE_GC
+    gc_collect_root((void **)&mp_state_ctx, sizeof(mp_state_ctx) / sizeof(size_t));
+    #endif
     gc_collect_end();
 }
 
@@ -82,11 +85,21 @@ void MP_WEAK __assert_func(const char *file, int line, const char *func, const c
 
 // Cortex-M3 Startup Code
 extern uint32_t _estack, _etext, _sdata, _edata, _sbss, _ebss;
+extern const uint32_t isr_vector[];
 
 void Reset_Handler(void) __attribute__((naked));
 void Reset_Handler(void) {
     // set stack pointer
     __asm volatile ("ldr sp, =_estack");
+
+    // Set Vector Table Offset Register
+    __asm volatile (
+        "ldr r0, =0xE000ED08\n"
+        "ldr r1, =isr_vector\n"
+        "str r1, [r0]\n"
+        ::: "r0", "r1"
+    );
+
     // copy .data section from flash to RAM
     for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
         *dest++ = *src++;
@@ -100,7 +113,7 @@ void Reset_Handler(void) {
     for (;;);
 }
 
-const uint32_t isr_vector[] __attribute__((section(".isr_vector"))) = {
+const uint32_t isr_vector[] __attribute__((section(".isr_vector"), aligned(256))) = {
     (uint32_t)&_estack,
     (uint32_t)&Reset_Handler,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

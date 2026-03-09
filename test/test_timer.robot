@@ -9,7 +9,6 @@ ${RESC}         ${CURDIR}/tang_nano_4k.resc
 ${REPL}         ${CURDIR}/tang_nano_4k.repl
 ${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
-${TEST_SCRIPT}  ${CURDIR}/../test_timer.py
 
 *** Test Cases ***
 Should Run Timer Test
@@ -22,23 +21,41 @@ Should Run Timer Test
     Create Terminal Tester  ${UART}
     Start Emulation
 
-    Wait For Text On Uart   MicroPython started on Tang Nano 4K
-    Wait For Text On Uart   >>>
+    Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
-    # Read the test script and write it to the REPL
-    ${script}=              Get File  ${TEST_SCRIPT}
-    Write Line To Uart      ${script}
+    Write Line To Uart      import machine
+    Wait For Line On Uart   >>>
+    Write Line To Uart      import time
+    Wait For Line On Uart   >>>
+    Write Line To Uart      def cb(t): print('TICK_EVENT')
+    Wait For Line On Uart   >>>
+    Write Line To Uart      print('TICKS_START:', time.ticks_ms())
+    Wait For Line On Uart   TICKS_START:
 
-    Wait For Text On Uart   Testing machine.Timer...
-    Wait For Text On Uart   Timer started. Waiting 3.5 seconds...
+    # Create a periodic timer
+    Write Line To Uart      tim = machine.Timer(0)
+    Wait For Line On Uart   >>>
+    Write Line To Uart      tim.init(period=500, mode=machine.Timer.PERIODIC, callback=cb)
+    Wait For Line On Uart   >>>
+    Write Line To Uart      print('START_SIGNAL')
+    Wait For Line On Uart   START_SIGNAL
 
-    # We expect 3 ticks in 3.5 seconds (at 1s, 2s, 3s)
-    Wait For Text On Uart   Timer periodic tick
-    Wait For Text On Uart   Timer periodic tick
-    Wait For Text On Uart   Timer periodic tick
+    # We expect 3 ticks
+    Wait For Line On Uart   TICK_EVENT
+    Wait For Line On Uart   TICK_EVENT
+    Wait For Line On Uart   TICK_EVENT
 
-    Wait For Text On Uart   Deinitializing timer...
-    Wait For Text On Uart   Testing one-shot timer (2 seconds)...
+    Write Line To Uart      tim.deinit()
+    Wait For Line On Uart   >>>
+    Write Line To Uart      print('TICKS_END:', time.ticks_ms())
+    Wait For Line On Uart   TICKS_END:
 
-    Wait For Text On Uart   One-shot timer fired!
-    Wait For Text On Uart   Test complete.
+    # Create a one-shot timer
+    Write Line To Uart      print('ONESHOT_SIGNAL')
+    Wait For Line On Uart   ONESHOT_SIGNAL
+    Write Line To Uart      tim.init(period=500, mode=machine.Timer.ONE_SHOT, callback=cb)
+    Wait For Line On Uart   >>>
+    Wait For Line On Uart   TICK_EVENT
+
+    Write Line To Uart      print('DONE_SIGNAL')
+    Wait For Line On Uart   DONE_SIGNAL
