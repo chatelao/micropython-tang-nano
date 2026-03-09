@@ -62,14 +62,13 @@ mp_uint_t mp_hal_ticks_us(void) {
     uint32_t status = SYSTICK_CTRL;
     enable_irq(irq_state);
 
-    // Check if SysTick interrupt is pending
+    // Check if SysTick interrupt is pending (COUNTFLAG set)
     if ((status & (1 << 16)) && counter > (SYSTICK_LOAD / 2)) {
         milliseconds++;
     }
 
-    uint32_t load = SYSTICK_LOAD + 1;
-    uint32_t us = counter / (CPU_FREQ / 1000000);
-    return milliseconds * 1000 + (1000 - us);
+    uint32_t us_per_tick = CPU_FREQ / 1000000;
+    return milliseconds * 1000 + (SYSTICK_LOAD - counter) / us_per_tick;
 }
 
 mp_uint_t mp_hal_ticks_cpu(void) {

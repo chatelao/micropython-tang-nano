@@ -51,11 +51,11 @@ SRC_C = \
 	timer.c \
 	pwm.c \
 	modmachine.c \
+	$(TOP)/extmod/modtime.c \
 	$(TOP)/extmod/machine_i2c.c \
 	$(TOP)/extmod/virtpin.c \
 	$(TOP)/shared/libc/printf.c \
 	$(TOP)/shared/runtime/stdout_helpers.c \
-	$(TOP)/extmod/modtime.c \
 
 SRC_QSTR += $(SRC_C)
 
