@@ -53,11 +53,22 @@ mp_uint_t mp_hal_ticks_ms(void) {
 }
 
 mp_uint_t mp_hal_ticks_us(void) {
-    return ticks_ms * 1000;
+    uint32_t irq_state;
+    __asm__ volatile ("mrs %0, primask\n" "cpsid i" : "=r" (irq_state));
+    uint32_t ms = ticks_ms;
+    uint32_t val = SYSTICK_VAL;
+    uint32_t ctrl = SYSTICK_CTRL;
+    __asm__ volatile ("msr primask, %0" :: "r" (irq_state));
+
+    uint32_t load = SYSTICK_LOAD;
+    if ((ctrl & 0x10000) && val > (load / 2)) {
+        ms++;
+    }
+    return ms * 1000 + (load - val) * 1000 / (load + 1);
 }
 
 mp_uint_t mp_hal_ticks_cpu(void) {
-    return ticks_ms * 1000;
+    return mp_hal_ticks_us();
 }
 
 void mp_hal_delay_us(mp_uint_t us) {
