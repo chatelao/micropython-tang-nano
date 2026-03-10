@@ -11,10 +11,10 @@ ${RESC}         ${CURDIR}/tang_nano_4k.resc
 ${REPL}         ${CURDIR}/tang_nano_4k.repl
 ${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
-${TEST_SCRIPT}  ${CURDIR}/../test_timer.py
+${TEST_SCRIPT}  ${CURDIR}/../test_pin.py
 
 *** Test Cases ***
-Should Run Timer Test
+Should Run Pin Test
     Execute Command         $repl = @${REPL}
     Execute Command         $bin = @${BIN}
     Execute Command         include @${RESC}
@@ -39,16 +39,7 @@ Should Run Timer Test
     # Exit paste mode and execute
     Execute Command         ${UART} WriteChar 4
 
-    Wait For Line On Uart   Testing machine.Timer...
-    Wait For Line On Uart   Timer started. Waiting 3.5 seconds...
-
-    # We expect 3 ticks in 3.5 seconds (at 1s, 2s, 3s)
-    Wait For Line On Uart   Timer periodic tick
-    Wait For Line On Uart   Timer periodic tick
-    Wait For Line On Uart   Timer periodic tick
-
-    Wait For Line On Uart   Deinitializing timer...
-    Wait For Line On Uart   Testing one-shot timer (2 seconds)...
-
-    Wait For Line On Uart   One-shot timer fired!
-    Wait For Line On Uart   Test complete.
+    Wait For Line On Uart   Toggling Pin 0...
+    Wait For Line On Uart   Pin 0 is ON
+    Wait For Line On Uart   Pin 0 is OFF
+    Wait For Line On Uart   Pin 1 value: 0
