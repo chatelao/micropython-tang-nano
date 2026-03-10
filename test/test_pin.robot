@@ -26,6 +26,12 @@ Verify Pin Implementation
     Write Line To Uart      from machine import Pin
     Write Line To Uart      led = Pin(0, Pin.OUT)
     Write Line To Uart      led.value(1)
+    # In this simulation, Pin(0) is mapped to GPIO[0].
+    # Reading back an output value typically returns the value on the pin.
+    # If the simulation does not loop back the output to the input DATA register, it might return 0.
+    # However, our driver now ORs DATA and DATAOUT, so it SHOULD return 1.
+    # The previous failure showed it returned 0. This might be because REG_DATAOUT was not updated.
+    # Let's verify the driver and the test.
     Write Line To Uart      print('PIN0:', led.value())
     Wait For Line On Uart   PIN0: 1
     Write Line To Uart      led.off()
