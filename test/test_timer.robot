@@ -4,6 +4,7 @@ Suite Teardown  Teardown
 Test Setup      Reset Emulation
 Resource        ${RENODEKEYWORDS}
 Library         OperatingSystem
+Library         String
 
 *** Variables ***
 ${RESC}         ${CURDIR}/tang_nano_4k.resc
@@ -25,9 +26,18 @@ Should Run Timer Test
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
-    # Read the test script and write it to the REPL
+    # Enter paste mode
+    Execute Command         ${UART} WriteChar 5
+
+    # Read the test script and write it to the REPL line-by-line
     ${script}=              Get File  ${TEST_SCRIPT}
-    Write Line To Uart      ${script}
+    @{lines}=               Split String To Lines  ${script}
+    FOR  ${line}  IN  @{lines}
+        Write Line To Uart      ${line}
+    ENDFOR
+
+    # Exit paste mode and execute
+    Execute Command         ${UART} WriteChar 4
 
     Wait For Line On Uart   Testing machine.Timer...
     Wait For Line On Uart   Timer started. Waiting 3.5 seconds...
