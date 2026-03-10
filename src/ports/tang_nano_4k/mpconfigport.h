@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 // options to control how MicroPython is built
-#define MICROPY_CONFIG_ROM_LEVEL (MICROPY_CONFIG_ROM_LEVEL_MINIMUM)
+#define MICROPY_CONFIG_ROM_LEVEL (MICROPY_CONFIG_ROM_LEVEL_BASIC_FEATURES)
 
 #define MICROPY_ENABLE_GC (1)
 #define MICROPY_HELPER_REPL (1)
@@ -34,3 +34,7 @@ extern const struct _mp_obj_module_t mp_module_machine;
 
 #define MICROPY_PY_MACHINE_I2C (1)
 #define MICROPY_PY_MACHINE_SOFTI2C (1)
+
+// Enable built-in math and floating point support
+#define MICROPY_PY_BUILTINS_FLOAT (1)
+#define MICROPY_PY_MATH (1)

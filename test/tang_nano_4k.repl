@@ -22,3 +22,16 @@ uart0: UART.CMSDK_APB_UART @ sysbus 0x40004000
 // Mapped at 0x60000000 for simulation purposes
 external_flash: Memory.MappedMemory @ sysbus 0x60000000
     size: 0x400000
+
+// Memory-mapped peripherals for simulation stability
+// GPIO Bridge at 0x40010000
+gpio_bridge: Memory.MappedMemory @ sysbus 0x40010000
+    size: 0x100
+
+// Timer0 at 0x40000000
+timer0_mem: Memory.MappedMemory @ sysbus 0x40000000
+    size: 0x100
+
+// Timer1 at 0x40001000
+timer1_mem: Memory.MappedMemory @ sysbus 0x40001000
+    size: 0x100
