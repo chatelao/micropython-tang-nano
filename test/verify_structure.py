@@ -7,12 +7,14 @@ def test_structure():
         'documentation',
         'src',
         'test',
-        '.github'
+        '.github',
+        'scripts'
     ]
     expected_files = [
         'README.md',
         'ROADMAP.md',
-        'GEMINI.md'
+        'GEMINI.md',
+        'Makefile'
     ]
 
     missing = []
