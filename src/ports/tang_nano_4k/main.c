@@ -61,6 +61,9 @@ void gc_collect(void) {
     gc_collect_root((void **)&_sdata, (size_t)(&_edata - &_sdata));
     gc_collect_root((void **)&_sbss, (size_t)(&_ebss - &_sbss));
 
+    // Scan MicroPython state as well
+    gc_collect_root((void **)&mp_state_ctx, sizeof(mp_state_ctx) / sizeof(size_t));
+
     gc_collect_end();
 }
 
