@@ -31,15 +31,14 @@ Should Blink Pin 0
 
     # Enter Paste Mode (Ctrl-E)
     Execute Command         ${UART} WriteChar 5
-    Wait For Text On Uart   paste mode
+    Wait For Line On Uart   paste mode
 
     # Send the test script line by line to avoid UART overflow
     ${script}=              Get File  ${TEST_SCRIPT}
     @{lines}=               Split To Lines  ${script}
     FOR    ${line}    IN    @{lines}
         Write Line To Uart  ${line}
-        # Wait for echo to ensure REPL is ready for next line
-        Wait For Text On Uart   ${line}
+        Wait For Line On Uart   ===
     END
 
     # Execute Paste Mode (Ctrl-D)

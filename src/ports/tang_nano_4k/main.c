@@ -55,10 +55,12 @@ void gc_collect(void) {
     void *dummy;
     gc_collect_start();
     gc_collect_root(&dummy, ((mp_uint_t)stack_top - (mp_uint_t)&dummy) / sizeof(mp_uint_t));
+
     // Scan .data and .bss sections for roots
     extern uint32_t _sdata, _edata, _sbss, _ebss;
-    gc_collect_root((void **)(void *)&_sdata, (size_t)(&_edata - &_sdata));
-    gc_collect_root((void **)(void *)&_sbss, (size_t)(&_ebss - &_sbss));
+    gc_collect_root((void **)&_sdata, (size_t)(&_edata - &_sdata));
+    gc_collect_root((void **)&_sbss, (size_t)(&_ebss - &_sbss));
+
     gc_collect_end();
 }
 
@@ -93,7 +95,7 @@ void Reset_Handler(void) {
     __asm volatile ("ldr sp, =_estack");
     // set VTOR to the start of the interrupt vector table
     #define SCB_VTOR (*(volatile uint32_t *)0xE000ED08)
-    extern const uint32_t isr_vector[];
+    extern const uint32_t isr_vector[] __attribute__((aligned(256)));
     SCB_VTOR = (uint32_t)isr_vector;
     // copy .data section from flash to RAM
     for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
