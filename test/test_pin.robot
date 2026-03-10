@@ -34,7 +34,7 @@ Should Run Pin Test
     ${lines}=               Evaluate  $script.splitlines()
     FOR  ${line}  IN  @{lines}
         Write Line To Uart      ${line}
-    ENDFOR
+    END
 
     # Exit paste mode and execute
     Execute Command         ${UART} WriteChar 4
