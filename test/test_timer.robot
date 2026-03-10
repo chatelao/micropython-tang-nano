@@ -26,9 +26,14 @@ Should Run Timer Test
     # REPL prompt doesn't have a newline, so we can't wait for line on it reliably.
     # We'll rely on subsequent output.
 
-    # Read the test script and write it to the REPL
+    # Send script using paste mode
+    Execute Command         sysbus.uart0 WriteChar 5
     ${script}=              Get File  ${TEST_SCRIPT}
-    Write Line To Uart      ${script}
+    ${lines}=               Evaluate  $script.splitlines()
+    FOR  ${line}  IN  @{lines}
+        Write Line To Uart      ${line}
+    END
+    Execute Command         sysbus.uart0 WriteChar 4
 
     Wait For Line On Uart   Testing machine.Timer...
     Wait For Line On Uart   Timer started. Waiting 3.5 seconds...
