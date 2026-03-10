@@ -16,8 +16,10 @@ else
 fi
 
 # Clone MicroPython core if not present
-if [ ! -d "src/lib/micropython" ]; then
+if [ ! -f "src/lib/micropython/README.md" ]; then
     echo "Cloning MicroPython core..."
+    # Remove directory if it exists but is empty/incomplete
+    rm -rf src/lib/micropython
     git clone --depth 1 --branch v1.24.1 https://github.com/micropython/micropython.git src/lib/micropython
 else
     echo "MicroPython core already exists."
