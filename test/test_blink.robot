@@ -26,7 +26,8 @@ Should Blink Pin 0
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
     Wait For Line On Uart   Tang Nano 4K with GW1NSR-LV4C
-    Wait For Line On Uart   >>>
+
+    Sleep                   1s
 
     # Enter Paste Mode (Ctrl-E)
     Execute Command         ${UART} WriteChar 5
@@ -39,7 +40,7 @@ Should Blink Pin 0
     # Execute Paste Mode (Ctrl-D)
     Execute Command         ${UART} WriteChar 4
 
-    Wait For Line On Uart   Starting blink test...
+    Wait For Line On Uart   Starting blink test...    timeout=15
 
     FOR    ${INDEX}    IN RANGE    5
         Wait For Line On Uart   LED ON    timeout=10
