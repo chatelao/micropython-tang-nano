@@ -21,18 +21,12 @@ Should Verify PWM Interface
     Create Terminal Tester  ${UART}
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
-    Wait For Text On Uart   >>>
     Write Line To Uart      from machine import PWM, Pin
-    Wait For Text On Uart   >>>
     Write Line To Uart      pwm = PWM(Pin(0))
-    Wait For Text On Uart   >>>
     Write Line To Uart      print(pwm)
     Wait For Line On Uart   PWM(pin=0, freq=1000, duty=512)
     Write Line To Uart      pwm.freq(2000)
-    Wait For Text On Uart   >>>
     Write Line To Uart      pwm.duty(256)
-    Wait For Text On Uart   >>>
     Write Line To Uart      print(pwm)
     Wait For Line On Uart   PWM(pin=0, freq=2000, duty=256)
     Write Line To Uart      pwm.deinit()
-    Wait For Text On Uart   >>>

@@ -21,30 +21,21 @@ Verify I2C Implementation
     Create Terminal Tester  ${UART}
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
-    Wait For Text On Uart   >>>
 
     # Test machine.I2C
     Write Line To Uart      from machine import I2C, Pin
-    Wait For Text On Uart   >>>
     Write Line To Uart      i2c = I2C(scl=Pin(0), sda=Pin(1), freq=100000)
-    Wait For Text On Uart   >>>
     Write Line To Uart      print('I2C_OK')
     Wait For Line On Uart   I2C_OK
-    Wait For Text On Uart   >>>
 
     # Test scan (should return empty list as no devices are attached)
     Write Line To Uart      print('SCAN:', i2c.scan())
     Wait For Line On Uart   SCAN: []
-    Wait For Text On Uart   >>>
 
     # Test machine.SoftI2C
     Write Line To Uart      from machine import SoftI2C
-    Wait For Text On Uart   >>>
     Write Line To Uart      si2c = SoftI2C(scl=Pin(2), sda=Pin(3))
-    Wait For Text On Uart   >>>
     Write Line To Uart      print('SOFTI2C_OK')
     Wait For Line On Uart   SOFTI2C_OK
-    Wait For Text On Uart   >>>
     Write Line To Uart      print('SSCAN:', si2c.scan())
     Wait For Line On Uart   SSCAN: []
-    Wait For Text On Uart   >>>

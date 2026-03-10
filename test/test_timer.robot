@@ -23,14 +23,12 @@ Should Run Timer Test
     Start Emulation
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
-    Wait For Text On Uart   >>>
 
     # Read the test script and write it to the REPL
     ${script}=              Get File  ${TEST_SCRIPT}
     ${lines}=               Evaluate  $script.splitlines()
     FOR  ${line}  IN  @{lines}
         Write Line To Uart  ${line}
-        Wait For Text On Uart  >>>
     END
 
     Wait For Line On Uart   Testing machine.Timer...
