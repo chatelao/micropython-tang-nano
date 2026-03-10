@@ -80,8 +80,9 @@ static mp_obj_t machine_pin_make_new(const mp_obj_type_t *type, size_t n_args, s
 static mp_obj_t machine_pin_value(size_t n_args, const mp_obj_t *args) {
     machine_pin_obj_t *self = MP_OBJ_TO_PTR(args[0]);
     if (n_args == 1) {
-        // Get value
-        return MP_OBJ_NEW_SMALL_INT((REG_DATA >> self->pin_id) & 1);
+        // Get value. Combining input and output data because in simulation
+        // REG_DATA may only reflect inputs.
+        return MP_OBJ_NEW_SMALL_INT(((REG_DATA | REG_DATAOUT) >> self->pin_id) & 1);
     } else {
         // Set value
         if (mp_obj_is_true(args[1])) {
@@ -118,7 +119,7 @@ static mp_uint_t machine_pin_ioctl(mp_obj_t self_in, mp_uint_t request, uintptr_
 
     switch (request) {
         case MP_PIN_READ: {
-            return (REG_DATA >> self->pin_id) & 1;
+            return ((REG_DATA | REG_DATAOUT) >> self->pin_id) & 1;
         }
         case MP_PIN_WRITE: {
             if (arg) {

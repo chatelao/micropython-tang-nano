@@ -24,12 +24,18 @@ Should Run Timer Test
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
+    # Enter paste mode (Ctrl-E)
+    Execute Command         ${UART} WriteChar 5
+
     # Read the test script and write it to the REPL
     ${script}=              Get File  ${TEST_SCRIPT}
     ${lines}=               Evaluate  $script.splitlines()
     FOR  ${line}  IN  @{lines}
         Write Line To Uart  ${line}
     END
+
+    # Exit paste mode and execute (Ctrl-D)
+    Execute Command         ${UART} WriteChar 4
 
     Wait For Line On Uart   Testing machine.Timer...
     Wait For Line On Uart   Timer started. Waiting 3.5 seconds...
