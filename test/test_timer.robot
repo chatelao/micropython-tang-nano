@@ -31,7 +31,7 @@ Should Run Timer Test
 
     # Read the test script and write it to the REPL line-by-line
     ${script}=              Get File  ${TEST_SCRIPT}
-    @{lines}=               Split String To Lines  ${script}
+    ${lines}=               Evaluate  $script.splitlines()
     FOR  ${line}  IN  @{lines}
         Write Line To Uart      ${line}
     ENDFOR
