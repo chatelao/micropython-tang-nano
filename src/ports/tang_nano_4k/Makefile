@@ -31,7 +31,7 @@ FLASH_ORIGIN = 0x00000000
 FLASH_LENGTH = 32K
 endif
 
-LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs
+LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs -lc -lm -lnosys
 LDFLAGS += -Wl,--defsym=FLASH_ORIGIN=$(FLASH_ORIGIN),--defsym=FLASH_LENGTH=$(FLASH_LENGTH)
 
 # Tune for Debugging or Optimization

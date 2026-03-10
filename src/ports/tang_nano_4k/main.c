@@ -15,8 +15,7 @@
 #include "timer.h"
 #include "pwm.h"
 
-// Heap for MicroPython - Reduced to 4KB for absolute stability in 22KB RAM
-static char heap[4 * 1024];
+// Heap for MicroPython
 static char *stack_top;
 
 int main(int argc, char **argv) {
@@ -24,7 +23,8 @@ int main(int argc, char **argv) {
     stack_top = (char *)&stack_dummy;
     mp_stack_set_limit(2048);
 
-    gc_init(heap, heap + sizeof(heap));
+    extern uint32_t _sheap, _eheap;
+    gc_init(&_sheap, &_eheap);
     mp_init();
     mp_hal_init();
     printf("\nMicroPython started on Tang Nano 4K\n");
@@ -58,11 +58,8 @@ void gc_collect(void) {
 
     // Scan .data and .bss sections for roots
     extern uint32_t _sdata, _edata, _sbss, _ebss;
-    gc_collect_root((void **)&_sdata, (size_t)(&_edata - &_sdata));
-    gc_collect_root((void **)&_sbss, (size_t)(&_ebss - &_sbss));
-
-    // Scan MicroPython state as well
-    gc_collect_root((void **)&mp_state_ctx, sizeof(mp_state_ctx) / sizeof(size_t));
+    gc_collect_root((void **)&_sdata, (uint32_t *)&_edata - (uint32_t *)&_sdata);
+    gc_collect_root((void **)&_sbss, (uint32_t *)&_ebss - (uint32_t *)&_sbss);
 
     gc_collect_end();
 }
@@ -101,11 +98,14 @@ void Reset_Handler(void) {
     extern const uint32_t isr_vector[];
     SCB_VTOR = (uint32_t)isr_vector;
     // copy .data section from flash to RAM
-    for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
+    uint32_t *src = &_etext;
+    uint32_t *dest = &_sdata;
+    while (dest < &_edata) {
         *dest++ = *src++;
     }
     // zero out .bss section
-    for (uint32_t *dest = &_sbss; dest < &_ebss;) {
+    dest = &_sbss;
+    while (dest < &_ebss) {
         *dest++ = 0;
     }
     // jump to main
