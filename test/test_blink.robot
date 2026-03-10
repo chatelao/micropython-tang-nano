@@ -26,16 +26,15 @@ Should Blink Pin 0
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
     Wait For Line On Uart   Tang Nano 4K with GW1NSR-LV4C
+    Wait For Line On Uart   >>>
 
     # Enter Paste Mode (Ctrl-E)
     Execute Command         ${UART} WriteChar 5
+    Wait For Line On Uart   paste mode
 
-    # Read the test script and write it to the REPL line-by-line
+    # Send the test script
     ${script}=              Get File  ${TEST_SCRIPT}
-    @{lines}=               Split To Lines  ${script}
-    FOR    ${line}    IN    @{lines}
-        Write Line To Uart  ${line}
-    END
+    Write Line To Uart      ${script}
 
     # Execute Paste Mode (Ctrl-D)
     Execute Command         ${UART} WriteChar 4
