@@ -39,8 +39,6 @@ int mp_hal_stdin_rx_chr(void) {
             return c;
         }
         mp_handle_pending(true);
-        // Busy wait instead of WFI for better simulation stability
-        for (volatile int i = 0; i < 100; i++);
     }
 }
 
@@ -48,8 +46,6 @@ void mp_hal_delay_ms(mp_uint_t ms) {
     uint32_t start = mp_hal_ticks_ms();
     while (mp_hal_ticks_ms() - start < ms) {
         mp_handle_pending(true);
-        // Busy wait instead of WFI for better simulation stability
-        for (volatile int i = 0; i < 100; i++);
     }
 }
 
@@ -65,10 +61,8 @@ mp_uint_t mp_hal_ticks_us(void) {
     enable_irq(irq_state);
 
     // Check if SysTick interrupt is pending (COUNTFLAG set)
-    // If it is, then milliseconds might be one behind.
     if (status & (1 << 16)) {
         milliseconds++;
-        // Read counter again in case it wrapped just as we read status
         counter = SYSTICK_VAL;
     }
 
@@ -82,8 +76,9 @@ mp_uint_t mp_hal_ticks_cpu(void) {
 }
 
 void mp_hal_delay_us(mp_uint_t us) {
-    uint32_t start = mp_hal_ticks_us();
-    while (mp_hal_ticks_us() - start < us) {
-        mp_handle_pending(true);
+    // Pure cycle-based delay for maximum stability in simulation
+    uint32_t cycles_per_us = CPU_FREQ / 1000000;
+    for (volatile uint32_t i = 0; i < us * cycles_per_us / 4; i++) {
+        __asm__("nop");
     }
 }
