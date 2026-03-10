@@ -39,7 +39,7 @@ jobs:
       - name: Run Renode tests
         uses: antmicro/renode-test-action@v5
         with:
-          tests-to-run: test/tang_nano_4k.robot
+          tests-to-run: test/*.robot
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
