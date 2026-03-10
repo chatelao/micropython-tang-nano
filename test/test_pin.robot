@@ -11,7 +11,7 @@ ${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
 
 *** Test Cases ***
-Verify I2C Implementation
+Verify Pin Implementation
     Execute Command         $repl = @${REPL}
     Execute Command         $bin = @${BIN}
     Execute Command         include @${RESC}
@@ -23,28 +23,35 @@ Verify I2C Implementation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
     Wait For Text On Uart   >>>
 
-    # Test machine.I2C
-    Write Line To Uart      from machine import I2C, Pin
+    # Test Pin output
+    Write Line To Uart      from machine import Pin
     Wait For Text On Uart   >>>
-    Write Line To Uart      i2c = I2C(scl=Pin(0), sda=Pin(1), freq=100000)
+    Write Line To Uart      led = Pin(0, Pin.OUT)
     Wait For Text On Uart   >>>
-    Write Line To Uart      print('I2C_OK')
-    Wait For Line On Uart   I2C_OK
+    Write Line To Uart      led.value(1)
+    Wait For Text On Uart   >>>
+    Write Line To Uart      print('PIN0:', led.value())
+    Wait For Line On Uart   PIN0: 1
+    Wait For Text On Uart   >>>
+    Write Line To Uart      led.off()
+    Wait For Text On Uart   >>>
+    Write Line To Uart      print('PIN0:', led.value())
+    Wait For Line On Uart   PIN0: 0
+    Wait For Text On Uart   >>>
+    Write Line To Uart      led.on()
+    Wait For Text On Uart   >>>
+    Write Line To Uart      print('PIN0:', led.value())
+    Wait For Line On Uart   PIN0: 1
     Wait For Text On Uart   >>>
 
-    # Test scan (should return empty list as no devices are attached)
-    Write Line To Uart      print('SCAN:', i2c.scan())
-    Wait For Line On Uart   SCAN: []
+    # Test Pin input
+    Write Line To Uart      in_pin = Pin(1, Pin.IN)
+    Wait For Text On Uart   >>>
+    Write Line To Uart      print('PIN1:', in_pin.value())
+    Wait For Line On Uart   PIN1: 0
     Wait For Text On Uart   >>>
 
-    # Test machine.SoftI2C
-    Write Line To Uart      from machine import SoftI2C
-    Wait For Text On Uart   >>>
-    Write Line To Uart      si2c = SoftI2C(scl=Pin(2), sda=Pin(3))
-    Wait For Text On Uart   >>>
-    Write Line To Uart      print('SOFTI2C_OK')
-    Wait For Line On Uart   SOFTI2C_OK
-    Wait For Text On Uart   >>>
-    Write Line To Uart      print('SSCAN:', si2c.scan())
-    Wait For Line On Uart   SSCAN: []
+    # Test Pin identification
+    Write Line To Uart      print(led)
+    Wait For Line On Uart   Pin(0)
     Wait For Text On Uart   >>>
