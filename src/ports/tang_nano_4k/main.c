@@ -58,8 +58,11 @@ void gc_collect(void) {
 
     // Scan .data and .bss sections for roots
     extern uint32_t _sdata, _edata, _sbss, _ebss;
-    gc_collect_root((void **)&_sdata, (uint32_t *)&_edata - (uint32_t *)&_sdata);
-    gc_collect_root((void **)&_sbss, (uint32_t *)&_ebss - (uint32_t *)&_sbss);
+    gc_collect_root((void **)(void *)&_sdata, (size_t)(&_edata - &_sdata));
+    gc_collect_root((void **)(void *)&_sbss, (size_t)(&_ebss - &_sbss));
+
+    // Scan MicroPython state as well
+    gc_collect_root((void **)&mp_state_ctx, sizeof(mp_state_ctx) / sizeof(size_t));
 
     gc_collect_end();
 }
