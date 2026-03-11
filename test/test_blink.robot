@@ -27,25 +27,25 @@ Should Blink Pin 0
     # Wait for REPL to be ready
     Sleep                   2s
 
-    Write Line To Uart      from machine import Pin; print("MOK")
+    Write Line To Uart      from machine import Pin; print("M" + "OK")
     Wait For Line On Uart   MOK
 
-    Write Line To Uart      import time; print("TOK")
+    Write Line To Uart      import time; print("T" + "OK")
     Wait For Line On Uart   TOK
 
-    Write Line To Uart      led = Pin(0, Pin.OUT); print("POK")
+    Write Line To Uart      led = Pin(0, Pin.OUT); print("P" + "OK")
     Wait For Line On Uart   POK
 
     FOR    ${INDEX}    IN RANGE    3
-        Write Line To Uart  led.on(); print("LON")
+        Write Line To Uart  led.on(); print("L" + "ON")
         Wait For Line On Uart   LON
-        Write Line To Uart  time.sleep_ms(50); print("S")
+        Write Line To Uart  time.sleep_ms(10); print("S")
         Wait For Line On Uart   S
-        Write Line To Uart  led.off(); print("LOFF")
+        Write Line To Uart  led.off(); print("L" + "OFF")
         Wait For Line On Uart   LOFF
-        Write Line To Uart  time.sleep_ms(50); print("S")
+        Write Line To Uart  time.sleep_ms(10); print("S")
         Wait For Line On Uart   S
     END
 
-    Write Line To Uart      print("DONE")
+    Write Line To Uart      print("D" + "ONE")
     Wait For Line On Uart   DONE

@@ -15,17 +15,11 @@
 #include "timer.h"
 #include "pwm.h"
 
-// Heap for MicroPython
-static char heap[16 * 1024];
+// Heap for MicroPython - 4KB to fit in limited 22KB SRAM
+static char heap[4 * 1024];
 static char *stack_top;
 
-#define SCB_VTOR (*(volatile uint32_t *)0xE000ED08)
-extern const uint32_t isr_vector[];
-
 int main(int argc, char **argv) {
-    // Set VTOR as early as possible
-    SCB_VTOR = (uint32_t)isr_vector;
-
     int stack_dummy;
     stack_top = (char *)&stack_dummy;
     mp_stack_set_limit(2048);
@@ -51,18 +45,19 @@ void SysTick_Handler(void) {
     machine_timer_tick_all();
 }
 
-#define TIMER1_INTCLEAR (*(volatile uint32_t *)(0x4000100C))
 void TIMER1_Handler(void) {
-    TIMER1_INTCLEAR = 1;
+    (*(volatile uint32_t *)0x4000100C) = 1;
     machine_pwm_tick();
+}
+
+void Default_Handler(void) {
+    while (1);
 }
 
 void gc_collect(void) {
     void *dummy;
     gc_collect_start();
-    // Scan stack
     gc_collect_root(&dummy, ((mp_uint_t)stack_top - (mp_uint_t)&dummy) / sizeof(mp_uint_t));
-    // Scan MicroPython state (includes registered root pointers)
     gc_collect_root((void **)&mp_state_ctx, sizeof(mp_state_ctx) / sizeof(size_t));
     gc_collect_end();
 }
@@ -89,22 +84,20 @@ void MP_WEAK __assert_func(const char *file, int line, const char *func, const c
 }
 #endif
 
-// Cortex-M3 Startup Code
 extern uint32_t _estack, _etext, _sdata, _edata, _sbss, _ebss;
 
 void Reset_Handler(void) __attribute__((naked));
 void Reset_Handler(void) {
-    // set stack pointer
     __asm volatile ("ldr sp, =_estack");
-    // copy .data section from flash to RAM
-    for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
+    uint32_t *src = &_etext;
+    uint32_t *dest = &_sdata;
+    while (dest < &_edata) {
         *dest++ = *src++;
     }
-    // zero out .bss section
-    for (uint32_t *dest = &_sbss; dest < &_ebss;) {
+    dest = &_sbss;
+    while (dest < &_ebss) {
         *dest++ = 0;
     }
-    // jump to main
     main(0, NULL);
     for (;;);
 }
@@ -112,16 +105,17 @@ void Reset_Handler(void) {
 const uint32_t isr_vector[] __attribute__((section(".isr_vector"), aligned(256))) = {
     (uint32_t)&_estack,
     (uint32_t)&Reset_Handler,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    (uint32_t)&SysTick_Handler,     // 0x3C
-    0, // UART0_Handler             // 0x40
-    0, // USER_INT0_Handler
-    0, // UART1_Handler
-    0, // USER_INT1_Handler
-    0, // USER_INT2_Handler
-    0, // Reserved
-    0, // PORT0_COMB_Handler
-    0, // USER_INT3_Handler
-    0, // TIMER0_Handler            // 0x60
-    (uint32_t)&TIMER1_Handler,      // 0x64
+    (uint32_t)&Default_Handler, // NMI
+    (uint32_t)&Default_Handler, // HardFault
+    (uint32_t)&Default_Handler, // MemManage
+    (uint32_t)&Default_Handler, // BusFault
+    (uint32_t)&Default_Handler, // UsageFault
+    0, 0, 0, 0,                 // Reserved
+    (uint32_t)&Default_Handler, // SVCall
+    (uint32_t)&Default_Handler, // DebugMonitor
+    0,                          // Reserved
+    (uint32_t)&Default_Handler, // PendSV
+    (uint32_t)&SysTick_Handler, // SysTick
+    0, 0, 0, 0, 0, 0, 0, 0, 0,  // IRQ 0-8
+    (uint32_t)&TIMER1_Handler,  // IRQ 9
 };

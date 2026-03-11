@@ -8,6 +8,7 @@ MEMORY
 }
 
 STACK_SIZE = 2K;
+HEAP_SIZE = 12K;
 
 SECTIONS
 {
@@ -24,24 +25,36 @@ SECTIONS
 
     .data : AT (_etext)
     {
+        . = ALIGN(4);
         _sdata = .;
         *(.data*)
+        . = ALIGN(4);
         _edata = .;
     } > SRAM
 
     .bss :
     {
+        . = ALIGN(4);
         _sbss = .;
         *(.bss*)
         *(COMMON)
+        . = ALIGN(4);
         _ebss = .;
-        _end = .;
-        end = .;
     } > SRAM
 
-    .stack :
+    .heap (NOLOAD) :
+    {
+        . = ALIGN(4);
+        _sheap = .;
+        . = . + HEAP_SIZE;
+        . = ALIGN(4);
+        _eheap = .;
+    } > SRAM
+
+    .stack (NOLOAD) :
     {
         . = ALIGN(8);
+        *(.stack*)
         . = . + STACK_SIZE;
         _estack = .;
     } > SRAM

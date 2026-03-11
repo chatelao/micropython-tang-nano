@@ -67,7 +67,6 @@ mp_uint_t mp_hal_ticks_us(void) {
     uint32_t status = SYSTICK_CTRL;
     enable_irq(irq_state);
 
-    // Check if SysTick interrupt is pending (COUNTFLAG set)
     if (status & (1 << 16)) {
         milliseconds++;
         counter = SYSTICK_VAL;
@@ -83,7 +82,6 @@ mp_uint_t mp_hal_ticks_cpu(void) {
 }
 
 void mp_hal_delay_us(mp_uint_t us) {
-    // Pure cycle-based delay for maximum stability in simulation
     uint32_t cycles_per_us = CPU_FREQ / 1000000;
     for (volatile uint32_t i = 0; i < us * cycles_per_us / 4; i++) {
         __asm__("nop");
