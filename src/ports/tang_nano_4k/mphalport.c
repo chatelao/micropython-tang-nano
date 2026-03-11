@@ -53,8 +53,6 @@ void mp_hal_delay_ms(mp_uint_t ms) {
     uint32_t start = mp_hal_ticks_ms();
     while (mp_hal_ticks_ms() - start < ms) {
         mp_handle_pending(true);
-        // Busy wait instead of WFI for better simulation stability in Renode
-        for (volatile int i = 0; i < 100; i++);
     }
 }
 

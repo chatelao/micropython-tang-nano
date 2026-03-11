@@ -15,8 +15,8 @@
 #include "timer.h"
 #include "pwm.h"
 
-// Heap for MicroPython - 16KB fits in 22KB SRAM with other BSS and 2KB Stack
-static char heap[16 * 1024];
+// Heap for MicroPython - 12KB fits in 22KB SRAM with 2KB Stack and BSS/Data
+static char heap[12 * 1024];
 static char *stack_top;
 
 int main(int argc, char **argv) {
@@ -56,8 +56,12 @@ void gc_collect(void) {
     gc_collect_start();
     // Scan stack
     gc_collect_root(&dummy, ((mp_uint_t)stack_top - (mp_uint_t)&dummy) / sizeof(mp_uint_t));
-    // Scan MicroPython state for roots (e.g. scheduler callbacks)
-    gc_collect_root((void **)&mp_state_ctx, sizeof(mp_state_ctx) / sizeof(size_t));
+
+    // Scan .data and .bss sections for roots
+    extern uint32_t _sdata, _edata, _sbss, _ebss;
+    gc_collect_root((void **)&_sdata, (uint32_t *)&_edata - (uint32_t *)&_sdata);
+    gc_collect_root((void **)&_sbss, (uint32_t *)&_ebss - (uint32_t *)&_sbss);
+
     gc_collect_end();
 }
 
