@@ -13,6 +13,7 @@ SECTIONS
 {
     .text :
     {
+        . = ALIGN(256);
         KEEP(*(.isr_vector))
         *(.text*)
         *(.rodata*)

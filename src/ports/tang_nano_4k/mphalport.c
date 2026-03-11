@@ -46,8 +46,6 @@ int mp_hal_stdin_rx_chr(void) {
             return c;
         }
         mp_handle_pending(true);
-        // Busy wait instead of WFI for better simulation stability in Renode
-        for (volatile int i = 0; i < 100; i++);
     }
 }
 
