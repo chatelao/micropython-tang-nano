@@ -15,11 +15,17 @@
 #include "timer.h"
 #include "pwm.h"
 
-// Heap for MicroPython - 12KB fits in 22KB SRAM with 2KB Stack and BSS/Data
-static char heap[12 * 1024];
+// Heap for MicroPython
+static char heap[16 * 1024];
 static char *stack_top;
 
+#define SCB_VTOR (*(volatile uint32_t *)0xE000ED08)
+extern const uint32_t isr_vector[];
+
 int main(int argc, char **argv) {
+    // Set VTOR as early as possible
+    SCB_VTOR = (uint32_t)isr_vector;
+
     int stack_dummy;
     stack_top = (char *)&stack_dummy;
     mp_stack_set_limit(2048);
@@ -56,12 +62,8 @@ void gc_collect(void) {
     gc_collect_start();
     // Scan stack
     gc_collect_root(&dummy, ((mp_uint_t)stack_top - (mp_uint_t)&dummy) / sizeof(mp_uint_t));
-
-    // Scan .data and .bss sections for roots
-    extern uint32_t _sdata, _edata, _sbss, _ebss;
-    gc_collect_root((void **)&_sdata, (uint32_t *)&_edata - (uint32_t *)&_sdata);
-    gc_collect_root((void **)&_sbss, (uint32_t *)&_ebss - (uint32_t *)&_sbss);
-
+    // Scan MicroPython state (includes registered root pointers)
+    gc_collect_root((void **)&mp_state_ctx, sizeof(mp_state_ctx) / sizeof(size_t));
     gc_collect_end();
 }
 
@@ -95,14 +97,11 @@ void Reset_Handler(void) {
     // set stack pointer
     __asm volatile ("ldr sp, =_estack");
     // copy .data section from flash to RAM
-    uint32_t *src = &_etext;
-    uint32_t *dest = &_sdata;
-    while (dest < &_edata) {
+    for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
         *dest++ = *src++;
     }
     // zero out .bss section
-    dest = &_sbss;
-    while (dest < &_ebss) {
+    for (uint32_t *dest = &_sbss; dest < &_ebss;) {
         *dest++ = 0;
     }
     // jump to main
