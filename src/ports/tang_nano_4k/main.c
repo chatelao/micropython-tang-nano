@@ -16,6 +16,7 @@
 #include "pwm.h"
 
 // Heap for MicroPython
+static char heap[8 * 1024];
 static char *stack_top;
 
 int main(int argc, char **argv) {
@@ -23,8 +24,7 @@ int main(int argc, char **argv) {
     stack_top = (char *)&stack_dummy;
     mp_stack_set_limit(2048);
 
-    extern uint32_t _sheap, _eheap;
-    gc_init(&_sheap, &_eheap);
+    gc_init(heap, heap + sizeof(heap));
     mp_init();
     mp_hal_init();
     printf("\nMicroPython started on Tang Nano 4K\n");
@@ -54,18 +54,7 @@ void TIMER1_Handler(void) {
 void gc_collect(void) {
     void *dummy;
     gc_collect_start();
-    // Scan stack
     gc_collect_root(&dummy, ((mp_uint_t)stack_top - (mp_uint_t)&dummy) / sizeof(mp_uint_t));
-
-    // Scan .data and .bss sections for roots
-    // Note: We skip the heap which is defined between _sheap and _eheap
-    extern uint32_t _sdata, _edata, _sbss, _ebss;
-    gc_collect_root((void **)&_sdata, (uint32_t *)&_edata - (uint32_t *)&_sdata);
-    gc_collect_root((void **)&_sbss, (uint32_t *)&_ebss - (uint32_t *)&_sbss);
-
-    // Scan MicroPython state
-    gc_collect_root((void **)&mp_state_ctx, sizeof(mp_state_ctx) / sizeof(size_t));
-
     gc_collect_end();
 }
 
@@ -98,21 +87,12 @@ void Reset_Handler(void) __attribute__((naked));
 void Reset_Handler(void) {
     // set stack pointer
     __asm volatile ("ldr sp, =_estack");
-
-    // set VTOR to the start of the interrupt vector table
-    #define SCB_VTOR (*(volatile uint32_t *)0xE000ED08)
-    extern const uint32_t isr_vector[];
-    SCB_VTOR = (uint32_t)isr_vector;
-
     // copy .data section from flash to RAM
-    uint32_t *src = &_etext;
-    uint32_t *dest = &_sdata;
-    while (dest < &_edata) {
+    for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
         *dest++ = *src++;
     }
     // zero out .bss section
-    dest = &_sbss;
-    while (dest < &_ebss) {
+    for (uint32_t *dest = &_sbss; dest < &_ebss;) {
         *dest++ = 0;
     }
     // jump to main

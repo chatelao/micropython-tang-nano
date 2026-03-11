@@ -10,9 +10,16 @@
 #define SYSTICK_LOAD (*(volatile uint32_t *)(SYSTICK_BASE + 0x04))
 #define SYSTICK_VAL  (*(volatile uint32_t *)(SYSTICK_BASE + 0x08))
 
+#define SCB_VTOR (*(volatile uint32_t *)0xE000ED08)
+
 volatile mp_uint_t ticks_ms = 0;
 
+extern const uint32_t isr_vector[];
+
 void mp_hal_init(void) {
+    // Set VTOR to the start of the interrupt vector table
+    SCB_VTOR = (uint32_t)isr_vector;
+
     uart_init(115200);
     pin_init();
 
@@ -39,13 +46,17 @@ int mp_hal_stdin_rx_chr(void) {
             return c;
         }
         mp_handle_pending(true);
+        // Busy wait instead of WFI for better simulation stability in Renode
+        for (volatile int i = 0; i < 100; i++);
     }
 }
 
 void mp_hal_delay_ms(mp_uint_t ms) {
-    for (mp_uint_t i = 0; i < ms; i++) {
-        mp_hal_delay_us(1000);
+    uint32_t start = mp_hal_ticks_ms();
+    while (mp_hal_ticks_ms() - start < ms) {
         mp_handle_pending(true);
+        // Busy wait instead of WFI for better simulation stability in Renode
+        for (volatile int i = 0; i < 100; i++);
     }
 }
 

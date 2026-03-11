@@ -30,22 +30,18 @@ SECTIONS
 
     .bss :
     {
-        . = ALIGN(4);
         _sbss = .;
         *(.bss*)
         *(COMMON)
-        . = ALIGN(4);
         _ebss = .;
+        _end = .;
+        end = .;
     } > SRAM
 
-    .stack (NOLOAD) :
+    .stack :
     {
         . = ALIGN(8);
-        _sstack = .;
         . = . + STACK_SIZE;
         _estack = .;
     } > SRAM
-
-    _sheap = _ebss;
-    _eheap = _sstack;
 }

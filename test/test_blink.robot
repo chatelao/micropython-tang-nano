@@ -24,28 +24,28 @@ Should Blink Pin 0
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
     Wait For Line On Uart   Tang Nano 4K with GW1NSR-LV4C
 
-    # Wait for REPL to settle
-    Sleep                   2s
+    # Wait for REPL to be ready
+    Sleep                   1s
 
-    Write Line To Uart      from machine import Pin; print("MOD" + "_OK")
+    Write Line To Uart      from machine import Pin; print("MOD_OK")
     Wait For Line On Uart   MOD_OK
 
-    Write Line To Uart      import time; print("TIME" + "_OK")
+    Write Line To Uart      import time; print("TIME_OK")
     Wait For Line On Uart   TIME_OK
 
-    Write Line To Uart      led = Pin(0, Pin.OUT); print("PIN" + "_OK")
+    Write Line To Uart      led = Pin(0, Pin.OUT); print("PIN_OK")
     Wait For Line On Uart   PIN_OK
 
     FOR    ${INDEX}    IN RANGE    3
-        Write Line To Uart  led.on(); print("LED_O" + "N")
-        Wait For Line On Uart   LED_ON
-        Write Line To Uart  time.sleep_ms(100); print("S" + "LEPT")
-        Wait For Line On Uart   SLEPT
-        Write Line To Uart  led.off(); print("LED_OF" + "F")
-        Wait For Line On Uart   LED_OFF
-        Write Line To Uart  time.sleep_ms(100); print("S" + "LEPT")
-        Wait For Line On Uart   SLEPT
+        Write Line To Uart  led.on(); print("ON")
+        Wait For Line On Uart   ON
+        Write Line To Uart  time.sleep_ms(50); print("S")
+        Wait For Line On Uart   S
+        Write Line To Uart  led.off(); print("OFF")
+        Wait For Line On Uart   OFF
+        Write Line To Uart  time.sleep_ms(50); print("S")
+        Wait For Line On Uart   S
     END
 
-    Write Line To Uart      print("TEST" + "_DONE")
-    Wait For Line On Uart   TEST_DONE
+    Write Line To Uart      print("DONE")
+    Wait For Line On Uart   DONE
