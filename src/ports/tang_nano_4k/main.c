@@ -15,8 +15,8 @@
 #include "timer.h"
 #include "pwm.h"
 
-// Heap for MicroPython
-static char heap[8 * 1024];
+// Heap for MicroPython - Reduced to 6KB to fit in 22KB SRAM with BSS and Stack
+static char heap[6 * 1024];
 static char *stack_top;
 
 int main(int argc, char **argv) {
