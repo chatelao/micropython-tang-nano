@@ -7,6 +7,7 @@
 #define MICROPY_ENABLE_GC (1)
 #define MICROPY_HELPER_REPL (1)
 #define MICROPY_ENABLE_COMPILER (1)
+#define MICROPY_PY_TIME (1)
 
 // type definitions for the specific machine
 typedef intptr_t mp_int_t; // must be pointer size
@@ -27,8 +28,11 @@ typedef long mp_off_t;
 #define MP_STATE_PORT MP_STATE_VM
 
 extern const struct _mp_obj_module_t mp_module_machine;
+extern const struct _mp_obj_module_t mp_module_time;
 #define MICROPY_PORT_BUILTIN_MODULES \
-    { MP_ROM_QSTR(MP_QSTR_machine), MP_ROM_PTR(&mp_module_machine) },
+    { MP_ROM_QSTR(MP_QSTR_machine), MP_ROM_PTR(&mp_module_machine) }, \
+    { MP_ROM_QSTR(MP_QSTR_time), MP_ROM_PTR(&mp_module_time) }, \
+    { MP_ROM_QSTR(MP_QSTR_utime), MP_ROM_PTR(&mp_module_time) },
 
 #define MICROPY_ENABLE_SCHEDULER (1)
 

@@ -14,6 +14,19 @@ void mp_hal_delay_ms(mp_uint_t ms);
 void mp_hal_delay_us(mp_uint_t us);
 #define mp_hal_delay_us_fast(us) mp_hal_delay_us(us)
 mp_uint_t mp_hal_ticks_ms(void);
+mp_uint_t mp_hal_ticks_us(void);
+mp_uint_t mp_hal_ticks_cpu(void);
+
+static inline mp_uint_t disable_irq(void) {
+    uint32_t state;
+    __asm__ volatile ("mrs %0, primask" : "=r" (state));
+    __asm__ volatile ("cpsid i");
+    return state;
+}
+
+static inline void enable_irq(mp_uint_t state) {
+    __asm__ volatile ("msr primask, %0" : : "r" (state));
+}
 
 #include "extmod/virtpin.h"
 

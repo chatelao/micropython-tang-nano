@@ -13,6 +13,7 @@ SECTIONS
 {
     .text :
     {
+        . = ALIGN(256);
         KEEP(*(.isr_vector))
         *(.text*)
         *(.rodata*)
@@ -23,25 +24,32 @@ SECTIONS
 
     .data : AT (_etext)
     {
+        . = ALIGN(4);
         _sdata = .;
         *(.data*)
+        . = ALIGN(4);
         _edata = .;
     } > SRAM
 
     .bss :
     {
+        . = ALIGN(4);
         _sbss = .;
         *(.bss*)
         *(COMMON)
+        . = ALIGN(4);
         _ebss = .;
-        _end = .;
-        end = .;
     } > SRAM
 
-    .stack :
+    .stack (NOLOAD) :
     {
         . = ALIGN(8);
+        _sstack = .;
         . = . + STACK_SIZE;
         _estack = .;
     } > SRAM
+
+    /* Use all remaining space for heap */
+    _sheap = _ebss;
+    _eheap = _sstack;
 }

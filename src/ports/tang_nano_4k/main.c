@@ -16,7 +16,7 @@
 #include "pwm.h"
 
 // Heap for MicroPython
-static char heap[16 * 1024];
+static char heap[8 * 1024];
 static char *stack_top;
 
 int main(int argc, char **argv) {
@@ -39,22 +39,17 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-extern volatile mp_uint_t ticks_ms;
-void SysTick_Handler(void) {
-    ticks_ms++;
-    machine_timer_tick_all();
-}
-
-#define TIMER1_INTCLEAR (*(volatile uint32_t *)(0x4000100C))
-void TIMER1_Handler(void) {
-    TIMER1_INTCLEAR = 1;
-    machine_pwm_tick();
+void Default_Handler(void) {
+    while (1);
 }
 
 void gc_collect(void) {
     void *dummy;
     gc_collect_start();
+    // Scan stack
     gc_collect_root(&dummy, ((mp_uint_t)stack_top - (mp_uint_t)&dummy) / sizeof(mp_uint_t));
+    // Scan MicroPython state
+    gc_collect_root((void **)&mp_state_ctx, sizeof(mp_state_ctx) / sizeof(size_t));
     gc_collect_end();
 }
 
@@ -100,19 +95,23 @@ void Reset_Handler(void) {
     for (;;);
 }
 
-const uint32_t isr_vector[] __attribute__((section(".isr_vector"))) = {
+extern void SysTick_Handler(void);
+extern void TIMER1_Handler(void);
+
+const uint32_t isr_vector[] __attribute__((section(".isr_vector"), aligned(256))) = {
     (uint32_t)&_estack,
     (uint32_t)&Reset_Handler,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    (uint32_t)&SysTick_Handler,     // 0x3C
-    0, // UART0_Handler             // 0x40
-    0, // USER_INT0_Handler
-    0, // UART1_Handler
-    0, // USER_INT1_Handler
-    0, // USER_INT2_Handler
-    0, // Reserved
-    0, // PORT0_COMB_Handler
-    0, // USER_INT3_Handler
-    0, // TIMER0_Handler            // 0x60
-    (uint32_t)&TIMER1_Handler,      // 0x64
+    (uint32_t)&Default_Handler, // NMI
+    (uint32_t)&Default_Handler, // HardFault
+    (uint32_t)&Default_Handler, // MemManage
+    (uint32_t)&Default_Handler, // BusFault
+    (uint32_t)&Default_Handler, // UsageFault
+    0, 0, 0, 0,                 // Reserved
+    (uint32_t)&Default_Handler, // SVCall
+    (uint32_t)&Default_Handler, // DebugMonitor
+    0,                          // Reserved
+    (uint32_t)&Default_Handler, // PendSV
+    (uint32_t)&SysTick_Handler, // SysTick
+    0, 0, 0, 0, 0, 0, 0, 0, 0,  // IRQ 0-8
+    (uint32_t)&TIMER1_Handler,  // IRQ 9
 };
