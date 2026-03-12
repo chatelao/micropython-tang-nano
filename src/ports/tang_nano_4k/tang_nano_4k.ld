@@ -8,7 +8,6 @@ MEMORY
 }
 
 STACK_SIZE = 2K;
-HEAP_SIZE = 12K;
 
 SECTIONS
 {
@@ -42,20 +41,15 @@ SECTIONS
         _ebss = .;
     } > SRAM
 
-    .heap (NOLOAD) :
-    {
-        . = ALIGN(4);
-        _sheap = .;
-        . = . + HEAP_SIZE;
-        . = ALIGN(4);
-        _eheap = .;
-    } > SRAM
-
     .stack (NOLOAD) :
     {
         . = ALIGN(8);
-        *(.stack*)
+        _sstack = .;
         . = . + STACK_SIZE;
         _estack = .;
     } > SRAM
+
+    /* Use all remaining space for heap */
+    _sheap = _ebss;
+    _eheap = _sstack;
 }
