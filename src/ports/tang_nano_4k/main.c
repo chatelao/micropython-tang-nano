@@ -15,8 +15,8 @@
 #include "timer.h"
 #include "pwm.h"
 
-// Heap for MicroPython - 4KB to fit in limited 22KB SRAM
-static char heap[4 * 1024];
+// Heap for MicroPython
+static char heap[12 * 1024];
 static char *stack_top;
 
 int main(int argc, char **argv) {
@@ -37,17 +37,6 @@ int main(int argc, char **argv) {
 
     mp_deinit();
     return 0;
-}
-
-extern volatile mp_uint_t ticks_ms;
-void SysTick_Handler(void) {
-    ticks_ms++;
-    machine_timer_tick_all();
-}
-
-void TIMER1_Handler(void) {
-    (*(volatile uint32_t *)0x4000100C) = 1;
-    machine_pwm_tick();
 }
 
 void Default_Handler(void) {
@@ -84,23 +73,28 @@ void MP_WEAK __assert_func(const char *file, int line, const char *func, const c
 }
 #endif
 
+// Cortex-M3 Startup Code
 extern uint32_t _estack, _etext, _sdata, _edata, _sbss, _ebss;
 
 void Reset_Handler(void) __attribute__((naked));
 void Reset_Handler(void) {
+    // set stack pointer
     __asm volatile ("ldr sp, =_estack");
-    uint32_t *src = &_etext;
-    uint32_t *dest = &_sdata;
-    while (dest < &_edata) {
+    // copy .data section from flash to RAM
+    for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
         *dest++ = *src++;
     }
-    dest = &_sbss;
-    while (dest < &_ebss) {
+    // zero out .bss section
+    for (uint32_t *dest = &_sbss; dest < &_ebss;) {
         *dest++ = 0;
     }
+    // jump to main
     main(0, NULL);
     for (;;);
 }
+
+extern void SysTick_Handler(void);
+extern void TIMER1_Handler(void);
 
 const uint32_t isr_vector[] __attribute__((section(".isr_vector"), aligned(256))) = {
     (uint32_t)&_estack,
