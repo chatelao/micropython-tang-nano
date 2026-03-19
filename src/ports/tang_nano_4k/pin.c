@@ -81,6 +81,10 @@ static mp_obj_t machine_pin_value(size_t n_args, const mp_obj_t *args) {
     machine_pin_obj_t *self = MP_OBJ_TO_PTR(args[0]);
     if (n_args == 1) {
         // Get value
+        // For simulation and hardware correctness, we read from DATA if it's an input
+        // and from DATAOUT if it's an output.
+        // However, many MicroPython ports simply read the input register which usually
+        // reflects the pin state regardless of direction (if input buffer is enabled).
         return MP_OBJ_NEW_SMALL_INT((REG_DATA >> self->pin_id) & 1);
     } else {
         // Set value
