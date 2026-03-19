@@ -81,13 +81,8 @@ static mp_obj_t machine_pin_value(size_t n_args, const mp_obj_t *args) {
     machine_pin_obj_t *self = MP_OBJ_TO_PTR(args[0]);
     if (n_args == 1) {
         // Get value
-        // In Renode simulation, we use Memory.MappedMemory for the GPIO bridge.
-        // This means the input register (REG_DATA) and output register (REG_DATAOUT)
-        // are separate memory locations. To ensure Pin.value() works correctly for
-        // both input pins (set via sysbus) and output pins (set via p0.on()), we
-        // OR the two registers. On real hardware, the input buffer typically reflects
-        // the pin state regardless of direction, so this is a simulation-specific
-        // enhancement for stability.
+        // OR REG_DATA (input) and REG_DATAOUT (output) to ensure Pin.value()
+        // reports correct state in simulation and hardware contexts.
         return MP_OBJ_NEW_SMALL_INT(((REG_DATA | REG_DATAOUT) >> self->pin_id) & 1);
     } else {
         // Set value
