@@ -81,7 +81,9 @@ static mp_obj_t machine_pin_value(size_t n_args, const mp_obj_t *args) {
     machine_pin_obj_t *self = MP_OBJ_TO_PTR(args[0]);
     if (n_args == 1) {
         // Get value
-        return MP_OBJ_NEW_SMALL_INT((REG_DATA >> self->pin_id) & 1);
+        // OR REG_DATA (input) and REG_DATAOUT (output) to ensure Pin.value()
+        // reports correct state in simulation and hardware contexts.
+        return MP_OBJ_NEW_SMALL_INT(((REG_DATA | REG_DATAOUT) >> self->pin_id) & 1);
     } else {
         // Set value
         if (mp_obj_is_true(args[1])) {

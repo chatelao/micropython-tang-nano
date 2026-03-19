@@ -15,8 +15,8 @@
 #include "timer.h"
 #include "pwm.h"
 
-// Heap for MicroPython - 4KB for absolute stability in 22KB SRAM
-static char heap[4 * 1024];
+// Heap for MicroPython - 8KB to avoid MemoryError during compilation
+static char heap[8 * 1024];
 static char *stack_top;
 
 int main(int argc, char **argv) {
@@ -56,7 +56,7 @@ void gc_collect(void) {
     gc_collect_start();
     // Scan stack
     gc_collect_root(&dummy, ((mp_uint_t)stack_top - (mp_uint_t)&dummy) / sizeof(mp_uint_t));
-    // Scan MicroPython state
+    // Scan MicroPython state (includes registered root pointers like active_timers)
     gc_collect_root((void **)&mp_state_ctx, sizeof(mp_state_ctx) / sizeof(size_t));
     gc_collect_end();
 }
