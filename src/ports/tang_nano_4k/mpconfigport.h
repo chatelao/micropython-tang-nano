@@ -38,3 +38,5 @@ extern const struct _mp_obj_module_t mp_module_time;
 
 #define MICROPY_PY_MACHINE_I2C (1)
 #define MICROPY_PY_MACHINE_SOFTI2C (1)
+#define MICROPY_PY_MACHINE_SPI (1)
+#define MICROPY_PY_MACHINE_SOFTSPI (1)
