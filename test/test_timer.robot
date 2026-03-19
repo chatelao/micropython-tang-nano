@@ -24,13 +24,12 @@ Should Run Timer Test
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
-    # Send the test script line by line in paste mode (Ctrl-E / Ctrl-D)
+    # Send the test script in paste mode (Ctrl-E / Ctrl-D)
     Execute Command         ${UART} WriteChar 5
     ${script}=              Get File  ${TEST_SCRIPT}
-    ${lines}=               Evaluate  $script.splitlines()
-    FOR    ${line}    IN    @{lines}
-        Write Line To Uart  ${line}
-    END
+    # To avoid syntax errors with line-by-line echoes, we send it in blocks or with pauses.
+    # However, 'Write Line To Uart' should work if sent in paste mode.
+    Write Line To Uart      ${script}
     Execute Command         ${UART} WriteChar 4
 
     Wait For Line On Uart   Testing machine.Timer...
