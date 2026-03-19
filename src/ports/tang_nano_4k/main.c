@@ -15,8 +15,8 @@
 #include "timer.h"
 #include "pwm.h"
 
-// Heap for MicroPython
-static char heap[8 * 1024];
+// Heap for MicroPython - 4KB for absolute stability in 22KB SRAM
+static char heap[4 * 1024];
 static char *stack_top;
 
 int main(int argc, char **argv) {
@@ -41,6 +41,14 @@ int main(int argc, char **argv) {
 
 void Default_Handler(void) {
     while (1);
+}
+
+extern void SysTick_Handler(void);
+
+void TIMER1_Handler(void) {
+    // Clear Timer 1 interrupt
+    (*(volatile uint32_t *)0x4000100C) = 1;
+    machine_pwm_tick();
 }
 
 void gc_collect(void) {
@@ -94,9 +102,6 @@ void Reset_Handler(void) {
     main(0, NULL);
     for (;;);
 }
-
-extern void SysTick_Handler(void);
-extern void TIMER1_Handler(void);
 
 const uint32_t isr_vector[] __attribute__((section(".isr_vector"), aligned(256))) = {
     (uint32_t)&_estack,
