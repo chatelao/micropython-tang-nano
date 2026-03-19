@@ -27,8 +27,16 @@ Should Run Timer Test
     # Send the test script in paste mode (Ctrl-E / Ctrl-D)
     Execute Command         ${UART} WriteChar 5
     ${script}=              Get File  ${TEST_SCRIPT}
-    Write Line To Uart      ${script}
+    ${lines}=               Evaluate  $script.splitlines()
+    FOR    ${line}    IN    @{lines}
+        Write Line To Uart  ${line}
+        # Short sleep to prevent character loss in Renode UART RX
+        Sleep               50ms
+    END
     Execute Command         ${UART} WriteChar 4
+
+    # Wait for the script to finish loading and execute
+    Wait For Line On Uart   SCRIPT_LOADED    timeout=10
 
     Wait For Line On Uart   Testing machine.Timer...
     Wait For Line On Uart   Timer started. Waiting 3500ms...

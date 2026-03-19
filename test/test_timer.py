@@ -1,6 +1,7 @@
 import machine
 import time
 
+# Use string concatenation to avoid matching UART echoes in Robot Framework
 print("Testing machine.Ti" + "mer...")
 
 # Create a periodic timer that prints a message every 1 second
@@ -26,4 +27,5 @@ for i in range(10):
     t.deinit()
 print("Slot reuse test pas" + "sed.")
 
+print("SCRIPT_LO" + "ADED")
 print("Test compl" + "ete.")
