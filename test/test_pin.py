@@ -8,10 +8,10 @@ print("Toggling Pin 0...")
 for i in range(10):
     led.value(1)
     print("Pin 0 is ON")
-    time.sleep(0.5)
+    time.sleep_ms(500)
     led.value(0)
     print("Pin 0 is OFF")
-    time.sleep(0.5)
+    time.sleep_ms(500)
 
 # Test input mode
 in_pin = machine.Pin(1, machine.Pin.IN)

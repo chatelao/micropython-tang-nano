@@ -29,8 +29,9 @@ Verify I2C Implementation
     Wait For Line On Uart   I2C_OK
 
     # Test scan (should return empty list as no devices are attached)
+    # i2c.scan() can be slow in simulation, increasing timeout
     Write Line To Uart      print('SCAN:', i2c.scan())
-    Wait For Line On Uart   SCAN: []
+    Wait For Line On Uart   SCAN: []    timeout=20
 
     # Test machine.SoftI2C
     Write Line To Uart      from machine import SoftI2C
@@ -38,4 +39,4 @@ Verify I2C Implementation
     Write Line To Uart      print('SOFTI2C_OK')
     Wait For Line On Uart   SOFTI2C_OK
     Write Line To Uart      print('SSCAN:', si2c.scan())
-    Wait For Line On Uart   SSCAN: []
+    Wait For Line On Uart   SSCAN: []    timeout=20

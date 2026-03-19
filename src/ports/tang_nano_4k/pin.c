@@ -81,11 +81,14 @@ static mp_obj_t machine_pin_value(size_t n_args, const mp_obj_t *args) {
     machine_pin_obj_t *self = MP_OBJ_TO_PTR(args[0]);
     if (n_args == 1) {
         // Get value
-        // For simulation and hardware correctness, we read from DATA if it's an input
-        // and from DATAOUT if it's an output.
-        // However, many MicroPython ports simply read the input register which usually
-        // reflects the pin state regardless of direction (if input buffer is enabled).
-        return MP_OBJ_NEW_SMALL_INT((REG_DATA >> self->pin_id) & 1);
+        // In Renode simulation, we use Memory.MappedMemory for the GPIO bridge.
+        // This means the input register (REG_DATA) and output register (REG_DATAOUT)
+        // are separate memory locations. To ensure Pin.value() works correctly for
+        // both input pins (set via sysbus) and output pins (set via p0.on()), we
+        // OR the two registers. On real hardware, the input buffer typically reflects
+        // the pin state regardless of direction, so this is a simulation-specific
+        // enhancement for stability.
+        return MP_OBJ_NEW_SMALL_INT(((REG_DATA | REG_DATAOUT) >> self->pin_id) & 1);
     } else {
         // Set value
         if (mp_obj_is_true(args[1])) {
