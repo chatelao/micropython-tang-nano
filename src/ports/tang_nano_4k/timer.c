@@ -25,14 +25,23 @@ void machine_timer_tick_all(void) {
     uint32_t current_tick = mp_hal_ticks_ms();
     for (int i = 0; i < MAX_TIMERS; i++) {
         machine_timer_obj_t *timer = MP_STATE_PORT(active_timers)[i];
-        if (timer && timer->active && (current_tick - timer->last_tick >= timer->period)) {
-            if (timer->callback != mp_const_none) {
-                mp_sched_schedule(timer->callback, MP_OBJ_FROM_PTR(timer));
-            }
-            if (timer->mode == TIMER_MODE_ONE_SHOT) {
-                timer->active = false;
-            } else {
-                timer->last_tick = current_tick;
+        if (timer && timer->active) {
+            // Use signed subtraction to handle potential 1ms jitters in simulation
+            int32_t diff = (int32_t)(current_tick - timer->last_tick);
+            if (diff >= (int32_t)timer->period) {
+                if (timer->callback != mp_const_none) {
+                    mp_sched_schedule(timer->callback, MP_OBJ_FROM_PTR(timer));
+                }
+                if (timer->mode == TIMER_MODE_ONE_SHOT) {
+                    timer->active = false;
+                } else {
+                    // Reset last_tick relative to the expected period to avoid drift
+                    timer->last_tick += timer->period;
+                    // If we are still behind, catch up to current time
+                    if ((int32_t)(current_tick - timer->last_tick) >= (int32_t)timer->period) {
+                        timer->last_tick = current_tick;
+                    }
+                }
             }
         }
     }

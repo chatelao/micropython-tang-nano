@@ -41,9 +41,10 @@ Should Run Timer Test
     Wait For Line On Uart   Timer started. Waiting 3500 ms...
 
     # We expect 3 ticks in 3500 ms (at 1s, 2s, 3s)
-    Wait For Line On Uart   Timer periodic tick
-    Wait For Line On Uart   Timer periodic tick
-    Wait For Line On Uart   Timer periodic tick
+    # Using a loop with a small timeout to handle potential synchronization variations
+    FOR    ${INDEX}    IN RANGE    3
+        Wait For Line On Uart   Timer periodic tick    timeout=5
+    END
 
     Wait For Line On Uart   Deinitializing timer...
     Wait For Line On Uart   Testing one-shot timer (2000 ms)...

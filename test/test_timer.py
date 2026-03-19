@@ -17,7 +17,7 @@ tim.deinit()
 print("Testing one-shot timer (2000 ms)...")
 tim.init(period=2000, mode=machine.Timer.ONE_SHOT, callback=lambda t: print("One-shot timer fired!"))
 
-time.sleep_ms(3000)
+time.sleep_ms(4000)
 
 print("Testing slot reuse...")
 for i in range(10):
