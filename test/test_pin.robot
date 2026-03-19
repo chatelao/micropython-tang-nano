@@ -11,7 +11,7 @@ ${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
 
 *** Test Cases ***
-Should Verify PWM Interface
+Verify Pin Interface
     Execute Command         $repl = @${REPL}
     Execute Command         $bin = @${BIN}
     Execute Command         include @${RESC}
@@ -20,18 +20,23 @@ Should Verify PWM Interface
     Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
     Create Terminal Tester  ${UART}
     Start Emulation
+
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
-    Write Line To Uart      from machine import PWM, Pin; print("PWM_IMPORT_OK")
-    Wait For Line On Uart   PWM_IMPORT_OK
-    Write Line To Uart      pwm = PWM(Pin(0)); print("PWM_INIT_OK")
-    Wait For Line On Uart   PWM_INIT_OK
-    Write Line To Uart      print(pwm)
-    Wait For Line On Uart   PWM(pin=0, freq=1000, duty=512)
-    Write Line To Uart      pwm.freq(2000); print("PWM_FREQ_OK")
-    Wait For Line On Uart   PWM_FREQ_OK
-    Write Line To Uart      pwm.duty(256); print("PWM_DUTY_OK")
-    Wait For Line On Uart   PWM_DUTY_OK
-    Write Line To Uart      print(pwm)
-    Wait For Line On Uart   PWM(pin=0, freq=2000, duty=256)
-    Write Line To Uart      pwm.deinit(); print("PWM_DEINIT_OK")
-    Wait For Line On Uart   PWM_DEINIT_OK
+    Wait For Line On Uart   Tang Nano 4K with GW1NSR-LV4C
+
+    # Test Output
+    Write Line To Uart      from machine import Pin
+    Write Line To Uart      p0 = Pin(0, Pin.OUT)
+    Write Line To Uart      p0.on(); print("P0_ON")
+    Wait For Line On Uart   P0_ON
+    Write Line To Uart      p0.off(); print("P0_OFF")
+    Wait For Line On Uart   P0_OFF
+    Write Line To Uart      p0.value(1); print("P0_VAL_1")
+    Wait For Line On Uart   P0_VAL_1
+    Write Line To Uart      print("P0_STATE:", p0.value())
+    Wait For Line On Uart   P0_STATE: 1
+
+    # Test Input
+    Write Line To Uart      p1 = Pin(1, Pin.IN)
+    Write Line To Uart      print("P1_VAL:", p1.value())
+    Wait For Line On Uart   P1_VAL: 0
