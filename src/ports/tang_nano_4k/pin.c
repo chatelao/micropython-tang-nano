@@ -15,8 +15,10 @@
 #define REG_ALTFUNCCLR   GPIO_REG(0x001C)
 
 void pin_init(void) {
-    // Initialize GPIO if needed (e.g., clear all output enables)
+    // Initialize GPIO
     REG_OUTENCLR = 0xFFFF;
+    // Set all data bits to 1 by default to simulate pull-ups in Renode MappedMemory
+    REG_DATA = 0xFFFF;
 }
 
 static void machine_pin_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t kind) {
@@ -81,7 +83,15 @@ static mp_obj_t machine_pin_value(size_t n_args, const mp_obj_t *args) {
     machine_pin_obj_t *self = MP_OBJ_TO_PTR(args[0]);
     if (n_args == 1) {
         // Get value
-        return MP_OBJ_NEW_SMALL_INT((REG_DATA >> self->pin_id) & 1);
+        // If pin is output, return state from REG_DATAOUT.
+        // If input, return state from REG_DATA.
+        // In simulation with MappedMemory, REG_DATA doesn't automatically follow REG_DATAOUT.
+        uint32_t pin_mask = (1 << self->pin_id);
+        if (REG_OUTENSET & pin_mask) {
+            return MP_OBJ_NEW_SMALL_INT((REG_DATAOUT >> self->pin_id) & 1);
+        } else {
+            return MP_OBJ_NEW_SMALL_INT((REG_DATA >> self->pin_id) & 1);
+        }
     } else {
         // Set value
         if (mp_obj_is_true(args[1])) {
@@ -118,7 +128,12 @@ static mp_uint_t machine_pin_ioctl(mp_obj_t self_in, mp_uint_t request, uintptr_
 
     switch (request) {
         case MP_PIN_READ: {
-            return (REG_DATA >> self->pin_id) & 1;
+            uint32_t pin_mask = (1 << self->pin_id);
+            if (REG_OUTENSET & pin_mask) {
+                return (REG_DATAOUT >> self->pin_id) & 1;
+            } else {
+                return (REG_DATA >> self->pin_id) & 1;
+            }
         }
         case MP_PIN_WRITE: {
             if (arg) {
