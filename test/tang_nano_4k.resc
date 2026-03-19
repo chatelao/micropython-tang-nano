@@ -8,6 +8,9 @@ $bin?=@src/ports/tang_nano_4k/build/firmware.elf
 
 machine LoadPlatformDescription $repl
 
+# Set CPU performance to match 27MHz hardware for accurate SysTick timing
+sysbus.cpu PerformanceInMips 27
+
 showAnalyzer uart0
 
 macro reset

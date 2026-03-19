@@ -31,7 +31,7 @@ FLASH_ORIGIN = 0x00000000
 FLASH_LENGTH = 32K
 endif
 
-LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs
+LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs -lc -lm -lnosys
 LDFLAGS += -Wl,--defsym=FLASH_ORIGIN=$(FLASH_ORIGIN),--defsym=FLASH_LENGTH=$(FLASH_LENGTH)
 
 # Tune for Debugging or Optimization
@@ -51,6 +51,7 @@ SRC_C = \
 	timer.c \
 	pwm.c \
 	modmachine.c \
+	$(TOP)/extmod/modtime.c \
 	$(TOP)/extmod/machine_i2c.c \
 	$(TOP)/extmod/virtpin.c \
 	$(TOP)/shared/libc/printf.c \
