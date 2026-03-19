@@ -30,14 +30,14 @@ Verify I2C Implementation
     Wait For Line On Uart   I2C_OK
 
     # Test scan (should return empty list as no devices are attached)
-    Write Line To Uart      print('SCAN:', i2c.scan())
+    Write Line To Uart      print('SCAN:', i2c.scan(), 'OK' if True else '')
     # Increase the timeout for scan operation in case it takes longer in simulation
-    Wait For Line On Uart   SCAN: []    timeout=15
+    Wait For Line On Uart   SCAN: [] OK    timeout=15
 
     # Test machine.SoftI2C
     Write Line To Uart      from machine import SoftI2C; print("SMOD_O" + "K")
     Wait For Line On Uart   SMOD_OK
     Write Line To Uart      si2c = SoftI2C(scl=Pin(2), sda=Pin(3)); print("SOFTI2C_O" + "K")
     Wait For Line On Uart   SOFTI2C_OK
-    Write Line To Uart      print('SSCAN:', si2c.scan())
-    Wait For Line On Uart   SSCAN: []    timeout=15
+    Write Line To Uart      print('SSCAN:', si2c.scan(), 'OK' if True else '')
+    Wait For Line On Uart   SSCAN: [] OK    timeout=15

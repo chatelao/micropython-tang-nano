@@ -27,13 +27,11 @@ Should Run Timer Test
     # Send the test script in paste mode (Ctrl-E / Ctrl-D)
     Execute Command         ${UART} WriteChar 5
     ${script}=              Get File  ${TEST_SCRIPT}
-    # To avoid syntax errors with line-by-line echoes, we send it in blocks or with pauses.
-    # However, 'Write Line To Uart' should work if sent in paste mode.
     Write Line To Uart      ${script}
     Execute Command         ${UART} WriteChar 4
 
     Wait For Line On Uart   Testing machine.Timer...
-    Wait For Line On Uart   Timer started. Waiting 3.5 seconds...
+    Wait For Line On Uart   Timer started. Waiting 3500ms...
 
     # We expect 3 ticks in 3.5 seconds (at 1s, 2s, 3s)
     Wait For Line On Uart   Timer periodic tick
@@ -41,7 +39,8 @@ Should Run Timer Test
     Wait For Line On Uart   Timer periodic tick
 
     Wait For Line On Uart   Deinitializing timer...
-    Wait For Line On Uart   Testing one-shot timer (2 seconds)...
+    Wait For Line On Uart   Testing one-shot timer (2000ms)...
 
     Wait For Line On Uart   One-shot timer fired!
+    Wait For Line On Uart   Slot reuse test passed.
     Wait For Line On Uart   Test complete.
