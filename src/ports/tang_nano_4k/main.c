@@ -15,8 +15,8 @@
 #include "timer.h"
 #include "pwm.h"
 
-// Heap for MicroPython - 4KB for absolute stability in 22KB SRAM
-static char heap[4 * 1024];
+// Heap for MicroPython - 8KB to avoid MemoryError during compilation
+static char heap[8 * 1024];
 static char *stack_top;
 
 int main(int argc, char **argv) {
