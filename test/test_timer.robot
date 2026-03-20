@@ -28,8 +28,12 @@ Should Run Timer Test
     ${script}=              Get File  ${TEST_SCRIPT}
     ${lines}=               Evaluate  $script.splitlines()
     FOR    ${line}    IN    @{lines}
-        Write Line To Uart  ${line}
-        Wait For Line On Uart  ${line}
+        # Skip empty lines
+        ${trimmed}=         Evaluate  $line.strip()
+        IF    "${trimmed}" != ""
+            Write Line To Uart  ${line}
+            Wait For Line On Uart  ${line}
+        END
     END
 
     Wait For Line On Uart   Testing machine.Timer...

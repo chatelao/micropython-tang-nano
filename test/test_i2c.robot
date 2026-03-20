@@ -24,7 +24,9 @@ Verify I2C Implementation
 
     # Test machine.I2C
     Write Line To Uart      from machine import I2C, Pin
+    Wait For Line On Uart   from machine import I2C, Pin
     Write Line To Uart      i2c = I2C(scl=Pin(0), sda=Pin(1), freq=100000)
+    Wait For Line On Uart   i2c = I2C(scl=Pin(0), sda=Pin(1), freq=100000)
     Write Line To Uart      print('I2C_OK')
     Wait For Line On Uart   I2C_OK
 
@@ -34,7 +36,9 @@ Verify I2C Implementation
 
     # Test machine.SoftI2C
     Write Line To Uart      from machine import SoftI2C
+    Wait For Line On Uart   from machine import SoftI2C
     Write Line To Uart      si2c = SoftI2C(scl=Pin(2), sda=Pin(3))
+    Wait For Line On Uart   si2c = SoftI2C(scl=Pin(2), sda=Pin(3))
     Write Line To Uart      print('SOFTI2C_OK')
     Wait For Line On Uart   SOFTI2C_OK
     Write Line To Uart      print('SSCAN:', si2c.scan())
