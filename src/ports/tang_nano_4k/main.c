@@ -15,8 +15,8 @@
 #include "timer.h"
 #include "pwm.h"
 
-// Heap for MicroPython - 8KB to avoid MemoryError during compilation
-static char heap[8 * 1024];
+// Linker symbols for memory sections
+extern uint32_t _sdata, _edata, _sbss, _ebss, _sheap, _eheap, _estack;
 static char *stack_top;
 
 int main(int argc, char **argv) {
@@ -24,7 +24,8 @@ int main(int argc, char **argv) {
     stack_top = (char *)&stack_dummy;
     mp_stack_set_limit(2048);
 
-    gc_init(heap, heap + sizeof(heap));
+    // Initialize GC with the range between BSS and Stack
+    gc_init(&_sheap, &_eheap);
     mp_init();
     mp_hal_init();
     printf("\nMicroPython started on Tang Nano 4K\n");
@@ -54,9 +55,14 @@ void TIMER1_Handler(void) {
 void gc_collect(void) {
     void *dummy;
     gc_collect_start();
-    // Scan stack
+    // 1. Scan stack (from current frame up to stack_top)
     gc_collect_root(&dummy, ((mp_uint_t)stack_top - (mp_uint_t)&dummy) / sizeof(mp_uint_t));
-    // Scan MicroPython state (includes registered root pointers like active_timers)
+
+    // 2. Scan DATA and BSS sections for global root pointers
+    // This ensures that active_timers pool and other global pointers are scanned
+    gc_collect_root((void **)&_sdata, (&_ebss - &_sdata));
+
+    // 3. Scan MicroPython state
     gc_collect_root((void **)&mp_state_ctx, sizeof(mp_state_ctx) / sizeof(size_t));
     gc_collect_end();
 }

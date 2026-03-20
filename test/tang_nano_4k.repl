@@ -5,7 +5,6 @@ nvic: IRQControllers.NVIC @ sysbus 0xE000E000
 cpu: CPU.CortexM @ sysbus
     cpuType: "cortex-m3"
     nvic: nvic
-    clockFrequency: 27000000
 
 // Internal Flash (User Flash) - 32KB
 flash: Memory.MappedMemory @ sysbus 0x00000000
@@ -20,10 +19,12 @@ uart0: UART.CMSDK_APB_UART @ sysbus 0x40004000
     frequency: 27000000
 
 // Timer0 - Correct hardware base address
-timer0: Timer.CMSDK_APB_Timer @ sysbus 0x40000000
+timer0: Memory.MappedMemory @ sysbus 0x40000000
+    size: 0x1000
 
 // Timer1 - Correct hardware base address (Used for PWM in firmware)
-timer1: Timer.CMSDK_APB_Timer @ sysbus 0x40001000
+timer1: Memory.MappedMemory @ sysbus 0x40001000
+    size: 0x1000
 
 // External SPI NOR Flash - 4MB
 // Mapped at 0x60000000 for simulation purposes
@@ -31,4 +32,5 @@ external_flash: Memory.MappedMemory @ sysbus 0x60000000
     size: 0x400000
 
 // GPIO Bridge - 16-bit
-gpio0: GPIOPort.CMSDK_APB_GPIO @ sysbus 0x40010000
+gpio0: Memory.MappedMemory @ sysbus 0x40010000
+    size: 0x1000

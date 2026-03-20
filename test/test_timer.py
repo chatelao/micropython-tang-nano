@@ -5,6 +5,7 @@ print("Testing machine.Timer...")
 
 # Create a periodic timer that prints a message every 1 second
 tim = machine.Timer(0)
+print("Initial ticks_ms:", time.ticks_ms())
 tim.init(period=1000, mode=machine.Timer.PERIODIC, callback=lambda t: print("Timer periodic tick"))
 
 print("Timer started. Waiting 3500 ms...")
@@ -16,6 +17,7 @@ tim.deinit()
 # Create a one-shot timer
 print("Testing one-shot timer (2000 ms)...")
 tim.init(period=2000, mode=machine.Timer.ONE_SHOT, callback=lambda t: print("One-shot timer fired!"))
+print("One-shot started at ticks_ms:", time.ticks_ms())
 
 time.sleep_ms(4000)
 
