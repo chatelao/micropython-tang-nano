@@ -109,5 +109,6 @@ MP_DEFINE_CONST_OBJ_TYPE(
 );
 
 void flash_init_vfs(void) {
-    // Mounting is usually done in main.c
+    mp_obj_t bdev = MP_OBJ_FROM_PTR(&machine_flash_obj);
+    mp_vfs_mount_and_chdir_protected(bdev, MP_OBJ_NEW_QSTR(MP_QSTR__slash_));
 }
