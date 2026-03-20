@@ -29,10 +29,11 @@ def main():
 
     # Redirect Renode output to a file to avoid blocking on PIPE buffer
     renode_log = open(renode_log_path, "w")
-    renode_proc = subprocess.Popen([renode_bin, resc_file, "--disable-xwt"], stdout=renode_log, stderr=renode_log)
+    # Use --port -1 to disable the monitor network port and avoid potential conflicts
+    renode_proc = subprocess.Popen([renode_bin, "--port", "-1", "--disable-xwt", resc_file], stdout=renode_log, stderr=renode_log)
 
     # Wait for Renode to start and port to be open
-    time.sleep(20) # Give Renode enough time to start and open the socket
+    time.sleep(30) # Increase wait time for safety
 
     # Set environment variables for run-tests.py
     os.environ["MICROPY_CPYTHON3"] = sys.executable

@@ -5,6 +5,7 @@ using sysbus
 $bin?=@src/ports/tang_nano_4k/build/firmware.elf
 
 # Use the base script to set up the machine
+mach create "tang_nano_4k"
 include @test/tang_nano_4k.resc
 
 # Expose UART via TCP for compliance tests
