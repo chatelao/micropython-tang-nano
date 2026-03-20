@@ -19,6 +19,9 @@ SECTIONS
         *(.rodata*)
         *(.init)
         *(.fini)
+
+        . = ALIGN(4);
+        *(.ARM.exidx*)
         _etext = .;
     } > FLASH
 
@@ -52,4 +55,5 @@ SECTIONS
     /* Use all remaining space for heap */
     _sheap = _ebss;
     _eheap = _sstack;
+    end = .;
 }

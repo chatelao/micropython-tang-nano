@@ -94,3 +94,7 @@ void mp_hal_delay_us(mp_uint_t us) {
         __asm__("nop");
     }
 }
+
+uint64_t mp_hal_time_ns(void) {
+    return (uint64_t)mp_hal_ticks_ms() * 1000000ULL;
+}

@@ -21,6 +21,8 @@ INC += -I$(BUILD)
 
 CFLAGS_CORTEX_M3 = -mthumb -mcpu=cortex-m3
 CFLAGS += $(INC) -Wall -Werror -std=c99 $(CFLAGS_CORTEX_M3) $(COPT)
+# Disable some warnings for external libraries
+CFLAGS_MOD = -Wno-unused-function
 
 # Simulation support
 ifeq ($(SIMULATION), 1)
@@ -51,12 +53,21 @@ SRC_C = \
 	timer.c \
 	pwm.c \
 	adc.c \
+	flash.c \
 	modmachine.c \
 	$(TOP)/extmod/modtime.c \
 	$(TOP)/extmod/machine_i2c.c \
 	$(TOP)/extmod/machine_spi.c \
 	$(TOP)/drivers/bus/softspi.c \
 	$(TOP)/extmod/virtpin.c \
+	$(TOP)/extmod/modvfs.c \
+	$(TOP)/extmod/vfs.c \
+	$(TOP)/extmod/vfs_lfs.c \
+	$(TOP)/extmod/vfs_reader.c \
+	$(TOP)/extmod/vfs_blockdev.c \
+	$(TOP)/extmod/modos.c \
+	$(TOP)/lib/littlefs/lfs2.c \
+	$(TOP)/lib/littlefs/lfs2_util.c \
 	$(TOP)/shared/libc/printf.c \
 	$(TOP)/shared/runtime/stdout_helpers.c \
 
@@ -73,6 +84,8 @@ endif
 OBJ += $(PY_CORE_O)
 OBJ += $(addprefix $(BUILD)/, $(filter-out $(TOP)/%, $(SRC_C:.c=.o)))
 OBJ += $(addprefix $(BUILD)/, $(patsubst $(TOP)/%, %, $(filter $(TOP)/%, $(SRC_C:.c=.o))))
+
+$(BUILD)/lib/littlefs/%.o: CFLAGS += $(CFLAGS_MOD)
 
 all: $(BUILD)/firmware.bin
 
