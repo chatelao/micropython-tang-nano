@@ -23,7 +23,8 @@ def socket_to_stdout(s):
 def stdin_to_socket(s):
     try:
         while True:
-            data = sys.stdin.buffer.read(1)
+            # Use read1 to avoid blocking until the full buffer is filled
+            data = sys.stdin.buffer.read1(1024)
             if not data:
                 break
             s.sendall(data)

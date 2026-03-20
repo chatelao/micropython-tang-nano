@@ -38,14 +38,8 @@ jobs:
 
       - name: Setup Renode
         run: |
-          # Install Renode for the host runner
-          CODENAME=$(lsb_release -cs)
-          sudo apt-get update
-          sudo apt-get install -y wget gnupg
-          wget -qO- https://repository.antmicro.com/antmicro.asc | sudo gpg --dearmor -o /usr/share/keyrings/antmicro.gpg
-          echo "deb [signed-by=/usr/share/keyrings/antmicro.gpg] http://repository.antmicro.com/ubuntu $CODENAME main" | sudo tee /etc/apt/sources.list.d/antmicro.list
-          sudo apt-get update
-          sudo apt-get install -y renode renode-test
+          # Install renode-run for the host runner
+          python3 -m pip install renode-run
 
       - name: Run Renode functional tests
         uses: antmicro/renode-test-action@v5

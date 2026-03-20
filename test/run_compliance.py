@@ -30,7 +30,10 @@ def run_compliance():
 
     # 2. Start Renode in background
     print("Starting Renode...")
-    renode_proc = subprocess.Popen(["renode", "test/compliance.resc", "--no-gui"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # Use renode-run to manage renode execution
+    # Redirect output to prevent pipe buffer exhaustion
+    log_file = open("renode.log", "w")
+    renode_proc = subprocess.Popen(["renode-run", "run", "--", "test/compliance.resc"], stdout=log_file, stderr=log_file)
 
     # Wait for Renode to start and port 12345 to be open
     if not wait_for_port('localhost', 12345):
@@ -40,14 +43,12 @@ def run_compliance():
 
     # 3. Run MicroPython tests
     print("Running MicroPython compliance tests...")
-    test_env = os.environ.copy()
-    test_env["MICROPY_MICROPYTHON"] = "src/ports/tang_nano_4k/build/firmware.elf"
 
     # We use pyboard.py to run tests via the socket bridge
     # Need to specify the target device for run-tests.py
     # From run-tests.py: test_instance can be exec:command
-    socket_bridge_cmd = f"python3 {os.path.join('test', 'socket_bridge.py')}"
-    target = f"exec:{socket_bridge_cmd}"
+    socket_bridge_abs = os.path.abspath(os.path.join('test', 'socket_bridge.py'))
+    target = f"exec:{sys.executable} {socket_bridge_abs}"
 
     # Official run-tests.py path
     run_tests_py = "src/lib/micropython/tests/run-tests.py"
@@ -62,27 +63,24 @@ def run_compliance():
     # Change current working directory to the tests folder
     # to let run-tests.py find the tests correctly
     tests_cwd = os.path.dirname(run_tests_py)
-    # Adjust target path since it will be relative to tests_cwd
-    socket_bridge_rel = os.path.relpath(os.path.join(os.getcwd(), 'test', 'socket_bridge.py'), tests_cwd)
-    target_rel = f"exec:python3 {socket_bridge_rel}"
 
+    # Official run-tests.py in this repo has -r for results dir
     cmd = [
         sys.executable, "run-tests.py",
-        "-t", target_rel,
+        "-t", target, # Use absolute target
         "-r", os.path.abspath(result_dir),
     ] + test_dirs
 
     try:
-        proc = subprocess.run(cmd, capture_output=True, text=True, cwd=tests_cwd, env=test_env)
+        proc = subprocess.run(cmd, capture_output=True, text=True, cwd=tests_cwd)
         test_output = proc.stdout
         print(test_output)
-    except Exception as e:
-        print(f"Error running tests: {e}")
-        test_output = f"Error: {e}"
-
-    # 4. Stop Renode
-    print("Stopping Renode...")
-    os.kill(renode_proc.pid, signal.SIGTERM)
+        test_returncode = proc.returncode
+    finally:
+        # 4. Stop Renode
+        print("Stopping Renode...")
+        os.kill(renode_proc.pid, signal.SIGTERM)
+        log_file.close()
 
     # 5. Generate report
     print("Generating COMLIANCE_TESTS.md report...")
@@ -91,6 +89,7 @@ def run_compliance():
     report = "# MicroPython Compliance Test Report\n\n"
     report += f"Generated on: {time.strftime('%Y-%m-%d %H:%M:%S')}\n\n"
 
+    all_passed = False
     if os.path.exists(results_json):
         with open(results_json, "r") as f:
             data = json.load(f)
@@ -111,15 +110,18 @@ def run_compliance():
                 for f_test in failed:
                     report += f"- {f_test[0]}\n"
                 report += "\n"
+            else:
+                if passed:
+                    all_passed = True
     else:
-        # Fallback to parsing stdout if JSON is not present (though run-tests.py should create it with -r)
+        # Fallback to parsing stdout if JSON is not present
         import re
         report += "## Test Summary (Parsed from Output)\n\n"
-        # Match "pass  path/to/test.py" or "FAIL  path/to/test.py"
-        # Using regex to avoid false positives in paths or messages
-        passed_matches = re.findall(r"^pass\s+\S+", test_output, re.MULTILINE)
-        failed_matches = re.findall(r"^FAIL\s+\S+", test_output, re.MULTILINE)
-        skipped_matches = re.findall(r"^skip\s+\S+", test_output, re.MULTILINE)
+        # run-tests.py output format: "pass  path/to/test.py" or "fail  path/to/test.py"
+        # Also handles "skip  path/to/test.py" and "lrge  path/to/test.py"
+        passed_matches = re.findall(r"^pass\s+.+", test_output, re.MULTILINE | re.IGNORECASE)
+        failed_matches = re.findall(r"^fail\s+.+", test_output, re.MULTILINE | re.IGNORECASE)
+        skipped_matches = re.findall(r"^(skip|lrge)\s+.+", test_output, re.MULTILINE | re.IGNORECASE)
 
         passed_count = len(passed_matches)
         failed_count = len(failed_matches)
@@ -134,11 +136,19 @@ def run_compliance():
             for line in failed_matches:
                 report += f"- {line.strip()}\n"
             report += "\n"
+        else:
+            if passed_count > 0:
+                all_passed = True
 
     with open("COMLIANCE_TESTS.md", "w") as f:
         f.write(report)
 
     print("Compliance report generated.")
+
+    # Fail the script if tests failed or no tests were run
+    if not all_passed or test_returncode != 0:
+        print("Compliance tests FAILED.")
+        sys.exit(1)
 
 if __name__ == "__main__":
     run_compliance()
