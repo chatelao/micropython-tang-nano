@@ -18,10 +18,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install ARM GNU Toolchain
+      - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi
+          sudo apt-get install -y gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi xvfb libffi-dev
 
       - name: Clone MicroPython core
         run: |
@@ -36,6 +36,10 @@ jobs:
         run: |
           make -C src/ports/tang_nano_4k/ SIMULATION=1
 
+      - name: Build MicroPython Unix port (as a reference)
+        run: |
+          make -C src/lib/micropython/ports/unix aarch64=0
+
       - name: Run Renode tests
         uses: antmicro/renode-test-action@v5
         with:
@@ -48,6 +52,7 @@ jobs:
           python3 test/run_compliance.py
 
       - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: firmware

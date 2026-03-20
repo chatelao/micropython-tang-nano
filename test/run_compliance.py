@@ -4,7 +4,7 @@ import os
 import sys
 import socket
 
-def wait_for_port(port, host='127.0.0.1', timeout=30):
+def wait_for_port(port, host='127.0.0.1', timeout=60):
     start_time = time.time()
     while True:
         try:
@@ -17,37 +17,54 @@ def wait_for_port(port, host='127.0.0.1', timeout=30):
 
 def run_compliance():
     root_dir = os.getcwd()
+
     # 1. Start Renode in background
-    # Redirect stdout/stderr to a file to avoid pipe deadlock
     resc_path = os.path.abspath("test/compliance.resc")
-    renode_log = open("renode_output.log", "w")
+    renode_log_path = os.path.abspath("renode_output.log")
+    renode_log = open(renode_log_path, "w")
+
+    # Use xvfb-run to ensure Renode can start its virtual display in headless environments
+    # Use -e to include the script and keep Renode running
     renode_proc = subprocess.Popen(
-        ["renode", "--nocfg", resc_path],
+        ["xvfb-run", "renode", "--nocfg", "--headless", "-e", f"include @{resc_path}"],
         stdout=renode_log,
         stderr=subprocess.STDOUT
     )
 
-    print("Waiting for Renode to start...")
+    print("Waiting for Renode to start and port 12345 to be available...")
     if not wait_for_port(12345):
-        print("Renode failed to start or port 12345 is not available.")
+        print("Renode failed to start or port 12345 is not available after 60 seconds.")
         renode_proc.terminate()
         renode_log.close()
+
+        if os.path.exists(renode_log_path):
+            with open(renode_log_path, "r") as f:
+                print("--- Renode Output Log ---")
+                print(f.read())
+                print("-------------------------")
+
         return False
 
     # 2. Run MicroPython tests
-    # We choose a subset of tests that are likely to pass on a minimal port
+    # Select stable directories for the compliance report
     test_dirs = ["basics", "micropython", "import", "io", "misc"]
 
     micropython_dir = "src/lib/micropython"
     run_tests_py = os.path.abspath(f"{micropython_dir}/tests/run-tests.py")
     socket_bridge = os.path.abspath("test/socket_bridge.py")
+    # Path to the Unix port build, which should be pre-built in CI
+    micropython_bin = os.path.abspath(f"{micropython_dir}/ports/unix/build-standard/micropython")
 
-    # Correct flag is --device
+    if not os.path.exists(micropython_bin):
+        print(f"Error: MicroPython Unix port binary not found at {micropython_bin}")
+        renode_proc.terminate()
+        return False
+
     cmd = [
         "python3", run_tests_py,
-        "--target", "pyboard",
-        "-v",
+        "--micropython", micropython_bin,
         "--device", f"exec:python3 {socket_bridge}",
+        "-v"
     ] + test_dirs
 
     print(f"Running command: {' '.join(cmd)}")
@@ -97,6 +114,7 @@ def run_compliance():
     return proc.returncode == 0
 
 if __name__ == "__main__":
-    run_compliance()
-    # Always exit 0 to allow the CI to finish and upload artifacts
+    if not run_compliance():
+        # Exit with error to indicate failure in CI
+        sys.exit(1)
     sys.exit(0)
