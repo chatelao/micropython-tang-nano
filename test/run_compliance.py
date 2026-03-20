@@ -33,7 +33,20 @@ def main():
     renode_proc = subprocess.Popen([renode_bin, "--port", "-1", "--disable-xwt", resc_file], stdout=renode_log, stderr=renode_log)
 
     # Wait for Renode to start and port to be open
-    time.sleep(30) # Increase wait time for safety
+    time.sleep(30) # Give Renode enough time to start and open the socket
+
+    # Try to find the PTY if socket failed
+    pty_path = None
+    try:
+        # Check renode.log for PTY info
+        with open(renode_log_path, "r") as f:
+            log_content = f.read()
+            match = re.search(r"UART PTY terminal available at ([^\s\n]+)", log_content)
+            if match:
+                pty_path = match.group(1)
+                print(f"Found Renode PTY: {pty_path}")
+    except:
+        pass
 
     # Set environment variables for run-tests.py
     os.environ["MICROPY_CPYTHON3"] = sys.executable
@@ -46,12 +59,17 @@ def main():
     try:
         for test_dir in test_dirs:
             print(f"Running compliance tests in {test_dir}...")
+
+            device_str = f"exec:{sys.executable} {bridge_script} 127.0.0.1 12345"
+            if pty_path:
+                device_str = pty_path
+
             test_cmd = [
                 sys.executable,
                 "run-tests.py",
                 "-j", "1", # Force single job to avoid UART port conflict
                 "--target", "pyboard",
-                "--device", f"exec:{sys.executable} {bridge_script} 127.0.0.1 12345",
+                "--device", device_str,
                 "-d", test_dir
             ]
 
