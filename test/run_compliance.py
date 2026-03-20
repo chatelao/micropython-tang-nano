@@ -17,6 +17,7 @@ def main():
     bridge_script = os.path.abspath(os.path.join(repo_root, "test/socket_bridge.py"))
     resc_file = os.path.abspath(os.path.join(repo_root, "test/compliance.resc"))
     report_file = os.path.join(repo_root, "COMLIANCE_TESTS.md")
+    renode_log_path = os.path.join(repo_root, "renode.log")
 
     print(f"Starting Renode with {resc_file}...")
     # Start Renode in the background
@@ -27,11 +28,11 @@ def main():
             renode_bin = potential_bin
 
     # Redirect Renode output to a file to avoid blocking on PIPE buffer
-    renode_log = open(os.path.join(repo_root, "renode.log"), "w")
+    renode_log = open(renode_log_path, "w")
     renode_proc = subprocess.Popen([renode_bin, resc_file, "--disable-xwt"], stdout=renode_log, stderr=renode_log)
 
     # Wait for Renode to start and port to be open
-    time.sleep(15) # Give Renode enough time to start and open the socket
+    time.sleep(20) # Give Renode enough time to start and open the socket
 
     test_dirs = ["basics", "micropython", "misc"]
     total_performed = 0
@@ -119,6 +120,14 @@ def main():
                 f.write("All tests passed!\n")
 
         print(f"Report generated: {report_file}")
+
+    except Exception as e:
+        print(f"Fatal error during compliance test orchestration: {e}")
+        if os.path.exists(renode_log_path):
+            print("--- Renode Log ---")
+            with open(renode_log_path, "r") as f:
+                print(f.read())
+            print("-----------------")
 
     finally:
         print("Stopping Renode...")

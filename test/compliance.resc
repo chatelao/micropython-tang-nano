@@ -10,5 +10,12 @@ include @test/tang_nano_4k.resc
 # Expose UART via TCP for compliance tests
 # CreateTerminalServer is the standard Renode command to expose a UART via TCP
 # It creates a server that accepts connections and bridges them to the UART
+
+# For booting from external flash, we need to set VTOR, SP and PC manually in Renode
+sysbus.cpu VectorTableOffset 0x60000000
+sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
+sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
+
 showAnalyzer sysbus.uart0
 sysbus.uart0 CreateTerminalServer 12345
+start
