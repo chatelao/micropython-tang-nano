@@ -11,7 +11,7 @@ Next steps for the MicroPython for Tang Nano 4K project:
 - [x] 13. Implement PWM support (Machine.PWM class).
 - [x] 14. Implement SoftI2C support (Machine.I2C and Machine.SoftI2C classes).
 - [x] 15. Implement SPI support (Machine.SPI and Machine.SoftSPI classes).
-- [ ] 16. Implement ADC support (Machine.ADC class).
+- [x] 16. Implement ADC support (Machine.ADC class).
 - [ ] 17. Implement Virtual File System (VFS) and Flash storage support.
 - [ ] 18. Implement Hardware Interrupts for GPIO.
 

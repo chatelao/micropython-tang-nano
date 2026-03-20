@@ -50,6 +50,7 @@ SRC_C = \
 	pin.c \
 	timer.c \
 	pwm.c \
+	adc.c \
 	modmachine.c \
 	$(TOP)/extmod/modtime.c \
 	$(TOP)/extmod/machine_i2c.c \

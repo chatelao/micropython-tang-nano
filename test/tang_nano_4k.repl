@@ -26,3 +26,7 @@ external_flash: Memory.MappedMemory @ sysbus 0x60000000
 // GPIO Bridge - 16-bit (Mapped as memory for simulation)
 gpio0: Memory.MappedMemory @ sysbus 0x40010000
     size: 0x1000
+
+// ADC - 8-channel 12-bit (Mapped as memory for simulation)
+adc0: Memory.MappedMemory @ sysbus 0x40002400
+    size: 0x400
