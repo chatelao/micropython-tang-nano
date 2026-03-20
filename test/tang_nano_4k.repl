@@ -29,4 +29,4 @@ gpio0: Memory.MappedMemory @ sysbus 0x40010000
 
 // ADC - 8-channel 12-bit (Mapped as memory for simulation)
 adc0: Memory.MappedMemory @ sysbus 0x40002400
-    size: 0x100
+    size: 0x400
