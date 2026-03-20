@@ -51,14 +51,23 @@ SRC_C = \
 	timer.c \
 	pwm.c \
 	adc.c \
+	flash.c \
 	modmachine.c \
+	$(TOP)/extmod/vfs.c \
+	$(TOP)/extmod/vfs_blockdev.c \
+	$(TOP)/extmod/vfs_lfs.c \
+	$(TOP)/extmod/vfs_reader.c \
+	$(TOP)/extmod/modos.c \
 	$(TOP)/extmod/modtime.c \
+	$(TOP)/lib/littlefs/lfs2.c \
+	$(TOP)/lib/littlefs/lfs2_util.c \
 	$(TOP)/extmod/machine_i2c.c \
 	$(TOP)/extmod/machine_spi.c \
 	$(TOP)/drivers/bus/softspi.c \
 	$(TOP)/extmod/virtpin.c \
 	$(TOP)/shared/libc/printf.c \
 	$(TOP)/shared/runtime/stdout_helpers.c \
+	$(TOP)/shared/timeutils/timeutils.c \
 
 SRC_QSTR += $(SRC_C)
 
@@ -83,5 +92,9 @@ $(BUILD)/firmware.elf: $(OBJ)
 
 $(BUILD)/firmware.bin: $(BUILD)/firmware.elf
 	$(Q)$(OBJCOPY) -O binary $^ $@
+
+# Disable unused-function warning for LittleFS as it has several static functions
+# only used in assertions, which are disabled in release builds.
+$(BUILD)/lib/littlefs/lfs2.o: CFLAGS += -Wno-unused-function
 
 include $(TOP)/py/mkrules.mk

@@ -17,6 +17,10 @@ mp_uint_t mp_hal_ticks_ms(void);
 mp_uint_t mp_hal_ticks_us(void);
 mp_uint_t mp_hal_ticks_cpu(void);
 
+static inline uint64_t mp_hal_time_ns(void) {
+    return (uint64_t)mp_hal_ticks_ms() * 1000000ULL;
+}
+
 static inline mp_uint_t disable_irq(void) {
     uint32_t state;
     __asm__ volatile ("mrs %0, primask" : "=r" (state));

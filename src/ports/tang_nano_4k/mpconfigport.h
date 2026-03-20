@@ -5,6 +5,7 @@
 #define MICROPY_CONFIG_ROM_LEVEL (MICROPY_CONFIG_ROM_LEVEL_MINIMUM)
 
 #define MICROPY_ENABLE_GC (1)
+#define MICROPY_ENABLE_FINALISER (1)
 #define MICROPY_HELPER_REPL (1)
 #define MICROPY_ENABLE_COMPILER (1)
 #define MICROPY_PY_TIME (1)
@@ -40,3 +41,15 @@ extern const struct _mp_obj_module_t mp_module_time;
 #define MICROPY_PY_MACHINE_SOFTI2C (1)
 #define MICROPY_PY_MACHINE_SPI (1)
 #define MICROPY_PY_MACHINE_SOFTSPI (1)
+
+// VFS and Filesystem support
+#define MICROPY_VFS (1)
+#define MICROPY_VFS_LFS2 (1)
+#define MICROPY_PY_UOS (1)
+#define MICROPY_PY_IO (1)
+
+// Use vfs for importing files
+#define MICROPY_READER_VFS (1)
+
+// LittleFS configuration
+#define LFS2_ASSERT(test) ((void)(test))
