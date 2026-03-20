@@ -26,10 +26,12 @@ def main():
         if os.path.exists(potential_bin):
             renode_bin = potential_bin
 
-    renode_proc = subprocess.Popen([renode_bin, resc_file, "--disable-xwt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # Redirect Renode output to a file to avoid blocking on PIPE buffer
+    renode_log = open(os.path.join(repo_root, "renode.log"), "w")
+    renode_proc = subprocess.Popen([renode_bin, resc_file, "--disable-xwt"], stdout=renode_log, stderr=renode_log)
 
     # Wait for Renode to start and port to be open
-    time.sleep(10) # Give Renode enough time to start and open the socket
+    time.sleep(15) # Give Renode enough time to start and open the socket
 
     test_dirs = ["basics", "micropython", "misc"]
     total_performed = 0
@@ -49,13 +51,26 @@ def main():
             ]
 
             try:
-                # result_dir defaults to 'results' relative to run-tests.py
-                result = subprocess.run(test_cmd, cwd=micropython_tests_dir, capture_output=True, text=True, timeout=600) # 10 min timeout per block
-                print(result.stdout)
+                # Run and stream output to console for progress visibility
+                process = subprocess.Popen(test_cmd, cwd=micropython_tests_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 
-                # Parse results from stdout
-                passed_match = re.search(r"(\d+) tests passed", result.stdout)
-                performed_match = re.search(r"(\d+) tests performed", result.stdout)
+                output_lines = []
+                start_time = time.time()
+                while True:
+                    if time.time() - start_time > 600: # 10 min timeout
+                        raise subprocess.TimeoutExpired(test_cmd, 600)
+                    line = process.stdout.readline()
+                    if not line and process.poll() is not None:
+                        break
+                    if line:
+                        print(line, end='', flush=True)
+                        output_lines.append(line)
+
+                full_output = "".join(output_lines)
+
+                # Parse results from captured output
+                passed_match = re.search(r"(\d+) tests passed", full_output)
+                performed_match = re.search(r"(\d+) tests performed", full_output)
 
                 passed_count = int(passed_match.group(1)) if passed_match else 0
                 performed_count = int(performed_match.group(1)) if performed_match else 0
@@ -75,6 +90,7 @@ def main():
                     os.remove(results_json_path)
 
             except subprocess.TimeoutExpired:
+                process.kill()
                 print(f"Tests in {test_dir} timed out!")
                 all_failed_tests.append(f"{test_dir} (TIMED OUT)")
             except Exception as e:
@@ -111,6 +127,7 @@ def main():
             renode_proc.wait(timeout=5)
         except subprocess.TimeoutExpired:
             renode_proc.kill()
+        renode_log.close()
 
 if __name__ == "__main__":
     main()
