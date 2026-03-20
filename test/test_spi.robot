@@ -24,21 +24,26 @@ Verify SPI Implementation
 
     # Test machine.SPI
     Write Line To Uart      from machine import SPI, Pin
+    Wait For Line On Uart   from machine import SPI, Pin
     Write Line To Uart      spi = SPI(baudrate=100000, sck=Pin(0), mosi=Pin(1), miso=Pin(2))
+    Wait For Line On Uart   spi = SPI(baudrate=100000, sck=Pin(0), mosi=Pin(1), miso=Pin(2))
     Write Line To Uart      print('SPI_OK')
     Wait For Line On Uart   SPI_OK
 
     # Test transfer (should return 0xFF if MISO is pulled high or 0x00 if low in Renode)
-    # By default, pins are likely 0 in simulation unless configured.
     Write Line To Uart      res = spi.read(1)
+    Wait For Line On Uart   res = spi.read(1)
     Write Line To Uart      print('READ_OK', res)
     Wait For Line On Uart   READ_OK b'\\x00'
 
     # Test machine.SoftSPI
     Write Line To Uart      from machine import SoftSPI
+    Wait For Line On Uart   from machine import SoftSPI
     Write Line To Uart      sspi = SoftSPI(baudrate=100000, sck=Pin(3), mosi=Pin(4), miso=Pin(5))
+    Wait For Line On Uart   sspi = SoftSPI(baudrate=100000, sck=Pin(3), mosi=Pin(4), miso=Pin(5))
     Write Line To Uart      print('SOFTSPI_OK')
     Wait For Line On Uart   SOFTSPI_OK
     Write Line To Uart      res2 = sspi.read(1)
+    Wait For Line On Uart   res2 = sspi.read(1)
     Write Line To Uart      print('SREAD_OK', res2)
     Wait For Line On Uart   SREAD_OK b'\\x00'
