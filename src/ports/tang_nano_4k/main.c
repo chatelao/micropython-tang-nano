@@ -33,8 +33,14 @@ int main(int argc, char **argv) {
         printf("\nMicroPython started on Tang Nano 4K\n");
 
         for (;;) {
-            if (pyexec_friendly_repl() != 0) {
-                break;
+            if (pyexec_mode_kind == PYEXEC_MODE_RAW_REPL) {
+                if (pyexec_raw_repl() != 0) {
+                    break;
+                }
+            } else {
+                if (pyexec_friendly_repl() != 0) {
+                    break;
+                }
             }
         }
 

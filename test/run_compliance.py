@@ -34,6 +34,9 @@ def main():
     # Wait for Renode to start and port to be open
     time.sleep(20) # Give Renode enough time to start and open the socket
 
+    # Set environment variables for run-tests.py
+    os.environ["MICROPY_CPYTHON3"] = sys.executable
+
     test_dirs = ["basics", "micropython", "misc"]
     total_performed = 0
     total_passed = 0
@@ -66,6 +69,7 @@ def main():
                     if line:
                         print(line, end='', flush=True)
                         output_lines.append(line)
+                        start_time = time.time() # Reset timeout on activity
 
                 full_output = "".join(output_lines)
 
