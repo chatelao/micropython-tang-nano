@@ -54,7 +54,8 @@ SRC_C = \
 	flash.c \
 	modmachine.c \
 	$(TOP)/extmod/vfs.c \
-	$(TOP)/extmod/vfs_lfsx.c \
+	$(TOP)/extmod/vfs_blockdev.c \
+	$(TOP)/extmod/vfs_lfs.c \
 	$(TOP)/extmod/vfs_reader.c \
 	$(TOP)/extmod/modos.c \
 	$(TOP)/extmod/modtime.c \
@@ -66,6 +67,7 @@ SRC_C = \
 	$(TOP)/extmod/virtpin.c \
 	$(TOP)/shared/libc/printf.c \
 	$(TOP)/shared/runtime/stdout_helpers.c \
+	$(TOP)/shared/timeutils/timeutils.c \
 
 SRC_QSTR += $(SRC_C)
 
