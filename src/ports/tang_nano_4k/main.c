@@ -24,18 +24,24 @@ int main(int argc, char **argv) {
     stack_top = (char *)&stack_dummy;
     mp_stack_set_limit(2048);
 
-    gc_init(heap, heap + sizeof(heap));
-    mp_init();
     mp_hal_init();
-    printf("\nMicroPython started on Tang Nano 4K\n");
 
     for (;;) {
-        if (pyexec_friendly_repl() != 0) {
-            break;
+        gc_init(heap, heap + sizeof(heap));
+        mp_init();
+
+        printf("\nMicroPython started on Tang Nano 4K\n");
+
+        for (;;) {
+            if (pyexec_friendly_repl() != 0) {
+                break;
+            }
         }
+
+        printf("soft reboot\n");
+        mp_deinit();
     }
 
-    mp_deinit();
     return 0;
 }
 

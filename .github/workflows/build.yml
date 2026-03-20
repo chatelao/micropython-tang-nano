@@ -43,6 +43,22 @@ jobs:
             test/tang_nano_4k.robot
             test/test_blink.robot
 
+      - name: Run MicroPython Compliance tests
+        run: |
+          # The renode-test-action v5 uses a Docker container that has renode installed.
+          # However, this step runs on the host (ubuntu-latest).
+          # We need to install Renode on the host or run this within a container.
+          # Since renode-test-action already runs, we can assume we might need it.
+          # For simplicity and to ensure 'renode' is available:
+          sudo apt-get update
+          sudo apt-get install -y dirmngr gnupg apt-transport-https ca-certificates software-properties-common
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+          echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+          sudo apt-get update
+          wget https://builds.antmicro.com/renode/nightly/renode_latest.deb
+          sudo apt-get install -y ./renode_latest.deb
+          python3 test/run_compliance.py
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -50,6 +66,7 @@ jobs:
           path: |
             src/ports/tang_nano_4k/build/firmware.bin
             src/ports/tang_nano_4k/build/firmware.elf
+            COMLIANCE_TESTS.md
           if-no-files-found: warn
 
       - name: Create Release
@@ -59,5 +76,6 @@ jobs:
           files: |
             src/ports/tang_nano_4k/build/firmware.bin
             src/ports/tang_nano_4k/build/firmware.elf
+            COMLIANCE_TESTS.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

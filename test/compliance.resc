@@ -1,0 +1,14 @@
+# compliance.resc
+
+using sysbus
+
+$bin?=@src/ports/tang_nano_4k/build/firmware.elf
+
+# Use the base script to set up the machine
+include @test/tang_nano_4k.resc
+
+# Expose UART via TCP for compliance tests
+# CreateTerminalServer is the standard Renode command to expose a UART via TCP
+# It creates a server that accepts connections and bridges them to the UART
+showAnalyzer sysbus.uart0
+sysbus.uart0 CreateTerminalServer 12345
