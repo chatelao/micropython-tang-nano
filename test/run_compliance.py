@@ -30,10 +30,10 @@ def run_compliance():
 
     # 2. Start Renode in background
     print("Starting Renode...")
-    # Use renode-run to manage renode execution
+    # renode-test-action adds Renode to PATH
     # Redirect output to prevent pipe buffer exhaustion
     log_file = open("renode.log", "w")
-    renode_proc = subprocess.Popen(["renode-run", "run", "--", "test/compliance.resc"], stdout=log_file, stderr=log_file)
+    renode_proc = subprocess.Popen(["renode", "test/compliance.resc", "--no-gui"], stdout=log_file, stderr=log_file)
 
     # Wait for Renode to start and port 12345 to be open
     if not wait_for_port('localhost', 12345):

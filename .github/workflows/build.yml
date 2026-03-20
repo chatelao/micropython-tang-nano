@@ -36,11 +36,6 @@ jobs:
         run: |
           make -C src/ports/tang_nano_4k/ SIMULATION=1
 
-      - name: Setup Renode
-        run: |
-          # Install renode-run for the host runner
-          python3 -m pip install renode-run
-
       - name: Run Renode functional tests
         uses: antmicro/renode-test-action@v5
         with:
