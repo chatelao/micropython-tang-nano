@@ -73,7 +73,7 @@ def run_compliance():
     ] + test_dirs
 
     try:
-        proc = subprocess.run(cmd, capture_output=True, text=True, cwd=tests_cwd)
+        proc = subprocess.run(cmd, capture_output=True, text=True, cwd=tests_cwd, env=test_env)
         test_output = proc.stdout
         print(test_output)
     except Exception as e:

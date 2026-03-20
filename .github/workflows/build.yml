@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
 
@@ -40,8 +40,10 @@ jobs:
         run: |
           # Install Renode for the host runner
           CODENAME=$(lsb_release -cs)
-          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61
-          echo "deb http://repository.antmicro.com/ubuntu $CODENAME main" | sudo tee /etc/apt/sources.list.d/antmicro.list
+          sudo apt-get update
+          sudo apt-get install -y wget gnupg
+          wget -qO- https://repository.antmicro.com/antmicro.asc | sudo gpg --dearmor -o /usr/share/keyrings/antmicro.gpg
+          echo "deb [signed-by=/usr/share/keyrings/antmicro.gpg] http://repository.antmicro.com/ubuntu $CODENAME main" | sudo tee /etc/apt/sources.list.d/antmicro.list
           sudo apt-get update
           sudo apt-get install -y renode renode-test
 
