@@ -38,8 +38,8 @@ jobs:
 
       - name: Build MicroPython Unix port (as a reference)
         run: |
-          # Disable SSL and BTREE which require submodules not present in the shallow clone
-          make -C src/lib/micropython/ports/unix aarch64=0 MICROPY_PY_SSL=0 MICROPY_PY_BTREE=0
+          # Disable SSL, BTREE and frozen modules which require submodules not present in the shallow clone
+          make -C src/lib/micropython/ports/unix aarch64=0 MICROPY_PY_SSL=0 MICROPY_PY_BTREE=0 FROZEN_MANIFEST=
 
       - name: Run Renode tests
         uses: antmicro/renode-test-action@v5
