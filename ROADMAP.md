@@ -2,6 +2,23 @@
 
 Next steps for the MicroPython for Tang Nano 4K project:
 
+## In Progress / Planned
+- [ ] 17. Implement Virtual File System (VFS) and Flash storage support.
+- [ ] 18. Implement Hardware Interrupts for GPIO.
+- [ ] 19. Implement Hardware I2C Master support.
+- [ ] 20. Implement Hardware SPI Master support.
+- [ ] 21. Implement Watchdog Timer (WDT) support.
+- [ ] 22. Implement Real-Time Clock (RTC) support.
+- [ ] 23. Implement Power Management (Sleep/Deep Sleep modes).
+- [ ] 24. Optimization: Increase heap size and optimize SRAM usage.
+
+## Completed Milestones
+- [x] 1. Initialize project structure and documentation.
+- [x] 2. Research and document target hardware specifications.
+- [x] 3. Set up MicroPython cross-compilation toolchain for the target architecture.
+- [x] 4. Implement minimal MicroPython port with UART REPL.
+- [x] 5. Document detailed memory map for Cortex-M3.
+- [x] 6. Document peripheral register mapping.
 - [x] 7. Integrate MicroPython core and generate required headers (QSTRs, version, etc.).
 - [x] 8. Resolve compilation issues in `main.c`, `mphalport.c`, and `uart.c`.
 - [x] 9. Successfully link the firmware and generate `firmware.bin` (Verified for simulation).
@@ -12,16 +29,3 @@ Next steps for the MicroPython for Tang Nano 4K project:
 - [x] 14. Implement SoftI2C support (Machine.I2C and Machine.SoftI2C classes).
 - [x] 15. Implement SPI support (Machine.SPI and Machine.SoftSPI classes).
 - [x] 16. Implement ADC support (Machine.ADC class).
-- [ ] 17. Implement Virtual File System (VFS) and Flash storage support.
-- [ ] 18. Implement Hardware Interrupts for GPIO.
-
-## Past Steps
-- [x] 1. Initialize project structure and documentation.
-- [x] 2. Research and document target hardware specifications.
-- [x] 3. Set up MicroPython cross-compilation toolchain for the target architecture.
-- [x] 4. Implement minimal MicroPython port with UART REPL (Initial structure and UART driver).
-- [x] 5. Document detailed memory map for Cortex-M3.
-- [x] 6. Document peripheral register mapping.
-- [x] Initial setup and project organization.
-- [x] Install ARM GNU Toolchain and clone MicroPython core.
-- [x] Create port-specific configuration and header stubs.
