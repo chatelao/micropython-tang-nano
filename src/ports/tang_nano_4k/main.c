@@ -12,6 +12,8 @@
 #include "py/stackctrl.h"
 #include "shared/runtime/pyexec.h"
 #include "mphalport.h"
+#include "extmod/vfs.h"
+#include "flash.h"
 #include "timer.h"
 #include "pwm.h"
 
@@ -28,6 +30,10 @@ int main(int argc, char **argv) {
     mp_init();
     mp_hal_init();
     printf("\nMicroPython started on Tang Nano 4K\n");
+
+    // Initialize VFS
+    mp_obj_t bdev = mp_obj_new_instance(&machine_flash_type, 0, NULL);
+    mp_vfs_mount_and_chdir_protected(bdev, MP_OBJ_NEW_QSTR(MP_QSTR__slash_));
 
     for (;;) {
         if (pyexec_friendly_repl() != 0) {
@@ -62,11 +68,11 @@ void gc_collect(void) {
 }
 
 mp_lexer_t *mp_lexer_new_from_file(qstr filename) {
-    mp_raise_OSError(MP_ENOENT);
+    return mp_vfs_lexer_new_from_file(filename);
 }
 
 mp_import_stat_t mp_import_stat(const char *path) {
-    return MP_IMPORT_STAT_NO_EXIST;
+    return mp_vfs_import_stat(path);
 }
 
 void nlr_jump_fail(void *val) {

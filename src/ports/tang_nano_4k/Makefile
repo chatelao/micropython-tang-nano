@@ -51,8 +51,15 @@ SRC_C = \
 	timer.c \
 	pwm.c \
 	adc.c \
+	flash.c \
 	modmachine.c \
+	$(TOP)/extmod/vfs.c \
+	$(TOP)/extmod/vfs_lfsx.c \
+	$(TOP)/extmod/vfs_reader.c \
+	$(TOP)/extmod/modos.c \
 	$(TOP)/extmod/modtime.c \
+	$(TOP)/lib/littlefs/lfs2.c \
+	$(TOP)/lib/littlefs/lfs2_util.c \
 	$(TOP)/extmod/machine_i2c.c \
 	$(TOP)/extmod/machine_spi.c \
 	$(TOP)/drivers/bus/softspi.c \
