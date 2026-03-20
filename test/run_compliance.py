@@ -20,8 +20,13 @@ def main():
 
     print(f"Starting Renode with {resc_file}...")
     # Start Renode in the background
-    # --plain to avoid ANSI escapes and --port -1 to disable telnet if possible, but standard is just background
-    renode_proc = subprocess.Popen(["renode", resc_file, "--disable-xwt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    renode_bin = "renode"
+    if "RENODE_ROOT" in os.environ:
+        potential_bin = os.path.join(os.environ["RENODE_ROOT"], "renode")
+        if os.path.exists(potential_bin):
+            renode_bin = potential_bin
+
+    renode_proc = subprocess.Popen([renode_bin, resc_file, "--disable-xwt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     # Wait for Renode to start and port to be open
     time.sleep(10) # Give Renode enough time to start and open the socket
