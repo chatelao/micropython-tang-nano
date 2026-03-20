@@ -49,3 +49,6 @@ extern const struct _mp_obj_module_t mp_module_time;
 
 // Use vfs for importing files
 #define MICROPY_READER_VFS (1)
+
+// LittleFS configuration
+#define LFS2_ASSERT(test) ((void)(test))

@@ -91,4 +91,8 @@ $(BUILD)/firmware.elf: $(OBJ)
 $(BUILD)/firmware.bin: $(BUILD)/firmware.elf
 	$(Q)$(OBJCOPY) -O binary $^ $@
 
+# Disable unused-function warning for LittleFS as it has several static functions
+# only used in assertions, which are disabled in release builds.
+$(BUILD)/lib/littlefs/lfs2.o: CFLAGS += -Wno-unused-function
+
 include $(TOP)/py/mkrules.mk
