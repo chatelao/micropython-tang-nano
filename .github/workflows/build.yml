@@ -41,16 +41,11 @@ jobs:
           # Disable SSL, BTREE and frozen modules which require submodules not present in the shallow clone
           make -C src/lib/micropython/ports/unix aarch64=0 MICROPY_PY_SSL=0 MICROPY_PY_BTREE=0 FROZEN_MANIFEST=
 
-      - name: Run Renode tests
+      - name: Run Renode and compliance tests
         uses: antmicro/renode-test-action@v5
         with:
           tests-to-run: |
             test/tang_nano_4k.robot
-            test/test_blink.robot
-
-      - name: Run MicroPython compliance tests
-        run: |
-          python3 test/run_compliance.py
 
       - name: Upload artifacts
         if: always()

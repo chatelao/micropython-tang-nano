@@ -3,6 +3,7 @@ import time
 import os
 import sys
 import socket
+import argparse
 
 def wait_for_port(port, host='127.0.0.1', timeout=60, proc=None):
     start_time = time.time()
@@ -17,42 +18,60 @@ def wait_for_port(port, host='127.0.0.1', timeout=60, proc=None):
                 return False
             time.sleep(1)
 
-def run_compliance():
+def run_compliance(attach=False):
     root_dir = os.getcwd()
 
-    # 1. Start Renode in background
-    resc_path = os.path.abspath("test/compliance.resc")
+    renode_proc = None
+    renode_log = None
     renode_log_path = os.path.abspath("renode_output.log")
-    renode_log = open(renode_log_path, "w")
 
-    # Use xvfb-run to ensure Renode can start its virtual display in headless environments
-    # -a finds a free server number
-    # Use --disable-gui to run in headless mode
-    # Use -p to avoid escape codes in log
-    # Use -e to execute the inclusion of the resc file
-    renode_proc = subprocess.Popen(
-        ["xvfb-run", "-a", "renode", "--disable-gui", "-p", "-e", f"include @{resc_path}"],
-        stdout=renode_log,
-        stderr=subprocess.STDOUT
-    )
+    if not attach:
+        # 1. Start Renode in background
+        resc_path = os.path.abspath("test/compliance.resc")
+        repl_path = os.path.abspath("test/tang_nano_4k.repl")
+        bin_path = os.path.abspath("src/ports/tang_nano_4k/build/firmware.elf")
 
-    print("Waiting for Renode to start and port 12345 to be available...")
-    if not wait_for_port(12345, proc=renode_proc):
-        print("Renode failed to start or port 12345 is not available after 60 seconds.")
+        renode_log = open(renode_log_path, "w")
 
-        # Flush and close log to make sure we can read it
-        renode_log.flush()
-        renode_log.close()
+        # Use xvfb-run to ensure Renode can start its virtual display in headless environments
+        # -a finds a free server number
+        # Use --disable-gui to run in headless mode
+        # Use -p to avoid escape codes in log
+        # Pass absolute paths as variables
+        # Use spaces around '=' for variable assignment in Renode
+        renode_proc = subprocess.Popen(
+            [
+                "xvfb-run", "-a", "renode", "--disable-gui", "-p",
+                "-e", f"$repl = @{repl_path}",
+                "-e", f"$bin = @{bin_path}",
+                "-e", f"include @{resc_path}"
+            ],
+            stdout=renode_log,
+            stderr=subprocess.STDOUT
+        )
 
-        if os.path.exists(renode_log_path):
-            with open(renode_log_path, "r") as f:
-                print("--- Renode Output Log ---")
-                print(f.read())
-                print("-------------------------")
+        print("Waiting for Renode to start and port 12345 to be available...")
+        if not wait_for_port(12345, proc=renode_proc):
+            print("Renode failed to start or port 12345 is not available after 60 seconds.")
 
-        if renode_proc.poll() is None:
-            renode_proc.terminate()
-        return False
+            # Flush and close log to make sure we can read it
+            renode_log.flush()
+            renode_log.close()
+
+            if os.path.exists(renode_log_path):
+                with open(renode_log_path, "r") as f:
+                    print("--- Renode Output Log ---")
+                    print(f.read())
+                    print("-------------------------")
+
+            if renode_proc.poll() is None:
+                renode_proc.terminate()
+            return False
+    else:
+        print("Attaching to existing Renode instance on port 12345...")
+        if not wait_for_port(12345, timeout=5):
+            print("Port 12345 not available for attachment.")
+            return False
 
     # 2. Run MicroPython tests
     # Select stable directories for the compliance report
@@ -66,7 +85,7 @@ def run_compliance():
 
     if not os.path.exists(micropython_bin):
         print(f"Error: MicroPython Unix port binary not found at {micropython_bin}")
-        renode_proc.terminate()
+        if renode_proc: renode_proc.terminate()
         return False
 
     cmd = [
@@ -113,17 +132,22 @@ def run_compliance():
             md_file.write("See `compliance_output.log` for full details.\n")
 
     # 3. Cleanup
-    renode_proc.terminate()
-    try:
-        renode_proc.wait(timeout=5)
-    except subprocess.TimeoutExpired:
-        renode_proc.kill()
-    renode_log.close()
+    if renode_proc:
+        renode_proc.terminate()
+        try:
+            renode_proc.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            renode_proc.kill()
+        renode_log.close()
 
     return proc.returncode == 0
 
 if __name__ == "__main__":
-    if not run_compliance():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--attach", action="store_true", help="Attach to an already running Renode instance")
+    args = parser.parse_args()
+
+    if not run_compliance(attach=args.attach):
         # Exit with error to indicate failure in CI
         sys.exit(1)
     sys.exit(0)

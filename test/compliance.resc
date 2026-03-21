@@ -2,16 +2,15 @@
 
 using sysbus
 mach create "tang_nano_4k"
-
-# Paths are relative to the directory containing this script
-$repl?=@tang_nano_4k.repl
-$bin?=@../src/ports/tang_nano_4k/build/firmware.elf
+log "Machine created"
 
 machine LoadPlatformDescription $repl
+log "Platform description loaded"
 
-logLevel 3
+logLevel 0
 log "Starting compliance script"
 
+log "Loading platform from $repl"
 # Set CPU performance to match 27MHz hardware for accurate SysTick timing
 sysbus.cpu PerformanceInMips 27
 
