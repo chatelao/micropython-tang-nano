@@ -10,13 +10,6 @@
 #define TIMER1_RELOAD (*(volatile uint32_t *)(TIMER1_BASE + 0x08))
 #define TIMER1_INTCLEAR (*(volatile uint32_t *)(TIMER1_BASE + 0x0C))
 
-#define GPIO_BASE (0x40010000)
-#define REG_DATAOUT (*(volatile uint32_t *)(GPIO_BASE + 0x0004))
-#define REG_OUTENSET (*(volatile uint32_t *)(GPIO_BASE + 0x0010))
-#define REG_ALTFUNCCLR (*(volatile uint32_t *)(GPIO_BASE + 0x001C))
-
-#define NVIC_ISER0 (*(volatile uint32_t *)(0xE000E100))
-
 #define MAX_PWM 8
 MP_REGISTER_ROOT_POINTER(struct _machine_pwm_obj_t *active_pwm[8]);
 
