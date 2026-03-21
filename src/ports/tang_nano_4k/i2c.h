@@ -7,13 +7,15 @@
 #define I2C_BASE 0x40002000
 
 typedef struct {
-    volatile uint32_t PRER;  // 0x00: Clock prescale register
-    volatile uint32_t CTR;   // 0x04: Control register
-    volatile uint32_t TXR;   // 0x08: Transmit data register
-    volatile uint32_t RXR;   // 0x0C: Receive data register
-    volatile uint32_t CR;    // 0x10: Command register
-    volatile uint32_t SR;    // 0x14: Status register
+    volatile uint32_t PREL;  // 0x00: Clock prescale register low
+    volatile uint32_t PREH;  // 0x04: Clock prescale register high
+    volatile uint32_t CTR;   // 0x08: Control register
+    volatile uint32_t TXR;   // 0x0C: Transmit/Receive data register
+    volatile uint32_t CR;    // 0x10: Command/Status register
 } I2C_TypeDef;
+
+#define RXR TXR
+#define SR  CR
 
 #define I2C0 ((I2C_TypeDef *)I2C_BASE)
 
