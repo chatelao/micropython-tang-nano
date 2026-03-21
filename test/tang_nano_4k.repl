@@ -18,13 +18,10 @@ sram: Memory.MappedMemory @ sysbus 0x20000000
 uart0: UART.CMSDK_APB_UART @ sysbus 0x40004000
     frequency: 27000000
 
-// I2C Master - Mapped as memory for simulation
-i2c0: Memory.MappedMemory @ sysbus 0x40002000
-    size: 0x200
-
-// SPI Master - Mapped as memory for simulation
-spi0: Memory.MappedMemory @ sysbus 0x40002200
-    size: 0x200
+// APB2 Peripherals (I2C, SPI, ADC, etc.)
+// Grouped into a single 4KB region to satisfy Renode's 0x400 (1KB) page alignment requirement.
+apb2_peripherals: Memory.MappedMemory @ sysbus 0x40002000
+    size: 0x1000
 
 // External SPI NOR Flash - 4MB
 // Mapped at 0x60000000 for simulation purposes
@@ -50,6 +47,3 @@ gpio0: GPIOPort.ARM_AHB_GPIO @ sysbus 0x40010000
     14 -> nvic @ 30
     15 -> nvic @ 31
 
-// ADC - 8-channel 12-bit (Mapped as memory for simulation)
-adc0: Memory.MappedMemory @ sysbus 0x40002400
-    size: 0x200
