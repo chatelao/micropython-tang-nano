@@ -1,0 +1,36 @@
+# compliance.resc
+
+using sysbus
+mach create "tang_nano_4k"
+log "Machine created"
+
+machine LoadPlatformDescription $repl
+log "Platform description loaded"
+
+logLevel 0
+log "Starting compliance script"
+
+log "Loading platform from $repl"
+# Set CPU performance to match 27MHz hardware for accurate SysTick timing
+sysbus.cpu PerformanceInMips 27
+
+# Expose UART0 via TCP Terminal Server on port 12345
+log "Creating TCP Terminal Server on port 12345"
+emulation CreateTcpTerminalServer 12345 "server1"
+connector Connect sysbus.uart0 server1
+log "UART connected to TCP server"
+
+macro reset
+"""
+    sysbus LoadELF $bin
+    log "ELF loaded"
+    # For booting from external flash, we need to set VTOR, SP and PC manually in Renode
+    sysbus.cpu VectorTableOffset 0x60000000
+    sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
+    sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
+    log "CPU state initialized"
+"""
+
+runMacro $reset
+log "Initial reset complete"
+start
