@@ -4,9 +4,11 @@ import os
 import sys
 import socket
 
-def wait_for_port(port, host='127.0.0.1', timeout=60):
+def wait_for_port(port, host='127.0.0.1', timeout=60, proc=None):
     start_time = time.time()
     while True:
+        if proc and proc.poll() is not None:
+            return False
         try:
             with socket.create_connection((host, port), timeout=1):
                 return True
@@ -24,17 +26,22 @@ def run_compliance():
     renode_log = open(renode_log_path, "w")
 
     # Use xvfb-run to ensure Renode can start its virtual display in headless environments
+    # -a finds a free server number
     # Use --disable-gui to run in headless mode
+    # Use -p to avoid escape codes in log
+    # Use -e to execute the inclusion of the resc file
     renode_proc = subprocess.Popen(
-        ["xvfb-run", "renode", "--disable-gui", "-e", f"include @{resc_path}"],
+        ["xvfb-run", "-a", "renode", "--disable-gui", "-p", "-e", f"include @{resc_path}"],
         stdout=renode_log,
         stderr=subprocess.STDOUT
     )
 
     print("Waiting for Renode to start and port 12345 to be available...")
-    if not wait_for_port(12345):
+    if not wait_for_port(12345, proc=renode_proc):
         print("Renode failed to start or port 12345 is not available after 60 seconds.")
-        renode_proc.terminate()
+
+        # Flush and close log to make sure we can read it
+        renode_log.flush()
         renode_log.close()
 
         if os.path.exists(renode_log_path):
@@ -43,6 +50,8 @@ def run_compliance():
                 print(f.read())
                 print("-------------------------")
 
+        if renode_proc.poll() is None:
+            renode_proc.terminate()
         return False
 
     # 2. Run MicroPython tests
