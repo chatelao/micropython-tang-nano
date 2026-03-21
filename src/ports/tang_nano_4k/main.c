@@ -14,6 +14,9 @@
 #include "mphalport.h"
 #include "timer.h"
 #include "pwm.h"
+#include "flash.h"
+#include "extmod/vfs.h"
+#include "extmod/vfs_lfs.h"
 
 // Heap for MicroPython - 4KB for absolute stability in 22KB SRAM
 static char heap[4 * 1024];
@@ -27,6 +30,12 @@ int main(int argc, char **argv) {
     gc_init(heap, heap + sizeof(heap));
     mp_init();
     mp_hal_init();
+
+    // Initialize the flash and mount the VFS
+    flash_init();
+    mp_obj_t bdev = MP_OBJ_FROM_PTR(&machine_flash_obj);
+    mp_vfs_mount_and_chdir_protected(bdev, MP_OBJ_NEW_QSTR(MP_QSTR_littlefs));
+
     printf("\nMicroPython started on Tang Nano 4K\n");
 
     for (;;) {
@@ -61,13 +70,6 @@ void gc_collect(void) {
     gc_collect_end();
 }
 
-mp_lexer_t *mp_lexer_new_from_file(qstr filename) {
-    mp_raise_OSError(MP_ENOENT);
-}
-
-mp_import_stat_t mp_import_stat(const char *path) {
-    return MP_IMPORT_STAT_NO_EXIST;
-}
 
 void nlr_jump_fail(void *val) {
     while (1);
