@@ -23,8 +23,8 @@ uart0: UART.CMSDK_APB_UART @ sysbus 0x40004000
 external_flash: Memory.MappedMemory @ sysbus 0x60000000
     size: 0x400000
 
-// GPIO Bridge - 16-bit (CMSDK GPIO)
-gpio0: GPIOPort.CMSDK_GPIO @ sysbus 0x40010000
+// GPIO Bridge - 16-bit (ARM AHB GPIO / CMSDK)
+gpio0: GPIOPort.ARM_AHB_GPIO @ sysbus 0x40010000
     0 -> nvic @ 16
     1 -> nvic @ 17
     2 -> nvic @ 18
