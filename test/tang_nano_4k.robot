@@ -25,3 +25,13 @@ Should Boot Successfully and Interaction with REPL
     Wait For Line On Uart   Tang Nano 4K with GW1NSR-LV4C
     Write Line To Uart      print("Hello from external Flash")
     Wait For Line On Uart   Hello from external Flash
+
+Verify Hardware SPI
+    Execute Command         sysbus WriteByte 0x40002208 0x60
+    Write Line To Uart      from machine import SPI, Pin
+    Write Line To Uart      spi = SPI(0, baudrate=1000000)
+    Write Line To Uart      print('SPI:', spi)
+    Wait For Line On Uart   SPI: SPI(0, baudrate=1000000, polarity=0, phase=0, bits=8, firstbit=0)
+    Write Line To Uart      spi.write(b'\\x55\\xAA')
+    Write Line To Uart      print('WRITE_DONE')
+    Wait For Line On Uart   WRITE_DONE
