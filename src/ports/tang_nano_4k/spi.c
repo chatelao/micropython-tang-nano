@@ -1,5 +1,6 @@
 /* spi.c */
 #include "spi.h"
+#include <stdio.h>
 #include "py/runtime.h"
 #include "py/mphal.h"
 #include "py/mperrno.h"
@@ -59,9 +60,9 @@ static void machine_spi_init_func(mp_obj_base_t *self_in, size_t n_args, const m
         { MP_QSTR_phase, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0} },
         { MP_QSTR_bits, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 8} },
         { MP_QSTR_firstbit, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0} },
-        { MP_QSTR_sck, MP_ARG_KW_ONLY | MP_OBJ_NULL, {.u_obj = MP_OBJ_NULL} },
-        { MP_QSTR_mosi, MP_ARG_KW_ONLY | MP_OBJ_NULL, {.u_obj = MP_OBJ_NULL} },
-        { MP_QSTR_miso, MP_ARG_KW_ONLY | MP_OBJ_NULL, {.u_obj = MP_OBJ_NULL} },
+        { MP_QSTR_sck, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
+        { MP_QSTR_mosi, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
+        { MP_QSTR_miso, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
     };
 
     machine_spi_obj_t *self = (machine_spi_obj_t *)self_in;
@@ -73,6 +74,9 @@ static void machine_spi_init_func(mp_obj_base_t *self_in, size_t n_args, const m
     }
 
     self->baudrate = args[ARG_baudrate].u_int;
+    if (self->baudrate == 0) {
+        mp_raise_ValueError(MP_ERROR_TEXT("baudrate cannot be 0"));
+    }
     self->polarity = args[ARG_polarity].u_int;
     self->phase = args[ARG_phase].u_int;
     self->firstbit = args[ARG_firstbit].u_int;
@@ -107,6 +111,12 @@ static mp_obj_t machine_spi_make_new(const mp_obj_type_t *type, size_t n_args, s
     return MP_OBJ_FROM_PTR(self);
 }
 
+static void machine_spi_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t kind) {
+    machine_spi_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    mp_printf(print, "SPI(0, baudrate=%u, polarity=%u, phase=%u, bits=8, firstbit=%u)",
+        self->baudrate, self->polarity, self->phase, self->firstbit);
+}
+
 static const mp_machine_spi_p_t machine_spi_p = {
     .init = machine_spi_init_func,
     .transfer = machine_spi_transfer,
@@ -117,6 +127,7 @@ MP_DEFINE_CONST_OBJ_TYPE(
     MP_QSTR_SPI,
     MP_TYPE_FLAG_NONE,
     make_new, machine_spi_make_new,
+    print, machine_spi_print,
     protocol, &machine_spi_p,
     locals_dict, &mp_machine_spi_locals_dict
     );

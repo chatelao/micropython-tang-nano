@@ -27,6 +27,7 @@ Should Boot Successfully and Interaction with REPL
     Wait For Line On Uart   Hello from external Flash
 
 Verify Hardware SPI
+    Execute Command         sysbus WriteByte 0x40002208 0x60
     Write Line To Uart      from machine import SPI, Pin
     Write Line To Uart      spi = SPI(0, baudrate=1000000)
     Write Line To Uart      print('SPI:', spi)
