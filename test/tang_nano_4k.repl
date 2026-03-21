@@ -18,6 +18,10 @@ sram: Memory.MappedMemory @ sysbus 0x20000000
 uart0: UART.CMSDK_APB_UART @ sysbus 0x40004000
     frequency: 27000000
 
+// I2C Master - Mapped as memory for simulation
+i2c0: Memory.MappedMemory @ sysbus 0x40002000
+    size: 0x100
+
 // External SPI NOR Flash - 4MB
 // Mapped at 0x60000000 for simulation purposes
 external_flash: Memory.MappedMemory @ sysbus 0x60000000
