@@ -24,7 +24,7 @@ external_flash: Memory.MappedMemory @ sysbus 0x60000000
     size: 0x400000
 
 // GPIO Bridge - 16-bit (CMSDK GPIO)
-gpio0: GPIOPort.CMSDK_APB_GPIO @ sysbus 0x40010000
+gpio0: GPIOPort.CMSDK_GPIO @ sysbus 0x40010000
     0 -> nvic @ 16
     1 -> nvic @ 17
     2 -> nvic @ 18
@@ -41,6 +41,7 @@ gpio0: GPIOPort.CMSDK_APB_GPIO @ sysbus 0x40010000
     13 -> nvic @ 29
     14 -> nvic @ 30
     15 -> nvic @ 31
+    16 -> nvic @ 6
 
 // ADC - 8-channel 12-bit (Mapped as memory for simulation)
 adc0: Memory.MappedMemory @ sysbus 0x40002400

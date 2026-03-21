@@ -3,7 +3,6 @@
 Next steps for the MicroPython for Tang Nano 4K project:
 
 ## In Progress / Planned
-- [ ] 18. Implement Hardware Interrupts for GPIO.
 - [ ] 19. Implement Hardware I2C Master support.
 - [ ] 20. Implement Hardware SPI Master support.
 - [ ] 21. Implement Watchdog Timer (WDT) support.
@@ -29,3 +28,4 @@ Next steps for the MicroPython for Tang Nano 4K project:
 - [x] 15. Implement SPI support (Machine.SPI and Machine.SoftSPI classes).
 - [x] 16. Implement ADC support (Machine.ADC class).
 - [x] 17. Implement Virtual File System (VFS) and Flash storage support.
+- [x] 18. Implement Hardware Interrupts for GPIO.
