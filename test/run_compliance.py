@@ -24,9 +24,9 @@ def run_compliance():
     renode_log = open(renode_log_path, "w")
 
     # Use xvfb-run to ensure Renode can start its virtual display in headless environments
-    # Use -e to include the script and keep Renode running
+    # Use --disable-gui to run in headless mode
     renode_proc = subprocess.Popen(
-        ["xvfb-run", "renode", "--nocfg", "--headless", "-e", f"include @{resc_path}"],
+        ["xvfb-run", "renode", "--disable-gui", "-e", f"include @{resc_path}"],
         stdout=renode_log,
         stderr=subprocess.STDOUT
     )
