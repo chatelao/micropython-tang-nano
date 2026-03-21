@@ -23,9 +23,24 @@ uart0: UART.CMSDK_APB_UART @ sysbus 0x40004000
 external_flash: Memory.MappedMemory @ sysbus 0x60000000
     size: 0x400000
 
-// GPIO Bridge - 16-bit (Mapped as memory for simulation)
-gpio0: Memory.MappedMemory @ sysbus 0x40010000
-    size: 0x1000
+// GPIO Bridge - 16-bit (CMSDK GPIO)
+gpio0: GPIOPort.CMSDK_APB_GPIO @ sysbus 0x40010000
+    0 -> nvic @ 16
+    1 -> nvic @ 17
+    2 -> nvic @ 18
+    3 -> nvic @ 19
+    4 -> nvic @ 20
+    5 -> nvic @ 21
+    6 -> nvic @ 22
+    7 -> nvic @ 23
+    8 -> nvic @ 24
+    9 -> nvic @ 25
+    10 -> nvic @ 26
+    11 -> nvic @ 27
+    12 -> nvic @ 28
+    13 -> nvic @ 29
+    14 -> nvic @ 30
+    15 -> nvic @ 31
 
 // ADC - 8-channel 12-bit (Mapped as memory for simulation)
 adc0: Memory.MappedMemory @ sysbus 0x40002400

@@ -12,6 +12,7 @@
 #include "py/stackctrl.h"
 #include "shared/runtime/pyexec.h"
 #include "mphalport.h"
+#include "pin.h"
 #include "timer.h"
 #include "pwm.h"
 #include "flash.h"
@@ -59,6 +60,29 @@ void TIMER1_Handler(void) {
     (*(volatile uint32_t *)0x4000100C) = 1;
     machine_pwm_tick();
 }
+
+void GPIO_Handler(uint32_t pin_id) {
+    // Clear GPIO interrupt
+    (*(volatile uint32_t *)0x40010038) = (1 << pin_id);
+    machine_pin_dispatch_irq(pin_id);
+}
+
+void PORT0_0_Handler(void) { GPIO_Handler(0); }
+void PORT0_1_Handler(void) { GPIO_Handler(1); }
+void PORT0_2_Handler(void) { GPIO_Handler(2); }
+void PORT0_3_Handler(void) { GPIO_Handler(3); }
+void PORT0_4_Handler(void) { GPIO_Handler(4); }
+void PORT0_5_Handler(void) { GPIO_Handler(5); }
+void PORT0_6_Handler(void) { GPIO_Handler(6); }
+void PORT0_7_Handler(void) { GPIO_Handler(7); }
+void PORT0_8_Handler(void) { GPIO_Handler(8); }
+void PORT0_9_Handler(void) { GPIO_Handler(9); }
+void PORT0_10_Handler(void) { GPIO_Handler(10); }
+void PORT0_11_Handler(void) { GPIO_Handler(11); }
+void PORT0_12_Handler(void) { GPIO_Handler(12); }
+void PORT0_13_Handler(void) { GPIO_Handler(13); }
+void PORT0_14_Handler(void) { GPIO_Handler(14); }
+void PORT0_15_Handler(void) { GPIO_Handler(15); }
 
 void gc_collect(void) {
     void *dummy;
@@ -119,6 +143,24 @@ const uint32_t isr_vector[] __attribute__((section(".isr_vector"), aligned(256))
     0,                          // Reserved
     (uint32_t)&Default_Handler, // PendSV
     (uint32_t)&SysTick_Handler, // SysTick
-    0, 0, 0, 0, 0, 0, 0, 0, 0,  // IRQ 0-8
+    0, 0, 0, 0, 0, 0, 0, 0,     // IRQ 0-7
+    0,                          // IRQ 8 (TIMER 0)
     (uint32_t)&TIMER1_Handler,  // IRQ 9
+    0, 0, 0, 0, 0, 0,           // IRQ 10-15
+    (uint32_t)&PORT0_0_Handler, // IRQ 16
+    (uint32_t)&PORT0_1_Handler, // IRQ 17
+    (uint32_t)&PORT0_2_Handler, // IRQ 18
+    (uint32_t)&PORT0_3_Handler, // IRQ 19
+    (uint32_t)&PORT0_4_Handler, // IRQ 20
+    (uint32_t)&PORT0_5_Handler, // IRQ 21
+    (uint32_t)&PORT0_6_Handler, // IRQ 22
+    (uint32_t)&PORT0_7_Handler, // IRQ 23
+    (uint32_t)&PORT0_8_Handler, // IRQ 24
+    (uint32_t)&PORT0_9_Handler, // IRQ 25
+    (uint32_t)&PORT0_10_Handler, // IRQ 26
+    (uint32_t)&PORT0_11_Handler, // IRQ 27
+    (uint32_t)&PORT0_12_Handler, // IRQ 28
+    (uint32_t)&PORT0_13_Handler, // IRQ 29
+    (uint32_t)&PORT0_14_Handler, // IRQ 30
+    (uint32_t)&PORT0_15_Handler, // IRQ 31
 };

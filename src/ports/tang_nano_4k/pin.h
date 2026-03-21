@@ -11,5 +11,6 @@ typedef struct _machine_pin_obj_t {
 } machine_pin_obj_t;
 
 void pin_init(void);
+void machine_pin_dispatch_irq(uint32_t pin_id);
 
 #endif // MICROPY_INCLUDED_TANG_NANO_4K_PIN_H
