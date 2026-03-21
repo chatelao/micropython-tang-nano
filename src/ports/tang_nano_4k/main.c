@@ -63,7 +63,7 @@ void TIMER1_Handler(void) {
 
 void GPIO_Handler(uint32_t pin_id) {
     // Clear GPIO interrupt
-    (*(volatile uint32_t *)0x40010038) = (1 << pin_id);
+    REG_INTSTATUS = (1 << pin_id);
     machine_pin_dispatch_irq(pin_id);
 }
 

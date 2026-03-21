@@ -4,25 +4,6 @@
 #include "extmod/virtpin.h"
 #include "pin.h"
 
-#define GPIO_BASE (0x40010000)
-#define GPIO_REG(off) (*(volatile uint32_t *)(GPIO_BASE + (off)))
-
-#define REG_DATA         GPIO_REG(0x0000)
-#define REG_DATAOUT      GPIO_REG(0x0004)
-#define REG_OUTENSET     GPIO_REG(0x0010)
-#define REG_OUTENCLR     GPIO_REG(0x0014)
-#define REG_ALTFUNCSET   GPIO_REG(0x0018)
-#define REG_ALTFUNCCLR   GPIO_REG(0x001C)
-#define REG_INTENSET     GPIO_REG(0x0020)
-#define REG_INTENCLR     GPIO_REG(0x0024)
-#define REG_INTTYPESET   GPIO_REG(0x0028)
-#define REG_INTTYPECLR   GPIO_REG(0x002C)
-#define REG_INTPOLSET    GPIO_REG(0x0030)
-#define REG_INTPOLCLR    GPIO_REG(0x0034)
-#define REG_INTSTATUS    GPIO_REG(0x0038)
-
-#define NVIC_ISER0 (*(volatile uint32_t *)(0xE000E100))
-
 MP_REGISTER_ROOT_POINTER(mp_obj_t pin_irq_handler[16]);
 MP_REGISTER_ROOT_POINTER(struct _machine_pin_obj_t *pin_obj[16]);
 
@@ -175,6 +156,7 @@ static mp_obj_t machine_pin_irq(size_t n_args, const mp_obj_t *pos_args, mp_map_
     if (vals[ARG_handler].u_obj == mp_const_none) {
         // Disable interrupt
         REG_INTENCLR = (1 << self->pin_id);
+        NVIC_ICER0 = (1 << (16 + self->pin_id));
         MP_STATE_PORT(pin_irq_handler)[self->pin_id] = mp_const_none;
     } else {
         // Configure interrupt

@@ -41,7 +41,6 @@ gpio0: GPIOPort.ARM_AHB_GPIO @ sysbus 0x40010000
     13 -> nvic @ 29
     14 -> nvic @ 30
     15 -> nvic @ 31
-    16 -> nvic @ 6
 
 // ADC - 8-channel 12-bit (Mapped as memory for simulation)
 adc0: Memory.MappedMemory @ sysbus 0x40002400
