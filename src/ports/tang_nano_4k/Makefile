@@ -54,6 +54,7 @@ SRC_C = \
 	pwm.c \
 	adc.c \
 	flash.c \
+	i2c.c \
 	modmachine.c \
 	$(TOP)/extmod/modtime.c \
 	$(TOP)/extmod/machine_i2c.c \
