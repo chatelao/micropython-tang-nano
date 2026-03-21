@@ -22,6 +22,10 @@ uart0: UART.CMSDK_APB_UART @ sysbus 0x40004000
 i2c0: Memory.MappedMemory @ sysbus 0x40002000
     size: 0x400
 
+// SPI Master - Mapped as memory for simulation
+spi0: Memory.MappedMemory @ sysbus 0x40002200
+    size: 0x400
+
 // External SPI NOR Flash - 4MB
 // Mapped at 0x60000000 for simulation purposes
 external_flash: Memory.MappedMemory @ sysbus 0x60000000
