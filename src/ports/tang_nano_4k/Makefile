@@ -21,6 +21,9 @@ INC += -I$(BUILD)
 
 CFLAGS_CORTEX_M3 = -mthumb -mcpu=cortex-m3
 CFLAGS += $(INC) -Wall -Werror -std=c99 $(CFLAGS_CORTEX_M3) $(COPT)
+ifeq ($(SIMULATION), 1)
+CFLAGS += -DSIMULATION=1
+endif
 # Disable some warnings for external libraries
 CFLAGS_MOD = -Wno-unused-function
 
@@ -55,6 +58,7 @@ SRC_C = \
 	adc.c \
 	flash.c \
 	i2c.c \
+	spi.c \
 	modmachine.c \
 	$(TOP)/extmod/modtime.c \
 	$(TOP)/extmod/machine_i2c.c \
