@@ -43,13 +43,22 @@ jobs:
             test/tang_nano_4k.robot
             test/test_blink.robot
 
+      - name: Run MicroPython Compliance Tests
+        run: |
+          # Install xvfb for headless Renode if needed by the script
+          sudo apt-get install -y xvfb
+          xvfb-run -a python3 test/run_compliance.py
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: firmware
+          name: firmware-and-tests
           path: |
             src/ports/tang_nano_4k/build/firmware.bin
             src/ports/tang_nano_4k/build/firmware.elf
+            COMLIANCE_TESTS.md
+            compliance_output.log
+            renode_output.log
           if-no-files-found: warn
 
       - name: Create Release
