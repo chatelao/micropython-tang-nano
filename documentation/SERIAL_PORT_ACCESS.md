@@ -8,16 +8,20 @@ The Tang Nano 4K features a GW1NSR-LV4C SoC with an integrated ARM Cortex-M3 cor
 
 ## Hardware Modification (Soldering)
 
-To enable serial communication over USB, you must solder two bridges on the **bottom side** of the PCB.
+The current default UART0 routing uses **FPGA Pin 18 (TX)** and **FPGA Pin 19 (RX)**, which are available on the physical pin headers.
+
+To enable serial communication over the onboard USB-C connector (via the BL702 bridge), legacy routing to pins 34 and 35 is required. This involves soldering two bridges on the **bottom side** of the PCB:
 
 1.  Locate pads **R11** and **R12** near the BL702 chip.
 2.  **R11**: Solder a bridge (0Ω resistor or solder blob) to connect the BL702 RX to FPGA Pin 35.
 3.  **R12**: Solder a bridge (0Ω resistor or solder blob) to connect the BL702 TX to FPGA Pin 34.
 
-| Component | Function | M3 Signal | FPGA Pin |
+| Component | Function | M3 Signal | Legacy FPGA Pin |
 | :--- | :--- | :--- | :--- |
 | **R11** | UART TX | UART0 TX | Pin 35 (IOR2A) |
 | **R12** | UART RX | UART0 RX | Pin 34 (IOR2B) |
+
+**Note**: Using Header Pins 18 and 19 does not require any soldering.
 
 ## Software Configuration
 
@@ -40,4 +44,4 @@ When connecting to the board's serial port on your computer, use the following s
 ## Important Considerations
 
 *   **HDMI Conflict**: Pins 34 and 35 are also used for HDMI signals (`HDMI_TX2`). If your FPGA bitstream uses both HDMI and the Cortex-M3 UART0 on these pins, you may experience interference or failure of one or both interfaces.
-*   **Bitstream Routing**: Ensure your Gowin EDA project correctly routes the `UART0_TXD` and `UART0_RXD` signals of the Cortex-M3 "Hard Core" to pins 35 and 34 respectively in the Floor Planner (CST file).
+*   **Bitstream Routing**: Ensure your Gowin EDA project correctly routes the `UART0_TXD` and `UART0_RXD` signals of the Cortex-M3 "Hard Core" to pins 18 and 19 respectively in the Floor Planner (CST file).
