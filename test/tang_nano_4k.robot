@@ -124,6 +124,38 @@ Verify Real-Time Clock Implementation
     Write Line To Uart      print('RTC_TIME', rtc.datetime())
     Wait For Line On Uart   RTC_TIME (2024, 1, 1, 1, 12, 0, 10, 0)
 
+Verify Power Management Implementation
+    Execute Command         $repl = @${REPL}
+    Execute Command         $bin = @${BIN}
+    Execute Command         include @${RESC}
+    Execute Command         sysbus.cpu VectorTableOffset 0x60000000
+    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
+    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
+    Create Terminal Tester  ${UART}
+    Start Emulation
+    Wait For Line On Uart   MicroPython started on Tang Nano 4K
+
+    # Test machine.idle()
+    Write Line To Uart      import machine
+    Write Line To Uart      machine.idle()
+    Write Line To Uart      print('IDLE_OK')
+    Wait For Line On Uart   IDLE_OK
+
+    # Test machine.lightsleep(100)
+    Write Line To Uart      import time
+    Write Line To Uart      start = time.ticks_ms()
+    Write Line To Uart      machine.lightsleep(100)
+    Write Line To Uart      end = time.ticks_ms()
+    Write Line To Uart      print('LIGHTSLEEP_OK', time.ticks_diff(end, start) >= 100)
+    Wait For Line On Uart   LIGHTSLEEP_OK True
+
+    # Test machine.deepsleep(100)
+    Write Line To Uart      start = time.ticks_ms()
+    Write Line To Uart      machine.deepsleep(100)
+    Write Line To Uart      end = time.ticks_ms()
+    Write Line To Uart      print('DEEPSLEEP_OK', time.ticks_diff(end, start) >= 100)
+    Wait For Line On Uart   DEEPSLEEP_OK True
+
 Run MicroPython Compliance Tests
     Execute Command         $repl = @${REPL}
     Execute Command         $bin = @${BIN}
