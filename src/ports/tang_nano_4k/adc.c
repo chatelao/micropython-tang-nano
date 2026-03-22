@@ -4,7 +4,7 @@
 #include "adc.h"
 #include "pin.h"
 
-#define ADC_BASE (0x40002400)
+#define ADC_BASE (0x40002800)
 #define REG_ADC_CFG  (*(volatile uint32_t *)(ADC_BASE + 0x00))
 #define REG_ADC_DATA (*(volatile uint32_t *)(ADC_BASE + 0x04))
 #define REG_ADC_STS  (*(volatile uint32_t *)(ADC_BASE + 0x08))
