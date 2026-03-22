@@ -57,3 +57,7 @@ adc0: Memory.MappedMemory @ sysbus 0x40002800
 // Watchdog Timer (Mapped as memory for simulation)
 wdt0: Memory.MappedMemory @ sysbus 0x40008000
     size: 0x1000
+
+// RTC (Mapped as memory for simulation)
+rtc0: Memory.MappedMemory @ sysbus 0x40006000
+    size: 0x100

@@ -89,6 +89,41 @@ Verify Watchdog Timer Implementation
     ${ctrl_val}=            Execute Command  sysbus ReadDoubleWord 0x40008008
     Should Contain          ${ctrl_val}      0x00000003
 
+Verify Real-Time Clock Implementation
+    Execute Command         $repl = @${REPL}
+    Execute Command         $bin = @${BIN}
+    Execute Command         include @${RESC}
+    Execute Command         sysbus.cpu VectorTableOffset 0x60000000
+    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
+    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
+    Create Terminal Tester  ${UART}
+    Start Emulation
+    Wait For Line On Uart   MicroPython started on Tang Nano 4K
+
+    # Test machine.RTC
+    Write Line To Uart      from machine import RTC
+    Write Line To Uart      rtc = RTC()
+    # (year, month, day, weekday, hour, minute, second, subseconds)
+    # Mon, 01 Jan 2024 12:00:00
+    Write Line To Uart      rtc.datetime((2024, 1, 1, 1, 12, 0, 0, 0))
+    Write Line To Uart      print('RTC_SET')
+    Wait For Line On Uart   RTC_SET
+
+    # Verify RTC LOAD_VALUE via Renode
+    # 2024-01-01 12:00:00 since 2000-01-01 00:00:00
+    # 24 years total. 2000, 2004, 2008, 2012, 2016, 2020 are leap years.
+    # Total days: 24 * 365 + 6 = 8760 + 6 = 8766 days
+    # (8766 * 24 + 12) * 3600 = (210384 + 12) * 3600 = 210396 * 3600 = 757,425,600
+    # 757,425,600 = 0x2D25F580
+    ${load_val}=            Execute Command  sysbus ReadDoubleWord 0x40006008
+    Should Contain          ${load_val}      0x2D25F580
+
+    # Simulate passing of time by writing to CURRENT_DATA
+    # Add 10 seconds: 757,425,610 = 0x2D25F58A
+    Execute Command         sysbus WriteDoubleWord 0x40006000 0x2D25F58A
+    Write Line To Uart      print('RTC_TIME', rtc.datetime())
+    Wait For Line On Uart   RTC_TIME (2024, 1, 1, 1, 12, 0, 10, 0)
+
 Run MicroPython Compliance Tests
     Execute Command         $repl = @${REPL}
     Execute Command         $bin = @${BIN}
