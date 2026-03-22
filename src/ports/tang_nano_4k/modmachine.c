@@ -22,10 +22,9 @@ static mp_obj_t machine_lightsleep(size_t n_args, const mp_obj_t *args) {
         mp_hal_wfi();
     } else {
         mp_int_t ms = mp_obj_get_int(args[0]);
-        uint32_t start = mp_hal_ticks_ms();
-        while (mp_hal_ticks_ms() - start < (uint32_t)ms) {
-            mp_hal_wfi();
-        }
+        // For timed sleep, use mp_hal_delay_ms to allow simulation time to advance
+        // correctly and handle pending MicroPython events.
+        mp_hal_delay_ms(ms);
     }
     return mp_const_none;
 }
