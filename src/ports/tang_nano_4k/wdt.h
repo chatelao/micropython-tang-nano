@@ -11,7 +11,9 @@ typedef struct {
     volatile uint32_t VALUE;   // 0x04: Value register
     volatile uint32_t CTRL;    // 0x08: Control register
     volatile uint32_t INTCLR;  // 0x0C: Interrupt clear register
-    uint32_t RESERVED[764];    // Padding to 0xC00
+    volatile uint32_t RIS;     // 0x10: Raw interrupt status
+    volatile uint32_t MIS;     // 0x14: Masked interrupt status
+    uint32_t RESERVED[762];    // Padding to 0xC00
     volatile uint32_t LOCK;    // 0xC00: Lock register
 } WDT_TypeDef;
 
