@@ -16,12 +16,10 @@ The MicroPython REPL is accessible via the Cortex-M3 UART0 peripheral.
 
 ### Hardware Wiring
 The UART0 signals are routed through the FPGA fabric to the following pins:
-- **UART0 RX**: FPGA Pin 34 (IOR2B)
-- **UART0 TX**: FPGA Pin 35 (IOR2A)
+- **UART0 RX**: FPGA Pin 19 (IOB13B)
+- **UART0 TX**: FPGA Pin 18 (IOB13A)
 
-To access the REPL via the onboard USB-C connector (BL702 bridge), the following solder bridges must be populated on the bottom of the PCB:
-- **R11**: Connects BL702 RX to FPGA Pin 35 (TX).
-- **R12**: Connects BL702 TX to FPGA Pin 34 (RX).
+Note: Previous versions utilized pins 34 and 35. To access the REPL via the onboard USB-C connector (BL702 bridge) when using the default pins (34/35), solder bridges R11/R12 were required. For the current routing (18/19), external wiring to the header pins is typically necessary.
 
 ### Terminal Settings
 Use a serial terminal with the following configuration:

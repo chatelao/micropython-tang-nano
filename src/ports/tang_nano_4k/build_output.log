@@ -1,9 +1,0 @@
-arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -Wall -Werror -O2 -I. -I../../ -I../../lib/micropython/ -DNDEBUG -ffunction-sections -fdata-sections -c -o main.o main.c
-In file included from ../../lib/micropython/py/lexer.h:32,
-                 from ../../lib/micropython/py/compile.h:29,
-                 from main.c:2:
-../../lib/micropython/py/qstr.h:43:14: fatal error: genhdr/qstrdefs.generated.h: No such file or directory
-   43 |     #include "genhdr/qstrdefs.generated.h"
-      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make: *** [Makefile:33: main.o] Error 1
