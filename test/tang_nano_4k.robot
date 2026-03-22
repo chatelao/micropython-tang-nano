@@ -114,13 +114,13 @@ Verify Real-Time Clock Implementation
     # 24 years total. 2000, 2004, 2008, 2012, 2016, 2020 are leap years.
     # Total days: 24 * 365 + 6 = 8760 + 6 = 8766 days
     # (8766 * 24 + 12) * 3600 = (210384 + 12) * 3600 = 210396 * 3600 = 757,425,600
-    # 757,425,600 = 0x2D25F580
+    # 757,425,600 = 0x2D2565C0
     ${load_val}=            Execute Command  sysbus ReadDoubleWord 0x40006008
-    Should Contain          ${load_val}      0x2D25F580
+    Should Contain          ${load_val}      0x2D2565C0
 
     # Simulate passing of time by writing to CURRENT_DATA
-    # Add 10 seconds: 757,425,610 = 0x2D25F58A
-    Execute Command         sysbus WriteDoubleWord 0x40006000 0x2D25F58A
+    # Add 10 seconds: 757,425,610 = 0x2D2565CA
+    Execute Command         sysbus WriteDoubleWord 0x40006000 0x2D2565CA
     Write Line To Uart      print('RTC_TIME', rtc.datetime())
     Wait For Line On Uart   RTC_TIME (2024, 1, 1, 1, 12, 0, 10, 0)
 
