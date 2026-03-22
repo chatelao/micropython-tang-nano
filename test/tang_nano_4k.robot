@@ -69,11 +69,15 @@ Verify Watchdog Timer Implementation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
     # Test machine.WDT
-    Write Line To Uart      from machine import WDT, mem32
+    Write Line To Uart      from machine import WDT
     Write Line To Uart      wdt = WDT(0, timeout=5000)
-    Write Line To Uart      print('WDT_OK', hex(mem32[0x40008000]))
-    # 5000ms * 27000 = 135,000,000 = 0x80befc0
-    Wait For Line On Uart   WDT_OK 0x80befc0
+    Write Line To Uart      print('WDT_OK')
+    Wait For Line On Uart   WDT_OK
+
+    # Verify WDT LOAD register via Renode
+    # 5000ms * 27000 = 135,000,000 = 0x080BEFC0
+    ${load_val}=            Execute Command  sysbus ReadDoubleWord 0x40008000
+    Should Contain          ${load_val}      0x080BEFC0
 
     # Test feed
     Write Line To Uart      wdt.feed()

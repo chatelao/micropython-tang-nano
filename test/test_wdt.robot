@@ -23,17 +23,22 @@ Verify WDT Implementation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
     # Test machine.WDT
-    Write Line To Uart      from machine import WDT, mem32
+    Write Line To Uart      from machine import WDT
     Write Line To Uart      wdt = WDT(0, timeout=5000)
-    Write Line To Uart      print('WDT_OK', hex(mem32[0x40008000]))
-    # 5000ms * 27000 = 135,000,000 = 0x80befc0
-    Wait For Line On Uart   WDT_OK 0x80befc0
+    Write Line To Uart      print('WDT_OK')
+    Wait For Line On Uart   WDT_OK
+
+    # Verify WDT registers in simulation memory
+    # LOAD register at 0x40008000
+    # 5000ms * 27000 = 135,000,000 = 0x080BEFC0
+    ${load_val}=            Execute Command  sysbus ReadDoubleWord 0x40008000
+    Should Contain          ${load_val}      0x080BEFC0
+
+    # CTRL register at 0x40008008 should be 3
+    ${ctrl_val}=            Execute Command  sysbus ReadDoubleWord 0x40008008
+    Should Contain          ${ctrl_val}      0x00000003
 
     # Test feed
     Write Line To Uart      wdt.feed()
     Write Line To Uart      print('FEED_OK')
     Wait For Line On Uart   FEED_OK
-
-    # Verify WDT registers via Renode
-    ${ctrl_val}=            Execute Command  sysbus ReadDoubleWord 0x40008008
-    Should Contain          ${ctrl_val}      0x00000003
