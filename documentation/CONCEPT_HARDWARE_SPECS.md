@@ -53,3 +53,22 @@ This document outlines the hardware specifications for the Sipeed Tang Nano 4K d
 - [x] Detailed memory map for Cortex-M3.
 - [x] Peripheral register mapping.
 - [x] Implement SoftI2C support.
+
+## Silicon-to-Metal Interconnection Matrix
+
+This matrix defines the interconnection points between the hard-core silicon (Cortex-M3 subsystem) and the metal-programmable FPGA fabric and resources.
+
+| Silicon Area \ Metal Area | Logic Fabric | BSRAM | DSP | PLL | Bank 0 | Bank 1 | Bank 2 | Bank 3 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Cortex-M3 Core** | X | | | | | | | |
+| **Internal SRAM** | X | | | | | | | |
+| **Internal Flash** | X | | | | | | | |
+| **UART 0 / 1** | X | | | | | | | |
+| **Timer 0 / 1** | X | | | | | | | |
+| **I2C 0 / SPI 0** | X | | | | | | | |
+| **ADC IP** | X | | | | | | | |
+| **GPIO Bridge** | X | | | | | | | |
+| **NVIC (IRQs)** | X | | | | | | | |
+| **SYSCON** | X | | | | | | | |
+
+*Note: 'X' indicates a direct electrical or bus-level interface between the silicon hard-core and the programmable metal/logic fabric. Peripherals in silicon route their I/O signals through the logic fabric to reach physical I/O banks.*
