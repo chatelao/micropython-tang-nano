@@ -3,8 +3,8 @@
 Next steps for the MicroPython for Tang Nano 4K project:
 
 ## In Progress / Planned
-- [ ] 20. Implement Hardware SPI Master support.
-- [ ] 21. Implement Watchdog Timer (WDT) support.
+- [x] 20. Implement Hardware SPI Master support.
+- [x] 21. Implement Watchdog Timer (WDT) support.
 - [ ] 22. Implement Real-Time Clock (RTC) support.
 - [ ] 23. Implement Power Management (Sleep/Deep Sleep modes).
 - [ ] 24. Optimization: Increase heap size and optimize SRAM usage.
