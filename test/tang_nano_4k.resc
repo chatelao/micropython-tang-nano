@@ -11,6 +11,14 @@ machine LoadPlatformDescription $repl
 # Set CPU performance to match 27MHz hardware for accurate SysTick timing
 sysbus.cpu PerformanceInMips 27
 
+# Setup the UART terminal on a TCP port for compliance testing.
+# The 'false' parameter is to disable Telnet.
+macro setup_tcp_term
+"""
+    emulation CreateServerSocketTerminal 12345 "uart-terminal" false
+    connector Connect sysbus.uart0 "uart-terminal"
+"""
+
 showAnalyzer uart0
 
 macro reset
