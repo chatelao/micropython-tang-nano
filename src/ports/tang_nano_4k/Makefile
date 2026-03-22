@@ -59,8 +59,10 @@ SRC_C = \
 	flash.c \
 	i2c.c \
 	spi.c \
+	wdt.c \
 	modmachine.c \
 	$(TOP)/extmod/modtime.c \
+	$(TOP)/extmod/machine_mem.c \
 	$(TOP)/extmod/machine_i2c.c \
 	$(TOP)/extmod/machine_spi.c \
 	$(TOP)/drivers/bus/softspi.c \

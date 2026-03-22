@@ -56,3 +56,34 @@ Verify Hardware SPI Implementation
     Write Line To Uart      res2 = sspi.read(1)
     Write Line To Uart      print('SREAD_OK', res2)
     Wait For Line On Uart   SREAD_OK b'\\x00'
+
+Verify Watchdog Timer Implementation
+    Execute Command         $repl = @${REPL}
+    Execute Command         $bin = @${BIN}
+    Execute Command         include @${RESC}
+    Execute Command         sysbus.cpu VectorTableOffset 0x60000000
+    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
+    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
+    Create Terminal Tester  ${UART}
+    Start Emulation
+    Wait For Line On Uart   MicroPython started on Tang Nano 4K
+
+    # Test machine.WDT
+    Write Line To Uart      from machine import WDT
+    Write Line To Uart      wdt = WDT(0, timeout=5000)
+    Write Line To Uart      print('WDT_OK')
+    Wait For Line On Uart   WDT_OK
+
+    # Verify WDT LOAD register via Renode
+    # 5000ms * 27000 = 135,000,000 = 0x080BEFC0
+    ${load_val}=            Execute Command  sysbus ReadDoubleWord 0x40008000
+    Should Contain          ${load_val}      0x080BEFC0
+
+    # Test feed
+    Write Line To Uart      wdt.feed()
+    Write Line To Uart      print('FEED_OK')
+    Wait For Line On Uart   FEED_OK
+
+    # Verify WDT registers via Renode
+    ${ctrl_val}=            Execute Command  sysbus ReadDoubleWord 0x40008008
+    Should Contain          ${ctrl_val}      0x00000003

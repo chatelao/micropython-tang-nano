@@ -53,3 +53,7 @@ gpio0: GPIOPort.ARM_AHB_GPIO @ sysbus 0x40010000
 // ADC - 8-channel 12-bit (Mapped as memory for simulation)
 adc0: Memory.MappedMemory @ sysbus 0x40002800
     size: 0x400
+
+// Watchdog Timer (Mapped as memory for simulation)
+wdt0: Memory.MappedMemory @ sysbus 0x40008000
+    size: 0x1000
