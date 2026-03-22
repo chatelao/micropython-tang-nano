@@ -78,6 +78,8 @@ def run_compliance(attach=False):
     else:
         print("All tests passed.")
 
+    sys.exit(result.returncode)
+
 if __name__ == "__main__":
     attach = "--attach" in sys.argv
     run_compliance(attach=attach)

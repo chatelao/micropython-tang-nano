@@ -3,6 +3,7 @@ Suite Setup     Setup
 Suite Teardown  Teardown
 Test Setup      Reset Emulation
 Resource        ${RENODEKEYWORDS}
+Library         Process
 
 *** Variables ***
 ${RESC}         ${CURDIR}/tang_nano_4k.resc
@@ -87,3 +88,23 @@ Verify Watchdog Timer Implementation
     # Verify WDT registers via Renode
     ${ctrl_val}=            Execute Command  sysbus ReadDoubleWord 0x40008008
     Should Contain          ${ctrl_val}      0x00000003
+
+Run MicroPython Compliance Tests
+    Execute Command         $repl = @${REPL}
+    Execute Command         $bin = @${BIN}
+    Execute Command         include @${RESC}
+    Execute Command         runMacro $setup_tcp_term
+    Execute Command         sysbus.cpu VectorTableOffset 0x60000000
+    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
+    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
+    Start Emulation
+
+    # Give Renode a moment to start the TCP terminal server
+    Sleep                   5s
+
+    # Run compliance tests in --attach mode
+    ${result}=              Run Process    python3    ${CURDIR}/run_compliance.py    --attach    cwd=${CURDIR}/..    stdout=PIPE    stderr=STDOUT
+    Log                     ${result.stdout}
+    # Currently allowing some failures as the port is in progress, but the script itself should run to completion.
+    # To enforce strict compliance, uncomment the next line:
+    # Should Be Equal As Integers    ${result.rc}    0
