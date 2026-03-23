@@ -62,23 +62,34 @@ make -C src/lib/micropython/mpy-cross
 ```
 
 ### 3. Build the Firmware
-Compile the Tang Nano 4K specific firmware:
+Compile the Tang Nano 4K specific firmware. There are two main variants:
 
+**Hardware Variant (for the actual board):**
 ```bash
-make -C src/ports/tang_nano_4k/
+make -C src/ports/tang_nano_4k/ BUILD=build_hw
 ```
+Generates `firmware.bin` in `src/ports/tang_nano_4k/build_hw/`.
 
-This will generate `firmware.bin` and `firmware.elf` in the `src/ports/tang_nano_4k/build/` directory.
+**Simulation Variant (for Renode):**
+```bash
+make -C src/ports/tang_nano_4k/ SIMULATION=1
+```
+Generates `firmware.bin` in `src/ports/tang_nano_4k/build/`.
 
-### 4. Flashing the Firmware
-Use the **Gowin Programmer** tool (part of the Gowin EDA) to flash the firmware.
+### 4. Flashing the FPGA Bitstream (Essential)
+Before the M3 core can interact with the external pins, you must flash the FPGA bitstream. This bitstream routes the M3's internal signals (UART, GPIO, etc.) to the physical pins of the Tang Nano 4K.
 
-1.  Connect your Tang Nano 4K via USB.
-2.  Open **Gowin Programmer**.
-3.  Select **Access Mode**: `MCU Mode`.
-4.  Select **Operation**: `Flash Erase, Program, Verify`.
-5.  Select the `firmware.bin` file generated in the previous step.
-6.  Click **Run**.
+1.  In **Gowin Programmer**, select **Access Mode**: `SRAM Mode` (for testing) or `Embedded Flash Mode` (for permanent storage).
+2.  Select the `tang_nano_4k_m3.fs` bitstream file from the release or `src/fpga/bitstream/`.
+3.  Click **Run**.
+
+### 5. Flashing the MicroPython Firmware
+Once the bitstream is flashed, you can load the MicroPython firmware onto the M3 core:
+
+1.  In **Gowin Programmer**, select **Access Mode**: `MCU Mode`.
+2.  Select **Operation**: `Flash Erase, Program, Verify`.
+3.  Select the `firmware_hw.bin` file from the release or your `build_hw` directory.
+4.  Click **Run**.
 
 ---
 

@@ -36,6 +36,19 @@ jobs:
         run: |
           make -C src/ports/tang_nano_4k/ SIMULATION=1
 
+      - name: Build Tang Nano 4K port (Hardware variant)
+        run: |
+          make -C src/ports/tang_nano_4k/ BUILD=build_hw
+
+      - name: Prepare artifacts
+        run: |
+          mkdir dist
+          cp src/ports/tang_nano_4k/build/firmware.bin dist/firmware_sim.bin
+          cp src/ports/tang_nano_4k/build/firmware.elf dist/firmware_sim.elf
+          cp src/ports/tang_nano_4k/build_hw/firmware.bin dist/firmware_hw.bin
+          cp src/ports/tang_nano_4k/build_hw/firmware.elf dist/firmware_hw.elf
+          cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/tang_nano_4k_m3.fs
+
       - name: Run Renode tests
         uses: antmicro/renode-test-action@v5
         with:
@@ -48,8 +61,11 @@ jobs:
         with:
           name: firmware-and-tests
           path: |
-            src/ports/tang_nano_4k/build/firmware.bin
-            src/ports/tang_nano_4k/build/firmware.elf
+            dist/firmware_sim.bin
+            dist/firmware_sim.elf
+            dist/firmware_hw.bin
+            dist/firmware_hw.elf
+            dist/tang_nano_4k_m3.fs
             COMLIANCE_TESTS.md
             compliance_output.log
             renode_output.log
@@ -60,7 +76,10 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            src/ports/tang_nano_4k/build/firmware.bin
-            src/ports/tang_nano_4k/build/firmware.elf
+            dist/firmware_sim.bin
+            dist/firmware_sim.elf
+            dist/firmware_hw.bin
+            dist/firmware_hw.elf
+            dist/tang_nano_4k_m3.fs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

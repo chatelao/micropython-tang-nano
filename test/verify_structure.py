@@ -6,12 +6,14 @@ def test_structure():
         'definitions',
         'documentation',
         'src',
+        'src/fpga/bitstream',
         'test',
         '.github'
     ]
     expected_files = [
         'README.md',
         'ROADMAP.md',
+        'src/fpga/bitstream/tang_nano_4k_m3.fs',
         'GEMINI.md'
     ]
 
