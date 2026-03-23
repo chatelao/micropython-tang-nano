@@ -47,6 +47,12 @@ This document outlines the hardware specifications for the Sipeed Tang Nano 4K d
 | INTSTATUS | 0x0C | Interrupt status (R/W) |
 | BAUDDIV | 0x10 | Baudrate divider (R/W) |
 
+#### UART0 Signal Mapping
+| Signal | FPGA Pin | Bank | Function |
+| --- | --- | --- | --- |
+| UART0_TXD | Pin 18 | 3 | IOB13A |
+| UART0_RXD | Pin 19 | 3 | IOB13B |
+
 ## Implementation Status
 - [x] Research target hardware specifications.
 - [x] Document basic specifications.

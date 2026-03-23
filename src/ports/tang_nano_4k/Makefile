@@ -59,8 +59,10 @@ SRC_C = \
 	flash.c \
 	i2c.c \
 	spi.c \
+	rtc.c \
 	wdt.c \
 	modmachine.c \
+	$(TOP)/shared/timeutils/timeutils.c \
 	$(TOP)/extmod/modtime.c \
 	$(TOP)/extmod/machine_mem.c \
 	$(TOP)/extmod/machine_i2c.c \

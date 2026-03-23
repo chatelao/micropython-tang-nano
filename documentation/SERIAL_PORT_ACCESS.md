@@ -23,6 +23,8 @@ To enable serial communication over USB using the **legacy** pins (34/35), solde
 1.  **R11**: Connects BL702 RX to FPGA Pin 35 (TX).
 2.  **R12**: Connects BL702 TX to FPGA Pin 34 (RX).
 
+**Note**: Using Header Pins 18 and 19 does not require any soldering.
+
 ## Software Configuration
 
 ### Cortex-M3 Peripheral

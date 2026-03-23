@@ -3,6 +3,8 @@
 ## Goal
 This project aims to port MicroPython to the "Sipeed Tang Nano 4K" FPGA development board.
 
+For a comprehensive overview of the port, including hardware details, installation, and usage, see the [Tang Nano 4K MicroPython Port Guide](documentation/TANG_NANO_MICROPYTHON_GUIDE.md).
+
 ## Project Structure
 - `/definitions` - Datasheets and Standards to be used.
 - `/documentation` - Concepts and implementation progress for different areas.
@@ -18,8 +20,6 @@ The MicroPython REPL is accessible via the Cortex-M3 UART0 peripheral.
 The UART0 signals are routed through the FPGA fabric to the following pins:
 - **UART0 RX**: FPGA Pin 19 (IOB13B)
 - **UART0 TX**: FPGA Pin 18 (IOB13A)
-
-Note: Previous versions utilized pins 34 and 35. To access the REPL via the onboard USB-C connector (BL702 bridge) when using the default pins (34/35), solder bridges R11/R12 were required. For the current routing (18/19), external wiring to the header pins is typically necessary.
 
 ### Terminal Settings
 Use a serial terminal with the following configuration:
