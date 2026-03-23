@@ -5,8 +5,8 @@ QSTR_DEFS = qstrdefsport.h
 
 # MicroPython feature configurations
 MICROPY_ROM_TEXT_COMPRESSION ?= 1
-MICROPY_PY_BUILTINS_FLOAT ?= 1
-MICROPY_PY_MATH ?= 1
+MICROPY_PY_BUILTINS_FLOAT ?= 0
+MICROPY_PY_MATH ?= 0
 MICROPY_ENABLE_COMPILER ?= 1
 MICROPY_PY_SYS_STDFILES ?= 1
 
@@ -90,7 +90,11 @@ SRC_C += \
 SRC_QSTR += $(TOP)/shared/readline/readline.c $(TOP)/shared/runtime/pyexec.c
 endif
 
-OBJ += $(PY_CORE_O)
+# Filter out irrelevant architecture files from PY_CORE_O
+PY_CORE_O_FILTERED = $(filter-out %/nlrx86.o %/nlrx64.o %/nlraarch64.o %/nlrmips.o %/nlrpowerpc.o %/nlrxtensa.o %/nlrrv32.o %/nlrrv64.o %/nlrsetjmp.o, $(PY_CORE_O))
+PY_CORE_O_FILTERED := $(filter-out %/asmx64.o %/emitnx64.o %/asmx86.o %/emitnx86.o %/asmxtensa.o %/emitnxtensa.o %/emitinlinextensa.o %/emitnxtensawin.o %/asmrv32.o %/emitnrv32.o %/emitinlinerv32.o, $(PY_CORE_O_FILTERED))
+
+OBJ += $(PY_CORE_O_FILTERED)
 OBJ += $(addprefix $(BUILD)/, $(filter-out $(TOP)/%, $(SRC_C:.c=.o)))
 OBJ += $(addprefix $(BUILD)/, $(patsubst $(TOP)/%, %, $(filter $(TOP)/%, $(SRC_C:.c=.o))))
 
