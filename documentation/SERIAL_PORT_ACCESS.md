@@ -6,20 +6,22 @@ This document describes how to access the Cortex-M3 serial port on the Sipeed Ta
 
 The Tang Nano 4K features a GW1NSR-LV4C SoC with an integrated ARM Cortex-M3 core. It uses a Bouffalo Lab BL702 chip as a USB-to-JTAG/UART bridge. By default, the UART lines of the BL702 are disconnected from the FPGA pins to avoid interference with the HDMI interface.
 
-## Hardware Modification (Soldering)
+## UART Pin Routing
 
-The current default UART0 routing uses **FPGA Pin 18 (TX)** and **FPGA Pin 19 (RX)**, which are available on the physical pin headers.
+The UART0 signals are routed through the FPGA fabric. The current configuration uses the following pins:
 
-To enable serial communication over the onboard USB-C connector (via the BL702 bridge), legacy routing to pins 34 and 35 is required. This involves soldering two bridges on the **bottom side** of the PCB:
-
-1.  Locate pads **R11** and **R12** near the BL702 chip.
-2.  **R11**: Solder a bridge (0Ω resistor or solder blob) to connect the BL702 RX to FPGA Pin 35.
-3.  **R12**: Solder a bridge (0Ω resistor or solder blob) to connect the BL702 TX to FPGA Pin 34.
-
-| Component | Function | M3 Signal | Legacy FPGA Pin |
+| Function | M3 Signal | FPGA Pin | Bank |
 | :--- | :--- | :--- | :--- |
-| **R11** | UART TX | UART0 TX | Pin 35 (IOR2A) |
-| **R12** | UART RX | UART0 RX | Pin 34 (IOR2B) |
+| **UART0 RX** | RXD | Pin 19 (IOB13B) | 3 |
+| **UART0 TX** | TXD | Pin 18 (IOB13A) | 3 |
+
+### Legacy Routing and Hardware Modifications
+
+Previous versions of the firmware routed UART0 to Pins 34 and 35, which are internally connected to the BL702 bridge pads R11 and R12.
+
+To enable serial communication over USB using the **legacy** pins (34/35), solder two bridges on the **bottom side** of the PCB:
+1.  **R11**: Connects BL702 RX to FPGA Pin 35 (TX).
+2.  **R12**: Connects BL702 TX to FPGA Pin 34 (RX).
 
 **Note**: Using Header Pins 18 and 19 does not require any soldering.
 
@@ -28,7 +30,7 @@ To enable serial communication over the onboard USB-C connector (via the BL702 b
 ### Cortex-M3 Peripheral
 The MicroPython port and standard GW1NSR-4C designs use **UART0** for the system console.
 
-*   **Base Address**: `0x40000000`
+*   **Base Address**: `0x40004000`
 *   **Clock Frequency**: 27 MHz
 *   **Default Baud Rate**: 115200
 
@@ -43,5 +45,5 @@ When connecting to the board's serial port on your computer, use the following s
 
 ## Important Considerations
 
-*   **HDMI Conflict**: Pins 34 and 35 are also used for HDMI signals (`HDMI_TX2`). If your FPGA bitstream uses both HDMI and the Cortex-M3 UART0 on these pins, you may experience interference or failure of one or both interfaces.
+*   **HDMI Conflict**: Pins 34 and 35 (used in legacy routing) are also used for HDMI signals (`HDMI_TX2`). The current routing to pins 18 and 19 avoids this conflict.
 *   **Bitstream Routing**: Ensure your Gowin EDA project correctly routes the `UART0_TXD` and `UART0_RXD` signals of the Cortex-M3 "Hard Core" to pins 18 and 19 respectively in the Floor Planner (CST file).
