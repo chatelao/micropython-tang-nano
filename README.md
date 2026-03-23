@@ -3,6 +3,8 @@
 ## Goal
 This project aims to port MicroPython to the "Sipeed Tang Nano 4K" FPGA development board.
 
+For a comprehensive overview of the port, including hardware details, installation, and usage, see the [Tang Nano 4K MicroPython Port Guide](documentation/TANG_NANO_MICROPYTHON_GUIDE.md).
+
 ## Project Structure
 - `/definitions` - Datasheets and Standards to be used.
 - `/documentation` - Concepts and implementation progress for different areas.
