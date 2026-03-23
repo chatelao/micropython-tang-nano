@@ -6,9 +6,9 @@ cpu: CPU.CortexM @ sysbus
     cpuType: "cortex-m3"
     nvic: nvic
 
-// Internal Flash (User Flash) - 32KB
+// Internal Flash (Code Flash) - 128KB
 flash: Memory.MappedMemory @ sysbus 0x00000000
-    size: 0x8000
+    size: 0x20000
 
 // Internal SRAM - 22KB
 sram: Memory.MappedMemory @ sysbus 0x20000000

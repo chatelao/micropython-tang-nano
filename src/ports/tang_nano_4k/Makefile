@@ -33,10 +33,12 @@ FLASH_ORIGIN = 0x60000000
 FLASH_LENGTH = 4M
 else
 FLASH_ORIGIN = 0x00000000
-FLASH_LENGTH = 32K
+# The GW1NSR-4C has 128KB of address space for instruction flash (0x00000 to 0x1FFFF)
+# as per the memory map in the GW1NSR-4C datasheet.
+FLASH_LENGTH = 128K
 endif
 
-LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs -lc -lnosys
+LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nano.specs --specs=nosys.specs -lc -lnosys
 LDFLAGS += -Wl,--defsym=FLASH_ORIGIN=$(FLASH_ORIGIN),--defsym=FLASH_LENGTH=$(FLASH_LENGTH)
 
 # Tune for Debugging or Optimization

@@ -42,6 +42,9 @@ extern const struct _mp_obj_module_t mp_module_time;
 #define MICROPY_PY_MACHINE_SOFTSPI (1)
 #define MICROPY_PY_MACHINE_MEMX (1)
 
+#define MICROPY_PY_BUILTINS_FLOAT (0)
+#define MICROPY_PY_MATH (0)
+
 #define MICROPY_VFS (1)
 #define MICROPY_VFS_LFS2 (1)
 #define MICROPY_PY_UOS (1)
