@@ -44,16 +44,20 @@ SECTIONS
         _ebss = .;
     } > SRAM
 
+    /* Use all remaining space for heap between .bss and .stack */
+    .heap (NOLOAD) :
+    {
+        . = ALIGN(8);
+        _sheap = .;
+        . = ORIGIN(SRAM) + LENGTH(SRAM) - STACK_SIZE;
+        _eheap = .;
+    } > SRAM
+
     .stack (NOLOAD) :
     {
         . = ALIGN(8);
         _sstack = .;
-        . = . + STACK_SIZE;
+        . = ORIGIN(SRAM) + LENGTH(SRAM);
         _estack = .;
     } > SRAM
-
-    /* Use all remaining space for heap */
-    _sheap = _ebss;
-    _eheap = _sstack;
-    end = .;
 }
