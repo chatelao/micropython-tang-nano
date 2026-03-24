@@ -5,8 +5,8 @@ QSTR_DEFS = qstrdefsport.h
 
 # MicroPython feature configurations
 MICROPY_ROM_TEXT_COMPRESSION ?= 1
-MICROPY_PY_BUILTINS_FLOAT ?= 1
-MICROPY_PY_MATH ?= 1
+MICROPY_PY_BUILTINS_FLOAT ?= 0
+MICROPY_PY_MATH ?= 0
 MICROPY_ENABLE_COMPILER ?= 1
 MICROPY_PY_SYS_STDFILES ?= 1
 
@@ -33,10 +33,12 @@ FLASH_ORIGIN = 0x60000000
 FLASH_LENGTH = 4M
 else
 FLASH_ORIGIN = 0x00000000
-FLASH_LENGTH = 32K
+# The GW1NSR-4C has 128KB of address space for instruction flash (0x00000 to 0x1FFFF)
+# as per the memory map in the GW1NSR-4C datasheet.
+FLASH_LENGTH = 128K
 endif
 
-LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nosys.specs -lc -lm -lnosys
+LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nano.specs --specs=nosys.specs -lc -lnosys
 LDFLAGS += -Wl,--defsym=FLASH_ORIGIN=$(FLASH_ORIGIN),--defsym=FLASH_LENGTH=$(FLASH_LENGTH)
 
 # Tune for Debugging or Optimization
@@ -90,7 +92,34 @@ SRC_C += \
 SRC_QSTR += $(TOP)/shared/readline/readline.c $(TOP)/shared/runtime/pyexec.c
 endif
 
-OBJ += $(PY_CORE_O)
+# Filter out irrelevant architecture-specific object files from PY_CORE_O
+# to reduce binary size and ensure it fits in the 32KB FLASH.
+# This removes NLR and EMIT support for non-target architectures.
+EXCLUDE_OBJ = \
+	py/nlrx86.o \
+	py/nlrx64.o \
+	py/nlraarch64.o \
+	py/nlrmips.o \
+	py/nlrpowerpc.o \
+	py/nlrxtensa.o \
+	py/nlrrv32.o \
+	py/nlrrv64.o \
+	py/nlrsetjmp.o \
+	py/asmx64.o \
+	py/emitnx64.o \
+	py/asmx86.o \
+	py/emitnx86.o \
+	py/asmarm.o \
+	py/emitnarm.o \
+	py/asmxtensa.o \
+	py/emitnxtensa.o \
+	py/emitinlinextensa.o \
+	py/emitnxtensawin.o \
+	py/asmrv32.o \
+	py/emitnrv32.o \
+	py/emitinlinerv32.o
+
+OBJ += $(filter-out $(addprefix $(BUILD)/, $(EXCLUDE_OBJ)), $(PY_CORE_O))
 OBJ += $(addprefix $(BUILD)/, $(filter-out $(TOP)/%, $(SRC_C:.c=.o)))
 OBJ += $(addprefix $(BUILD)/, $(patsubst $(TOP)/%, %, $(filter $(TOP)/%, $(SRC_C:.c=.o))))
 
