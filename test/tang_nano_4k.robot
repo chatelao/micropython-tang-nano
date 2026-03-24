@@ -124,6 +124,37 @@ Verify Real-Time Clock Implementation
     Write Line To Uart      print('RTC_TIME', rtc.datetime())
     Wait For Line On Uart   RTC_TIME (2024, 1, 1, 1, 12, 0, 10, 0)
 
+Verify Power Management Implementation
+    Execute Command         $repl = @${REPL}
+    Execute Command         $bin = @${BIN}
+    Execute Command         include @${RESC}
+    Execute Command         sysbus.cpu VectorTableOffset 0x60000000
+    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
+    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
+    Create Terminal Tester  ${UART}
+    Start Emulation
+    Wait For Line On Uart   MicroPython started on Tang Nano 4K
+
+    # Run machine.idle()
+    Write Line To Uart      from machine import idle
+    Write Line To Uart      idle()
+    Write Line To Uart      print('IDLE_OK')
+    Wait For Line On Uart   IDLE_OK
+
+    # Run power management tests
+    Write Line To Uart      import time
+    Write Line To Uart      from machine import lightsleep, deepsleep
+
+    # Test lightsleep(100)
+    Write Line To Uart      s = time.ticks_ms(); lightsleep(100); e = time.ticks_ms(); print('LS_OK', time.ticks_diff(e, s))
+    # Use Regex to check that we slept at least 90ms. Match line like "LS_OK 101"
+    Wait For Line On Uart   LS_OK ([9][0-9]|[1-9][0-9][0-9]+)   treatAsRegex=true
+
+    # Test deepsleep(100) - Should cause a reset and reboot
+    Write Line To Uart      deepsleep(100)
+    # After deepsleep, the board resets, so we should see the boot message again
+    Wait For Line On Uart   MicroPython started on Tang Nano 4K
+
 Run MicroPython Compliance Tests
     Execute Command         $repl = @${REPL}
     Execute Command         $bin = @${BIN}
