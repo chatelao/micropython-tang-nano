@@ -1,4 +1,5 @@
 #include "py/runtime.h"
+#include "py/mphal.h"
 #include "pin.h"
 #include "timer.h"
 #include "pwm.h"
@@ -10,8 +11,54 @@
 #include "flash.h"
 #include "extmod/modmachine.h"
 
+#define AIRCR (*(volatile uint32_t *)0xE000ED0C)
+#define AIRCR_VECTKEY 0x05FA0000
+#define AIRCR_SYSRESETREQ (1 << 2)
+
+mp_obj_t machine_reset(void) {
+    AIRCR = AIRCR_VECTKEY | AIRCR_SYSRESETREQ;
+    while (1) {
+        // Wait for reset
+    }
+    return mp_const_none;
+}
+MP_DEFINE_CONST_FUN_OBJ_0(machine_reset_obj, machine_reset);
+
+mp_obj_t machine_idle(void) {
+    mp_hal_wfi();
+    return mp_const_none;
+}
+MP_DEFINE_CONST_FUN_OBJ_0(machine_idle_obj, machine_idle);
+
+mp_obj_t machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+    if (n_args == 0) {
+        mp_hal_wfi();
+    } else {
+        mp_int_t delay = mp_obj_get_int(args[0]);
+        if (delay > 0) {
+            uint32_t start = mp_hal_ticks_ms();
+            while (mp_hal_ticks_ms() - start < (uint32_t)delay) {
+                mp_hal_wfi();
+                mp_handle_pending(true);
+            }
+        }
+    }
+    return mp_const_none;
+}
+MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(machine_lightsleep_obj, 0, 1, machine_lightsleep);
+
+mp_obj_t machine_deepsleep(size_t n_args, const mp_obj_t *args) {
+    machine_lightsleep(n_args, args);
+    return machine_reset();
+}
+MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(machine_deepsleep_obj, 0, 1, machine_deepsleep);
+
 static const mp_rom_map_elem_t machine_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_machine) },
+    { MP_ROM_QSTR(MP_QSTR_reset), MP_ROM_PTR(&machine_reset_obj) },
+    { MP_ROM_QSTR(MP_QSTR_idle), MP_ROM_PTR(&machine_idle_obj) },
+    { MP_ROM_QSTR(MP_QSTR_lightsleep), MP_ROM_PTR(&machine_lightsleep_obj) },
+    { MP_ROM_QSTR(MP_QSTR_deepsleep), MP_ROM_PTR(&machine_deepsleep_obj) },
     { MP_ROM_QSTR(MP_QSTR_Pin), MP_ROM_PTR(&machine_pin_type) },
     { MP_ROM_QSTR(MP_QSTR_Timer), MP_ROM_PTR(&machine_timer_type) },
     { MP_ROM_QSTR(MP_QSTR_PWM), MP_ROM_PTR(&machine_pwm_type) },
