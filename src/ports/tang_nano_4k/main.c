@@ -19,8 +19,7 @@
 #include "extmod/vfs.h"
 #include "extmod/vfs_lfs.h"
 
-// Heap for MicroPython - 4KB for absolute stability in 22KB SRAM
-static char heap[4 * 1024];
+extern char _sheap, _eheap;
 static char *stack_top;
 
 int main(int argc, char **argv) {
@@ -29,7 +28,7 @@ int main(int argc, char **argv) {
     mp_stack_set_limit(2048);
 
     for (;;) {
-        gc_init(heap, heap + sizeof(heap));
+        gc_init(&_sheap, &_eheap);
         mp_init();
         mp_hal_init();
 
