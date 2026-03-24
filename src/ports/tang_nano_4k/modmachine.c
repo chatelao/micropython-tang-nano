@@ -19,28 +19,29 @@ static mp_obj_t machine_reset(void) {
 }
 MP_DEFINE_CONST_FUN_OBJ_0(machine_reset_obj, machine_reset);
 
-mp_obj_t machine_idle(void) {
+static mp_obj_t machine_idle(void) {
     mp_hal_wfi();
     return mp_const_none;
 }
 MP_DEFINE_CONST_FUN_OBJ_0(machine_idle_obj, machine_idle);
 
-mp_obj_t machine_lightsleep(size_t n_args, const mp_obj_t *args) {
+static mp_obj_t machine_lightsleep(size_t n_args, const mp_obj_t *args) {
     if (n_args == 0) {
         mp_hal_wfi();
     } else {
         mp_uint_t start = mp_hal_ticks_ms();
         mp_uint_t delay = mp_obj_get_int(args[0]);
-        while (mp_hal_ticks_ms() - start < delay) {
+        // Always yield at least once
+        do {
             mp_hal_wfi();
             mp_handle_pending(true);
-        }
+        } while (mp_hal_ticks_ms() - start < delay);
     }
     return mp_const_none;
 }
 MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(machine_lightsleep_obj, 0, 1, machine_lightsleep);
 
-mp_obj_t machine_deepsleep(size_t n_args, const mp_obj_t *args) {
+static mp_obj_t machine_deepsleep(size_t n_args, const mp_obj_t *args) {
     machine_lightsleep(n_args, args);
     return machine_reset();
 }

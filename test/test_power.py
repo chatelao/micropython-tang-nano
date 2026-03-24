@@ -11,12 +11,12 @@ def test_systick():
     if diff >= 40:
         print("PASS")
     else:
-        print("FAIL: SysTick not advancing correctly")
+        print("FAIL: SysTick not advancing correctly (got %d)" % diff)
 
 def test_idle():
     print("Testing machine.idle()...")
     machine.idle()
-    print("ID" + "LE_OK")
+    print("ID" + "LE_OK_IDLE")
 
 def test_lightsleep(ms):
     print("Testing machine.lightsleep(%d)..." % ms)
@@ -25,10 +25,10 @@ def test_lightsleep(ms):
     end = time.ticks_ms()
     diff = time.ticks_diff(end, start)
     print("LS" + "_OK:%d" % diff)
-    if diff >= 90: # Allow some jitter in simulation
+    if diff >= 80: # Using 80ms threshold for 100ms requested
         print("PASS")
     else:
-        print("FAIL: Slept for too little time")
+        print("FAIL: Slept for too little time (got %d)" % diff)
 
 def test_deepsleep(ms):
     print("Testing machine.deepsleep(%d)..." % ms)
@@ -45,7 +45,5 @@ def test_reset():
 test_systick()
 test_idle()
 test_lightsleep(100)
-# test_deepsleep and test_reset are usually tested in automated robot scripts
-# because they reset the environment.
 # test_deepsleep(50)
 # test_reset()

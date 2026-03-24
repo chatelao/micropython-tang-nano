@@ -28,9 +28,7 @@ static inline void enable_irq(mp_uint_t state) {
     __asm__ volatile ("msr primask, %0" : : "r" (state));
 }
 
-static inline void mp_hal_wfi(void) {
-    __asm__ volatile ("wfi");
-}
+#define mp_hal_wfi() __asm__ volatile ("wfi")
 
 #include "extmod/virtpin.h"
 
