@@ -29,9 +29,7 @@ static inline void enable_irq(mp_uint_t state) {
 }
 
 static inline void mp_hal_wfi(void) {
-    __asm__ volatile ("dsb\n\t"
-                      "wfi\n\t"
-                      "isb");
+    __asm__ volatile ("wfi");
 }
 
 #include "extmod/virtpin.h"

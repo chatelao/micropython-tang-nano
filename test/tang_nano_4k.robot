@@ -135,23 +135,26 @@ Verify Power Management Implementation
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
+    # Verify SysTick is advancing
+    Write Line To Uart      import time
+    Write Line To Uart      t1 = time.ticks_ms(); time.sleep_ms(50); t2 = time.ticks_ms(); print('TICK' + '_CHECK:{}'.format(time.ticks_diff(t2, t1)))
+    # Match at least 40ms to account for jitter. Regex: TICK_CHECK:(4[0-9]|[5-9][0-9]|[1-9][0-9]{2,})
+    Wait For Line On Uart   TICK_CHECK:(4[0-9]|[5-9][0-9]|[1-9][0-9]{2,})   treatAsRegex=true
+
     # Run machine.idle()
     Write Line To Uart      from machine import idle
     Write Line To Uart      idle()
-    Write Line To Uart      print('IDLE_OK')
+    Write Line To Uart      print('ID' + 'LE_OK')
     Wait For Line On Uart   IDLE_OK
 
-    # Run power management tests
-    Write Line To Uart      import time
+    # Run lightsleep test
     Write Line To Uart      from machine import lightsleep, deepsleep
-
-    # Test lightsleep(100)
-    Write Line To Uart      s = time.ticks_ms(); lightsleep(100); e = time.ticks_ms(); print('LS_OK:{}'.format(time.ticks_diff(e, s)))
+    Write Line To Uart      s = time.ticks_ms(); lightsleep(100); e = time.ticks_ms(); print('LS' + '_OK:{}'.format(time.ticks_diff(e, s)))
     # Use Regex to check that we slept at least 90ms. Match line like "LS_OK:101"
     Wait For Line On Uart   LS_OK:([9][0-9]|[1-9][0-9]+)   treatAsRegex=true
 
-    # Test deepsleep(100) - Should cause a reset and reboot
-    Write Line To Uart      deepsleep(100)
+    # Test deepsleep(50) - Should cause a reset and reboot
+    Write Line To Uart      deepsleep(50)
     # After deepsleep, the board resets, so we should see the boot message again
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
