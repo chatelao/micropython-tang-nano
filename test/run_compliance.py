@@ -3,6 +3,7 @@ import os
 import sys
 import time
 import socket
+import argparse
 
 def wait_for_port(port, timeout=60):
     start_time = time.time()
@@ -15,7 +16,7 @@ def wait_for_port(port, timeout=60):
                 return False
             time.sleep(1)
 
-def run_compliance(attach=False):
+def run_compliance(attach=False, test_filter=None):
     renode_proc = None
     root_dir = os.getcwd()
 
@@ -29,6 +30,7 @@ def run_compliance(attach=False):
     if not attach:
         # Start Renode in the background
         resc_path = os.path.join(root_dir, "test/compliance.resc")
+        # Fixed path for firmware check
         if not os.path.exists("src/ports/tang_nano_4k/build/firmware.elf"):
              print("Firmware not found, build it first.")
              sys.exit(1)
@@ -45,18 +47,26 @@ def run_compliance(attach=False):
 
     # Run micropython tests
     test_dir = os.path.join(root_dir, "src/lib/micropython/tests")
-    run_tests_py = os.path.join(test_dir, "run-tests.py")
 
     # Use socket_bridge.py as the device executor
     bridge_script = os.path.join(root_dir, "test/socket_bridge.py")
     device_cmd = f"python3 {bridge_script}"
 
+    # Exclude float and net tests because they are disabled in mpconfigport.h
+    # and not supported by our current port's hardware configuration.
+    exclude_tests = ["-e", "float", "-e", "net"]
+
     # Run tests from the test directory
     print(f"Running tests in {test_dir}...")
+    # Use -j1 to avoid multiple concurrent connections to the same Renode port
     cmd = [
         "python3", "run-tests.py",
+        "-j", "1",
         "-t", f"exec:{device_cmd}"
-    ]
+    ] + exclude_tests
+
+    if test_filter:
+        cmd.extend(test_filter)
 
     with open(os.path.join(root_dir, "compliance_output.log"), "w") as out:
         result = subprocess.run(cmd, stdout=out, stderr=subprocess.STDOUT, text=True, cwd=test_dir)
@@ -81,5 +91,9 @@ def run_compliance(attach=False):
     sys.exit(0)
 
 if __name__ == "__main__":
-    attach = "--attach" in sys.argv
-    run_compliance(attach=attach)
+    parser = argparse.ArgumentParser(description="Run MicroPython compliance tests.")
+    parser.add_argument("--attach", action="store_true", help="Attach to an existing Renode instance.")
+    parser.add_argument("tests", nargs="*", help="Specific tests to run.")
+    args = parser.parse_args()
+
+    run_compliance(attach=args.attach, test_filter=args.tests)

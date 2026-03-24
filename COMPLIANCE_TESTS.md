@@ -1,8 +1,9 @@
 # MicroPython Compliance Test Results
 
 ```
-b''
-error: could not detect test instance
-could not enter raw repl
+platform=minimal
+pass  basics/sys1.py
+1 tests performed (11 individual testcases)
+1 tests passed
 
 ```

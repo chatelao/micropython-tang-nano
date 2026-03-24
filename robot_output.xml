@@ -1,110 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Rebot 6.1 (Python 3.12.13 on linux)" generated="20260324 12:50:29.011" rpa="false" schemaversion="4">
-<suite id="s1" name="Test Suite" source="/app/test/test_power.robot">
-<kw name="Setup" library="renode-keywords" type="SETUP">
-<msg timestamp="20260324 12:50:12.318" level="TRACE">Arguments: [  ]</msg>
-<kw name="Evaluate" library="BuiltIn">
+<robot generator="Rebot 7.4.2 (Python 3.12.13 on linux)" generated="2026-03-24T21:27:25.027854" rpa="false" schemaversion="5">
+<suite id="s1" name="Test Suite" source="/app/test/tang_nano_4k.robot">
+<kw name="Setup" owner="renode-keywords" type="SETUP">
+<msg time="2026-03-24T21:27:18.524251" level="TRACE">Arguments: [  ]</msg>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2026-03-24T21:27:18.527519" level="TRACE">Arguments: [ 'platform.system()' | modules='platform' ]</msg>
+<msg time="2026-03-24T21:27:18.528148" level="TRACE">Return: 'Linux'</msg>
+<msg time="2026-03-24T21:27:18.528419" level="INFO">${SYSTEM} = Linux</msg>
 <var>${SYSTEM}</var>
 <arg>platform.system()</arg>
 <arg>modules=platform</arg>
 <doc>Evaluates the given expression in Python and returns the result.</doc>
-<msg timestamp="20260324 12:50:12.319" level="TRACE">Arguments: [ 'platform.system()' | modules='platform' ]</msg>
-<msg timestamp="20260324 12:50:12.319" level="TRACE">Return: 'Linux'</msg>
-<msg timestamp="20260324 12:50:12.319" level="INFO">${SYSTEM} = Linux</msg>
-<status status="PASS" starttime="20260324 12:50:12.319" endtime="20260324 12:50:12.319"/>
+<status status="PASS" start="2026-03-24T21:27:18.525947" elapsed="0.002577"/>
 </kw>
-<kw name="Set Variable If" library="BuiltIn">
+<kw name="Set Variable If" owner="BuiltIn">
+<msg time="2026-03-24T21:27:18.530372" level="TRACE">Arguments: [ 'not True and False' | 'Debug' | '${CONFIGURATION}' ]</msg>
+<msg time="2026-03-24T21:27:18.530796" level="TRACE">Return: 'Release'</msg>
+<msg time="2026-03-24T21:27:18.530992" level="INFO">${CONFIGURATION} = Release</msg>
 <var>${CONFIGURATION}</var>
 <arg>not ${SKIP_RUNNING_SERVER} and ${SERVER_REMOTE_DEBUG}</arg>
 <arg>Debug</arg>
 <arg>${CONFIGURATION}</arg>
 <doc>Sets variable based on the given condition.</doc>
-<msg timestamp="20260324 12:50:12.320" level="TRACE">Arguments: [ 'not True and False' | 'Debug' | '${CONFIGURATION}' ]</msg>
-<msg timestamp="20260324 12:50:12.320" level="TRACE">Return: 'Release'</msg>
-<msg timestamp="20260324 12:50:12.320" level="INFO">${CONFIGURATION} = Release</msg>
-<status status="PASS" starttime="20260324 12:50:12.319" endtime="20260324 12:50:12.320"/>
+<status status="PASS" start="2026-03-24T21:27:18.529145" elapsed="0.001919"/>
 </kw>
-<kw name="Create List" library="BuiltIn">
+<kw name="Create List" owner="BuiltIn">
+<msg time="2026-03-24T21:27:18.532181" level="TRACE">Arguments: [ '--robot-server-port' | '49152' | '--hide-log' ]</msg>
+<msg time="2026-03-24T21:27:18.532595" level="TRACE">Return: ['--robot-server-port', '49152', '--hide-log']</msg>
+<msg time="2026-03-24T21:27:18.533270" level="INFO">@{PARAMS} = [ --robot-server-port | 49152 | --hide-log ]</msg>
 <var>@{PARAMS}</var>
 <arg>--robot-server-port</arg>
 <arg>${PORT_NUMBER}</arg>
 <arg>--hide-log</arg>
 <doc>Returns a list containing given items.</doc>
-<msg timestamp="20260324 12:50:12.320" level="TRACE">Arguments: [ '--robot-server-port' | '49153' | '--hide-log' ]</msg>
-<msg timestamp="20260324 12:50:12.320" level="TRACE">Return: ['--robot-server-port', '49153', '--hide-log']</msg>
-<msg timestamp="20260324 12:50:12.321" level="INFO">@{PARAMS} = [ --robot-server-port | 49153 | --hide-log ]</msg>
-<status status="PASS" starttime="20260324 12:50:12.320" endtime="20260324 12:50:12.321"/>
+<status status="PASS" start="2026-03-24T21:27:18.531439" elapsed="0.001925"/>
 </kw>
 <if>
 <branch type="IF" condition="${DISABLE_GUI}">
-<kw name="Insert Into List" library="Collections">
+<kw name="Insert Into List" owner="Collections">
 <arg>${PARAMS}</arg>
 <arg>0</arg>
 <arg>--disable-gui</arg>
 <doc>Inserts ``value`` into ``list`` to the position specified with ``index``.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:12.321" endtime="20260324 12:50:12.321"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.534169" elapsed="0.000099"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:12.321" endtime="20260324 12:50:12.321"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.533617" elapsed="0.000781"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:12.321" endtime="20260324 12:50:12.321"/>
+<status status="PASS" start="2026-03-24T21:27:18.533548" elapsed="0.000947"/>
 </if>
 <if>
 <branch type="IF" condition="not ${SKIP_RUNNING_SERVER}">
-<kw name="File Should Exist" library="OperatingSystem">
+<kw name="File Should Exist" owner="OperatingSystem">
 <arg>${DIRECTORY}/${BINARY_NAME}</arg>
 <arg>msg=Robot Framework remote server binary not found (${DIRECTORY}/${BINARY_NAME}). Did you forget to build it in ${CONFIGURATION} configuration?</arg>
 <doc>Fails unless the given ``path`` points to an existing file.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:12.321" endtime="20260324 12:50:12.321"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.535351" elapsed="0.000107"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:12.321" endtime="20260324 12:50:12.321"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.534687" elapsed="0.000893"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:12.321" endtime="20260324 12:50:12.321"/>
+<status status="PASS" start="2026-03-24T21:27:18.534622" elapsed="0.001009"/>
 </if>
 <if>
 <branch type="IF" condition="not ${SKIP_RUNNING_SERVER} and not ${SERVER_REMOTE_DEBUG} and not '${SYSTEM}' == 'Windows' and not ${NET_PLATFORM}">
-<kw name="Start Process" library="Process">
+<kw name="Start Process" owner="Process">
 <arg>mono</arg>
 <arg>${BINARY_NAME}</arg>
 <arg>@{PARAMS}</arg>
 <arg>cwd=${DIRECTORY}</arg>
 <doc>Starts a new process on background.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:12.322" endtime="20260324 12:50:12.322"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.536688" elapsed="0.000058"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:12.322" endtime="20260324 12:50:12.322"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.535824" elapsed="0.001090"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:12.321" endtime="20260324 12:50:12.322"/>
+<status status="PASS" start="2026-03-24T21:27:18.535777" elapsed="0.001211"/>
 </if>
 <if>
 <branch type="IF" condition="not ${SKIP_RUNNING_SERVER} and not ${SERVER_REMOTE_DEBUG} and '${SYSTEM}' == 'Windows'">
-<kw name="Start Process" library="Process">
+<kw name="Start Process" owner="Process">
 <arg>${BINARY_NAME}</arg>
 <arg>@{PARAMS}</arg>
 <arg>cwd=${DIRECTORY}</arg>
 <arg>shell=true</arg>
 <doc>Starts a new process on background.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:12.322" endtime="20260324 12:50:12.322"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.537766" elapsed="0.000032"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:12.322" endtime="20260324 12:50:12.322"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.537215" elapsed="0.000650"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:12.322" endtime="20260324 12:50:12.323"/>
+<status status="PASS" start="2026-03-24T21:27:18.537157" elapsed="0.000781"/>
 </if>
 <if>
 <branch type="IF" condition="not ${SKIP_RUNNING_SERVER} and not ${SERVER_REMOTE_DEBUG} and ${NET_PLATFORM}">
-<kw name="Start Process" library="Process">
+<kw name="Start Process" owner="Process">
 <arg>dotnet ${BINARY_NAME}</arg>
 <arg>@{PARAMS}</arg>
 <arg>cwd=${DIRECTORY}</arg>
 <arg>shell=true</arg>
 <doc>Starts a new process on background.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:12.323" endtime="20260324 12:50:12.323"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.538687" elapsed="0.000052"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:12.323" endtime="20260324 12:50:12.323"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.538148" elapsed="0.000696"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:12.323" endtime="20260324 12:50:12.323"/>
+<status status="PASS" start="2026-03-24T21:27:18.538050" elapsed="0.000859"/>
 </if>
 <if>
 <branch type="IF" condition="not ${SKIP_RUNNING_SERVER} and ${SERVER_REMOTE_DEBUG} and not '${SYSTEM}' == 'Windows' and not ${NET_PLATFORM}">
-<kw name="Start Process" library="Process">
+<kw name="Start Process" owner="Process">
 <arg>mono</arg>
 <arg>--debug</arg>
 <arg>--debugger-agent\=transport\=dt_socket,address\=0.0.0.0:${SERVER_REMOTE_PORT},server\=y,suspend\=${SERVER_REMOTE_SUSPEND}</arg>
@@ -112,701 +112,359 @@
 <arg>@{PARAMS}</arg>
 <arg>cwd=${DIRECTORY}</arg>
 <doc>Starts a new process on background.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:12.323" endtime="20260324 12:50:12.323"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.539754" elapsed="0.000044"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:12.323" endtime="20260324 12:50:12.323"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.539055" elapsed="0.000852"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:12.323" endtime="20260324 12:50:12.323"/>
+<status status="PASS" start="2026-03-24T21:27:18.539020" elapsed="0.000982"/>
 </if>
 <if>
 <branch type="IF" condition="not ${SKIP_RUNNING_SERVER} and ${SERVER_REMOTE_DEBUG} and '${SYSTEM}' == 'Windows'">
-<kw name="Fatal Error" library="BuiltIn">
+<kw name="Fatal Error" owner="BuiltIn">
 <arg>Windows doesn't support server remote debug option.</arg>
 <doc>Stops the whole test execution.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:12.324" endtime="20260324 12:50:12.324"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.540986" elapsed="0.000050"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:12.324" endtime="20260324 12:50:12.324"/>
+<status status="NOT RUN" start="2026-03-24T21:27:18.540261" elapsed="0.000924"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:12.324" endtime="20260324 12:50:12.324"/>
+<status status="PASS" start="2026-03-24T21:27:18.540180" elapsed="0.001089"/>
 </if>
 <if>
 <branch type="IF" condition="not '${SYSTEM}' == 'Windows'">
-<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<msg time="2026-03-24T21:27:18.542854" level="TRACE">Arguments: [ '60s' | '1s' | 'Import Library' | 'Remote' | 'http://127.0.0.1:${PORT_NUMBER}/' ]</msg>
+<kw name="Import Library" owner="BuiltIn">
+<msg time="2026-03-24T21:27:18.544533" level="TRACE">Arguments: [ 'Remote' | 'http://127.0.0.1:${PORT_NUMBER}/' ]</msg>
+<msg time="2026-03-24T21:27:19.475819" level="TRACE">Return: None</msg>
+<arg>Remote</arg>
+<arg>http://127.0.0.1:${PORT_NUMBER}/</arg>
+<doc>Imports a library with the given name and optional arguments.</doc>
+<status status="PASS" start="2026-03-24T21:27:18.543710" elapsed="0.932341"/>
+</kw>
+<msg time="2026-03-24T21:27:19.476207" level="TRACE">Return: None</msg>
 <arg>60s</arg>
 <arg>1s</arg>
 <arg>Import Library</arg>
 <arg>Remote</arg>
 <arg>http://127.0.0.1:${PORT_NUMBER}/</arg>
 <doc>Runs the specified keyword and retries if it fails.</doc>
-<msg timestamp="20260324 12:50:12.325" level="TRACE">Arguments: [ '60s' | '1s' | 'Import Library' | 'Remote' | 'http://127.0.0.1:${PORT_NUMBER}/' ]</msg>
-<kw name="Import Library" library="BuiltIn">
-<arg>Remote</arg>
-<arg>http://127.0.0.1:${PORT_NUMBER}/</arg>
-<doc>Imports a library with the given name and optional arguments.</doc>
-<msg timestamp="20260324 12:50:12.325" level="TRACE">Arguments: [ 'Remote' | 'http://127.0.0.1:${PORT_NUMBER}/' ]</msg>
-<msg timestamp="20260324 12:50:12.747" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:12.325" endtime="20260324 12:50:12.747"/>
+<status status="PASS" start="2026-03-24T21:27:18.542007" elapsed="0.934300"/>
 </kw>
-<msg timestamp="20260324 12:50:12.747" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:12.324" endtime="20260324 12:50:12.747"/>
-</kw>
-<status status="PASS" starttime="20260324 12:50:12.324" endtime="20260324 12:50:12.747"/>
+<status status="PASS" start="2026-03-24T21:27:18.541459" elapsed="0.934942"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:12.324" endtime="20260324 12:50:12.747"/>
+<status status="PASS" start="2026-03-24T21:27:18.541404" elapsed="0.935078"/>
 </if>
 <if>
 <branch type="IF" condition="'${SYSTEM}' == 'Windows'">
-<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
 <arg>60s</arg>
 <arg>1s</arg>
 <arg>Import Library</arg>
 <arg>Remote</arg>
 <arg>http://localhost:${PORT_NUMBER}/</arg>
 <doc>Runs the specified keyword and retries if it fails.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:12.747" endtime="20260324 12:50:12.748"/>
+<status status="NOT RUN" start="2026-03-24T21:27:19.477862" elapsed="0.000094"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:12.747" endtime="20260324 12:50:12.748"/>
+<status status="NOT RUN" start="2026-03-24T21:27:19.476687" elapsed="0.001444"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:12.747" endtime="20260324 12:50:12.748"/>
+<status status="PASS" start="2026-03-24T21:27:19.476613" elapsed="0.001589"/>
 </if>
-<kw name="Setup Renode" library="renode-keywords">
-<msg timestamp="20260324 12:50:12.748" level="TRACE">Arguments: [  ]</msg>
-<kw name="Set Default Uart Timeout" library="Remote">
+<kw name="Setup Renode" owner="renode-keywords">
+<msg time="2026-03-24T21:27:19.479803" level="TRACE">Arguments: [  ]</msg>
+<kw name="Set Default Uart Timeout" owner="Remote">
+<msg time="2026-03-24T21:27:19.480602" level="TRACE">Arguments: [ '8' ]</msg>
+<msg time="2026-03-24T21:27:19.533900" level="TRACE">Return: ''</msg>
 <arg>${DEFAULT_UART_TIMEOUT}</arg>
-<msg timestamp="20260324 12:50:12.748" level="TRACE">Arguments: [ '8' ]</msg>
-<msg timestamp="20260324 12:50:12.780" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:12.748" endtime="20260324 12:50:12.780"/>
+<status status="PASS" start="2026-03-24T21:27:19.480347" elapsed="0.053807"/>
 </kw>
 <if>
 <branch type="IF" condition="${SAVE_LOGS}">
-<kw name="Enable Logging To Cache" library="Remote">
-<msg timestamp="20260324 12:50:12.781" level="TRACE">Arguments: [  ]</msg>
-<msg timestamp="20260324 12:50:12.788" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:12.781" endtime="20260324 12:50:12.788"/>
+<kw name="Enable Logging To Cache" owner="Remote">
+<msg time="2026-03-24T21:27:19.535210" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:19.546763" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:19.535049" elapsed="0.011901"/>
 </kw>
-<status status="PASS" starttime="20260324 12:50:12.781" endtime="20260324 12:50:12.788"/>
+<status status="PASS" start="2026-03-24T21:27:19.534410" elapsed="0.012695"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:12.781" endtime="20260324 12:50:12.788"/>
+<status status="PASS" start="2026-03-24T21:27:19.534324" elapsed="0.012887"/>
 </if>
-<kw name="Set Variable" library="BuiltIn">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-24T21:27:19.548183" level="TRACE">Arguments: [ 'abcdefghijklmnopqrstuvwxyz01234567890_-' ]</msg>
+<msg time="2026-03-24T21:27:19.548385" level="TRACE">Return: 'abcdefghijklmnopqrstuvwxyz01234567890_-'</msg>
+<msg time="2026-03-24T21:27:19.548582" level="INFO">${allowed_chars} = abcdefghijklmnopqrstuvwxyz01234567890_-</msg>
 <var>${allowed_chars}</var>
 <arg>abcdefghijklmnopqrstuvwxyz01234567890_-</arg>
 <doc>Returns the given values which can then be assigned to a variables.</doc>
-<msg timestamp="20260324 12:50:12.789" level="TRACE">Arguments: [ 'abcdefghijklmnopqrstuvwxyz01234567890_-' ]</msg>
-<msg timestamp="20260324 12:50:12.789" level="TRACE">Return: 'abcdefghijklmnopqrstuvwxyz01234567890_-'</msg>
-<msg timestamp="20260324 12:50:12.789" level="INFO">${allowed_chars} = abcdefghijklmnopqrstuvwxyz01234567890_-</msg>
-<status status="PASS" starttime="20260324 12:50:12.789" endtime="20260324 12:50:12.789"/>
+<status status="PASS" start="2026-03-24T21:27:19.547538" elapsed="0.001098"/>
 </kw>
-<kw name="Convert To Lower Case" library="String">
+<kw name="Convert To Lower Case" owner="String">
+<msg time="2026-03-24T21:27:19.550223" level="TRACE">Arguments: [ 'tang_nano_4k' ]</msg>
+<msg time="2026-03-24T21:27:19.550417" level="TRACE">Return: 'tang_nano_4k'</msg>
+<msg time="2026-03-24T21:27:19.550578" level="INFO">${metrics_fname} = tang_nano_4k</msg>
 <var>${metrics_fname}</var>
 <arg>${SUITE_NAME}</arg>
 <doc>Converts string to lower case.</doc>
-<msg timestamp="20260324 12:50:12.789" level="TRACE">Arguments: [ 'test_power' ]</msg>
-<msg timestamp="20260324 12:50:12.789" level="TRACE">Return: 'test_power'</msg>
-<msg timestamp="20260324 12:50:12.789" level="INFO">${metrics_fname} = test_power</msg>
-<status status="PASS" starttime="20260324 12:50:12.789" endtime="20260324 12:50:12.789"/>
+<status status="PASS" start="2026-03-24T21:27:19.549769" elapsed="0.000875"/>
 </kw>
-<kw name="Replace String" library="String">
+<kw name="Replace String" owner="String">
+<msg time="2026-03-24T21:27:19.551371" level="TRACE">Arguments: [ 'tang_nano_4k' | ' ' | '_' ]</msg>
+<msg time="2026-03-24T21:27:19.551622" level="TRACE">Return: 'tang_nano_4k'</msg>
+<msg time="2026-03-24T21:27:19.551806" level="INFO">${metrics_fname} = tang_nano_4k</msg>
 <var>${metrics_fname}</var>
 <arg>${metrics_fname}</arg>
 <arg>${SPACE}</arg>
 <arg>_</arg>
 <doc>Replaces ``search_for`` in the given ``string`` with ``replace_with``.</doc>
-<msg timestamp="20260324 12:50:12.790" level="TRACE">Arguments: [ 'test_power' | ' ' | '_' ]</msg>
-<msg timestamp="20260324 12:50:12.790" level="TRACE">Return: 'test_power'</msg>
-<msg timestamp="20260324 12:50:12.790" level="INFO">${metrics_fname} = test_power</msg>
-<status status="PASS" starttime="20260324 12:50:12.789" endtime="20260324 12:50:12.790"/>
+<status status="PASS" start="2026-03-24T21:27:19.550931" elapsed="0.000920"/>
 </kw>
-<kw name="Replace String Using Regexp" library="String">
+<kw name="Replace String Using Regexp" owner="String">
+<msg time="2026-03-24T21:27:19.553699" level="TRACE">Arguments: [ 'tang_nano_4k' | '[^abcdefghijklmnopqrstuvwxyz01234567890_-]+' | '' ]</msg>
+<msg time="2026-03-24T21:27:19.554204" level="TRACE">Return: 'tang_nano_4k'</msg>
+<msg time="2026-03-24T21:27:19.554382" level="INFO">${metrics_fname} = tang_nano_4k</msg>
 <var>${metrics_fname}</var>
 <arg>${metrics_fname}</arg>
 <arg>[^${allowed_chars}]+</arg>
 <arg>${EMPTY}</arg>
 <doc>Replaces ``pattern`` in the given ``string`` with ``replace_with``.</doc>
-<msg timestamp="20260324 12:50:12.791" level="TRACE">Arguments: [ 'test_power' | '[^abcdefghijklmnopqrstuvwxyz01234567890_-]+' | '' ]</msg>
-<msg timestamp="20260324 12:50:12.791" level="TRACE">Return: 'test_power'</msg>
-<msg timestamp="20260324 12:50:12.791" level="INFO">${metrics_fname} = test_power</msg>
-<status status="PASS" starttime="20260324 12:50:12.790" endtime="20260324 12:50:12.791"/>
+<status status="PASS" start="2026-03-24T21:27:19.552176" elapsed="0.002268"/>
 </kw>
-<kw name="Join Path" library="OperatingSystem">
+<kw name="Join Path" owner="OperatingSystem">
+<msg time="2026-03-24T21:27:19.555209" level="TRACE">Arguments: [ '/app/' | 'profiler-tang_nano_4k' ]</msg>
+<msg time="2026-03-24T21:27:19.555422" level="TRACE">Return: '/app/profiler-tang_nano_4k'</msg>
+<msg time="2026-03-24T21:27:19.555601" level="INFO">${metrics_path} = /app/profiler-tang_nano_4k</msg>
 <var>${metrics_path}</var>
 <arg>${RESULTS_DIRECTORY}</arg>
 <arg>profiler-${metrics_fname}</arg>
 <doc>Joins the given path part(s) to the given base path.</doc>
-<msg timestamp="20260324 12:50:12.791" level="TRACE">Arguments: [ '/app/' | 'profiler-test_power' ]</msg>
-<msg timestamp="20260324 12:50:12.792" level="TRACE">Return: '/app/profiler-test_power'</msg>
-<msg timestamp="20260324 12:50:12.792" level="INFO">${metrics_path} = /app/profiler-test_power</msg>
-<status status="PASS" starttime="20260324 12:50:12.791" endtime="20260324 12:50:12.792"/>
+<status status="PASS" start="2026-03-24T21:27:19.554739" elapsed="0.000925"/>
 </kw>
 <if>
 <branch type="IF" condition="${CREATE_EXECUTION_METRICS}">
-<kw name="Execute Command" library="Remote">
+<kw name="Execute Command" owner="Remote">
 <arg>EnableProfilerGlobally "${metrics_path}"</arg>
-<status status="NOT RUN" starttime="20260324 12:50:12.792" endtime="20260324 12:50:12.793"/>
+<status status="NOT RUN" start="2026-03-24T21:27:19.556369" elapsed="0.000056"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:12.792" endtime="20260324 12:50:12.793"/>
+<status status="NOT RUN" start="2026-03-24T21:27:19.555870" elapsed="0.000634"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:12.792" endtime="20260324 12:50:12.793"/>
+<status status="PASS" start="2026-03-24T21:27:19.555811" elapsed="0.000768"/>
 </if>
-<kw name="Reset Emulation" library="Remote">
-<msg timestamp="20260324 12:50:12.793" level="TRACE">Arguments: [  ]</msg>
-<msg timestamp="20260324 12:50:12.815" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:12.793" endtime="20260324 12:50:12.815"/>
+<kw name="Reset Emulation" owner="Remote">
+<msg time="2026-03-24T21:27:19.557087" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:19.595471" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:19.556911" elapsed="0.038846"/>
 </kw>
-<msg timestamp="20260324 12:50:12.816" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:12.748" endtime="20260324 12:50:12.816"/>
+<msg time="2026-03-24T21:27:19.596074" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:19.479521" elapsed="0.116723"/>
 </kw>
-<msg timestamp="20260324 12:50:12.816" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:12.318" endtime="20260324 12:50:12.816"/>
+<msg time="2026-03-24T21:27:19.596358" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:18.523787" elapsed="1.072651"/>
 </kw>
-<test id="s1-t1" name="Verify Power Management" line="14">
-<kw name="Reset Emulation" library="Remote" type="SETUP">
-<msg timestamp="20260324 12:50:12.817" level="TRACE">Arguments: [  ]</msg>
-<msg timestamp="20260324 12:50:12.821" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:12.816" endtime="20260324 12:50:12.821"/>
+<test id="s1-t1" name="Should Boot Successfully and Interaction with REPL" line="15">
+<kw name="Reset Emulation" owner="Remote" type="SETUP">
+<msg time="2026-03-24T21:27:19.602051" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:19.609654" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:19.601875" elapsed="0.007969"/>
 </kw>
-<kw name="Execute Command" library="Remote">
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:19.610651" level="TRACE">Arguments: [ '$repl = @/app/test/tang_nano_4k.repl' ]</msg>
+<msg time="2026-03-24T21:27:19.668518" level="TRACE">Return: ''</msg>
 <arg>$repl = @${REPL}</arg>
-<msg timestamp="20260324 12:50:12.822" level="TRACE">Arguments: [ '$repl = @/app/test/tang_nano_4k.repl' ]</msg>
-<msg timestamp="20260324 12:50:12.859" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:12.822" endtime="20260324 12:50:12.859"/>
+<status status="PASS" start="2026-03-24T21:27:19.610273" elapsed="0.058444"/>
 </kw>
-<kw name="Execute Command" library="Remote">
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:19.669784" level="TRACE">Arguments: [ '$bin = @/app/test/../src/ports/tang_nano_4k/build/firmware.elf' ]</msg>
+<msg time="2026-03-24T21:27:19.674637" level="TRACE">Return: ''</msg>
 <arg>$bin = @${BIN}</arg>
-<msg timestamp="20260324 12:50:12.860" level="TRACE">Arguments: [ '$bin = @/app/test/../src/ports/tang_nano_4k/build/firmware.elf' ]</msg>
-<msg timestamp="20260324 12:50:12.863" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:12.860" endtime="20260324 12:50:12.863"/>
+<status status="PASS" start="2026-03-24T21:27:19.669295" elapsed="0.005506"/>
 </kw>
-<kw name="Execute Command" library="Remote">
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:19.675487" level="TRACE">Arguments: [ 'include @/app/test/tang_nano_4k.resc' ]</msg>
+<msg time="2026-03-24T21:27:21.939217" level="TRACE">Return: ''</msg>
 <arg>include @${RESC}</arg>
-<msg timestamp="20260324 12:50:12.863" level="TRACE">Arguments: [ 'include @/app/test/tang_nano_4k.resc' ]</msg>
-<msg timestamp="20260324 12:50:15.120" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:12.863" endtime="20260324 12:50:15.120"/>
+<status status="PASS" start="2026-03-24T21:27:19.675178" elapsed="2.264179"/>
 </kw>
-<kw name="Execute Command" library="Remote">
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:21.939737" level="TRACE">Arguments: [ 'sysbus.cpu VectorTableOffset 0x60000000' ]</msg>
+<msg time="2026-03-24T21:27:21.961366" level="TRACE">Return: ''</msg>
 <arg>sysbus.cpu VectorTableOffset 0x60000000</arg>
-<msg timestamp="20260324 12:50:15.121" level="TRACE">Arguments: [ 'sysbus.cpu VectorTableOffset 0x60000000' ]</msg>
-<msg timestamp="20260324 12:50:15.145" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:15.120" endtime="20260324 12:50:15.145"/>
+<status status="PASS" start="2026-03-24T21:27:21.939602" elapsed="0.022003"/>
 </kw>
-<kw name="Execute Command" library="Remote">
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:21.962228" level="TRACE">Arguments: [ 'sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`' ]</msg>
+<msg time="2026-03-24T21:27:22.000264" level="TRACE">Return: ''</msg>
 <arg>sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`</arg>
-<msg timestamp="20260324 12:50:15.145" level="TRACE">Arguments: [ 'sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`' ]</msg>
-<msg timestamp="20260324 12:50:15.180" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:15.145" endtime="20260324 12:50:15.180"/>
+<status status="PASS" start="2026-03-24T21:27:21.962005" elapsed="0.038399"/>
 </kw>
-<kw name="Execute Command" library="Remote">
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.000881" level="TRACE">Arguments: [ 'sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`' ]</msg>
+<msg time="2026-03-24T21:27:22.007313" level="TRACE">Return: ''</msg>
 <arg>sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`</arg>
-<msg timestamp="20260324 12:50:15.181" level="TRACE">Arguments: [ 'sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`' ]</msg>
-<msg timestamp="20260324 12:50:15.187" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:15.181" endtime="20260324 12:50:15.187"/>
+<status status="PASS" start="2026-03-24T21:27:22.000641" elapsed="0.006789"/>
 </kw>
-<kw name="Create Terminal Tester" library="Remote">
+<kw name="Create Terminal Tester" owner="Remote">
+<msg time="2026-03-24T21:27:22.007891" level="TRACE">Arguments: [ 'sysbus.uart0' ]</msg>
+<msg time="2026-03-24T21:27:22.019299" level="TRACE">Return: 0</msg>
 <arg>${UART}</arg>
-<msg timestamp="20260324 12:50:15.187" level="TRACE">Arguments: [ 'sysbus.uart0' ]</msg>
-<msg timestamp="20260324 12:50:15.198" level="TRACE">Return: 0</msg>
-<status status="PASS" starttime="20260324 12:50:15.187" endtime="20260324 12:50:15.198"/>
+<status status="PASS" start="2026-03-24T21:27:22.007660" elapsed="0.011849"/>
 </kw>
-<kw name="Start Emulation" library="Remote">
-<msg timestamp="20260324 12:50:15.198" level="TRACE">Arguments: [  ]</msg>
-<msg timestamp="20260324 12:50:15.320" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:15.198" endtime="20260324 12:50:15.320"/>
+<kw name="Start Emulation" owner="Remote">
+<msg time="2026-03-24T21:27:22.020045" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:22.136502" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:22.019860" elapsed="0.116780"/>
 </kw>
-<kw name="Wait For Line On Uart" library="Remote">
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.137214" level="TRACE">Arguments: [ 'MicroPython started on Tang Nano 4K' ]</msg>
+<msg time="2026-03-24T21:27:22.152513" level="TRACE">Return: {'Line': 'MicroPython started on Tang Nano 4K',
+ 'Timestamp': 0.129,
+ 'Groups': [],
+ 'IsFailingString': False}</msg>
 <arg>MicroPython started on Tang Nano 4K</arg>
-<msg timestamp="20260324 12:50:15.320" level="TRACE">Arguments: [ 'MicroPython started on Tang Nano 4K' ]</msg>
-<msg timestamp="20260324 12:50:15.334" level="TRACE">Return: {'Groups': [],
- 'IsFailingString': False,
- 'Line': 'MicroPython started on Tang Nano 4K',
- 'Timestamp': 0.2}</msg>
-<status status="PASS" starttime="20260324 12:50:15.320" endtime="20260324 12:50:15.335"/>
+<status status="PASS" start="2026-03-24T21:27:22.137065" elapsed="0.015997"/>
 </kw>
-<kw name="Wait For Line On Uart" library="Remote">
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.153469" level="TRACE">Arguments: [ 'Tang Nano 4K with GW1NSR-LV4C' ]</msg>
+<msg time="2026-03-24T21:27:22.157453" level="TRACE">Return: {'Line': 'Tang Nano 4K with GW1NSR-LV4C',
+ 'Timestamp': 0.129,
+ 'Groups': [],
+ 'IsFailingString': False}</msg>
 <arg>Tang Nano 4K with GW1NSR-LV4C</arg>
-<msg timestamp="20260324 12:50:15.335" level="TRACE">Arguments: [ 'Tang Nano 4K with GW1NSR-LV4C' ]</msg>
-<msg timestamp="20260324 12:50:15.339" level="TRACE">Return: {'Groups': [],
- 'IsFailingString': False,
- 'Line': 'Tang Nano 4K with GW1NSR-LV4C',
- 'Timestamp': 0.2}</msg>
-<status status="PASS" starttime="20260324 12:50:15.335" endtime="20260324 12:50:15.339"/>
+<status status="PASS" start="2026-03-24T21:27:22.153348" elapsed="0.004271"/>
 </kw>
-<kw name="Sleep" library="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20260324 12:50:15.340" level="TRACE">Arguments: [ '2s' ]</msg>
-<msg timestamp="20260324 12:50:17.340" level="INFO">Slept 2 seconds</msg>
-<msg timestamp="20260324 12:50:17.340" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:15.339" endtime="20260324 12:50:17.340"/>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.157999" level="TRACE">Arguments: [ 'print("Hello from external Flash")' ]</msg>
+<msg time="2026-03-24T21:27:22.176660" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>print("Hello from external Flash")</arg>
+<status status="PASS" start="2026-03-24T21:27:22.157877" elapsed="0.019021"/>
 </kw>
-<kw name="Write Line To Uart" library="Remote">
-<arg>import machine; print("MOD_O" + "K")</arg>
-<msg timestamp="20260324 12:50:17.341" level="TRACE">Arguments: [ 'import machine; print("MOD_O" + "K")' ]</msg>
-<msg timestamp="20260324 12:50:17.364" level="TRACE">Return: {'Groups': [], 'IsFailingString': False, 'Line': '', 'Timestamp': 0.0}</msg>
-<status status="PASS" starttime="20260324 12:50:17.340" endtime="20260324 12:50:17.364"/>
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.177274" level="TRACE">Arguments: [ 'Hello from external Flash' ]</msg>
+<msg time="2026-03-24T21:27:22.186259" level="TRACE">Return: {'Line': 'Hello from external Flash',
+ 'Timestamp': 7.21,
+ 'Groups': [],
+ 'IsFailingString': False}</msg>
+<arg>Hello from external Flash</arg>
+<status status="PASS" start="2026-03-24T21:27:22.177140" elapsed="0.009293"/>
 </kw>
-<kw name="Wait For Line On Uart" library="Remote">
-<arg>MOD_OK</arg>
-<msg timestamp="20260324 12:50:17.364" level="TRACE">Arguments: [ 'MOD_OK' ]</msg>
-<msg timestamp="20260324 12:50:17.379" level="TRACE">Return: {'Groups': [], 'IsFailingString': False, 'Line': 'MOD_OK', 'Timestamp': 361.9}</msg>
-<status status="PASS" starttime="20260324 12:50:17.364" endtime="20260324 12:50:17.379"/>
-</kw>
-<kw name="Write Line To Uart" library="Remote">
-<arg>import time; print("TIME_O" + "K")</arg>
-<msg timestamp="20260324 12:50:17.380" level="TRACE">Arguments: [ 'import time; print("TIME_O" + "K")' ]</msg>
-<msg timestamp="20260324 12:50:17.386" level="TRACE">Return: {'Groups': [], 'IsFailingString': False, 'Line': '', 'Timestamp': 0.0}</msg>
-<status status="PASS" starttime="20260324 12:50:17.379" endtime="20260324 12:50:17.387"/>
-</kw>
-<kw name="Wait For Line On Uart" library="Remote">
-<arg>TIME_OK</arg>
-<msg timestamp="20260324 12:50:17.387" level="TRACE">Arguments: [ 'TIME_OK' ]</msg>
-<msg timestamp="20260324 12:50:17.395" level="TRACE">Return: {'Groups': [], 'IsFailingString': False, 'Line': 'TIME_OK', 'Timestamp': 364.4}</msg>
-<status status="PASS" starttime="20260324 12:50:17.387" endtime="20260324 12:50:17.395"/>
-</kw>
-<kw name="Write Line To Uart" library="Remote">
-<arg>machine.idle(); print("ID" + "LE_OK")</arg>
-<msg timestamp="20260324 12:50:17.396" level="TRACE">Arguments: [ 'machine.idle(); print("ID" + "LE_OK")' ]</msg>
-<msg timestamp="20260324 12:50:17.403" level="TRACE">Return: {'Groups': [], 'IsFailingString': False, 'Line': '', 'Timestamp': 0.0}</msg>
-<status status="PASS" starttime="20260324 12:50:17.395" endtime="20260324 12:50:17.403"/>
-</kw>
-<kw name="Wait For Line On Uart" library="Remote">
-<arg>IDLE_OK</arg>
-<msg timestamp="20260324 12:50:17.403" level="TRACE">Arguments: [ 'IDLE_OK' ]</msg>
-<msg timestamp="20260324 12:50:17.414" level="TRACE">Return: {'Groups': [], 'IsFailingString': False, 'Line': 'IDLE_OK', 'Timestamp': 367.3}</msg>
-<status status="PASS" starttime="20260324 12:50:17.403" endtime="20260324 12:50:17.414"/>
-</kw>
-<kw name="Write Line To Uart" library="Remote">
-<arg>start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start)))</arg>
-<msg timestamp="20260324 12:50:17.414" level="TRACE">Arguments: [ 'start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start)))' ]</msg>
-<msg timestamp="20260324 12:50:17.424" level="TRACE">Return: {'Groups': [], 'IsFailingString': False, 'Line': '', 'Timestamp': 0.0}</msg>
-<status status="PASS" starttime="20260324 12:50:17.414" endtime="20260324 12:50:17.424"/>
-</kw>
-<kw name="Wait For Line On Uart" library="Remote">
-<arg>LS_OK:([9][0-9]|[1][0-4][0-9]|150)</arg>
-<arg>timeout=10</arg>
-<msg timestamp="20260324 12:50:17.424" level="TRACE">Arguments: [ 'LS_OK:([9][0-9]|[1][0-4][0-9]|150)' | 'timeout=10' ]</msg>
-<msg timestamp="20260324 12:50:27.981" level="FAIL">InvalidOperationException: Terminal tester failed!
-
-Full report:
-([host: 03/24/2026 12:50:15, virt:       0] Attached to UART event: success)
-[host: 03/24/2026 12:50:15, virt:       0]
-[host: 03/24/2026 12:50:15, virt:       0] MicroPython started on Tang Nano 4K
-([host: 03/24/2026 12:50:15, virt:     3.8] Line containing &gt;&gt;MicroPython started on Tang Nano 4K&lt;&lt; event: success)
-[host: 03/24/2026 12:50:15, virt:       0] Tang Nano 4K with GW1NSR-LV4C
-([host: 03/24/2026 12:50:15, virt:   5.057] Line containing &gt;&gt;Tang Nano 4K with GW1NSR-LV4C&lt;&lt; event: success)
-[host: 03/24/2026 12:50:15, virt:       0] MicroPython c3ca843493 on 2026-03-24; Tang Nano 4K with GW1NSR-LV4C
-&gt;&gt;&gt; import machine; print("MOD_O" + "K") [[no newline]]
-([host: 03/24/2026 12:50:17, virt:   359.9] Line containing &gt;&gt;import machine; print("MOD_O" + "K")&lt;&lt; event: success)
-[host: 03/24/2026 12:50:17, virt:     359]
-[host: 03/24/2026 12:50:17, virt:     361] MOD_OK
-([host: 03/24/2026 12:50:17, virt:   361.9] Line containing &gt;&gt;MOD_OK&lt;&lt; event: success)
-&gt;&gt;&gt; import time; print("TIME_O" + "K") [[no newline]]
-([host: 03/24/2026 12:50:17, virt: 362.445] Line containing &gt;&gt;import time; print("TIME_O" + "K")&lt;&lt; event: success)
-[host: 03/24/2026 12:50:17, virt:     362]
-[host: 03/24/2026 12:50:17, virt:     364] TIME_OK
-([host: 03/24/2026 12:50:17, virt:   364.4] Line containing &gt;&gt;TIME_OK&lt;&lt; event: success)
-&gt;&gt;&gt; machine.idle(); print("ID" + "LE_OK") [[no newline]]
-([host: 03/24/2026 12:50:17, virt:   364.8] Line containing &gt;&gt;machine.idle(); print("ID" + "LE_OK")&lt;&lt; event: success)
-[host: 03/24/2026 12:50:17, virt:     364]
-[host: 03/24/2026 12:50:17, virt:     367] IDLE_OK
-([host: 03/24/2026 12:50:17, virt:   367.3] Line containing &gt;&gt;IDLE_OK&lt;&lt; event: success)
-&gt;&gt;&gt; start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start))) [[no newline]]
-([host: 03/24/2026 12:50:17, virt: 368.624] Line containing &gt;&gt;start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start)))&lt;&lt; event: success)
-[host: 03/24/2026 12:50:17, virt:     368]
- [[no newline]]
-([host: 03/24/2026 12:50:27, virt: 10370.332] Line containing &gt;&gt;LS_OK:([9][0-9]|[1][0-4][0-9]|150)&lt;&lt; event: failure)
-
-</msg>
-<msg timestamp="20260324 12:50:27.981" level="DEBUG">InvalidOperationException:    at Antmicro.Renode.RobotFramework.UartKeywords.OperationFail(TerminalTester tester)
-   at Antmicro.Renode.RobotFramework.UartKeywords.DoTest[T](Nullable`1 timeout, Nullable`1 testerId, Func`3 test, Boolean expectBinaryModeTester)
-   at Antmicro.Renode.RobotFramework.UartKeywords.WaitForLineOnUart(String content, Nullable`1 timeout, Nullable`1 testerId, Boolean treatAsRegex, Boolean includeUnfinishedLine, Nullable`1 pauseEmulation, Nullable`1 matchNextLine)
-   at InvokeStub_UartKeywords.WaitForLineOnUart(Object, Span`1)
-   at System.Reflection.MethodBaseInvoker.InvokeWithManyArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
-</msg>
-<status status="FAIL" starttime="20260324 12:50:17.424" endtime="20260324 12:50:27.981"/>
-</kw>
-<kw name="Write Line To Uart" library="Remote">
-<arg>start = time.ticks_ms(); machine.lightsleep(500); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start)))</arg>
-<status status="NOT RUN" starttime="20260324 12:50:27.981" endtime="20260324 12:50:27.981"/>
-</kw>
-<kw name="Wait For Line On Uart" library="Remote">
-<arg>LS_OK:([4-6][0-9][0-9])</arg>
-<arg>timeout=10</arg>
-<status status="NOT RUN" starttime="20260324 12:50:27.981" endtime="20260324 12:50:27.981"/>
-</kw>
-<kw name="Test Teardown" library="renode-keywords" type="TEARDOWN">
-<msg timestamp="20260324 12:50:27.982" level="TRACE">Arguments: [  ]</msg>
-<kw name="Stop Profiler" library="renode-keywords">
-<msg timestamp="20260324 12:50:27.983" level="TRACE">Arguments: [  ]</msg>
+<kw name="Test Teardown" owner="renode-keywords" type="TEARDOWN">
+<msg time="2026-03-24T21:27:22.187478" level="TRACE">Arguments: [  ]</msg>
+<kw name="Stop Profiler" owner="renode-keywords">
+<msg time="2026-03-24T21:27:22.187957" level="TRACE">Arguments: [  ]</msg>
 <if>
 <branch type="IF" condition="${PROFILER_PROCESS}">
-<kw name="Terminate Process" library="Process">
+<kw name="Terminate Process" owner="Process">
 <arg>${PROFILER_PROCESS}</arg>
 <doc>Stops the process gracefully or forcefully.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:27.983" endtime="20260324 12:50:27.983"/>
+<status status="NOT RUN" start="2026-03-24T21:27:22.188343" elapsed="0.000030"/>
 </kw>
-<kw name="Set Test Variable" library="BuiltIn">
+<kw name="Set Test Variable" owner="BuiltIn">
 <arg>${PROFILER_PROCESS}</arg>
 <arg>None</arg>
 <doc>Makes a variable available everywhere within the scope of the current test.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:27.983" endtime="20260324 12:50:27.983"/>
+<status status="NOT RUN" start="2026-03-24T21:27:22.188522" elapsed="0.000027"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:27.983" endtime="20260324 12:50:27.983"/>
+<status status="NOT RUN" start="2026-03-24T21:27:22.188082" elapsed="0.000509"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:27.983" endtime="20260324 12:50:27.983"/>
+<status status="PASS" start="2026-03-24T21:27:22.188046" elapsed="0.000582"/>
 </if>
-<msg timestamp="20260324 12:50:27.983" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:27.982" endtime="20260324 12:50:27.983"/>
+<msg time="2026-03-24T21:27:22.188681" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:22.187715" elapsed="0.001020"/>
 </kw>
-<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:22.189724" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
+<msg time="2026-03-24T21:27:22.189863" level="TRACE">Return: None</msg>
+<msg time="2026-03-24T21:27:22.189977" level="INFO">${failed} = None</msg>
 <var>${failed}</var>
 <arg>Set Variable</arg>
 <arg>True</arg>
 <doc>Runs the given keyword with the given arguments, if the test failed.</doc>
-<msg timestamp="20260324 12:50:27.984" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
-<kw name="Set Variable" library="BuiltIn">
-<arg>True</arg>
-<doc>Returns the given values which can then be assigned to a variables.</doc>
-<msg timestamp="20260324 12:50:27.988" level="TRACE">Arguments: [ 'True' ]</msg>
-<msg timestamp="20260324 12:50:27.988" level="TRACE">Return: 'True'</msg>
-<status status="PASS" starttime="20260324 12:50:27.988" endtime="20260324 12:50:27.988"/>
-</kw>
-<msg timestamp="20260324 12:50:27.988" level="TRACE">Return: 'True'</msg>
-<msg timestamp="20260324 12:50:27.988" level="INFO">${failed} = True</msg>
-<status status="PASS" starttime="20260324 12:50:27.983" endtime="20260324 12:50:27.988"/>
+<status status="PASS" start="2026-03-24T21:27:22.189390" elapsed="0.000618"/>
 </kw>
 <if>
 <branch type="IF" condition="${failed}">
-<kw name="Strip String" library="String">
+<kw name="Strip String" owner="String">
 <var>${message}</var>
 <arg>${TEST_MESSAGE}</arg>
 <arg>mode=right</arg>
 <doc>Remove leading and/or trailing whitespaces from the given string.</doc>
-<msg timestamp="20260324 12:50:27.989" level="TRACE">Arguments: [ 'InvalidOperationException: Terminal tester failed!\n\nFull report:\n([host: 03/24/2026 12:50:15, virt:       0] Attached to UART event: success)\n[host: 03/24/2026 12:50:15, virt:       0] \n[host: 03/24/2026 12:50:15, virt:       0] MicroPython started on Tang Nano 4K\n([host: 03/24/2026 12:50:15, virt:     3.8] Line containing &gt;&gt;MicroPython started on Tang Nano 4K&lt;&lt; event: success)\n[host: 03/24/2026 12:50:15, virt:       0] Tang Nano 4K with GW1NSR-LV4C\n([host: 03/24/2026 12:50:15, virt:   5.057] Line containing &gt;&gt;Tang Nano 4K with GW1NSR-LV4C&lt;&lt; event: success)\n[host: 03/24/2026 12:50:15, virt:       0] MicroPython c3ca843493 on 2026-03-24; Tang Nano 4K with GW1NSR-LV4C\n&gt;&gt;&gt; import machine; print("MOD_O" + "K") [[no newline]]\n([host: 03/24/2026 12:50:17, virt:   359.9] Line containing &gt;&gt;import machine; print("MOD_O" + "K")&lt;&lt; event: success)\n[host: 03/24/2026 12:50:17, virt:     359] \n[host: 03/24/2026 12:50:17, virt:     361] MOD_OK\n([host: 03/24/2026 12:50:17, virt:   361.9] Line containing &gt;&gt;MOD_OK&lt;&lt; event: success)\n    [ Message content over the limit has been removed. ]\n[host: 03/24/2026 12:50:17, virt:     364] TIME_OK\n([host: 03/24/2026 12:50:17, virt:   364.4] Line containing &gt;&gt;TIME_OK&lt;&lt; event: success)\n&gt;&gt;&gt; machine.idle(); print("ID" + "LE_OK") [[no newline]]\n([host: 03/24/2026 12:50:17, virt:   364.8] Line containing &gt;&gt;machine.idle(); print("ID" + "LE_OK")&lt;&lt; event: success)\n[host: 03/24/2026 12:50:17, virt:     364] \n[host: 03/24/2026 12:50:17, virt:     367] IDLE_OK\n([host: 03/24/2026 12:50:17, virt:   367.3] Line containing &gt;&gt;IDLE_OK&lt;&lt; event: success)\n&gt;&gt;&gt; start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start))) [[no newline]]\n([host: 03/24/2026 12:50:17, virt: 368.624] Line containing &gt;&gt;start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start)))&lt;&lt; event: success)\n[host: 03/24/2026 12:50:17, virt:     368] \n [[no newline]]\n([host: 03/24/2026 12:50:27, virt: 10370.332] Line containing &gt;&gt;LS_OK:([9][0-9]|[1][0-4][0-9]|150)&lt;&lt; event: failure)\n' | mode='right' ]</msg>
-<msg timestamp="20260324 12:50:27.989" level="TRACE">Return: 'InvalidOperationException: Terminal tester failed!\n\nFull report:\n([host: 03/24/2026 12:50:15, virt:       0] Attached to UART event: success)\n[host: 03/24/2026 12:50:15, virt:       0] \n[host: 03/24/2026 12:50:15, virt:       0] MicroPython started on Tang Nano 4K\n([host: 03/24/2026 12:50:15, virt:     3.8] Line containing &gt;&gt;MicroPython started on Tang Nano 4K&lt;&lt; event: success)\n[host: 03/24/2026 12:50:15, virt:       0] Tang Nano 4K with GW1NSR-LV4C\n([host: 03/24/2026 12:50:15, virt:   5.057] Line containing &gt;&gt;Tang Nano 4K with GW1NSR-LV4C&lt;&lt; event: success)\n[host: 03/24/2026 12:50:15, virt:       0] MicroPython c3ca843493 on 2026-03-24; Tang Nano 4K with GW1NSR-LV4C\n&gt;&gt;&gt; import machine; print("MOD_O" + "K") [[no newline]]\n([host: 03/24/2026 12:50:17, virt:   359.9] Line containing &gt;&gt;import machine; print("MOD_O" + "K")&lt;&lt; event: success)\n[host: 03/24/2026 12:50:17, virt:     359] \n[host: 03/24/2026 12:50:17, virt:     361] MOD_OK\n([host: 03/24/2026 12:50:17, virt:   361.9] Line containing &gt;&gt;MOD_OK&lt;&lt; event: success)\n    [ Message content over the limit has been removed. ]\n[host: 03/24/2026 12:50:17, virt:     364] TIME_OK\n([host: 03/24/2026 12:50:17, virt:   364.4] Line containing &gt;&gt;TIME_OK&lt;&lt; event: success)\n&gt;&gt;&gt; machine.idle(); print("ID" + "LE_OK") [[no newline]]\n([host: 03/24/2026 12:50:17, virt:   364.8] Line containing &gt;&gt;machine.idle(); print("ID" + "LE_OK")&lt;&lt; event: success)\n[host: 03/24/2026 12:50:17, virt:     364] \n[host: 03/24/2026 12:50:17, virt:     367] IDLE_OK\n([host: 03/24/2026 12:50:17, virt:   367.3] Line containing &gt;&gt;IDLE_OK&lt;&lt; event: success)\n&gt;&gt;&gt; start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start))) [[no newline]]\n([host: 03/24/2026 12:50:17, virt: 368.624] Line containing &gt;&gt;start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start)))&lt;&lt; event: success)\n[host: 03/24/2026 12:50:17, virt:     368] \n [[no newline]]\n([host: 03/24/2026 12:50:27, virt: 10370.332] Line containing &gt;&gt;LS_OK:([9][0-9]|[1][0-4][0-9]|150)&lt;&lt; event: failure)'</msg>
-<msg timestamp="20260324 12:50:27.989" level="INFO">${message} = InvalidOperationException: Terminal tester failed!
-
-Full report:
-([host: 03/24/2026 12:50:15, virt:       0] Attached to UART event: success)
-[host: 03/24/2026 12:50:15, virt:       0]
-[host: 03/24/2...</msg>
-<status status="PASS" starttime="20260324 12:50:27.989" endtime="20260324 12:50:27.989"/>
+<status status="NOT RUN" start="2026-03-24T21:27:22.190300" elapsed="0.000026"/>
 </kw>
-<kw name="Set Test Message" library="BuiltIn">
+<kw name="Set Test Message" owner="BuiltIn">
 <arg>${message}</arg>
 <doc>Sets message for the current test case.</doc>
-<msg timestamp="20260324 12:50:27.989" level="TRACE">Arguments: [ 'InvalidOperationException: Terminal tester failed!\n\nFull report:\n([host: 03/24/2026 12:50:15, virt:       0] Attached to UART event: success)\n[host: 03/24/2026 12:50:15, virt:       0] \n[host: 03/24/2026 12:50:15, virt:       0] MicroPython started on Tang Nano 4K\n([host: 03/24/2026 12:50:15, virt:     3.8] Line containing &gt;&gt;MicroPython started on Tang Nano 4K&lt;&lt; event: success)\n[host: 03/24/2026 12:50:15, virt:       0] Tang Nano 4K with GW1NSR-LV4C\n([host: 03/24/2026 12:50:15, virt:   5.057] Line containing &gt;&gt;Tang Nano 4K with GW1NSR-LV4C&lt;&lt; event: success)\n[host: 03/24/2026 12:50:15, virt:       0] MicroPython c3ca843493 on 2026-03-24; Tang Nano 4K with GW1NSR-LV4C\n&gt;&gt;&gt; import machine; print("MOD_O" + "K") [[no newline]]\n([host: 03/24/2026 12:50:17, virt:   359.9] Line containing &gt;&gt;import machine; print("MOD_O" + "K")&lt;&lt; event: success)\n[host: 03/24/2026 12:50:17, virt:     359] \n[host: 03/24/2026 12:50:17, virt:     361] MOD_OK\n([host: 03/24/2026 12:50:17, virt:   361.9] Line containing &gt;&gt;MOD_OK&lt;&lt; event: success)\n    [ Message content over the limit has been removed. ]\n[host: 03/24/2026 12:50:17, virt:     364] TIME_OK\n([host: 03/24/2026 12:50:17, virt:   364.4] Line containing &gt;&gt;TIME_OK&lt;&lt; event: success)\n&gt;&gt;&gt; machine.idle(); print("ID" + "LE_OK") [[no newline]]\n([host: 03/24/2026 12:50:17, virt:   364.8] Line containing &gt;&gt;machine.idle(); print("ID" + "LE_OK")&lt;&lt; event: success)\n[host: 03/24/2026 12:50:17, virt:     364] \n[host: 03/24/2026 12:50:17, virt:     367] IDLE_OK\n([host: 03/24/2026 12:50:17, virt:   367.3] Line containing &gt;&gt;IDLE_OK&lt;&lt; event: success)\n&gt;&gt;&gt; start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start))) [[no newline]]\n([host: 03/24/2026 12:50:17, virt: 368.624] Line containing &gt;&gt;start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start)))&lt;&lt; event: success)\n[host: 03/24/2026 12:50:17, virt:     368] \n [[no newline]]\n([host: 03/24/2026 12:50:27, virt: 10370.332] Line containing &gt;&gt;LS_OK:([9][0-9]|[1][0-4][0-9]|150)&lt;&lt; event: failure)' ]</msg>
-<msg timestamp="20260324 12:50:27.990" level="INFO">Set test message to:
-InvalidOperationException: Terminal tester failed!
-
-Full report:
-([host: 03/24/2026 12:50:15, virt:       0] Attached to UART event: success)
-[host: 03/24/2026 12:50:15, virt:       0]
-[host: 03/24/2026 12:50:15, virt:       0] MicroPython started on Tang Nano 4K
-([host: 03/24/2026 12:50:15, virt:     3.8] Line containing &gt;&gt;MicroPython started on Tang Nano 4K&lt;&lt; event: success)
-[host: 03/24/2026 12:50:15, virt:       0] Tang Nano 4K with GW1NSR-LV4C
-([host: 03/24/2026 12:50:15, virt:   5.057] Line containing &gt;&gt;Tang Nano 4K with GW1NSR-LV4C&lt;&lt; event: success)
-[host: 03/24/2026 12:50:15, virt:       0] MicroPython c3ca843493 on 2026-03-24; Tang Nano 4K with GW1NSR-LV4C
-&gt;&gt;&gt; import machine; print("MOD_O" + "K") [[no newline]]
-([host: 03/24/2026 12:50:17, virt:   359.9] Line containing &gt;&gt;import machine; print("MOD_O" + "K")&lt;&lt; event: success)
-[host: 03/24/2026 12:50:17, virt:     359]
-[host: 03/24/2026 12:50:17, virt:     361] MOD_OK
-([host: 03/24/2026 12:50:17, virt:   361.9] Line containing &gt;&gt;MOD_OK&lt;&lt; event: success)
-    [ Message content over the limit has been removed. ]
-[host: 03/24/2026 12:50:17, virt:     364] TIME_OK
-([host: 03/24/2026 12:50:17, virt:   364.4] Line containing &gt;&gt;TIME_OK&lt;&lt; event: success)
-&gt;&gt;&gt; machine.idle(); print("ID" + "LE_OK") [[no newline]]
-([host: 03/24/2026 12:50:17, virt:   364.8] Line containing &gt;&gt;machine.idle(); print("ID" + "LE_OK")&lt;&lt; event: success)
-[host: 03/24/2026 12:50:17, virt:     364]
-[host: 03/24/2026 12:50:17, virt:     367] IDLE_OK
-([host: 03/24/2026 12:50:17, virt:   367.3] Line containing &gt;&gt;IDLE_OK&lt;&lt; event: success)
-&gt;&gt;&gt; start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start))) [[no newline]]
-([host: 03/24/2026 12:50:17, virt: 368.624] Line containing &gt;&gt;start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start)))&lt;&lt; event: success)
-[host: 03/24/2026 12:50:17, virt:     368]
- [[no newline]]
-([host: 03/24/2026 12:50:27, virt: 10370.332] Line containing &gt;&gt;LS_OK:([9][0-9]|[1][0-4][0-9]|150)&lt;&lt; event: failure)</msg>
-<msg timestamp="20260324 12:50:27.990" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:27.989" endtime="20260324 12:50:27.990"/>
+<status status="NOT RUN" start="2026-03-24T21:27:22.190455" elapsed="0.000025"/>
 </kw>
-<status status="PASS" starttime="20260324 12:50:27.988" endtime="20260324 12:50:27.990"/>
+<status status="NOT RUN" start="2026-03-24T21:27:22.190115" elapsed="0.000412"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:27.988" endtime="20260324 12:50:27.990"/>
+<status status="PASS" start="2026-03-24T21:27:22.190085" elapsed="0.000476"/>
 </if>
-<kw name="Run Keyword If Timeout Occurred" library="BuiltIn">
+<kw name="Run Keyword If Timeout Occurred" owner="BuiltIn">
+<msg time="2026-03-24T21:27:22.190989" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
+<msg time="2026-03-24T21:27:22.191075" level="TRACE">Return: None</msg>
+<msg time="2026-03-24T21:27:22.191164" level="INFO">${timed_out} = None</msg>
 <var>${timed_out}</var>
 <arg>Set Variable</arg>
 <arg>True</arg>
 <doc>Runs the given keyword if either a test or a keyword timeout has occurred.</doc>
-<msg timestamp="20260324 12:50:27.990" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
-<msg timestamp="20260324 12:50:27.990" level="TRACE">Return: None</msg>
-<msg timestamp="20260324 12:50:27.990" level="INFO">${timed_out} = None</msg>
-<status status="PASS" starttime="20260324 12:50:27.990" endtime="20260324 12:50:27.990"/>
+<status status="PASS" start="2026-03-24T21:27:22.190682" elapsed="0.000512"/>
 </kw>
 <if>
 <branch type="IF" condition="${timed_out}">
 <return>
-<status status="NOT RUN" starttime="20260324 12:50:27.991" endtime="20260324 12:50:27.991"/>
+<status status="NOT RUN" start="2026-03-24T21:27:22.191402" elapsed="0.000035"/>
 </return>
-<status status="NOT RUN" starttime="20260324 12:50:27.990" endtime="20260324 12:50:27.991"/>
+<status status="NOT RUN" start="2026-03-24T21:27:22.191297" elapsed="0.000179"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:27.990" endtime="20260324 12:50:27.991"/>
+<status status="PASS" start="2026-03-24T21:27:22.191263" elapsed="0.000253"/>
 </if>
 <if>
 <branch type="IF" condition="${CREATE_SNAPSHOT_ON_FAIL}">
-<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:22.192110" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<msg time="2026-03-24T21:27:22.192187" level="TRACE">Return: None</msg>
 <arg>Create Snapshot Of Failed Test</arg>
 <doc>Runs the given keyword with the given arguments, if the test failed.</doc>
-<msg timestamp="20260324 12:50:27.991" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
-<kw name="Create Snapshot Of Failed Test" library="renode-keywords">
-<msg timestamp="20260324 12:50:27.991" level="TRACE">Arguments: [  ]</msg>
-<kw name="Return From Keyword If" library="BuiltIn">
-<arg>'skipped' in @{TEST TAGS}</arg>
-<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
-<msg timestamp="20260324 12:50:27.992" level="TRACE">Arguments: [ "'skipped' in []" ]</msg>
-<msg timestamp="20260324 12:50:27.993" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:27.992" endtime="20260324 12:50:27.994"/>
+<status status="PASS" start="2026-03-24T21:27:22.191808" elapsed="0.000421"/>
 </kw>
-<kw name="Get Variable Value" library="BuiltIn">
-<var>${retry_index}</var>
-<arg>\${RETRYFAILED_RETRY_INDEX}</arg>
-<arg>0</arg>
-<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
-<msg timestamp="20260324 12:50:27.996" level="TRACE">Arguments: [ '\\${RETRYFAILED_RETRY_INDEX}' | '0' ]</msg>
-<msg timestamp="20260324 12:50:27.997" level="TRACE">Return: '0'</msg>
-<msg timestamp="20260324 12:50:27.997" level="INFO">${retry_index} = 0</msg>
-<status status="PASS" starttime="20260324 12:50:27.996" endtime="20260324 12:50:27.997"/>
-</kw>
-<kw name="Set Variable" library="BuiltIn">
-<var>${test_name}</var>
-<arg>${SUITE NAME}.${TEST NAME}.fail${retry_index}.save</arg>
-<doc>Returns the given values which can then be assigned to a variables.</doc>
-<msg timestamp="20260324 12:50:27.998" level="TRACE">Arguments: [ 'test_power.Verify Power Management.fail0.save' ]</msg>
-<msg timestamp="20260324 12:50:27.998" level="TRACE">Return: 'test_power.Verify Power Management.fail0.save'</msg>
-<msg timestamp="20260324 12:50:27.998" level="INFO">${test_name} = test_power.Verify Power Management.fail0.save</msg>
-<status status="PASS" starttime="20260324 12:50:27.998" endtime="20260324 12:50:27.998"/>
-</kw>
-<kw name="Sanitize Test Name" library="renode-keywords">
-<var>${test_name}</var>
-<arg>${test_name}</arg>
-<msg timestamp="20260324 12:50:27.998" level="TRACE">Arguments: [ ${test_name}='test_power.Verify Power Management.fail0.save' ]</msg>
-<kw name="Replace String" library="String">
-<var>${test_name}</var>
-<arg>${test_name}</arg>
-<arg>${SPACE}</arg>
-<arg>_</arg>
-<doc>Replaces ``search_for`` in the given ``string`` with ``replace_with``.</doc>
-<msg timestamp="20260324 12:50:27.999" level="TRACE">Arguments: [ 'test_power.Verify Power Management.fail0.save' | ' ' | '_' ]</msg>
-<msg timestamp="20260324 12:50:27.999" level="TRACE">Return: 'test_power.Verify_Power_Management.fail0.save'</msg>
-<msg timestamp="20260324 12:50:27.999" level="INFO">${test_name} = test_power.Verify_Power_Management.fail0.save</msg>
-<status status="PASS" starttime="20260324 12:50:27.999" endtime="20260324 12:50:27.999"/>
-</kw>
-<kw name="Replace String Using Regexp" library="String">
-<var>${test_name}</var>
-<arg>${test_name}</arg>
-<arg>[/""]</arg>
-<arg>-</arg>
-<doc>Replaces ``pattern`` in the given ``string`` with ``replace_with``.</doc>
-<msg timestamp="20260324 12:50:27.999" level="TRACE">Arguments: [ 'test_power.Verify_Power_Management.fail0.save' | '[/""]' | '-' ]</msg>
-<msg timestamp="20260324 12:50:27.999" level="TRACE">Return: 'test_power.Verify_Power_Management.fail0.save'</msg>
-<msg timestamp="20260324 12:50:27.999" level="INFO">${test_name} = test_power.Verify_Power_Management.fail0.save</msg>
-<status status="PASS" starttime="20260324 12:50:27.999" endtime="20260324 12:50:27.999"/>
-</kw>
-<return>
-<value>${test_name}</value>
-<status status="PASS" starttime="20260324 12:50:28.000" endtime="20260324 12:50:28.002"/>
-</return>
-<msg timestamp="20260324 12:50:28.004" level="TRACE">Return: 'test_power.Verify_Power_Management.fail0.save'</msg>
-<msg timestamp="20260324 12:50:28.004" level="INFO">${test_name} = test_power.Verify_Power_Management.fail0.save</msg>
-<status status="PASS" starttime="20260324 12:50:27.998" endtime="20260324 12:50:28.004"/>
-</kw>
-<kw name="Set Variable" library="BuiltIn">
-<var>${snapshots_dir}</var>
-<arg>${RESULTS_DIRECTORY}/snapshots</arg>
-<doc>Returns the given values which can then be assigned to a variables.</doc>
-<msg timestamp="20260324 12:50:28.004" level="TRACE">Arguments: [ '/app//snapshots' ]</msg>
-<msg timestamp="20260324 12:50:28.004" level="TRACE">Return: '/app//snapshots'</msg>
-<msg timestamp="20260324 12:50:28.004" level="INFO">${snapshots_dir} = /app//snapshots</msg>
-<status status="PASS" starttime="20260324 12:50:28.004" endtime="20260324 12:50:28.004"/>
-</kw>
-<kw name="Create Directory" library="OperatingSystem">
-<arg>${snapshots_dir}</arg>
-<doc>Creates the specified directory.</doc>
-<msg timestamp="20260324 12:50:28.004" level="TRACE">Arguments: [ '/app//snapshots' ]</msg>
-<msg timestamp="20260324 12:50:28.005" level="INFO" html="true">Directory '&lt;a href="file:///app/snapshots"&gt;/app/snapshots&lt;/a&gt;' already exists.</msg>
-<msg timestamp="20260324 12:50:28.005" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:28.004" endtime="20260324 12:50:28.005"/>
-</kw>
-<kw name="Set Variable" library="BuiltIn">
-<var>${snapshot_path}</var>
-<arg>"${snapshots_dir}/${test_name}"</arg>
-<doc>Returns the given values which can then be assigned to a variables.</doc>
-<msg timestamp="20260324 12:50:28.005" level="TRACE">Arguments: [ '"/app//snapshots/test_power.Verify_Power_Management.fail0.save"' ]</msg>
-<msg timestamp="20260324 12:50:28.005" level="TRACE">Return: '"/app//snapshots/test_power.Verify_Power_Management.fail0.save"'</msg>
-<msg timestamp="20260324 12:50:28.005" level="INFO">${snapshot_path} = "/app//snapshots/test_power.Verify_Power_Management.fail0.save"</msg>
-<status status="PASS" starttime="20260324 12:50:28.005" endtime="20260324 12:50:28.005"/>
-</kw>
-<kw name="Execute Command" library="Remote">
-<arg>Save ${snapshot_path}</arg>
-<msg timestamp="20260324 12:50:28.005" level="TRACE">Arguments: [ 'Save "/app//snapshots/test_power.Verify_Power_Management.fail0.save"' ]</msg>
-<msg timestamp="20260324 12:50:28.886" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:28.005" endtime="20260324 12:50:28.886"/>
-</kw>
-<kw name="Log To Console" library="BuiltIn">
-<arg>!!!!! Emulation's state saved to ${snapshot_path}</arg>
-<doc>Logs the given message to the console.</doc>
-<msg timestamp="20260324 12:50:28.886" level="TRACE">Arguments: [ '!!!!! Emulation\'s state saved to "/app//snapshots/test_power.Verify_Power_Management.fail0.save"' ]</msg>
-<msg timestamp="20260324 12:50:28.887" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:28.886" endtime="20260324 12:50:28.887"/>
-</kw>
-<msg timestamp="20260324 12:50:28.887" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:27.991" endtime="20260324 12:50:28.887"/>
-</kw>
-<msg timestamp="20260324 12:50:28.887" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:27.991" endtime="20260324 12:50:28.887"/>
-</kw>
-<status status="PASS" starttime="20260324 12:50:27.991" endtime="20260324 12:50:28.887"/>
+<status status="PASS" start="2026-03-24T21:27:22.191584" elapsed="0.000689"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:27.991" endtime="20260324 12:50:28.887"/>
+<status status="PASS" start="2026-03-24T21:27:22.191564" elapsed="0.000742"/>
 </if>
 <if>
 <branch type="IF" condition="${SAVE_LOGS}">
 <if>
 <branch type="IF" condition="&quot;${SAVE_LOGS_WHEN}&quot; == &quot;Always&quot;">
-<kw name="Save Test Log" library="renode-keywords">
-<status status="NOT RUN" starttime="20260324 12:50:28.888" endtime="20260324 12:50:28.888"/>
+<kw name="Save Test Log" owner="renode-keywords">
+<status status="NOT RUN" start="2026-03-24T21:27:22.192963" elapsed="0.000041"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:28.887" endtime="20260324 12:50:28.888"/>
+<status status="NOT RUN" start="2026-03-24T21:27:22.192552" elapsed="0.000491"/>
 </branch>
 <branch type="ELSE IF" condition="&quot;${SAVE_LOGS_WHEN}&quot; == &quot;Fail&quot;">
-<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:22.193559" level="TRACE">Arguments: [ 'Save Test Log' ]</msg>
+<msg time="2026-03-24T21:27:22.193634" level="TRACE">Return: None</msg>
 <arg>Save Test Log</arg>
 <doc>Runs the given keyword with the given arguments, if the test failed.</doc>
-<msg timestamp="20260324 12:50:28.888" level="TRACE">Arguments: [ 'Save Test Log' ]</msg>
-<kw name="Save Test Log" library="renode-keywords">
-<msg timestamp="20260324 12:50:28.889" level="TRACE">Arguments: [  ]</msg>
-<kw name="Return From Keyword If" library="BuiltIn">
-<arg>'skipped' in @{TEST TAGS}</arg>
-<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
-<msg timestamp="20260324 12:50:28.889" level="TRACE">Arguments: [ "'skipped' in []" ]</msg>
-<msg timestamp="20260324 12:50:28.889" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:28.889" endtime="20260324 12:50:28.889"/>
+<status status="PASS" start="2026-03-24T21:27:22.193312" elapsed="0.000364"/>
 </kw>
-<kw name="Get Variable Value" library="BuiltIn">
-<var>${retry_index}</var>
-<arg>\${RETRYFAILED_RETRY_INDEX}</arg>
-<arg>0</arg>
-<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
-<msg timestamp="20260324 12:50:28.889" level="TRACE">Arguments: [ '\\${RETRYFAILED_RETRY_INDEX}' | '0' ]</msg>
-<msg timestamp="20260324 12:50:28.890" level="TRACE">Return: '0'</msg>
-<msg timestamp="20260324 12:50:28.891" level="INFO">${retry_index} = 0</msg>
-<status status="PASS" starttime="20260324 12:50:28.889" endtime="20260324 12:50:28.891"/>
-</kw>
-<kw name="Set Variable" library="BuiltIn">
-<var>${test_name}</var>
-<arg>${SUITE NAME}.${TEST NAME}.fail${retry_index}</arg>
-<doc>Returns the given values which can then be assigned to a variables.</doc>
-<msg timestamp="20260324 12:50:28.891" level="TRACE">Arguments: [ 'test_power.Verify Power Management.fail0' ]</msg>
-<msg timestamp="20260324 12:50:28.891" level="TRACE">Return: 'test_power.Verify Power Management.fail0'</msg>
-<msg timestamp="20260324 12:50:28.891" level="INFO">${test_name} = test_power.Verify Power Management.fail0</msg>
-<status status="PASS" starttime="20260324 12:50:28.891" endtime="20260324 12:50:28.891"/>
-</kw>
-<kw name="Sanitize Test Name" library="renode-keywords">
-<var>${test_name}</var>
-<arg>${test_name}</arg>
-<msg timestamp="20260324 12:50:28.891" level="TRACE">Arguments: [ ${test_name}='test_power.Verify Power Management.fail0' ]</msg>
-<kw name="Replace String" library="String">
-<var>${test_name}</var>
-<arg>${test_name}</arg>
-<arg>${SPACE}</arg>
-<arg>_</arg>
-<doc>Replaces ``search_for`` in the given ``string`` with ``replace_with``.</doc>
-<msg timestamp="20260324 12:50:28.892" level="TRACE">Arguments: [ 'test_power.Verify Power Management.fail0' | ' ' | '_' ]</msg>
-<msg timestamp="20260324 12:50:28.892" level="TRACE">Return: 'test_power.Verify_Power_Management.fail0'</msg>
-<msg timestamp="20260324 12:50:28.892" level="INFO">${test_name} = test_power.Verify_Power_Management.fail0</msg>
-<status status="PASS" starttime="20260324 12:50:28.892" endtime="20260324 12:50:28.892"/>
-</kw>
-<kw name="Replace String Using Regexp" library="String">
-<var>${test_name}</var>
-<arg>${test_name}</arg>
-<arg>[/""]</arg>
-<arg>-</arg>
-<doc>Replaces ``pattern`` in the given ``string`` with ``replace_with``.</doc>
-<msg timestamp="20260324 12:50:28.892" level="TRACE">Arguments: [ 'test_power.Verify_Power_Management.fail0' | '[/""]' | '-' ]</msg>
-<msg timestamp="20260324 12:50:28.892" level="TRACE">Return: 'test_power.Verify_Power_Management.fail0'</msg>
-<msg timestamp="20260324 12:50:28.893" level="INFO">${test_name} = test_power.Verify_Power_Management.fail0</msg>
-<status status="PASS" starttime="20260324 12:50:28.892" endtime="20260324 12:50:28.893"/>
-</kw>
-<return>
-<value>${test_name}</value>
-<status status="PASS" starttime="20260324 12:50:28.893" endtime="20260324 12:50:28.893"/>
-</return>
-<msg timestamp="20260324 12:50:28.893" level="TRACE">Return: 'test_power.Verify_Power_Management.fail0'</msg>
-<msg timestamp="20260324 12:50:28.893" level="INFO">${test_name} = test_power.Verify_Power_Management.fail0</msg>
-<status status="PASS" starttime="20260324 12:50:28.891" endtime="20260324 12:50:28.893"/>
-</kw>
-<kw name="Set Variable" library="BuiltIn">
-<var>${logs_dir}</var>
-<arg>${RESULTS_DIRECTORY}/logs</arg>
-<doc>Returns the given values which can then be assigned to a variables.</doc>
-<msg timestamp="20260324 12:50:28.893" level="TRACE">Arguments: [ '/app//logs' ]</msg>
-<msg timestamp="20260324 12:50:28.893" level="TRACE">Return: '/app//logs'</msg>
-<msg timestamp="20260324 12:50:28.893" level="INFO">${logs_dir} = /app//logs</msg>
-<status status="PASS" starttime="20260324 12:50:28.893" endtime="20260324 12:50:28.893"/>
-</kw>
-<kw name="Create Directory" library="OperatingSystem">
-<arg>${logs_dir}</arg>
-<doc>Creates the specified directory.</doc>
-<msg timestamp="20260324 12:50:28.894" level="TRACE">Arguments: [ '/app//logs' ]</msg>
-<msg timestamp="20260324 12:50:28.894" level="INFO" html="true">Directory '&lt;a href="file:///app/logs"&gt;/app/logs&lt;/a&gt;' already exists.</msg>
-<msg timestamp="20260324 12:50:28.894" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:28.893" endtime="20260324 12:50:28.894"/>
-</kw>
-<kw name="Set Variable" library="BuiltIn">
-<var>${log_path}</var>
-<arg>${logs_dir}/${test_name}.log</arg>
-<doc>Returns the given values which can then be assigned to a variables.</doc>
-<msg timestamp="20260324 12:50:28.894" level="TRACE">Arguments: [ '/app//logs/test_power.Verify_Power_Management.fail0.log' ]</msg>
-<msg timestamp="20260324 12:50:28.894" level="TRACE">Return: '/app//logs/test_power.Verify_Power_Management.fail0.log'</msg>
-<msg timestamp="20260324 12:50:28.894" level="INFO">${log_path} = /app//logs/test_power.Verify_Power_Management.fail0.log</msg>
-<status status="PASS" starttime="20260324 12:50:28.894" endtime="20260324 12:50:28.894"/>
-</kw>
-<kw name="Log To Console" library="BuiltIn">
-<arg>!!!!! Log saved to "${log_path}"</arg>
-<doc>Logs the given message to the console.</doc>
-<msg timestamp="20260324 12:50:28.894" level="TRACE">Arguments: [ '!!!!! Log saved to "/app//logs/test_power.Verify_Power_Management.fail0.log"' ]</msg>
-<msg timestamp="20260324 12:50:28.894" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:28.894" endtime="20260324 12:50:28.895"/>
-</kw>
-<kw name="Save Cached Log" library="Remote">
-<arg>${log_path}</arg>
-<msg timestamp="20260324 12:50:28.895" level="TRACE">Arguments: [ '/app//logs/test_power.Verify_Power_Management.fail0.log' ]</msg>
-<msg timestamp="20260324 12:50:28.899" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:28.895" endtime="20260324 12:50:28.899"/>
-</kw>
-<msg timestamp="20260324 12:50:28.899" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:28.888" endtime="20260324 12:50:28.899"/>
-</kw>
-<msg timestamp="20260324 12:50:28.899" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:28.888" endtime="20260324 12:50:28.899"/>
-</kw>
-<status status="PASS" starttime="20260324 12:50:28.888" endtime="20260324 12:50:28.899"/>
+<status status="PASS" start="2026-03-24T21:27:22.193076" elapsed="0.000644"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:28.887" endtime="20260324 12:50:28.899"/>
+<status status="PASS" start="2026-03-24T21:27:22.192532" elapsed="0.001222"/>
 </if>
-<status status="PASS" starttime="20260324 12:50:28.887" endtime="20260324 12:50:28.899"/>
+<status status="PASS" start="2026-03-24T21:27:22.192377" elapsed="0.001408"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:28.887" endtime="20260324 12:50:28.899"/>
+<status status="PASS" start="2026-03-24T21:27:22.192356" elapsed="0.001493"/>
 </if>
 <if>
 <branch type="IF" condition="${HOLD_ON_ERROR}">
-<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
 <var>${res}</var>
 <arg>Run Keyword And Ignore Error</arg>
 <arg>Import Library</arg>
 <arg>Dialogs</arg>
 <doc>Runs the given keyword with the given arguments, if the test failed.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:28.900" endtime="20260324 12:50:28.900"/>
+<status status="NOT RUN" start="2026-03-24T21:27:22.194161" elapsed="0.000036"/>
 </kw>
-<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
 <arg>Run Keywords</arg>
 <arg>Run Keyword If</arg>
 <arg>'${res[0]}' == 'FAIL'</arg>
@@ -827,92 +485,1439 @@ Full report:
 <arg>'${res[0]}' != 'FAIL'</arg>
 <arg>Close GUI</arg>
 <doc>Runs the given keyword with the given arguments, if the test failed.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:28.900" endtime="20260324 12:50:28.900"/>
+<status status="NOT RUN" start="2026-03-24T21:27:22.194326" elapsed="0.000024"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:28.899" endtime="20260324 12:50:28.900"/>
+<status status="NOT RUN" start="2026-03-24T21:27:22.193936" elapsed="0.000498"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:28.899" endtime="20260324 12:50:28.900"/>
+<status status="PASS" start="2026-03-24T21:27:22.193913" elapsed="0.000552"/>
 </if>
-<kw name="Reset Emulation" library="Remote">
-<msg timestamp="20260324 12:50:28.900" level="TRACE">Arguments: [  ]</msg>
-<msg timestamp="20260324 12:50:28.951" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:28.900" endtime="20260324 12:50:28.951"/>
+<kw name="Reset Emulation" owner="Remote">
+<msg time="2026-03-24T21:27:22.194667" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:22.244604" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:22.194600" elapsed="0.050233"/>
 </kw>
-<kw name="Clear Cached Log" library="Remote">
-<msg timestamp="20260324 12:50:28.952" level="TRACE">Arguments: [  ]</msg>
-<msg timestamp="20260324 12:50:28.965" level="TRACE">Return: ''</msg>
-<status status="PASS" starttime="20260324 12:50:28.952" endtime="20260324 12:50:28.965"/>
+<kw name="Clear Cached Log" owner="Remote">
+<msg time="2026-03-24T21:27:22.245257" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:22.257779" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:22.245087" elapsed="0.012837"/>
 </kw>
-<msg timestamp="20260324 12:50:28.965" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:27.982" endtime="20260324 12:50:28.965"/>
+<msg time="2026-03-24T21:27:22.258015" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:22.187214" elapsed="0.070850"/>
 </kw>
-<doc>Verifies that MicroPython can perform idle and lightsleep operations.</doc>
-<status status="FAIL" starttime="20260324 12:50:12.816" endtime="20260324 12:50:28.965">InvalidOperationException: Terminal tester failed!
-
-Full report:
-([host: 03/24/2026 12:50:15, virt:       0] Attached to UART event: success)
-[host: 03/24/2026 12:50:15, virt:       0]
-[host: 03/24/2026 12:50:15, virt:       0] MicroPython started on Tang Nano 4K
-([host: 03/24/2026 12:50:15, virt:     3.8] Line containing &gt;&gt;MicroPython started on Tang Nano 4K&lt;&lt; event: success)
-[host: 03/24/2026 12:50:15, virt:       0] Tang Nano 4K with GW1NSR-LV4C
-([host: 03/24/2026 12:50:15, virt:   5.057] Line containing &gt;&gt;Tang Nano 4K with GW1NSR-LV4C&lt;&lt; event: success)
-[host: 03/24/2026 12:50:15, virt:       0] MicroPython c3ca843493 on 2026-03-24; Tang Nano 4K with GW1NSR-LV4C
-&gt;&gt;&gt; import machine; print("MOD_O" + "K") [[no newline]]
-([host: 03/24/2026 12:50:17, virt:   359.9] Line containing &gt;&gt;import machine; print("MOD_O" + "K")&lt;&lt; event: success)
-[host: 03/24/2026 12:50:17, virt:     359]
-[host: 03/24/2026 12:50:17, virt:     361] MOD_OK
-([host: 03/24/2026 12:50:17, virt:   361.9] Line containing &gt;&gt;MOD_OK&lt;&lt; event: success)
-    [ Message content over the limit has been removed. ]
-[host: 03/24/2026 12:50:17, virt:     364] TIME_OK
-([host: 03/24/2026 12:50:17, virt:   364.4] Line containing &gt;&gt;TIME_OK&lt;&lt; event: success)
-&gt;&gt;&gt; machine.idle(); print("ID" + "LE_OK") [[no newline]]
-([host: 03/24/2026 12:50:17, virt:   364.8] Line containing &gt;&gt;machine.idle(); print("ID" + "LE_OK")&lt;&lt; event: success)
-[host: 03/24/2026 12:50:17, virt:     364]
-[host: 03/24/2026 12:50:17, virt:     367] IDLE_OK
-([host: 03/24/2026 12:50:17, virt:   367.3] Line containing &gt;&gt;IDLE_OK&lt;&lt; event: success)
-&gt;&gt;&gt; start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start))) [[no newline]]
-([host: 03/24/2026 12:50:17, virt: 368.624] Line containing &gt;&gt;start = time.ticks_ms(); machine.lightsleep(100); end = time.ticks_ms(); print("LS_OK:" + str(time.ticks_diff(end, start)))&lt;&lt; event: success)
-[host: 03/24/2026 12:50:17, virt:     368]
- [[no newline]]
-([host: 03/24/2026 12:50:27, virt: 10370.332] Line containing &gt;&gt;LS_OK:([9][0-9]|[1][0-4][0-9]|150)&lt;&lt; event: failure)</status>
+<status status="PASS" start="2026-03-24T21:27:19.596732" elapsed="2.661391"/>
 </test>
-<kw name="Teardown" library="renode-keywords" type="TEARDOWN">
-<msg timestamp="20260324 12:50:28.967" level="TRACE">Arguments: [  ]</msg>
+<test id="s1-t2" name="Verify Hardware SPI Implementation" line="30">
+<kw name="Reset Emulation" owner="Remote" type="SETUP">
+<msg time="2026-03-24T21:27:22.262723" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:22.266612" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:22.262608" elapsed="0.004110"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.267150" level="TRACE">Arguments: [ '$repl = @/app/test/tang_nano_4k.repl' ]</msg>
+<msg time="2026-03-24T21:27:22.269055" level="TRACE">Return: ''</msg>
+<arg>$repl = @${REPL}</arg>
+<status status="PASS" start="2026-03-24T21:27:22.266960" elapsed="0.002171"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.269470" level="TRACE">Arguments: [ '$bin = @/app/test/../src/ports/tang_nano_4k/build/firmware.elf' ]</msg>
+<msg time="2026-03-24T21:27:22.271679" level="TRACE">Return: ''</msg>
+<arg>$bin = @${BIN}</arg>
+<status status="PASS" start="2026-03-24T21:27:22.269301" elapsed="0.002453"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.272117" level="TRACE">Arguments: [ 'include @/app/test/tang_nano_4k.resc' ]</msg>
+<msg time="2026-03-24T21:27:22.447242" level="TRACE">Return: ''</msg>
+<arg>include @${RESC}</arg>
+<status status="PASS" start="2026-03-24T21:27:22.271968" elapsed="0.175405"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.447738" level="TRACE">Arguments: [ 'sysbus.cpu VectorTableOffset 0x60000000' ]</msg>
+<msg time="2026-03-24T21:27:22.452152" level="TRACE">Return: ''</msg>
+<arg>sysbus.cpu VectorTableOffset 0x60000000</arg>
+<status status="PASS" start="2026-03-24T21:27:22.447608" elapsed="0.004655"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.452592" level="TRACE">Arguments: [ 'sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`' ]</msg>
+<msg time="2026-03-24T21:27:22.456917" level="TRACE">Return: ''</msg>
+<arg>sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`</arg>
+<status status="PASS" start="2026-03-24T21:27:22.452483" elapsed="0.004546"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.458017" level="TRACE">Arguments: [ 'sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`' ]</msg>
+<msg time="2026-03-24T21:27:22.462113" level="TRACE">Return: ''</msg>
+<arg>sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`</arg>
+<status status="PASS" start="2026-03-24T21:27:22.457783" elapsed="0.004413"/>
+</kw>
+<kw name="Create Terminal Tester" owner="Remote">
+<msg time="2026-03-24T21:27:22.462541" level="TRACE">Arguments: [ 'sysbus.uart0' ]</msg>
+<msg time="2026-03-24T21:27:22.465389" level="TRACE">Return: 0</msg>
+<arg>${UART}</arg>
+<status status="PASS" start="2026-03-24T21:27:22.462390" elapsed="0.003087"/>
+</kw>
+<kw name="Start Emulation" owner="Remote">
+<msg time="2026-03-24T21:27:22.465749" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:22.577027" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:22.465662" elapsed="0.111655"/>
+</kw>
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.578061" level="TRACE">Arguments: [ 'MicroPython started on Tang Nano 4K' ]</msg>
+<msg time="2026-03-24T21:27:22.583406" level="TRACE">Return: {'Line': 'MicroPython started on Tang Nano 4K',
+ 'Timestamp': 0.129,
+ 'Groups': [],
+ 'IsFailingString': False}</msg>
+<arg>MicroPython started on Tang Nano 4K</arg>
+<status status="PASS" start="2026-03-24T21:27:22.577838" elapsed="0.005726"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.583970" level="TRACE">Arguments: [ 'from machine import SPI, Pin' ]</msg>
+<msg time="2026-03-24T21:27:22.590724" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>from machine import SPI, Pin</arg>
+<status status="PASS" start="2026-03-24T21:27:22.583842" elapsed="0.007072"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.591287" level="TRACE">Arguments: [ 'spi = SPI(baudrate=100000, sck=Pin(0), mosi=Pin(1), miso=Pin(2))' ]</msg>
+<msg time="2026-03-24T21:27:22.604641" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>spi = SPI(baudrate=100000, sck=Pin(0), mosi=Pin(1), miso=Pin(2))</arg>
+<status status="PASS" start="2026-03-24T21:27:22.591157" elapsed="0.013842"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.605524" level="TRACE">Arguments: [ "print('SPI_OK')" ]</msg>
+<msg time="2026-03-24T21:27:22.620618" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>print('SPI_OK')</arg>
+<status status="PASS" start="2026-03-24T21:27:22.605376" elapsed="0.015505"/>
+</kw>
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.621294" level="TRACE">Arguments: [ 'SPI_OK' ]</msg>
+<msg time="2026-03-24T21:27:22.629027" level="TRACE">Return: {'Line': 'SPI_OK', 'Timestamp': 19.8, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>SPI_OK</arg>
+<status status="PASS" start="2026-03-24T21:27:22.621151" elapsed="0.008012"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.629522" level="TRACE">Arguments: [ 'res = spi.read(1)' ]</msg>
+<msg time="2026-03-24T21:27:22.634381" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>res = spi.read(1)</arg>
+<status status="PASS" start="2026-03-24T21:27:22.629387" elapsed="0.005164"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.635008" level="TRACE">Arguments: [ "print('READ_OK', res)" ]</msg>
+<msg time="2026-03-24T21:27:22.640119" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>print('READ_OK', res)</arg>
+<status status="PASS" start="2026-03-24T21:27:22.634864" elapsed="0.005395"/>
+</kw>
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.640687" level="TRACE">Arguments: [ "READ_OK b'\\x00'" ]</msg>
+<msg time="2026-03-24T21:27:22.645607" level="TRACE">Return: {'Line': "READ_OK b'\\x00'",
+ 'Timestamp': 23.753,
+ 'Groups': [],
+ 'IsFailingString': False}</msg>
+<arg>READ_OK b'\\x00'</arg>
+<status status="PASS" start="2026-03-24T21:27:22.640539" elapsed="0.005227"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.646160" level="TRACE">Arguments: [ 'from machine import SoftSPI' ]</msg>
+<msg time="2026-03-24T21:27:22.660201" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>from machine import SoftSPI</arg>
+<status status="PASS" start="2026-03-24T21:27:22.646035" elapsed="0.014303"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.660702" level="TRACE">Arguments: [ 'sspi = SoftSPI(baudrate=100000, sck=Pin(3), mosi=Pin(4), miso=Pin(5))' ]</msg>
+<msg time="2026-03-24T21:27:22.667382" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>sspi = SoftSPI(baudrate=100000, sck=Pin(3), mosi=Pin(4), miso=Pin(5))</arg>
+<status status="PASS" start="2026-03-24T21:27:22.660575" elapsed="0.006971"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.667968" level="TRACE">Arguments: [ "print('SOFTSPI_OK')" ]</msg>
+<msg time="2026-03-24T21:27:22.679308" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>print('SOFTSPI_OK')</arg>
+<status status="PASS" start="2026-03-24T21:27:22.667839" elapsed="0.011625"/>
+</kw>
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.680016" level="TRACE">Arguments: [ 'SOFTSPI_OK' ]</msg>
+<msg time="2026-03-24T21:27:22.685054" level="TRACE">Return: {'Line': 'SOFTSPI_OK',
+ 'Timestamp': 31.8,
+ 'Groups': [],
+ 'IsFailingString': False}</msg>
+<arg>SOFTSPI_OK</arg>
+<status status="PASS" start="2026-03-24T21:27:22.679865" elapsed="0.005376"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.685627" level="TRACE">Arguments: [ 'res2 = sspi.read(1)' ]</msg>
+<msg time="2026-03-24T21:27:22.690360" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>res2 = sspi.read(1)</arg>
+<status status="PASS" start="2026-03-24T21:27:22.685491" elapsed="0.005061"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.690962" level="TRACE">Arguments: [ "print('SREAD_OK', res2)" ]</msg>
+<msg time="2026-03-24T21:27:22.699478" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>print('SREAD_OK', res2)</arg>
+<status status="PASS" start="2026-03-24T21:27:22.690827" elapsed="0.008827"/>
+</kw>
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:22.700119" level="TRACE">Arguments: [ "SREAD_OK b'\\x00'" ]</msg>
+<msg time="2026-03-24T21:27:22.704741" level="TRACE">Return: {'Line': "SREAD_OK b'\\x00'",
+ 'Timestamp': 36.434,
+ 'Groups': [],
+ 'IsFailingString': False}</msg>
+<arg>SREAD_OK b'\\x00'</arg>
+<status status="PASS" start="2026-03-24T21:27:22.699975" elapsed="0.005077"/>
+</kw>
+<kw name="Test Teardown" owner="renode-keywords" type="TEARDOWN">
+<msg time="2026-03-24T21:27:22.706293" level="TRACE">Arguments: [  ]</msg>
+<kw name="Stop Profiler" owner="renode-keywords">
+<msg time="2026-03-24T21:27:22.706893" level="TRACE">Arguments: [  ]</msg>
+<if>
+<branch type="IF" condition="${PROFILER_PROCESS}">
+<kw name="Terminate Process" owner="Process">
+<arg>${PROFILER_PROCESS}</arg>
+<doc>Stops the process gracefully or forcefully.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:22.707396" elapsed="0.000042"/>
+</kw>
+<kw name="Set Test Variable" owner="BuiltIn">
+<arg>${PROFILER_PROCESS}</arg>
+<arg>None</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:22.707620" elapsed="0.000036"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:22.707067" elapsed="0.000648"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:22.707017" elapsed="0.000746"/>
+</if>
+<msg time="2026-03-24T21:27:22.707889" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:22.706563" elapsed="0.001407"/>
+</kw>
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:22.708542" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
+<msg time="2026-03-24T21:27:22.708644" level="TRACE">Return: None</msg>
+<msg time="2026-03-24T21:27:22.709127" level="INFO">${failed} = None</msg>
+<var>${failed}</var>
+<arg>Set Variable</arg>
+<arg>True</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="PASS" start="2026-03-24T21:27:22.708136" elapsed="0.001050"/>
+</kw>
+<if>
+<branch type="IF" condition="${failed}">
+<kw name="Strip String" owner="String">
+<var>${message}</var>
+<arg>${TEST_MESSAGE}</arg>
+<arg>mode=right</arg>
+<doc>Remove leading and/or trailing whitespaces from the given string.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:22.709582" elapsed="0.000031"/>
+</kw>
+<kw name="Set Test Message" owner="BuiltIn">
+<arg>${message}</arg>
+<doc>Sets message for the current test case.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:22.709758" elapsed="0.000083"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:22.709325" elapsed="0.000567"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:22.709287" elapsed="0.000657"/>
+</if>
+<kw name="Run Keyword If Timeout Occurred" owner="BuiltIn">
+<msg time="2026-03-24T21:27:22.710415" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
+<msg time="2026-03-24T21:27:22.710520" level="TRACE">Return: None</msg>
+<msg time="2026-03-24T21:27:22.710617" level="INFO">${timed_out} = None</msg>
+<var>${timed_out}</var>
+<arg>Set Variable</arg>
+<arg>True</arg>
+<doc>Runs the given keyword if either a test or a keyword timeout has occurred.</doc>
+<status status="PASS" start="2026-03-24T21:27:22.710091" elapsed="0.000558"/>
+</kw>
+<if>
+<branch type="IF" condition="${timed_out}">
+<return>
+<status status="NOT RUN" start="2026-03-24T21:27:22.710920" elapsed="0.000029"/>
+</return>
+<status status="NOT RUN" start="2026-03-24T21:27:22.710759" elapsed="0.000229"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:22.710731" elapsed="0.000299"/>
+</if>
+<if>
+<branch type="IF" condition="${CREATE_SNAPSHOT_ON_FAIL}">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:22.711997" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<msg time="2026-03-24T21:27:22.712088" level="TRACE">Return: None</msg>
+<arg>Create Snapshot Of Failed Test</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="PASS" start="2026-03-24T21:27:22.711619" elapsed="0.000513"/>
+</kw>
+<status status="PASS" start="2026-03-24T21:27:22.711116" elapsed="0.001063"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:22.711094" elapsed="0.001119"/>
+</if>
+<if>
+<branch type="IF" condition="${SAVE_LOGS}">
+<if>
+<branch type="IF" condition="&quot;${SAVE_LOGS_WHEN}&quot; == &quot;Always&quot;">
+<kw name="Save Test Log" owner="renode-keywords">
+<status status="NOT RUN" start="2026-03-24T21:27:22.712958" elapsed="0.000054"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:22.712495" elapsed="0.000565"/>
+</branch>
+<branch type="ELSE IF" condition="&quot;${SAVE_LOGS_WHEN}&quot; == &quot;Fail&quot;">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:22.713679" level="TRACE">Arguments: [ 'Save Test Log' ]</msg>
+<msg time="2026-03-24T21:27:22.713771" level="TRACE">Return: None</msg>
+<arg>Save Test Log</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="PASS" start="2026-03-24T21:27:22.713400" elapsed="0.000496"/>
+</kw>
+<status status="PASS" start="2026-03-24T21:27:22.713104" elapsed="0.000851"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:22.712475" elapsed="0.001517"/>
+</if>
+<status status="PASS" start="2026-03-24T21:27:22.712289" elapsed="0.001736"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:22.712265" elapsed="0.001795"/>
+</if>
+<if>
+<branch type="IF" condition="${HOLD_ON_ERROR}">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<var>${res}</var>
+<arg>Run Keyword And Ignore Error</arg>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:22.714441" elapsed="0.000050"/>
+</kw>
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:22.714647" elapsed="0.000035"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:22.714156" elapsed="0.000654"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:22.714130" elapsed="0.000735"/>
+</if>
+<kw name="Reset Emulation" owner="Remote">
+<msg time="2026-03-24T21:27:22.715110" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:22.743131" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:22.715021" elapsed="0.028336"/>
+</kw>
+<kw name="Clear Cached Log" owner="Remote">
+<msg time="2026-03-24T21:27:22.743758" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:22.748197" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:22.743636" elapsed="0.004698"/>
+</kw>
+<msg time="2026-03-24T21:27:22.748455" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:22.705999" elapsed="0.042517"/>
+</kw>
+<status status="PASS" start="2026-03-24T21:27:22.259996" elapsed="0.488594"/>
+</test>
+<test id="s1-t3" name="Verify Watchdog Timer Implementation" line="61">
+<kw name="Reset Emulation" owner="Remote" type="SETUP">
+<msg time="2026-03-24T21:27:22.752676" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:22.757636" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:22.752558" elapsed="0.005205"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.758469" level="TRACE">Arguments: [ '$repl = @/app/test/tang_nano_4k.repl' ]</msg>
+<msg time="2026-03-24T21:27:22.761723" level="TRACE">Return: ''</msg>
+<arg>$repl = @${REPL}</arg>
+<status status="PASS" start="2026-03-24T21:27:22.758205" elapsed="0.003662"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.762326" level="TRACE">Arguments: [ '$bin = @/app/test/../src/ports/tang_nano_4k/build/firmware.elf' ]</msg>
+<msg time="2026-03-24T21:27:22.765004" level="TRACE">Return: ''</msg>
+<arg>$bin = @${BIN}</arg>
+<status status="PASS" start="2026-03-24T21:27:22.762097" elapsed="0.003016"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.765497" level="TRACE">Arguments: [ 'include @/app/test/tang_nano_4k.resc' ]</msg>
+<msg time="2026-03-24T21:27:22.929388" level="TRACE">Return: ''</msg>
+<arg>include @${RESC}</arg>
+<status status="PASS" start="2026-03-24T21:27:22.765327" elapsed="0.164211"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.929965" level="TRACE">Arguments: [ 'sysbus.cpu VectorTableOffset 0x60000000' ]</msg>
+<msg time="2026-03-24T21:27:22.933950" level="TRACE">Return: ''</msg>
+<arg>sysbus.cpu VectorTableOffset 0x60000000</arg>
+<status status="PASS" start="2026-03-24T21:27:22.929829" elapsed="0.004257"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.934473" level="TRACE">Arguments: [ 'sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`' ]</msg>
+<msg time="2026-03-24T21:27:22.939170" level="TRACE">Return: ''</msg>
+<arg>sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`</arg>
+<status status="PASS" start="2026-03-24T21:27:22.934343" elapsed="0.004949"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:22.939651" level="TRACE">Arguments: [ 'sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`' ]</msg>
+<msg time="2026-03-24T21:27:22.944134" level="TRACE">Return: ''</msg>
+<arg>sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`</arg>
+<status status="PASS" start="2026-03-24T21:27:22.939536" elapsed="0.004718"/>
+</kw>
+<kw name="Create Terminal Tester" owner="Remote">
+<msg time="2026-03-24T21:27:22.944680" level="TRACE">Arguments: [ 'sysbus.uart0' ]</msg>
+<msg time="2026-03-24T21:27:22.964983" level="TRACE">Return: 0</msg>
+<arg>${UART}</arg>
+<status status="PASS" start="2026-03-24T21:27:22.944507" elapsed="0.020612"/>
+</kw>
+<kw name="Start Emulation" owner="Remote">
+<msg time="2026-03-24T21:27:22.965458" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:23.077470" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:22.965351" elapsed="0.112252"/>
+</kw>
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.078017" level="TRACE">Arguments: [ 'MicroPython started on Tang Nano 4K' ]</msg>
+<msg time="2026-03-24T21:27:23.083413" level="TRACE">Return: {'Line': 'MicroPython started on Tang Nano 4K',
+ 'Timestamp': 0.129,
+ 'Groups': [],
+ 'IsFailingString': False}</msg>
+<arg>MicroPython started on Tang Nano 4K</arg>
+<status status="PASS" start="2026-03-24T21:27:23.077888" elapsed="0.005702"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.084006" level="TRACE">Arguments: [ 'from machine import WDT' ]</msg>
+<msg time="2026-03-24T21:27:23.099494" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>from machine import WDT</arg>
+<status status="PASS" start="2026-03-24T21:27:23.083884" elapsed="0.015776"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.100136" level="TRACE">Arguments: [ 'wdt = WDT(0, timeout=5000)' ]</msg>
+<msg time="2026-03-24T21:27:23.106314" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>wdt = WDT(0, timeout=5000)</arg>
+<status status="PASS" start="2026-03-24T21:27:23.099978" elapsed="0.006491"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.106881" level="TRACE">Arguments: [ "print('WDT_OK')" ]</msg>
+<msg time="2026-03-24T21:27:23.113571" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>print('WDT_OK')</arg>
+<status status="PASS" start="2026-03-24T21:27:23.106714" elapsed="0.007008"/>
+</kw>
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.114124" level="TRACE">Arguments: [ 'WDT_OK' ]</msg>
+<msg time="2026-03-24T21:27:23.118570" level="TRACE">Return: {'Line': 'WDT_OK', 'Timestamp': 18.732, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>WDT_OK</arg>
+<status status="PASS" start="2026-03-24T21:27:23.114008" elapsed="0.004732"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.119137" level="TRACE">Arguments: [ 'sysbus ReadDoubleWord 0x40008000' ]</msg>
+<msg time="2026-03-24T21:27:23.125668" level="TRACE">Return: '0x080BEFC0\n\n'</msg>
+<msg time="2026-03-24T21:27:23.125917" level="INFO">${load_val} = 0x080BEFC0
+
+</msg>
+<var>${load_val}</var>
+<arg>sysbus ReadDoubleWord 0x40008000</arg>
+<status status="PASS" start="2026-03-24T21:27:23.119022" elapsed="0.006936"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<msg time="2026-03-24T21:27:23.126884" level="TRACE">Arguments: [ '0x080BEFC0\n\n' | '0x080BEFC0' ]</msg>
+<msg time="2026-03-24T21:27:23.127036" level="TRACE">Return: None</msg>
+<arg>${load_val}</arg>
+<arg>0x080BEFC0</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-03-24T21:27:23.126173" elapsed="0.000911"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.127366" level="TRACE">Arguments: [ 'wdt.feed()' ]</msg>
+<msg time="2026-03-24T21:27:23.132136" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>wdt.feed()</arg>
+<status status="PASS" start="2026-03-24T21:27:23.127278" elapsed="0.004997"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.132631" level="TRACE">Arguments: [ "print('FEED_OK')" ]</msg>
+<msg time="2026-03-24T21:27:23.137479" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>print('FEED_OK')</arg>
+<status status="PASS" start="2026-03-24T21:27:23.132524" elapsed="0.005106"/>
+</kw>
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.138027" level="TRACE">Arguments: [ 'FEED_OK' ]</msg>
+<msg time="2026-03-24T21:27:23.141666" level="TRACE">Return: {'Line': 'FEED_OK', 'Timestamp': 23.818, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>FEED_OK</arg>
+<status status="PASS" start="2026-03-24T21:27:23.137910" elapsed="0.003936"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.142195" level="TRACE">Arguments: [ 'sysbus ReadDoubleWord 0x40008008' ]</msg>
+<msg time="2026-03-24T21:27:23.147479" level="TRACE">Return: '0x00000003\n\n'</msg>
+<msg time="2026-03-24T21:27:23.147674" level="INFO">${ctrl_val} = 0x00000003
+
+</msg>
+<var>${ctrl_val}</var>
+<arg>sysbus ReadDoubleWord 0x40008008</arg>
+<status status="PASS" start="2026-03-24T21:27:23.142081" elapsed="0.005629"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<msg time="2026-03-24T21:27:23.148530" level="TRACE">Arguments: [ '0x00000003\n\n' | '0x00000003' ]</msg>
+<msg time="2026-03-24T21:27:23.148660" level="TRACE">Return: None</msg>
+<arg>${ctrl_val}</arg>
+<arg>0x00000003</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-03-24T21:27:23.148061" elapsed="0.000647"/>
+</kw>
+<kw name="Test Teardown" owner="renode-keywords" type="TEARDOWN">
+<msg time="2026-03-24T21:27:23.149710" level="TRACE">Arguments: [  ]</msg>
+<kw name="Stop Profiler" owner="renode-keywords">
+<msg time="2026-03-24T21:27:23.150432" level="TRACE">Arguments: [  ]</msg>
+<if>
+<branch type="IF" condition="${PROFILER_PROCESS}">
+<kw name="Terminate Process" owner="Process">
+<arg>${PROFILER_PROCESS}</arg>
+<doc>Stops the process gracefully or forcefully.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:23.150867" elapsed="0.000035"/>
+</kw>
+<kw name="Set Test Variable" owner="BuiltIn">
+<arg>${PROFILER_PROCESS}</arg>
+<arg>None</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:23.151047" elapsed="0.000027"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:23.150555" elapsed="0.000563"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.150520" elapsed="0.000635"/>
+</if>
+<msg time="2026-03-24T21:27:23.151209" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:23.150214" elapsed="0.001048"/>
+</kw>
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:23.151697" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
+<msg time="2026-03-24T21:27:23.151832" level="TRACE">Return: None</msg>
+<msg time="2026-03-24T21:27:23.151938" level="INFO">${failed} = None</msg>
+<var>${failed}</var>
+<arg>Set Variable</arg>
+<arg>True</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="PASS" start="2026-03-24T21:27:23.151401" elapsed="0.000568"/>
+</kw>
+<if>
+<branch type="IF" condition="${failed}">
+<kw name="Strip String" owner="String">
+<var>${message}</var>
+<arg>${TEST_MESSAGE}</arg>
+<arg>mode=right</arg>
+<doc>Remove leading and/or trailing whitespaces from the given string.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:23.152263" elapsed="0.000038"/>
+</kw>
+<kw name="Set Test Message" owner="BuiltIn">
+<arg>${message}</arg>
+<doc>Sets message for the current test case.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:23.152439" elapsed="0.000026"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:23.152075" elapsed="0.000427"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.152047" elapsed="0.000488"/>
+</if>
+<kw name="Run Keyword If Timeout Occurred" owner="BuiltIn">
+<msg time="2026-03-24T21:27:23.153103" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
+<msg time="2026-03-24T21:27:23.153199" level="TRACE">Return: None</msg>
+<msg time="2026-03-24T21:27:23.153293" level="INFO">${timed_out} = None</msg>
+<var>${timed_out}</var>
+<arg>Set Variable</arg>
+<arg>True</arg>
+<doc>Runs the given keyword if either a test or a keyword timeout has occurred.</doc>
+<status status="PASS" start="2026-03-24T21:27:23.152657" elapsed="0.000667"/>
+</kw>
+<if>
+<branch type="IF" condition="${timed_out}">
+<return>
+<status status="NOT RUN" start="2026-03-24T21:27:23.153557" elapsed="0.000023"/>
+</return>
+<status status="NOT RUN" start="2026-03-24T21:27:23.153439" elapsed="0.000177"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.153411" elapsed="0.000234"/>
+</if>
+<if>
+<branch type="IF" condition="${CREATE_SNAPSHOT_ON_FAIL}">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:23.154276" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<msg time="2026-03-24T21:27:23.154367" level="TRACE">Return: None</msg>
+<arg>Create Snapshot Of Failed Test</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="PASS" start="2026-03-24T21:27:23.154024" elapsed="0.000388"/>
+</kw>
+<status status="PASS" start="2026-03-24T21:27:23.153712" elapsed="0.000747"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.153692" elapsed="0.000800"/>
+</if>
+<if>
+<branch type="IF" condition="${SAVE_LOGS}">
+<if>
+<branch type="IF" condition="&quot;${SAVE_LOGS_WHEN}&quot; == &quot;Always&quot;">
+<kw name="Save Test Log" owner="renode-keywords">
+<status status="NOT RUN" start="2026-03-24T21:27:23.155158" elapsed="0.000042"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:23.154792" elapsed="0.000450"/>
+</branch>
+<branch type="ELSE IF" condition="&quot;${SAVE_LOGS_WHEN}&quot; == &quot;Fail&quot;">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:23.155846" level="TRACE">Arguments: [ 'Save Test Log' ]</msg>
+<msg time="2026-03-24T21:27:23.155934" level="TRACE">Return: None</msg>
+<arg>Save Test Log</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="PASS" start="2026-03-24T21:27:23.155536" elapsed="0.000442"/>
+</kw>
+<status status="PASS" start="2026-03-24T21:27:23.155275" elapsed="0.000750"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.154727" elapsed="0.001331"/>
+</if>
+<status status="PASS" start="2026-03-24T21:27:23.154566" elapsed="0.001523"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.154544" elapsed="0.001572"/>
+</if>
+<if>
+<branch type="IF" condition="${HOLD_ON_ERROR}">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<var>${res}</var>
+<arg>Run Keyword And Ignore Error</arg>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:23.156430" elapsed="0.000031"/>
+</kw>
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:23.156610" elapsed="0.000027"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:23.156187" elapsed="0.000530"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.156165" elapsed="0.000669"/>
+</if>
+<kw name="Reset Emulation" owner="Remote">
+<msg time="2026-03-24T21:27:23.157050" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:23.172840" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:23.156982" elapsed="0.016003"/>
+</kw>
+<kw name="Clear Cached Log" owner="Remote">
+<msg time="2026-03-24T21:27:23.173331" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:23.176077" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:23.173231" elapsed="0.003015"/>
+</kw>
+<msg time="2026-03-24T21:27:23.176359" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:23.149462" elapsed="0.026961"/>
+</kw>
+<status status="PASS" start="2026-03-24T21:27:22.750549" elapsed="0.425930"/>
+</test>
+<test id="s1-t4" name="Verify Real-Time Clock Implementation" line="92">
+<kw name="Reset Emulation" owner="Remote" type="SETUP">
+<msg time="2026-03-24T21:27:23.180377" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:23.184026" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:23.180273" elapsed="0.003857"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.184567" level="TRACE">Arguments: [ '$repl = @/app/test/tang_nano_4k.repl' ]</msg>
+<msg time="2026-03-24T21:27:23.186862" level="TRACE">Return: ''</msg>
+<arg>$repl = @${REPL}</arg>
+<status status="PASS" start="2026-03-24T21:27:23.184353" elapsed="0.002595"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.187328" level="TRACE">Arguments: [ '$bin = @/app/test/../src/ports/tang_nano_4k/build/firmware.elf' ]</msg>
+<msg time="2026-03-24T21:27:23.189610" level="TRACE">Return: ''</msg>
+<arg>$bin = @${BIN}</arg>
+<status status="PASS" start="2026-03-24T21:27:23.187144" elapsed="0.002574"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.190106" level="TRACE">Arguments: [ 'include @/app/test/tang_nano_4k.resc' ]</msg>
+<msg time="2026-03-24T21:27:23.372519" level="TRACE">Return: ''</msg>
+<arg>include @${RESC}</arg>
+<status status="PASS" start="2026-03-24T21:27:23.189950" elapsed="0.182767"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.373293" level="TRACE">Arguments: [ 'sysbus.cpu VectorTableOffset 0x60000000' ]</msg>
+<msg time="2026-03-24T21:27:23.377689" level="TRACE">Return: ''</msg>
+<arg>sysbus.cpu VectorTableOffset 0x60000000</arg>
+<status status="PASS" start="2026-03-24T21:27:23.373120" elapsed="0.004721"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.378191" level="TRACE">Arguments: [ 'sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`' ]</msg>
+<msg time="2026-03-24T21:27:23.381868" level="TRACE">Return: ''</msg>
+<arg>sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`</arg>
+<status status="PASS" start="2026-03-24T21:27:23.378076" elapsed="0.003904"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.382327" level="TRACE">Arguments: [ 'sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`' ]</msg>
+<msg time="2026-03-24T21:27:23.386082" level="TRACE">Return: ''</msg>
+<arg>sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`</arg>
+<status status="PASS" start="2026-03-24T21:27:23.382215" elapsed="0.003975"/>
+</kw>
+<kw name="Create Terminal Tester" owner="Remote">
+<msg time="2026-03-24T21:27:23.386601" level="TRACE">Arguments: [ 'sysbus.uart0' ]</msg>
+<msg time="2026-03-24T21:27:23.388686" level="TRACE">Return: 0</msg>
+<arg>${UART}</arg>
+<status status="PASS" start="2026-03-24T21:27:23.386430" elapsed="0.002467"/>
+</kw>
+<kw name="Start Emulation" owner="Remote">
+<msg time="2026-03-24T21:27:23.389229" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:23.498175" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:23.389126" elapsed="0.109175"/>
+</kw>
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.498656" level="TRACE">Arguments: [ 'MicroPython started on Tang Nano 4K' ]</msg>
+<msg time="2026-03-24T21:27:23.503770" level="TRACE">Return: {'Line': 'MicroPython started on Tang Nano 4K',
+ 'Timestamp': 0.129,
+ 'Groups': [],
+ 'IsFailingString': False}</msg>
+<arg>MicroPython started on Tang Nano 4K</arg>
+<status status="PASS" start="2026-03-24T21:27:23.498538" elapsed="0.006054"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.505320" level="TRACE">Arguments: [ 'from machine import RTC' ]</msg>
+<msg time="2026-03-24T21:27:23.512494" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>from machine import RTC</arg>
+<status status="PASS" start="2026-03-24T21:27:23.505181" elapsed="0.007453"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.513616" level="TRACE">Arguments: [ 'rtc = RTC()' ]</msg>
+<msg time="2026-03-24T21:27:23.523384" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>rtc = RTC()</arg>
+<status status="PASS" start="2026-03-24T21:27:23.513448" elapsed="0.010086"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.523953" level="TRACE">Arguments: [ 'rtc.datetime((2024, 1, 1, 1, 12, 0, 0, 0))' ]</msg>
+<msg time="2026-03-24T21:27:23.540637" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>rtc.datetime((2024, 1, 1, 1, 12, 0, 0, 0))</arg>
+<status status="PASS" start="2026-03-24T21:27:23.523813" elapsed="0.017074"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.541254" level="TRACE">Arguments: [ "print('RTC_SET')" ]</msg>
+<msg time="2026-03-24T21:27:23.547562" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>print('RTC_SET')</arg>
+<status status="PASS" start="2026-03-24T21:27:23.541137" elapsed="0.006566"/>
+</kw>
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.548105" level="TRACE">Arguments: [ 'RTC_SET' ]</msg>
+<msg time="2026-03-24T21:27:23.555186" level="TRACE">Return: {'Line': 'RTC_SET', 'Timestamp': 21.05, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>RTC_SET</arg>
+<status status="PASS" start="2026-03-24T21:27:23.547989" elapsed="0.007324"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.555671" level="TRACE">Arguments: [ 'sysbus ReadDoubleWord 0x40006008' ]</msg>
+<msg time="2026-03-24T21:27:23.561900" level="TRACE">Return: '0x2D2565C0\n\n'</msg>
+<msg time="2026-03-24T21:27:23.562094" level="INFO">${load_val} = 0x2D2565C0
+
+</msg>
+<var>${load_val}</var>
+<arg>sysbus ReadDoubleWord 0x40006008</arg>
+<status status="PASS" start="2026-03-24T21:27:23.555560" elapsed="0.006577"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<msg time="2026-03-24T21:27:23.562911" level="TRACE">Arguments: [ '0x2D2565C0\n\n' | '0x2D2565C0' ]</msg>
+<msg time="2026-03-24T21:27:23.563056" level="TRACE">Return: None</msg>
+<arg>${load_val}</arg>
+<arg>0x2D2565C0</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-03-24T21:27:23.562365" elapsed="0.000751"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.563406" level="TRACE">Arguments: [ 'sysbus WriteDoubleWord 0x40006000 0x2D2565CA' ]</msg>
+<msg time="2026-03-24T21:27:23.574104" level="TRACE">Return: ''</msg>
+<arg>sysbus WriteDoubleWord 0x40006000 0x2D2565CA</arg>
+<status status="PASS" start="2026-03-24T21:27:23.563303" elapsed="0.010928"/>
+</kw>
+<kw name="Write Line To Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.574601" level="TRACE">Arguments: [ "print('RTC_TIME', rtc.datetime())" ]</msg>
+<msg time="2026-03-24T21:27:23.580543" level="TRACE">Return: {'Line': '', 'Timestamp': 0.0, 'Groups': [], 'IsFailingString': False}</msg>
+<arg>print('RTC_TIME', rtc.datetime())</arg>
+<status status="PASS" start="2026-03-24T21:27:23.574483" elapsed="0.006222"/>
+</kw>
+<kw name="Wait For Line On Uart" owner="Remote">
+<msg time="2026-03-24T21:27:23.581178" level="TRACE">Arguments: [ 'RTC_TIME (2024, 1, 1, 1, 12, 0, 10, 0)' ]</msg>
+<msg time="2026-03-24T21:27:23.587682" level="TRACE">Return: {'Line': 'RTC_TIME (2024, 1, 1, 1, 12, 0, 10, 0)',
+ 'Timestamp': 27.551,
+ 'Groups': [],
+ 'IsFailingString': False}</msg>
+<arg>RTC_TIME (2024, 1, 1, 1, 12, 0, 10, 0)</arg>
+<status status="PASS" start="2026-03-24T21:27:23.581053" elapsed="0.006841"/>
+</kw>
+<kw name="Test Teardown" owner="renode-keywords" type="TEARDOWN">
+<msg time="2026-03-24T21:27:23.588950" level="TRACE">Arguments: [  ]</msg>
+<kw name="Stop Profiler" owner="renode-keywords">
+<msg time="2026-03-24T21:27:23.590458" level="TRACE">Arguments: [  ]</msg>
+<if>
+<branch type="IF" condition="${PROFILER_PROCESS}">
+<kw name="Terminate Process" owner="Process">
+<arg>${PROFILER_PROCESS}</arg>
+<doc>Stops the process gracefully or forcefully.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:23.590882" elapsed="0.000033"/>
+</kw>
+<kw name="Set Test Variable" owner="BuiltIn">
+<arg>${PROFILER_PROCESS}</arg>
+<arg>None</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:23.591058" elapsed="0.000027"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:23.590574" elapsed="0.000552"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.590542" elapsed="0.000687"/>
+</if>
+<msg time="2026-03-24T21:27:23.591291" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:23.590216" elapsed="0.001129"/>
+</kw>
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:23.591843" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
+<msg time="2026-03-24T21:27:23.591941" level="TRACE">Return: None</msg>
+<msg time="2026-03-24T21:27:23.592038" level="INFO">${failed} = None</msg>
+<var>${failed}</var>
+<arg>Set Variable</arg>
+<arg>True</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="PASS" start="2026-03-24T21:27:23.591488" elapsed="0.000581"/>
+</kw>
+<if>
+<branch type="IF" condition="${failed}">
+<kw name="Strip String" owner="String">
+<var>${message}</var>
+<arg>${TEST_MESSAGE}</arg>
+<arg>mode=right</arg>
+<doc>Remove leading and/or trailing whitespaces from the given string.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:23.592362" elapsed="0.000036"/>
+</kw>
+<kw name="Set Test Message" owner="BuiltIn">
+<arg>${message}</arg>
+<doc>Sets message for the current test case.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:23.592521" elapsed="0.000025"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:23.592171" elapsed="0.000413"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.592144" elapsed="0.000472"/>
+</if>
+<kw name="Run Keyword If Timeout Occurred" owner="BuiltIn">
+<msg time="2026-03-24T21:27:23.593117" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
+<msg time="2026-03-24T21:27:23.593210" level="TRACE">Return: None</msg>
+<msg time="2026-03-24T21:27:23.593301" level="INFO">${timed_out} = None</msg>
+<var>${timed_out}</var>
+<arg>Set Variable</arg>
+<arg>True</arg>
+<doc>Runs the given keyword if either a test or a keyword timeout has occurred.</doc>
+<status status="PASS" start="2026-03-24T21:27:23.592824" elapsed="0.000507"/>
+</kw>
+<if>
+<branch type="IF" condition="${timed_out}">
+<return>
+<status status="NOT RUN" start="2026-03-24T21:27:23.593546" elapsed="0.000023"/>
+</return>
+<status status="NOT RUN" start="2026-03-24T21:27:23.593440" elapsed="0.000163"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.593414" elapsed="0.000216"/>
+</if>
+<if>
+<branch type="IF" condition="${CREATE_SNAPSHOT_ON_FAIL}">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:23.594229" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<msg time="2026-03-24T21:27:23.594305" level="TRACE">Return: None</msg>
+<arg>Create Snapshot Of Failed Test</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="PASS" start="2026-03-24T21:27:23.593986" elapsed="0.000361"/>
+</kw>
+<status status="PASS" start="2026-03-24T21:27:23.593696" elapsed="0.000707"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.593677" elapsed="0.000759"/>
+</if>
+<if>
+<branch type="IF" condition="${SAVE_LOGS}">
+<if>
+<branch type="IF" condition="&quot;${SAVE_LOGS_WHEN}&quot; == &quot;Always&quot;">
+<kw name="Save Test Log" owner="renode-keywords">
+<status status="NOT RUN" start="2026-03-24T21:27:23.595048" elapsed="0.000033"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:23.594680" elapsed="0.000439"/>
+</branch>
+<branch type="ELSE IF" condition="&quot;${SAVE_LOGS_WHEN}&quot; == &quot;Fail&quot;">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:23.595628" level="TRACE">Arguments: [ 'Save Test Log' ]</msg>
+<msg time="2026-03-24T21:27:23.595704" level="TRACE">Return: None</msg>
+<arg>Save Test Log</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="PASS" start="2026-03-24T21:27:23.595386" elapsed="0.000414"/>
+</kw>
+<status status="PASS" start="2026-03-24T21:27:23.595150" elapsed="0.000698"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.594661" elapsed="0.001222"/>
+</if>
+<status status="PASS" start="2026-03-24T21:27:23.594509" elapsed="0.001405"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.594487" elapsed="0.001456"/>
+</if>
+<if>
+<branch type="IF" condition="${HOLD_ON_ERROR}">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<var>${res}</var>
+<arg>Run Keyword And Ignore Error</arg>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:23.596264" elapsed="0.000028"/>
+</kw>
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:23.596435" elapsed="0.000032"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:23.596014" elapsed="0.000540"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:23.595991" elapsed="0.000594"/>
+</if>
+<kw name="Reset Emulation" owner="Remote">
+<msg time="2026-03-24T21:27:23.596878" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:23.611408" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:23.596710" elapsed="0.014824"/>
+</kw>
+<kw name="Clear Cached Log" owner="Remote">
+<msg time="2026-03-24T21:27:23.611923" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:23.615019" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:23.611815" elapsed="0.003312"/>
+</kw>
+<msg time="2026-03-24T21:27:23.615214" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:23.588577" elapsed="0.026685"/>
+</kw>
+<status status="PASS" start="2026-03-24T21:27:23.178403" elapsed="0.436913"/>
+</test>
+<test id="s1-t5" name="Run MicroPython Compliance Tests" line="127">
+<kw name="Reset Emulation" owner="Remote" type="SETUP">
+<msg time="2026-03-24T21:27:23.619147" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:23.622704" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:23.619052" elapsed="0.003780"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.623263" level="TRACE">Arguments: [ '$repl = @/app/test/tang_nano_4k.repl' ]</msg>
+<msg time="2026-03-24T21:27:23.625129" level="TRACE">Return: ''</msg>
+<arg>$repl = @${REPL}</arg>
+<status status="PASS" start="2026-03-24T21:27:23.623067" elapsed="0.002145"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.625667" level="TRACE">Arguments: [ '$bin = @/app/test/../src/ports/tang_nano_4k/build/firmware.elf' ]</msg>
+<msg time="2026-03-24T21:27:23.628520" level="TRACE">Return: ''</msg>
+<arg>$bin = @${BIN}</arg>
+<status status="PASS" start="2026-03-24T21:27:23.625437" elapsed="0.003166"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.629298" level="TRACE">Arguments: [ 'include @/app/test/tang_nano_4k.resc' ]</msg>
+<msg time="2026-03-24T21:27:23.792422" level="TRACE">Return: ''</msg>
+<arg>include @${RESC}</arg>
+<status status="PASS" start="2026-03-24T21:27:23.629032" elapsed="0.163602"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:23.793288" level="TRACE">Arguments: [ 'runMacro $setup_tcp_term' ]</msg>
+<msg time="2026-03-24T21:27:24.038258" level="FAIL">KeywordException: Could not execute command 'runMacro $setup_tcp_term': There was an error executing command 'emulation CreateServerSocketTerminal 12345 "uart-terminal" false'Unable to create '0.0.0.0:12345' socket:[AddressAlreadyInUse] Address already in useThere was an error executing command 'runMacro $setup_tcp_term'Parsing line '    emulation CreateServerSocketTerminal 12345 "uart-terminal" false' failed.
+</msg>
+<msg time="2026-03-24T21:27:24.038475" level="DEBUG">KeywordException:    at Antmicro.Renode.RobotFramework.RenodeKeywords.ExecuteCommand(String command, String machine)
+   at InvokeStub_RenodeKeywords.ExecuteCommand(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+</msg>
+<arg>runMacro $setup_tcp_term</arg>
+<status status="FAIL" start="2026-03-24T21:27:23.793114" elapsed="0.245407">KeywordException: Could not execute command 'runMacro $setup_tcp_term': There was an error executing command 'emulation CreateServerSocketTerminal 12345 "uart-terminal" false'Unable to create '0.0.0.0:12345' socket:[AddressAlreadyInUse] Address already in useThere was an error executing command 'runMacro $setup_tcp_term'Parsing line '    emulation CreateServerSocketTerminal 12345 "uart-terminal" false' failed.
+</status>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<arg>sysbus.cpu VectorTableOffset 0x60000000</arg>
+<status status="NOT RUN" start="2026-03-24T21:27:24.038830" elapsed="0.000046"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<arg>sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`</arg>
+<status status="NOT RUN" start="2026-03-24T21:27:24.039006" elapsed="0.000025"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<arg>sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`</arg>
+<status status="NOT RUN" start="2026-03-24T21:27:24.039144" elapsed="0.000024"/>
+</kw>
+<kw name="Start Emulation" owner="Remote">
+<status status="NOT RUN" start="2026-03-24T21:27:24.039288" elapsed="0.000024"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:24.039415" elapsed="0.000024"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<var>${result}</var>
+<arg>python3</arg>
+<arg>/app/test/run_compliance.py</arg>
+<arg>--attach</arg>
+<arg>cwd=/app/test/..</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=STDOUT</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:24.039556" elapsed="0.000024"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>${result.stdout}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:24.039758" elapsed="0.000032"/>
+</kw>
+<kw name="Test Teardown" owner="renode-keywords" type="TEARDOWN">
+<msg time="2026-03-24T21:27:24.040897" level="TRACE">Arguments: [  ]</msg>
+<kw name="Stop Profiler" owner="renode-keywords">
+<msg time="2026-03-24T21:27:24.041710" level="TRACE">Arguments: [  ]</msg>
+<if>
+<branch type="IF" condition="${PROFILER_PROCESS}">
+<kw name="Terminate Process" owner="Process">
+<arg>${PROFILER_PROCESS}</arg>
+<doc>Stops the process gracefully or forcefully.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:24.042753" elapsed="0.000047"/>
+</kw>
+<kw name="Set Test Variable" owner="BuiltIn">
+<arg>${PROFILER_PROCESS}</arg>
+<arg>None</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:24.043071" elapsed="0.000040"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:24.042179" elapsed="0.000982"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:24.042029" elapsed="0.001242"/>
+</if>
+<msg time="2026-03-24T21:27:24.043384" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:24.041332" elapsed="0.002125"/>
+</kw>
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.044321" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.045246" level="TRACE">Arguments: [ 'True' ]</msg>
+<msg time="2026-03-24T21:27:24.045463" level="TRACE">Return: 'True'</msg>
+<arg>True</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.044819" elapsed="0.000692"/>
+</kw>
+<msg time="2026-03-24T21:27:24.045669" level="TRACE">Return: 'True'</msg>
+<msg time="2026-03-24T21:27:24.045817" level="INFO">${failed} = True</msg>
+<var>${failed}</var>
+<arg>Set Variable</arg>
+<arg>True</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.043763" elapsed="0.002190"/>
+</kw>
+<if>
+<branch type="IF" condition="${failed}">
+<kw name="Strip String" owner="String">
+<msg time="2026-03-24T21:27:24.046920" level="TRACE">Arguments: [ 'KeywordException: Could not execute command \'runMacro $setup_tcp_term\': There was an error executing command \'emulation CreateServerSocketTerminal 12345 "uart-terminal" false\'Unable to create \'0.0.0.0:12345\' socket:[AddressAlreadyInUse] Address already in useThere was an error executing command \'runMacro $setup_tcp_term\'Parsing line \'    emulation CreateServerSocketTerminal 12345 "uart-terminal" false\' failed.\n' | mode='right' ]</msg>
+<msg time="2026-03-24T21:27:24.047155" level="TRACE">Return: 'KeywordException: Could not execute command \'runMacro $setup_tcp_term\': There was an error executing command \'emulation CreateServerSocketTerminal 12345 "uart-terminal" false\'Unable to create \'0.0.0.0:12345\' socket:[AddressAlreadyInUse] Address already in useThere was an error executing command \'runMacro $setup_tcp_term\'Parsing line \'    emulation CreateServerSocketTerminal 12345 "uart-terminal" false\' failed.'</msg>
+<msg time="2026-03-24T21:27:24.047359" level="INFO">${message} = KeywordException: Could not execute command 'runMacro $setup_tcp_term': There was an error executing command 'emulation CreateServerSocketTerminal 12345 "uart-terminal" false'Unable to create '0.0.0.0...</msg>
+<var>${message}</var>
+<arg>${TEST_MESSAGE}</arg>
+<arg>mode=right</arg>
+<doc>Remove leading and/or trailing whitespaces from the given string.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.046536" elapsed="0.000868"/>
+</kw>
+<kw name="Set Test Message" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.048255" level="TRACE">Arguments: [ 'KeywordException: Could not execute command \'runMacro $setup_tcp_term\': There was an error executing command \'emulation CreateServerSocketTerminal 12345 "uart-terminal" false\'Unable to create \'0.0.0.0:12345\' socket:[AddressAlreadyInUse] Address already in useThere was an error executing command \'runMacro $setup_tcp_term\'Parsing line \'    emulation CreateServerSocketTerminal 12345 "uart-terminal" false\' failed.' ]</msg>
+<msg time="2026-03-24T21:27:24.048567" level="INFO">Set test message to:
+KeywordException: Could not execute command 'runMacro $setup_tcp_term': There was an error executing command 'emulation CreateServerSocketTerminal 12345 "uart-terminal" false'Unable to create '0.0.0.0:12345' socket:[AddressAlreadyInUse] Address already in useThere was an error executing command 'runMacro $setup_tcp_term'Parsing line '    emulation CreateServerSocketTerminal 12345 "uart-terminal" false' failed.</msg>
+<msg time="2026-03-24T21:27:24.048631" level="TRACE">Return: None</msg>
+<arg>${message}</arg>
+<doc>Sets message for the current test case.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.047662" elapsed="0.001204"/>
+</kw>
+<status status="PASS" start="2026-03-24T21:27:24.046067" elapsed="0.002851"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:24.046037" elapsed="0.002923"/>
+</if>
+<kw name="Run Keyword If Timeout Occurred" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.049756" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
+<msg time="2026-03-24T21:27:24.049940" level="TRACE">Return: None</msg>
+<msg time="2026-03-24T21:27:24.050065" level="INFO">${timed_out} = None</msg>
+<var>${timed_out}</var>
+<arg>Set Variable</arg>
+<arg>True</arg>
+<doc>Runs the given keyword if either a test or a keyword timeout has occurred.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.049209" elapsed="0.000890"/>
+</kw>
+<if>
+<branch type="IF" condition="${timed_out}">
+<return>
+<status status="NOT RUN" start="2026-03-24T21:27:24.050559" elapsed="0.000034"/>
+</return>
+<status status="NOT RUN" start="2026-03-24T21:27:24.050329" elapsed="0.000307"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:24.050281" elapsed="0.000604"/>
+</if>
+<if>
+<branch type="IF" condition="${CREATE_SNAPSHOT_ON_FAIL}">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.076007" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<kw name="Create Snapshot Of Failed Test" owner="renode-keywords">
+<msg time="2026-03-24T21:27:24.077059" level="TRACE">Arguments: [  ]</msg>
+<kw name="Return From Keyword If" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.078022" level="TRACE">Arguments: [ "'skipped' in []" ]</msg>
+<msg time="2026-03-24T21:27:24.078276" level="TRACE">Return: None</msg>
+<arg>'skipped' in @{TEST TAGS}</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.077300" elapsed="0.001054"/>
+</kw>
+<kw name="Get Variable Value" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.079060" level="TRACE">Arguments: [ '\\${RETRYFAILED_RETRY_INDEX}' | '0' ]</msg>
+<msg time="2026-03-24T21:27:24.080622" level="TRACE">Return: '0'</msg>
+<msg time="2026-03-24T21:27:24.080853" level="INFO">${retry_index} = 0</msg>
+<var>${retry_index}</var>
+<arg>\${RETRYFAILED_RETRY_INDEX}</arg>
+<arg>0</arg>
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.078623" elapsed="0.002271"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.081866" level="TRACE">Arguments: [ 'tang_nano_4k.Run MicroPython Compliance Tests.fail0.save' ]</msg>
+<msg time="2026-03-24T21:27:24.082041" level="TRACE">Return: 'tang_nano_4k.Run MicroPython Compliance Tests.fail0.save'</msg>
+<msg time="2026-03-24T21:27:24.082150" level="INFO">${test_name} = tang_nano_4k.Run MicroPython Compliance Tests.fail0.save</msg>
+<var>${test_name}</var>
+<arg>${SUITE NAME}.${TEST NAME}.fail${retry_index}.save</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.081153" elapsed="0.001029"/>
+</kw>
+<kw name="Sanitize Test Name" owner="renode-keywords">
+<msg time="2026-03-24T21:27:24.082917" level="TRACE">Arguments: [ ${test_name}='tang_nano_4k.Run MicroPython Compliance Tests.fail0.save' ]</msg>
+<kw name="Replace String" owner="String">
+<msg time="2026-03-24T21:27:24.083326" level="TRACE">Arguments: [ 'tang_nano_4k.Run MicroPython Compliance Tests.fail0.save' | ' ' | '_' ]</msg>
+<msg time="2026-03-24T21:27:24.083433" level="TRACE">Return: 'tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.save'</msg>
+<msg time="2026-03-24T21:27:24.083633" level="INFO">${test_name} = tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.save</msg>
+<var>${test_name}</var>
+<arg>${test_name}</arg>
+<arg>${SPACE}</arg>
+<arg>_</arg>
+<doc>Replaces ``search_for`` in the given ``string`` with ``replace_with``.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.083112" elapsed="0.000555"/>
+</kw>
+<kw name="Replace String Using Regexp" owner="String">
+<msg time="2026-03-24T21:27:24.084239" level="TRACE">Arguments: [ 'tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.save' | '[/""]' | '-' ]</msg>
+<msg time="2026-03-24T21:27:24.084540" level="TRACE">Return: 'tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.save'</msg>
+<msg time="2026-03-24T21:27:24.084802" level="INFO">${test_name} = tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.save</msg>
+<var>${test_name}</var>
+<arg>${test_name}</arg>
+<arg>[/""]</arg>
+<arg>-</arg>
+<doc>Replaces ``pattern`` in the given ``string`` with ``replace_with``.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.083965" elapsed="0.000877"/>
+</kw>
+<return>
+<value>${test_name}</value>
+<status status="PASS" start="2026-03-24T21:27:24.085003" elapsed="0.000072"/>
+</return>
+<msg time="2026-03-24T21:27:24.085295" level="TRACE">Return: 'tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.save'</msg>
+<msg time="2026-03-24T21:27:24.085415" level="INFO">${test_name} = tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.save</msg>
+<var>${test_name}</var>
+<arg>${test_name}</arg>
+<status status="PASS" start="2026-03-24T21:27:24.082596" elapsed="0.002933"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.086219" level="TRACE">Arguments: [ '/app//snapshots' ]</msg>
+<msg time="2026-03-24T21:27:24.086404" level="TRACE">Return: '/app//snapshots'</msg>
+<msg time="2026-03-24T21:27:24.086498" level="INFO">${snapshots_dir} = /app//snapshots</msg>
+<var>${snapshots_dir}</var>
+<arg>${RESULTS_DIRECTORY}/snapshots</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.085726" elapsed="0.000885"/>
+</kw>
+<kw name="Create Directory" owner="OperatingSystem">
+<msg time="2026-03-24T21:27:24.087024" level="TRACE">Arguments: [ '/app//snapshots' ]</msg>
+<msg time="2026-03-24T21:27:24.087250" level="INFO" html="true">Directory '&lt;a href="file:///app/snapshots"&gt;/app/snapshots&lt;/a&gt;' already exists.</msg>
+<msg time="2026-03-24T21:27:24.087306" level="TRACE">Return: None</msg>
+<arg>${snapshots_dir}</arg>
+<doc>Creates the specified directory.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.086876" elapsed="0.000486"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.087892" level="TRACE">Arguments: [ '"/app//snapshots/tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.save"' ]</msg>
+<msg time="2026-03-24T21:27:24.087979" level="TRACE">Return: '"/app//snapshots/tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.save"'</msg>
+<msg time="2026-03-24T21:27:24.088067" level="INFO">${snapshot_path} = "/app//snapshots/tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.save"</msg>
+<var>${snapshot_path}</var>
+<arg>"${snapshots_dir}/${test_name}"</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.087508" elapsed="0.000590"/>
+</kw>
+<kw name="Execute Command" owner="Remote">
+<msg time="2026-03-24T21:27:24.088383" level="TRACE">Arguments: [ 'Save "/app//snapshots/tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.save"' ]</msg>
+<msg time="2026-03-24T21:27:24.932504" level="TRACE">Return: ''</msg>
+<arg>Save ${snapshot_path}</arg>
+<status status="PASS" start="2026-03-24T21:27:24.088252" elapsed="0.844431"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.933445" level="TRACE">Arguments: [ '!!!!! Emulation\'s state saved to "/app//snapshots/tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.save"' ]</msg>
+<msg time="2026-03-24T21:27:24.933596" level="TRACE">Return: None</msg>
+<arg>!!!!! Emulation's state saved to ${snapshot_path}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.932994" elapsed="0.000702"/>
+</kw>
+<msg time="2026-03-24T21:27:24.933785" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:24.076566" elapsed="0.857264"/>
+</kw>
+<msg time="2026-03-24T21:27:24.933876" level="TRACE">Return: None</msg>
+<arg>Create Snapshot Of Failed Test</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.051393" elapsed="0.882524"/>
+</kw>
+<status status="PASS" start="2026-03-24T21:27:24.050996" elapsed="0.882961"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:24.050970" elapsed="0.883032"/>
+</if>
+<if>
+<branch type="IF" condition="${SAVE_LOGS}">
+<if>
+<branch type="IF" condition="&quot;${SAVE_LOGS_WHEN}&quot; == &quot;Always&quot;">
+<kw name="Save Test Log" owner="renode-keywords">
+<status status="NOT RUN" start="2026-03-24T21:27:24.934724" elapsed="0.000044"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:24.934317" elapsed="0.000490"/>
+</branch>
+<branch type="ELSE IF" condition="&quot;${SAVE_LOGS_WHEN}&quot; == &quot;Fail&quot;">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.935414" level="TRACE">Arguments: [ 'Save Test Log' ]</msg>
+<kw name="Save Test Log" owner="renode-keywords">
+<msg time="2026-03-24T21:27:24.935961" level="TRACE">Arguments: [  ]</msg>
+<kw name="Return From Keyword If" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.936544" level="TRACE">Arguments: [ "'skipped' in []" ]</msg>
+<msg time="2026-03-24T21:27:24.936717" level="TRACE">Return: None</msg>
+<arg>'skipped' in @{TEST TAGS}</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.936220" elapsed="0.001357"/>
+</kw>
+<kw name="Get Variable Value" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.938270" level="TRACE">Arguments: [ '\\${RETRYFAILED_RETRY_INDEX}' | '0' ]</msg>
+<msg time="2026-03-24T21:27:24.939752" level="TRACE">Return: '0'</msg>
+<msg time="2026-03-24T21:27:24.939967" level="INFO">${retry_index} = 0</msg>
+<var>${retry_index}</var>
+<arg>\${RETRYFAILED_RETRY_INDEX}</arg>
+<arg>0</arg>
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.937904" elapsed="0.002113"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.940940" level="TRACE">Arguments: [ 'tang_nano_4k.Run MicroPython Compliance Tests.fail0' ]</msg>
+<msg time="2026-03-24T21:27:24.941124" level="TRACE">Return: 'tang_nano_4k.Run MicroPython Compliance Tests.fail0'</msg>
+<msg time="2026-03-24T21:27:24.941242" level="INFO">${test_name} = tang_nano_4k.Run MicroPython Compliance Tests.fail0</msg>
+<var>${test_name}</var>
+<arg>${SUITE NAME}.${TEST NAME}.fail${retry_index}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.940271" elapsed="0.001080"/>
+</kw>
+<kw name="Sanitize Test Name" owner="renode-keywords">
+<msg time="2026-03-24T21:27:24.942486" level="TRACE">Arguments: [ ${test_name}='tang_nano_4k.Run MicroPython Compliance Tests.fail0' ]</msg>
+<kw name="Replace String" owner="String">
+<msg time="2026-03-24T21:27:24.943249" level="TRACE">Arguments: [ 'tang_nano_4k.Run MicroPython Compliance Tests.fail0' | ' ' | '_' ]</msg>
+<msg time="2026-03-24T21:27:24.943440" level="TRACE">Return: 'tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0'</msg>
+<msg time="2026-03-24T21:27:24.943547" level="INFO">${test_name} = tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0</msg>
+<var>${test_name}</var>
+<arg>${test_name}</arg>
+<arg>${SPACE}</arg>
+<arg>_</arg>
+<doc>Replaces ``search_for`` in the given ``string`` with ``replace_with``.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.942813" elapsed="0.000767"/>
+</kw>
+<kw name="Replace String Using Regexp" owner="String">
+<msg time="2026-03-24T21:27:24.944087" level="TRACE">Arguments: [ 'tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0' | '[/""]' | '-' ]</msg>
+<msg time="2026-03-24T21:27:24.944570" level="TRACE">Return: 'tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0'</msg>
+<msg time="2026-03-24T21:27:24.944746" level="INFO">${test_name} = tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0</msg>
+<var>${test_name}</var>
+<arg>${test_name}</arg>
+<arg>[/""]</arg>
+<arg>-</arg>
+<doc>Replaces ``pattern`` in the given ``string`` with ``replace_with``.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.943819" elapsed="0.001156"/>
+</kw>
+<return>
+<value>${test_name}</value>
+<status status="PASS" start="2026-03-24T21:27:24.945066" elapsed="0.000200"/>
+</return>
+<msg time="2026-03-24T21:27:24.945527" level="TRACE">Return: 'tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0'</msg>
+<msg time="2026-03-24T21:27:24.945771" level="INFO">${test_name} = tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0</msg>
+<var>${test_name}</var>
+<arg>${test_name}</arg>
+<status status="PASS" start="2026-03-24T21:27:24.941711" elapsed="0.004109"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.946687" level="TRACE">Arguments: [ '/app//logs' ]</msg>
+<msg time="2026-03-24T21:27:24.946876" level="TRACE">Return: '/app//logs'</msg>
+<msg time="2026-03-24T21:27:24.946985" level="INFO">${logs_dir} = /app//logs</msg>
+<var>${logs_dir}</var>
+<arg>${RESULTS_DIRECTORY}/logs</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.946080" elapsed="0.001018"/>
+</kw>
+<kw name="Create Directory" owner="OperatingSystem">
+<msg time="2026-03-24T21:27:24.947753" level="TRACE">Arguments: [ '/app//logs' ]</msg>
+<msg time="2026-03-24T21:27:24.948447" level="INFO" html="true">Created directory '&lt;a href="file:///app/logs"&gt;/app/logs&lt;/a&gt;'.</msg>
+<msg time="2026-03-24T21:27:24.948537" level="TRACE">Return: None</msg>
+<arg>${logs_dir}</arg>
+<doc>Creates the specified directory.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.947411" elapsed="0.001182"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.949658" level="TRACE">Arguments: [ '/app//logs/tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.log' ]</msg>
+<msg time="2026-03-24T21:27:24.949763" level="TRACE">Return: '/app//logs/tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.log'</msg>
+<msg time="2026-03-24T21:27:24.949939" level="INFO">${log_path} = /app//logs/tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.log</msg>
+<var>${log_path}</var>
+<arg>${logs_dir}/${test_name}.log</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.948925" elapsed="0.001055"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<msg time="2026-03-24T21:27:24.950758" level="TRACE">Arguments: [ '!!!!! Log saved to "/app//logs/tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.log"' ]</msg>
+<msg time="2026-03-24T21:27:24.950974" level="TRACE">Return: None</msg>
+<arg>!!!!! Log saved to "${log_path}"</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.950231" elapsed="0.000808"/>
+</kw>
+<kw name="Save Cached Log" owner="Remote">
+<msg time="2026-03-24T21:27:24.951518" level="TRACE">Arguments: [ '/app//logs/tang_nano_4k.Run_MicroPython_Compliance_Tests.fail0.log' ]</msg>
+<msg time="2026-03-24T21:27:24.957969" level="TRACE">Return: ''</msg>
+<arg>${log_path}</arg>
+<status status="PASS" start="2026-03-24T21:27:24.951301" elapsed="0.006756"/>
+</kw>
+<msg time="2026-03-24T21:27:24.958136" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:24.935726" elapsed="0.022466"/>
+</kw>
+<msg time="2026-03-24T21:27:24.958241" level="TRACE">Return: None</msg>
+<arg>Save Test Log</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="PASS" start="2026-03-24T21:27:24.935110" elapsed="0.023173"/>
+</kw>
+<status status="PASS" start="2026-03-24T21:27:24.934843" elapsed="0.023481"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:24.934296" elapsed="0.024073"/>
+</if>
+<status status="PASS" start="2026-03-24T21:27:24.934098" elapsed="0.024308"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:24.934069" elapsed="0.024365"/>
+</if>
+<if>
+<branch type="IF" condition="${HOLD_ON_ERROR}">
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<var>${res}</var>
+<arg>Run Keyword And Ignore Error</arg>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:24.958864" elapsed="0.000030"/>
+</kw>
+<kw name="Run Keyword If Test Failed" owner="BuiltIn">
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="NOT RUN" start="2026-03-24T21:27:24.959027" elapsed="0.000024"/>
+</kw>
+<status status="NOT RUN" start="2026-03-24T21:27:24.958521" elapsed="0.000624"/>
+</branch>
+<status status="PASS" start="2026-03-24T21:27:24.958493" elapsed="0.000751"/>
+</if>
+<kw name="Reset Emulation" owner="Remote">
+<msg time="2026-03-24T21:27:24.959462" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:24.973644" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:24.959391" elapsed="0.014385"/>
+</kw>
+<kw name="Clear Cached Log" owner="Remote">
+<msg time="2026-03-24T21:27:24.974093" level="TRACE">Arguments: [  ]</msg>
+<msg time="2026-03-24T21:27:24.977317" level="TRACE">Return: ''</msg>
+<status status="PASS" start="2026-03-24T21:27:24.974002" elapsed="0.003428"/>
+</kw>
+<msg time="2026-03-24T21:27:24.977523" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:24.040481" elapsed="0.937093"/>
+</kw>
+<status status="FAIL" start="2026-03-24T21:27:23.617190" elapsed="1.360500">KeywordException: Could not execute command 'runMacro $setup_tcp_term': There was an error executing command 'emulation CreateServerSocketTerminal 12345 "uart-terminal" false'Unable to create '0.0.0.0:12345' socket:[AddressAlreadyInUse] Address already in useThere was an error executing command 'runMacro $setup_tcp_term'Parsing line '    emulation CreateServerSocketTerminal 12345 "uart-terminal" false' failed.</status>
+</test>
+<kw name="Teardown" owner="renode-keywords" type="TEARDOWN">
+<msg time="2026-03-24T21:27:24.980324" level="TRACE">Arguments: [  ]</msg>
 <if>
 <branch type="IF" condition="not ${SKIP_RUNNING_SERVER}">
-<kw name="Stop Remote Server" library="Remote">
-<status status="NOT RUN" starttime="20260324 12:50:28.967" endtime="20260324 12:50:28.967"/>
+<kw name="Stop Remote Server" owner="Remote">
+<status status="NOT RUN" start="2026-03-24T21:27:24.980834" elapsed="0.000038"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:28.967" endtime="20260324 12:50:28.967"/>
+<status status="NOT RUN" start="2026-03-24T21:27:24.980441" elapsed="0.000474"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:28.967" endtime="20260324 12:50:28.967"/>
+<status status="PASS" start="2026-03-24T21:27:24.980407" elapsed="0.000544"/>
 </if>
 <if>
 <branch type="IF" condition="not ${SKIP_RUNNING_SERVER}">
-<kw name="Wait For Process" library="Process">
+<kw name="Wait For Process" owner="Process">
 <doc>Waits for the process to complete or to reach the given timeout.</doc>
-<status status="NOT RUN" starttime="20260324 12:50:28.968" endtime="20260324 12:50:28.968"/>
+<status status="NOT RUN" start="2026-03-24T21:27:24.981292" elapsed="0.000028"/>
 </kw>
-<status status="NOT RUN" starttime="20260324 12:50:28.968" endtime="20260324 12:50:28.968"/>
+<status status="NOT RUN" start="2026-03-24T21:27:24.981029" elapsed="0.000331"/>
 </branch>
-<status status="PASS" starttime="20260324 12:50:28.968" endtime="20260324 12:50:28.968"/>
+<status status="PASS" start="2026-03-24T21:27:24.981006" elapsed="0.000386"/>
 </if>
-<msg timestamp="20260324 12:50:28.968" level="TRACE">Return: None</msg>
-<status status="PASS" starttime="20260324 12:50:28.966" endtime="20260324 12:50:28.968"/>
+<msg time="2026-03-24T21:27:24.981446" level="TRACE">Return: None</msg>
+<status status="PASS" start="2026-03-24T21:27:24.980165" elapsed="0.001342"/>
 </kw>
 <meta name="HotSpot_Action">-</meta>
-<status status="FAIL" starttime="20260324 12:50:12.253" endtime="20260324 12:50:28.969"/>
+<status status="FAIL" start="2026-03-24T21:27:18.305564" elapsed="6.675982"/>
 </suite>
 <statistics>
 <total>
-<stat pass="0" fail="1" skip="0">All Tests</stat>
+<stat pass="4" fail="1" skip="0">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat pass="0" fail="1" skip="0" id="s1" name="Test Suite">Test Suite</stat>
+<stat name="Test Suite" id="s1" pass="4" fail="1" skip="0">Test Suite</stat>
 </suite>
 </statistics>
 <errors>
+<msg time="2026-03-24T21:27:18.300180" level="ERROR">Taking listener '/opt/renode/tests/retry_and_timeout_listener.py:1' into use failed: Invalid listener priority 'None'.</msg>
+<msg time="2026-03-24T21:27:19.601120" level="ERROR">Calling method 'start_test' of listener '/opt/renode/tests/robot_output_formatter.py' failed: AttributeError: 'tuple' object has no attribute 'full_name'</msg>
+<msg time="2026-03-24T21:27:22.259609" level="ERROR">Calling method 'end_test' of listener '/opt/renode/tests/robot_output_formatter.py' failed: AttributeError: 'tuple' object has no attribute 'full_name'</msg>
+<msg time="2026-03-24T21:27:22.262083" level="ERROR">Calling method 'start_test' of listener '/opt/renode/tests/robot_output_formatter.py' failed: AttributeError: 'tuple' object has no attribute 'full_name'</msg>
+<msg time="2026-03-24T21:27:22.750217" level="ERROR">Calling method 'end_test' of listener '/opt/renode/tests/robot_output_formatter.py' failed: AttributeError: 'tuple' object has no attribute 'full_name'</msg>
+<msg time="2026-03-24T21:27:22.752189" level="ERROR">Calling method 'start_test' of listener '/opt/renode/tests/robot_output_formatter.py' failed: AttributeError: 'tuple' object has no attribute 'full_name'</msg>
+<msg time="2026-03-24T21:27:23.178070" level="ERROR">Calling method 'end_test' of listener '/opt/renode/tests/robot_output_formatter.py' failed: AttributeError: 'tuple' object has no attribute 'full_name'</msg>
+<msg time="2026-03-24T21:27:23.179952" level="ERROR">Calling method 'start_test' of listener '/opt/renode/tests/robot_output_formatter.py' failed: AttributeError: 'tuple' object has no attribute 'full_name'</msg>
+<msg time="2026-03-24T21:27:23.616876" level="ERROR">Calling method 'end_test' of listener '/opt/renode/tests/robot_output_formatter.py' failed: AttributeError: 'tuple' object has no attribute 'full_name'</msg>
+<msg time="2026-03-24T21:27:23.618708" level="ERROR">Calling method 'start_test' of listener '/opt/renode/tests/robot_output_formatter.py' failed: AttributeError: 'tuple' object has no attribute 'full_name'</msg>
+<msg time="2026-03-24T21:27:24.979293" level="ERROR">Calling method 'end_test' of listener '/opt/renode/tests/robot_output_formatter.py' failed: AttributeError: 'tuple' object has no attribute 'full_name'</msg>
 </errors>
 </robot>
