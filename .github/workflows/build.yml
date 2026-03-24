@@ -66,7 +66,7 @@ jobs:
             dist/firmware_hw.bin
             dist/firmware_hw.elf
             dist/tang_nano_4k_m3.fs
-            COMLIANCE_TESTS.md
+            COMPLIANCE_TESTS.md
             compliance_output.log
             renode_output.log
           if-no-files-found: warn
