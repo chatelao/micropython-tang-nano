@@ -42,6 +42,7 @@ SECTIONS
         *(COMMON)
         . = ALIGN(4);
         _ebss = .;
+        end = .;
     } > SRAM
 
     /* Use all remaining space for heap between .bss and .stack */
