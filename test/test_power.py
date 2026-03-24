@@ -12,7 +12,7 @@ def test_lightsleep(ms):
     machine.lightsleep(ms)
     end = time.ticks_ms()
     diff = time.ticks_diff(end, start)
-    print("Slept for %d ms" % diff)
+    print("LS_OK:%d" % diff)
     if diff >= 90: # Allow some jitter in simulation
         print("PASS")
     else:
@@ -25,8 +25,14 @@ def test_deepsleep(ms):
     machine.deepsleep(ms)
     print("FAIL: deepsleep returned (should have reset)")
 
+def test_reset():
+    print("Testing machine.reset()...")
+    machine.reset()
+    print("FAIL: reset returned (should have reset)")
+
 test_idle()
 test_lightsleep(100)
-# test_deepsleep is usually tested in automated robot scripts
-# because it resets the environment.
+# test_deepsleep and test_reset are usually tested in automated robot scripts
+# because they reset the environment.
 # test_deepsleep(100)
+# test_reset()

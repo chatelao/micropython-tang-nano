@@ -146,9 +146,9 @@ Verify Power Management Implementation
     Write Line To Uart      from machine import lightsleep, deepsleep
 
     # Test lightsleep(100)
-    Write Line To Uart      s = time.ticks_ms(); lightsleep(100); e = time.ticks_ms(); print('LS_OK', time.ticks_diff(e, s))
-    # Use Regex to check that we slept at least 90ms. Match line like "LS_OK 101"
-    Wait For Line On Uart   LS_OK ([9][0-9]|[1-9][0-9][0-9]+)   treatAsRegex=true
+    Write Line To Uart      s = time.ticks_ms(); lightsleep(100); e = time.ticks_ms(); print('LS_OK:{}'.format(time.ticks_diff(e, s)))
+    # Use Regex to check that we slept at least 90ms. Match line like "LS_OK:101"
+    Wait For Line On Uart   LS_OK:([9][0-9]|[1-9][0-9]+)   treatAsRegex=true
 
     # Test deepsleep(100) - Should cause a reset and reboot
     Write Line To Uart      deepsleep(100)
