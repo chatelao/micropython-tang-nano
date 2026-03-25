@@ -10,6 +10,7 @@
 #include "wdt.h"
 #include "flash.h"
 #include "bridge.h"
+#include "dma.h"
 #include "extmod/modmachine.h"
 
 #define AIRCR (*(volatile uint32_t *)0xE000ED0C)
@@ -72,6 +73,7 @@ static const mp_rom_map_elem_t machine_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_RTC), MP_ROM_PTR(&machine_rtc_type) },
     { MP_ROM_QSTR(MP_QSTR_WDT), MP_ROM_PTR(&machine_wdt_type) },
     { MP_ROM_QSTR(MP_QSTR_FPGABridge), MP_ROM_PTR(&machine_fpga_bridge_type) },
+    { MP_ROM_QSTR(MP_QSTR_FPGADMA), MP_ROM_PTR(&machine_fpga_dma_type) },
     { MP_ROM_QSTR(MP_QSTR_mem8), MP_ROM_PTR(&machine_mem8_obj) },
     { MP_ROM_QSTR(MP_QSTR_mem16), MP_ROM_PTR(&machine_mem16_obj) },
     { MP_ROM_QSTR(MP_QSTR_mem32), MP_ROM_PTR(&machine_mem32_obj) },

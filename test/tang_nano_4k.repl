@@ -64,3 +64,13 @@ wdt0: Memory.MappedMemory @ sysbus 0x40008000
 // RTC (Mapped as memory for simulation)
 rtc0: Memory.MappedMemory @ sysbus 0x40006000
     size: 0x400
+
+// FPGA DMA Controller (Mapped as memory for simulation)
+// Base 0x40002C00 (APB2 Slot 9) - Must be 0x400 aligned
+dma0: Memory.MappedMemory @ sysbus 0x40002C00
+    size: 0x400
+
+// FPGA RAM - AHB2 Master region
+// Moved to 0x10000000 to fit in MicroPython 31-bit small ints
+fpga_ram: Memory.MappedMemory @ sysbus 0x10000000
+    size: 0x10000
