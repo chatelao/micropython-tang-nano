@@ -5,6 +5,29 @@ This project aims to port MicroPython to the "Sipeed Tang Nano 4K" FPGA developm
 
 For a comprehensive overview of the port, including hardware details, installation, and usage, see the [Tang Nano 4K MicroPython Port Guide](documentation/TANG_NANO_MICROPYTHON_GUIDE.md).
 
+## Supported MicroPython Features
+- **Core Modules**: `machine`, `time`/`utime`, `uos`, `io`.
+- **Machine Module Peripherals**:
+    - `Pin`: GPIO control (0-15) with hardware interrupt support.
+    - `Timer`: Hardware timers for periodic or one-shot events.
+    - `PWM`: Hardware-based Pulse Width Modulation.
+    - `ADC`: 12-bit Analog-to-Digital Converter.
+    - `I2C` / `SoftI2C`: Hardware and software I2C Master support.
+    - `SPI` / `SoftSPI`: Hardware and software SPI Master support.
+    - `RTC`: Real-Time Clock for date and time management.
+    - `WDT`: Hardware Watchdog Timer.
+    - `FPGABridge`: Low-level access to the 16-bit M3-to-FPGA GPIO bridge.
+    - `Flash`: Block device interface for the onboard SPI Flash.
+- **Filesystem**: LittleFS (LFS2) on external SPI Flash.
+- **Runtime**: Garbage Collector, REPL over UART0.
+
+## Unsupported Features
+- **Floating-point**: No hardware or software floating-point support (`MICROPY_PY_BUILTINS_FLOAT=0`).
+- **Math Module**: The `math` module is disabled to save flash space.
+- **Asynchronous**: `asyncio` and `async`/`await` are currently not supported.
+- **Connectivity**: No built-in network or Bluetooth stacks.
+- **Big Integers**: Support for arbitrary-precision integers is disabled.
+
 ## Project Structure
 - `/definitions` - Datasheets and Standards to be used.
 - `/documentation` - Concepts and implementation progress for different areas.
