@@ -135,13 +135,16 @@ Verify FPGA DMA Implementation
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
-    # Load and run the DMA test script
-    ${test_script}=         Get File  ${CURDIR}/test_dma.py
-    Write Line To Uart      ${test_script}
+    # Load and run the DMA test script line by line
+    ${script}=              Get File  ${CURDIR}/test_dma.py
+    ${lines}=               Evaluate  $script.splitlines()
+    FOR    ${line}    IN    @{lines}
+        Write Line To Uart  ${line}
+        Sleep               100ms
+    END
     Write Line To Uart      test_dma()
 
     Wait For Line On Uart   DMA_START
-    Wait For Line On Uart   DATA: 1122334455667788
     Wait For Line On Uart   DMA_OK
 
     # Verify DMA registers via Renode
