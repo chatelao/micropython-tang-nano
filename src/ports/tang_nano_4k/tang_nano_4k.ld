@@ -3,27 +3,18 @@ ENTRY(Reset_Handler)
 
 MEMORY
 {
-    INT_FLASH (rx) : ORIGIN = INT_FLASH_ORIGIN, LENGTH = INT_FLASH_LENGTH
-    EXT_FLASH (rx) : ORIGIN = EXT_FLASH_ORIGIN, LENGTH = EXT_FLASH_LENGTH
-    SRAM (rwx)      : ORIGIN = 0x20000000, LENGTH = 22K
+    FLASH (rx) : ORIGIN = FLASH_ORIGIN, LENGTH = FLASH_LENGTH
+    SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 22K
 }
 
 STACK_SIZE = 2K;
 
 SECTIONS
 {
-    .int_text :
+    .text :
     {
         . = ALIGN(256);
         KEEP(*(.isr_vector))
-        *(.text.Reset_Handler)
-        /* Place main and startup code in internal flash */
-        *main.o(.text*)
-        . = ALIGN(4);
-    } > INT_FLASH
-
-    .text :
-    {
         *(.text*)
         *(.rodata*)
         *(.init)
@@ -32,9 +23,9 @@ SECTIONS
         . = ALIGN(4);
         *(.ARM.exidx*)
         _etext = .;
-    } > MAIN_FLASH
+    } > FLASH
 
-    .data : AT (LOADADDR(.text) + SIZEOF(.text))
+    .data : AT (_etext)
     {
         . = ALIGN(4);
         _sdata = .;
