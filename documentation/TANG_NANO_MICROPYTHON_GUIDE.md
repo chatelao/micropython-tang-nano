@@ -27,7 +27,7 @@ The port implements the standard MicroPython `machine` module with hardware-spec
 | `SPI` / `SoftSPI` | Hardware SPI Master and bit-banged software SPI support. |
 | `RTC` | Real-Time Clock for date and time management. |
 | `WDT` | Hardware Watchdog Timer for system reliability. |
-| `Flash` | Block device interface for the onboard SPI Flash. |
+| `Flash` | Block device interface for the onboard SPI Flash. See the [External Flash Guide](EXTERNAL_FLASH_GUIDE.md) for IP details. |
 
 ### Memory and Filesystem
 MicroPython uses a **LittleFS (LFS2)** filesystem on the external SPI Flash, allowing you to store Python scripts and data files.
