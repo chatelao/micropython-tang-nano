@@ -124,6 +124,37 @@ Verify Real-Time Clock Implementation
     Write Line To Uart      print('RTC_TIME', rtc.datetime())
     Wait For Line On Uart   RTC_TIME (2024, 1, 1, 1, 12, 0, 10, 0)
 
+Verify FPGA DMA Implementation
+    Execute Command         $repl = @${REPL}
+    Execute Command         $bin = @${BIN}
+    Execute Command         include @${RESC}
+    Execute Command         sysbus.cpu VectorTableOffset 0x60000000
+    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
+    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
+    Create Terminal Tester  ${UART}
+    Start Emulation
+    Wait For Line On Uart   MicroPython started on Tang Nano 4K
+
+    # Load and run the DMA test script
+    ${test_script}=         Get File  ${CURDIR}/test_dma.py
+    Write Line To Uart      ${test_script}
+    Write Line To Uart      test_dma()
+
+    Wait For Line On Uart   DMA_START
+    Wait For Line On Uart   DATA: 1122334455667788
+    Wait For Line On Uart   DMA_OK
+
+    # Verify DMA registers via Renode
+    # LEN register (0x40002C08) should be 8
+    ${len_val}=             Execute Command  sysbus ReadDoubleWord 0x40002C08
+    Should Contain          ${len_val}       0x00000008
+
+    # CTRL register (0x40002C0C) should have DONE bit set (bit 2) and BUSY bit cleared (bit 1)
+    # Expected value ends in 4 or 5 (if START bit also remains set)
+    ${ctrl_val}=            Execute Command  sysbus ReadDoubleWord 0x40002C08
+    ${ctrl_val}=            Execute Command  sysbus ReadDoubleWord 0x40002C0C
+    Should Match Regexp     ${ctrl_val}      0x0000000[45]
+
 Run MicroPython Compliance Tests
     Execute Command         $repl = @${REPL}
     Execute Command         $bin = @${BIN}
