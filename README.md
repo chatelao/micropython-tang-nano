@@ -30,7 +30,7 @@ For a comprehensive overview of the port, including hardware details, installati
 
 ## Project Structure
 - `/definitions` - Datasheets and Standards to be used.
-- `/documentation` - Concepts and implementation progress for different areas.
+- `/documentation` - Concepts and implementation progress for different areas (see the [External Flash Guide](documentation/EXTERNAL_FLASH_GUIDE.md)).
 - `/src` - Source files for the MicroPython port.
 - `/test` - Unit, System, and End-2-End test concepts and cases.
 - `/.github` - Workflows for CI/CD.
