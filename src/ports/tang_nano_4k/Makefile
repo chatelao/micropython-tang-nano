@@ -5,8 +5,8 @@ QSTR_DEFS = qstrdefsport.h
 
 # MicroPython feature configurations
 MICROPY_ROM_TEXT_COMPRESSION ?= 1
-MICROPY_PY_BUILTINS_FLOAT ?= 0
-MICROPY_PY_MATH ?= 0
+MICROPY_PY_BUILTINS_FLOAT ?= 1
+MICROPY_PY_MATH ?= 1
 MICROPY_ENABLE_COMPILER ?= 1
 MICROPY_PY_SYS_STDFILES ?= 1
 
@@ -39,6 +39,7 @@ FLASH_LENGTH = 128K
 endif
 
 LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nano.specs --specs=nosys.specs -lc -lnosys
+LIBS += -lm
 LDFLAGS += -Wl,--defsym=FLASH_ORIGIN=$(FLASH_ORIGIN),--defsym=FLASH_LENGTH=$(FLASH_LENGTH)
 
 # Tune for Debugging or Optimization

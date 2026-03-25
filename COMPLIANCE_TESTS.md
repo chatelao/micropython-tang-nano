@@ -1,7 +1,7 @@
 # MicroPython Compliance Test Results
 
 ```
-platform=minimal
+platform=minimal float=30-bit
 pass  basics/0prelim.py
 pass  basics/andor.py
 pass  basics/annotate_var.py
