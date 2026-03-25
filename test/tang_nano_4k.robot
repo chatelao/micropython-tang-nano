@@ -135,16 +135,8 @@ Verify FPGA DMA Implementation
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
-    # Load and run the DMA test script line by line
-    ${script}=              Get File  ${CURDIR}/test_dma.py
-    ${lines}=               Evaluate  $script.splitlines()
-    FOR    ${line}    IN    @{lines}
-        Write Line To Uart  ${line}
-        Sleep               100ms
-    END
-    Write Line To Uart      test_dma()
-
-    Wait For Line On Uart   DMA_START
+    # Run DMA transfer test using a single-line command for maximum reliability in CI
+    Write Line To Uart      import machine; d = machine.FPGADMA(); s = bytearray([1,2,3,4,5,6,7,8]); t = bytearray(8); a = 0x20004800; d.transfer(s, a, 8); d.transfer(a, t, 8); print('DM' + 'A_OK') if s == t else print('FAIL')
     Wait For Line On Uart   DMA_OK
 
     # Verify DMA registers via Renode
@@ -154,7 +146,6 @@ Verify FPGA DMA Implementation
 
     # CTRL register (0x40002C0C) should have DONE bit set (bit 2) and BUSY bit cleared (bit 1)
     # Expected value ends in 4 or 5 (if START bit also remains set)
-    ${ctrl_val}=            Execute Command  sysbus ReadDoubleWord 0x40002C08
     ${ctrl_val}=            Execute Command  sysbus ReadDoubleWord 0x40002C0C
     Should Match Regexp     ${ctrl_val}      0x0000000[45]
 
