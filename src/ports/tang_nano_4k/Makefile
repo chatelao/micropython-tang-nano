@@ -63,6 +63,7 @@ SRC_C = \
 	spi.c \
 	rtc.c \
 	wdt.c \
+	bridge.c \
 	modmachine.c \
 	$(TOP)/shared/timeutils/timeutils.c \
 	$(TOP)/extmod/modtime.c \
