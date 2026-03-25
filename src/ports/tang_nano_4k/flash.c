@@ -5,16 +5,20 @@
 #include "extmod/vfs.h"
 #include "flash.h"
 
-// For simulation, we use the external flash mapped at 0x60000000.
-// To avoid corrupting any potential firmware, we start at a 1MB offset.
+// For simulation and SPLIT_FLASH, we use the external flash mapped at 0x60000000.
+// To avoid corrupting the firmware, we start at an offset.
 #define FLASH_BASE_ADDR      (0x60000000)
+#if SPLIT_FLASH
+#define FS_OFFSET            (0x40000)  // 256KB offset (to skip firmware)
+#else
 #define FS_OFFSET            (0x100000) // 1MB offset
+#endif
 #define FS_START_ADDR        (FLASH_BASE_ADDR + FS_OFFSET)
 
 #define FLASH_BLOCK_SIZE     (4096)
 #define FLASH_SECTOR_SIZE    (4096)
 #define FLASH_SIZE           (4 * 1024 * 1024) // 4MB total external flash
-#define FS_SIZE              (FLASH_SIZE - FS_OFFSET) // 3MB for filesystem
+#define FS_SIZE              (FLASH_SIZE - FS_OFFSET) // Remaining space for filesystem
 
 machine_flash_obj_t machine_flash_obj = {
     .base = { &machine_flash_type }

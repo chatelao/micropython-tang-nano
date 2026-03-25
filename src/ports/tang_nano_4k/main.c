@@ -35,6 +35,11 @@ int main(int argc, char **argv) {
 
         // Initialize the flash and mount the VFS
         flash_init();
+        #if SPLIT_FLASH
+        // If SPLIT_FLASH is enabled, the AHB-to-SPI bridge must be initialized
+        // here if it hasn't been done by the hardware or early boot code.
+        // For now, we assume it's transparent or handled by bridge_init.
+        #endif
         bridge_init();
         mp_obj_t bdev = MP_OBJ_FROM_PTR(&machine_flash_obj);
         mp_vfs_mount_and_chdir_protected(bdev, MP_OBJ_NEW_QSTR(MP_QSTR_littlefs));
@@ -124,7 +129,7 @@ void MP_WEAK __assert_func(const char *file, int line, const char *func, const c
 // Cortex-M3 Startup Code
 extern uint32_t _estack, _etext, _sdata, _edata, _sbss, _ebss;
 
-void Reset_Handler(void) __attribute__((naked));
+void Reset_Handler(void) __attribute__((naked, section(".text.Reset_Handler")));
 void Reset_Handler(void) {
     // set stack pointer
     __asm volatile ("ldr sp, =_estack");
