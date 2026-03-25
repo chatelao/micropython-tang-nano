@@ -16,6 +16,7 @@
 #include "timer.h"
 #include "pwm.h"
 #include "flash.h"
+#include "bridge.h"
 #include "extmod/vfs.h"
 #include "extmod/vfs_lfs.h"
 
@@ -34,6 +35,7 @@ int main(int argc, char **argv) {
 
         // Initialize the flash and mount the VFS
         flash_init();
+        bridge_init();
         mp_obj_t bdev = MP_OBJ_FROM_PTR(&machine_flash_obj);
         mp_vfs_mount_and_chdir_protected(bdev, MP_OBJ_NEW_QSTR(MP_QSTR_littlefs));
 
