@@ -4,6 +4,7 @@ include ../../lib/micropython/py/mkenv.mk
 QSTR_DEFS = qstrdefsport.h
 
 # MicroPython feature configurations
+SPLIT_FLASH ?= 0
 MICROPY_ROM_TEXT_COMPRESSION ?= 1
 MICROPY_PY_BUILTINS_FLOAT ?= 1
 MICROPY_PY_MATH ?= 1
@@ -24,10 +25,19 @@ CFLAGS += $(INC) -Wall -Werror -std=c99 $(CFLAGS_CORTEX_M3) $(COPT)
 ifeq ($(SIMULATION), 1)
 CFLAGS += -DSIMULATION=1
 endif
+ifeq ($(SPLIT_FLASH), 1)
+CFLAGS += -DSPLIT_FLASH=1
+endif
 # Disable some warnings for external libraries
 CFLAGS_MOD = -Wno-unused-function
 
-# Simulation support
+# Flash region configuration
+ifeq ($(SPLIT_FLASH), 1)
+# In split mode, INT_FLASH is always at 0x00000000
+FLASH_ORIGIN = 0x00000000
+FLASH_LENGTH = 32K
+else
+# Simulation support for standard mode
 ifeq ($(SIMULATION), 1)
 FLASH_ORIGIN = 0x60000000
 FLASH_LENGTH = 4M
@@ -37,8 +47,9 @@ FLASH_ORIGIN = 0x00000000
 # as per the memory map in the GW1NSR-4C datasheet.
 FLASH_LENGTH = 128K
 endif
+endif
 
-LDFLAGS += -T tang_nano_4k.ld -Wl,-Map=$@.map,--cref,--gc-sections --specs=nano.specs --specs=nosys.specs -lc -lnosys
+LDFLAGS += -T tang_nano_4k.ld -L$(BUILD) -Wl,-Map=$@.map,--cref,--gc-sections --specs=nano.specs --specs=nosys.specs -lc -lnosys
 LIBS += -lm
 LDFLAGS += -Wl,--defsym=FLASH_ORIGIN=$(FLASH_ORIGIN),--defsym=FLASH_LENGTH=$(FLASH_LENGTH)
 
@@ -130,9 +141,13 @@ $(BUILD)/lib/littlefs/%.o: CFLAGS += $(CFLAGS_MOD)
 
 all: $(BUILD)/firmware.bin
 
-$(BUILD)/firmware.elf: $(OBJ)
+$(BUILD)/regions.ld: | $(BUILD)
+	$(ECHO) "GEN $@"
+	$(Q)echo 'REGION_ALIAS("MAIN_FLASH", $(if $(filter 1,$(SPLIT_FLASH)),EXT_FLASH,INT_FLASH));' > $@
+
+$(BUILD)/firmware.elf: $(OBJ) $(BUILD)/regions.ld
 	$(ECHO) "LINK $@"
-	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJ) $(LIBS)
 	$(Q)$(SIZE) $@
 
 $(BUILD)/firmware.bin: $(BUILD)/firmware.elf
