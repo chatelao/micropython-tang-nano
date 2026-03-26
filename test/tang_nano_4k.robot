@@ -140,6 +140,36 @@ Verify FPGA DMA Implementation
     ${ctrl_val}=            Execute Command  sysbus ReadDoubleWord 0x40002C0C
     Should Match Regexp     ${ctrl_val}      0x0000000[45]
 
+Verify PSRAM Heap Expansion
+    Setup MicroPython
+    Start Emulation
+    Wait For Line On Uart   MicroPython started on Tang Nano 4K
+
+    # Test PSRAM allocation using a large buffer (1MB)
+    # The internal SRAM heap is only 22KB, so this must go to PSRAM.
+    Write Line To Uart      import gc
+    Write Line To Uart      gc.collect()
+    Write Line To Uart      print("FR" + "EE_START", gc.mem_free() > 8000000)
+    Wait For Line On Uart   FREE_START True
+
+    Write Line To Uart      size = 1024 * 1024
+    Write Line To Uart      buf = bytearray(size)
+    Write Line To Uart      print("AL" + "LOC_OK")
+    Wait For Line On Uart   ALLOC_OK  timeout=60
+
+    Write Line To Uart      for i in range(100): buf[i] = i
+    Write Line To Uart      ${EMPTY}
+    Write Line To Uart      ok = True
+    Write Line To Uart      for i in range(100):
+    Write Line To Uart      ${SPACE}if buf[i] != i: ok = False
+    Write Line To Uart      ${EMPTY}
+    Write Line To Uart      print("VE" + "RIFY", ok)
+    Wait For Line On Uart   VERIFY True  timeout=30
+
+    Write Line To Uart      gc.collect()
+    Write Line To Uart      print("AL" + "LOC_AFTER", gc.mem_alloc() > 1000000)
+    Wait For Line On Uart   ALLOC_AFTER True
+
 Run MicroPython Compliance Tests
     Execute Command         $repl = @${REPL}
     Execute Command         $bin = @${BIN}

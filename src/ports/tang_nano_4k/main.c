@@ -23,6 +23,13 @@
 extern char _sheap, _eheap;
 static char *stack_top;
 
+#ifdef SIMULATION
+#define PSRAM_BASE (0x10000000)
+#else
+#define PSRAM_BASE (0xA0000000)
+#endif
+#define PSRAM_SIZE (8 * 1024 * 1024)
+
 int main(int argc, char **argv) {
     int stack_dummy;
     stack_top = (char *)&stack_dummy;
@@ -30,6 +37,8 @@ int main(int argc, char **argv) {
 
     for (;;) {
         gc_init(&_sheap, &_eheap);
+        // Add external PSRAM to the heap
+        gc_add((void *)PSRAM_BASE, (void *)(PSRAM_BASE + PSRAM_SIZE));
         mp_init();
         mp_hal_init();
 
