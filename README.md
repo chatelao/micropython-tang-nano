@@ -52,5 +52,27 @@ Use a serial terminal with the following configuration:
 - **Stop Bits**: 1
 - **Flow Control**: None (8N1)
 
+## Split Flash Installation
+The Tang Nano 4K has only 32KB of internal code flash, which is insufficient for a full MicroPython build (~125KB). To solve this, we use a **Split Flash** architecture:
+
+| Region | Address | Binary | Description |
+| :--- | :--- | :--- | :--- |
+| **Internal Flash** | `0x00000000` | `firmware_int.bin` | Vector table & Reset Handler (32KB) |
+| **External Flash** | `0x60000000` | `firmware_ext.bin` | MicroPython Runtime & Code (1MB) |
+
+### Installation with Gowin Programmer
+1.  **Build** the firmware with `SPLIT_FLASH=1`.
+2.  **Flash Internal Flash**:
+    *   Access Mode: `MCU Mode`
+    *   Operation: `Flash Erase, Program, Verify`
+    *   File: `build/firmware_int.bin`
+3.  **Flash External Flash**:
+    *   Access Mode: `External Flash Mode`
+    *   Operation: `exFlash Erase, Program, Verify`
+    *   File: `build/firmware_ext.bin`
+    *   Address: `0x000000` (The M3 sees this at `0x60000000`)
+
+For detailed instructions, see the [Tang Nano 4K MicroPython Port Guide](documentation/TANG_NANO_MICROPYTHON_GUIDE.md).
+
 ## Progress
 Update `ROADMAP.md` for the current status and upcoming tasks.
