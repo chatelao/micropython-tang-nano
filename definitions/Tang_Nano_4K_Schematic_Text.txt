@@ -1,0 +1,37 @@
+1
+Sipeed T ang Nano 4K Datasheet v1.0
+深圳矽速科技有限公司
+Sipeed Tang Nano 4K Datasheet v1.0
+Characteristic：Main Chip : GW1NSR-LV4C with arm Cortex-M3 hard coreEmbedded FPGA logic module unit (4608 lut4)SOC device realizes the seamless connection between programmablelogic device and embedded processorOnboard usb-jtag debuggerOn board HDMI connector and its circuitOnboard camera connector (DVP interface)Onboard wson8 pad (32Mbit nor flash default)
+
+2
+Sipeed T ang Nano 4K Datasheet v1.0
+深圳矽速科技有限公司
+Update record of this documentV1.0Edited on August 7, 2021; Original documentHardware overviewHard core processor• Cortex-M3 32-bit RISC kernel；ARM3v7MArchitecture• Maximum operating frequency : 80MHz• Hardware division and single cycle multiplication• 26 interrupts with 8 prioritiesLogic cells(4-input LUT4)Quantity：4608Register(FF)Quantity：3456Block static randomaccess memoryB-SRAM(bits)Capacity：180K18 x 18 MultiplierQuantity：16User flash memoryEmbedded 256Kb storage spaceHyperRAMCapacity：64Mb ； Bit width：8bitsFlexible PLL resources• 2 PLL• Realize the frequency doubling, frequency division and phase shift• Global clock network resourcesDisplay screeninterfaceHDMI connector and its circuitCamera connector24P 0.5mm spacing FPC connector (common DVP camera sequence)DebuggerOn board bl702 chip provides JTAG debugging function for GW1NSRIO• Support 4mA, 8mA, 16mA, 24mA and other driving capabilities• Independent bus keeper, pull-up / pull-down resistor and open drainoutput options are provided for each I/O• Support Mipi interfacePush button2 programmable Push buttonsLEDOn board 1 programmable LEDNumber of GPIO38
+3
+Sipeed T ang Nano 4K Datasheet v1.0
+深圳矽速科技有限公司
+Software overviewIDESupport Gowin IDE(Version>1.9.7) ；Support Gowin SynthesisFloating License45.33.107.56:10559Off-line LicenseSend application email to support@sipeed.comExample of mail title ：【Apply Tang Lic】MAC: xxxxxxIDEhttp://www.gowinsemi.com.cn/faq.aspxMCU developmentdocumentshttp://www.gowinsemi.com.cn/down.aspx?TypeId=317&Id=394GOAI briefintroductionhttp://www.gowinsemi.com.cn/down.aspx?TypeId=666&Id=757GOAI Official projecthttps://github.com/gowinsemi/GoAISipeed Referenceexamplehttps://github.com/sipeed/TangNano-4K-exampleWorking conditionsPower supplydemandTYPE-C connector：5V±10% 0.5ATemperature rise<30KOperating ambienttemperature range-10℃ ~ 65℃
+4
+Sipeed T ang Nano 4K Datasheet v1.0
+深圳矽速科技有限公司
+Appearance drawing
+
+5
+Sipeed T ang Nano 4K Datasheet v1.0
+深圳矽速科技有限公司
+Functional annotation
+
+6
+Sipeed T ang Nano 4K Datasheet v1.0
+深圳矽速科技有限公司
+Dimension informationLength60.0 mmWidth22.86mmThicknessPlease check the 3D drawing
+
+7
+Sipeed T ang Nano 4K Datasheet v1.0
+深圳矽速科技有限公司
+Matters needing attentionESD protectionPlease pay attention to avoid static electricity hitting PCBA;Please release the static electricity from the handle before contactingPCBATolerance voltageThe working voltage of each GPIO has been marked in theschematic . Please do not let the actual working voltage of GPIOexceed the rated value, otherwise it will cause permanent damage toPCBAFPC connectorWhen connecting FPC flexible cable, please ensure that the cable iscompletely inserted into the cable without offset；PluggingPlease disconnect the power completely before plugging in and outthe cameraAvoid short circuitPlease avoid any liquid or metal touching the pads of componentson PCBA during power on, otherwise it will cause short circuit andburn PCBAPlease avoid using these GPIO.• JTAG : IOT2A/IOT2B/IOT3A/IOT3B/IOT4B• MODE : IOT7A• DONE : IOT5BIf you must use these GPIO, please read the following documents:<Ug292-1.0 schematic diagram instruction manual>ResourcesOfficial websitewww.sipeed.comGithubhttps://github.com/SipeedBBShttp://bbs.sipeed.comWikiwiki.sipeed.comSipeed Model platformhttps://maixhub.com/SDK /HDK Relevant informationhttps://dl.sipeed.com/E-mail(Technical support and businesscooperation)support@sipeed.com
+8
+Sipeed T ang Nano 4K Datasheet v1.0
+深圳矽速科技有限公司
+免责声明和版权声明本文档中的信息（包括 URL 地址）如有更改，恕不另行通知。该文档由 Sipeed 提供， 不附带任何形式的担保， 包括任何适销性担保，以及其他地方提及的任何提案，规范或样本。 本文档不构成责任，包括使用本文档中的信息侵犯任何专利权。Copyrights © 2021 Sipeed Limited. All rights reserved.

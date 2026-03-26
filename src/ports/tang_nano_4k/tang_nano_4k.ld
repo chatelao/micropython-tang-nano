@@ -3,18 +3,27 @@ ENTRY(Reset_Handler)
 
 MEMORY
 {
-    FLASH (rx) : ORIGIN = FLASH_ORIGIN, LENGTH = FLASH_LENGTH
+    INT_FLASH (rx) : ORIGIN = FLASH_ORIGIN, LENGTH = FLASH_LENGTH
+    EXT_FLASH (rx) : ORIGIN = 0x60000000, LENGTH = 256K
     SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 22K
 }
+
+INCLUDE regions.ld
 
 STACK_SIZE = 2K;
 
 SECTIONS
 {
-    .text :
+    .isr_vector :
     {
         . = ALIGN(256);
         KEEP(*(.isr_vector))
+        *(.boot*)
+    } > INT_FLASH
+
+    .text :
+    {
+        . = ALIGN(4);
         *(.text*)
         *(.rodata*)
         *(.init)
@@ -23,7 +32,7 @@ SECTIONS
         . = ALIGN(4);
         *(.ARM.exidx*)
         _etext = .;
-    } > FLASH
+    } > MAIN_FLASH
 
     .data : AT (_etext)
     {

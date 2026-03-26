@@ -83,13 +83,27 @@ Before the M3 core can interact with the external pins, you must flash the FPGA 
 2.  Select the `tang_nano_4k_m3.fs` bitstream file from the release or `src/fpga/bitstream/`.
 3.  Click **Run**.
 
-### 5. Flashing the MicroPython Firmware
-Once the bitstream is flashed, you can load the MicroPython firmware onto the M3 core:
+### 5. Flashing the MicroPython Firmware (Split Flash Mode)
+If you built the firmware with `SPLIT_FLASH=1`, follow these steps:
 
+#### IP Core Configuration (Gowin EDA)
+Before flashing, ensure your FPGA bitstream includes the **SPI Flash Interface** IP:
+- **Bus Interface**: AHB
+- **Mode**: Memory Mapped
+- **Base Address**: 0x60000000 (XIP range)
+
+#### Flashing Internal Flash
 1.  In **Gowin Programmer**, select **Access Mode**: `MCU Mode`.
 2.  Select **Operation**: `Flash Erase, Program, Verify`.
-3.  Select the `firmware_hw.bin` file from the release or your `build_hw` directory.
+3.  Select the `firmware_int.bin` file.
 4.  Click **Run**.
+
+#### Flashing External Flash
+1.  In **Gowin Programmer**, select **Access Mode**: `External Flash Mode`.
+2.  Select **Operation**: `exFlash Erase, Program, Verify`.
+3.  Select the `firmware_ext.bin` file.
+4.  Set **Address**: `0x000000`.
+5.  Click **Run**.
 
 ---
 
