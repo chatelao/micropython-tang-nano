@@ -40,6 +40,13 @@ extern char _sheap, _eheap;
 extern char _spsram_heap, _epsram_heap;
 static char *stack_top;
 
+#ifdef SIMULATION
+#define PSRAM_BASE (0x10000000)
+#else
+#define PSRAM_BASE (0xA0000000)
+#endif
+#define PSRAM_SIZE (8 * 1024 * 1024)
+
 int main(int argc, char **argv) {
     int stack_dummy;
     stack_top = (char *)&stack_dummy;
