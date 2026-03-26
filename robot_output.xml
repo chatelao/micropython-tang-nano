@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.1 (Python 3.12.13 on linux)" generated="20260326 18:48:48.519" rpa="false" schemaversion="4">
+<suite id="s1" name="Test Suite" source="/app/test/tang_nano_4k.robot">
+<meta name="HotSpot_Action">-</meta>
+<status status="SKIP" starttime="20260326 18:48:48.420" endtime="20260326 18:48:48.487"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="0" skip="0" id="s1" name="Test Suite">Test Suite</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
