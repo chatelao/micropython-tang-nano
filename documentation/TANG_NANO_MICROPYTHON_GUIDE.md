@@ -30,6 +30,14 @@ The port implements the standard MicroPython `machine` module with hardware-spec
 | `Flash` | Block device interface for the onboard SPI Flash. See the [External Flash Guide](EXTERNAL_FLASH_GUIDE.md) for IP details. |
 
 ### Memory and Filesystem
+MicroPython on the Tang Nano 4K utilizes the 22 KB internal SRAM as the primary heap and the **8 MB external PSRAM** as an extended heap.
+
+#### PSRAM IP Core Configuration (Gowin EDA)
+To enable the 8 MB PSRAM heap expansion, your FPGA bitstream must include the **Gowin PSRAM Memory Interface** IP (e.g., W955D8MBYA) with the following settings:
+- **Bus Interface**: AHB
+- **Mode**: Memory Mapped
+- **Base Address**: 0xA0000000 (AHB2 Master range)
+- **Data Width**: 16-bit
 MicroPython uses a **LittleFS (LFS2)** filesystem on the external SPI Flash, allowing you to store Python scripts and data files.
 *   **Flash Offset**: The filesystem starts at a 1 MB offset to avoid overwriting the FPGA bitstream.
 *   **Size**: 3 MB of space is available for the user filesystem.
