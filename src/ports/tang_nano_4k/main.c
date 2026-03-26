@@ -20,7 +20,24 @@
 #include "extmod/vfs.h"
 #include "extmod/vfs_lfs.h"
 
+const char tang_nano_4k_help_text[] =
+    "Welcome to MicroPython on Tang Nano 4K!\n"
+    "\n"
+    "For online help please visit https://micropython.org/help/.\n"
+    "\n"
+    "Control commands:\n"
+    "  CTRL-A        -- on a blank line, enter raw REPL mode\n"
+    "  CTRL-B        -- on a blank line, enter normal REPL mode\n"
+    "  CTRL-C        -- interrupt a running program\n"
+    "  CTRL-D        -- on a blank line, do a soft reset of the board\n"
+    "  CTRL-E        -- on a blank line, enter paste mode\n"
+    "\n"
+    "For further help on a specific object, type help(obj)\n"
+    "For a list of available modules, type help('modules')\n"
+;
+
 extern char _sheap, _eheap;
+extern char _spsram_heap, _epsram_heap;
 static char *stack_top;
 
 int main(int argc, char **argv) {
@@ -30,6 +47,9 @@ int main(int argc, char **argv) {
 
     for (;;) {
         gc_init(&_sheap, &_eheap);
+        #if MICROPY_GC_SPLIT_HEAP
+        gc_add(&_spsram_heap, &_epsram_heap);
+        #endif
         mp_init();
         mp_hal_init();
 

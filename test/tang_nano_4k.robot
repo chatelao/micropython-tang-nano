@@ -141,6 +141,7 @@ Verify FPGA DMA Implementation
     Should Match Regexp     ${ctrl_val}      0x0000000[45]
 
 Run MicroPython Compliance Tests
+    [Tags]                  compliance
     Execute Command         $repl = @${REPL}
     Execute Command         $bin = @${BIN}
     Execute Command         include @${RESC}

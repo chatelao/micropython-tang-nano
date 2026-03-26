@@ -6,6 +6,7 @@ MEMORY
     INT_FLASH (rx) : ORIGIN = FLASH_ORIGIN, LENGTH = FLASH_LENGTH
     EXT_FLASH (rx) : ORIGIN = 0x60000000, LENGTH = 256K
     SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 22K
+    PSRAM (rwx) : ORIGIN = 0xA0000000, LENGTH = 8M
 }
 
 INCLUDE regions.ld
@@ -70,4 +71,12 @@ SECTIONS
         . = ORIGIN(SRAM) + LENGTH(SRAM);
         _estack = .;
     } > SRAM
+
+    .psram_heap (NOLOAD) :
+    {
+        . = ALIGN(8);
+        _spsram_heap = .;
+        . = ORIGIN(PSRAM) + LENGTH(PSRAM);
+        _epsram_heap = .;
+    } > PSRAM
 }
