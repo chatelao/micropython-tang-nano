@@ -60,13 +60,29 @@ The Tang Nano 4K has only 32KB of internal code flash, which is insufficient for
 | **Internal Flash** | `0x00000000` | `firmware_int.bin` | Vector table & Reset Handler (32KB) |
 | **External Flash** | `0x60000000` | `firmware_ext.bin` | MicroPython Runtime & Code (1MB) |
 
+### IP Core Configuration (Gowin EDA)
+To access the external flash at `0x60000000`, you must instantiate the **SPI Flash Interface** IP in your Gowin project:
+1.  **IP Generator**: Select `SPI Flash Interface`.
+2.  **Configuration**:
+    *   **Protocol**: Single SPI (Standard).
+    *   **Bus Interface**: `AHB` (required for XIP).
+    *   **Memory Mapped**: Enable `Memory Mapped Mode`.
+    *   **Base Address**: Set to `0x60000000` in the AHB expansion configuration.
+3.  **M3 Connection**: Connect the IP core to the Cortex-M3 **AHB Master** port (typically via the AHB Expansion interface).
+4.  **Pin Constraints**: Map the SPI signals to the following pins:
+    *   `CS_N`: Pin 36
+    *   `SCLK`: Pin 37
+    *   `MOSI`: Pin 38
+    *   `MISO`: Pin 39
+
 ### Installation with Gowin Programmer
 1.  **Build** the firmware with `SPLIT_FLASH=1`.
-2.  **Flash Internal Flash**:
+2.  **Flash FPGA Bitstream**: Flash your `.fs` file containing the SPI Flash Interface IP.
+3.  **Flash Internal Flash**:
     *   Access Mode: `MCU Mode`
     *   Operation: `Flash Erase, Program, Verify`
     *   File: `build/firmware_int.bin`
-3.  **Flash External Flash**:
+4.  **Flash External Flash**:
     *   Access Mode: `External Flash Mode`
     *   Operation: `exFlash Erase, Program, Verify`
     *   File: `build/firmware_ext.bin`

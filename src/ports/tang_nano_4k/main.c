@@ -124,7 +124,7 @@ void MP_WEAK __assert_func(const char *file, int line, const char *func, const c
 // Cortex-M3 Startup Code
 extern uint32_t _estack, _etext, _sdata, _edata, _sbss, _ebss;
 
-void Reset_Handler(void) __attribute__((naked));
+void Reset_Handler(void) __attribute__((naked, section(".boot")));
 void Reset_Handler(void) {
     // set stack pointer
     __asm volatile ("ldr sp, =_estack");

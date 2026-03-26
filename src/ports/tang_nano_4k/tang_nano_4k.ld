@@ -4,7 +4,7 @@ ENTRY(Reset_Handler)
 MEMORY
 {
     INT_FLASH (rx) : ORIGIN = FLASH_ORIGIN, LENGTH = FLASH_LENGTH
-    EXT_FLASH (rx) : ORIGIN = 0x60000000, LENGTH = 1M
+    EXT_FLASH (rx) : ORIGIN = 0x60000000, LENGTH = 256K
     SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 22K
 }
 
@@ -18,7 +18,7 @@ SECTIONS
     {
         . = ALIGN(256);
         KEEP(*(.isr_vector))
-        *main.o(.text.Reset_Handler)
+        *(.boot*)
     } > INT_FLASH
 
     .text :

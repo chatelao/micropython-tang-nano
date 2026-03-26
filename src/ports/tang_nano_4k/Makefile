@@ -154,7 +154,7 @@ ifeq ($(SPLIT_FLASH), 1)
 $(BUILD)/firmware.bin: $(BUILD)/firmware.elf
 	$(ECHO) "BIN $@"
 	$(Q)$(OBJCOPY) -O binary -j .isr_vector $(BUILD)/firmware.elf $(BUILD)/firmware_int.bin
-	$(Q)$(OBJCOPY) -O binary -j .text $(BUILD)/firmware.elf $(BUILD)/firmware_ext.bin
+	$(Q)$(OBJCOPY) -O binary -j .text -j .data $(BUILD)/firmware.elf $(BUILD)/firmware_ext.bin
 	$(Q)cp $(BUILD)/firmware_int.bin $@ # Dummy for default 'all' target
 else
 $(BUILD)/firmware.bin: $(BUILD)/firmware.elf

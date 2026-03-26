@@ -10,20 +10,32 @@ ${RESC}         ${CURDIR}/tang_nano_4k.resc
 ${REPL}         ${CURDIR}/tang_nano_4k.repl
 ${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
-${BOOT_ADDR}    0x60000000
+
+*** Keywords ***
+Setup MicroPython
+    Execute Command         $repl = @${REPL}
+    Execute Command         $bin = @${BIN}
+    Execute Command         include @${RESC}
+    ${boot_addr_raw}=       Execute Command  sysbus GetSymbolAddress "isr_vector"
+    ${boot_addr}=           Evaluate  '''${boot_addr_raw}'''.strip()
+    Log                     Boot Addr: ${boot_addr}
+    # For booting, we need to set VTOR, SP and PC manually in Renode
+    Execute Command         sysbus.cpu VectorTableOffset ${boot_addr}
+    ${sp_val_raw}=          Execute Command  sysbus ReadDoubleWord ${boot_addr}
+    ${sp_val}=              Evaluate  '''${sp_val_raw}'''.strip()
+    Log                     SP Val: ${sp_val}
+    Execute Command         sysbus.cpu SP ${sp_val}
+    ${pc_ptr}=              Evaluate  hex(int("${boot_addr}", 16) + 4)
+    ${pc_val_raw}=          Execute Command  sysbus ReadDoubleWord ${pc_ptr}
+    ${pc_val}=              Evaluate  '''${pc_val_raw}'''.strip()
+    Log                     PC Val: ${pc_val}
+    Execute Command         sysbus.cpu PC ${pc_val}
+    Create Terminal Tester  ${UART}
 
 *** Test Cases ***
 Should Boot Successfully and Interaction with REPL
     [Tags]                  boot
-    Execute Command         $repl = @${REPL}
-    Execute Command         $bin = @${BIN}
-    Execute Command         include @${RESC}
-    # For booting, we need to set VTOR, SP and PC manually in Renode
-    Execute Command         sysbus.cpu VectorTableOffset ${BOOT_ADDR}
-    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord ${BOOT_ADDR}`
-    ${pc_addr}=             Evaluate  hex(int("${BOOT_ADDR}", 16) + 4)
-    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord ${pc_addr}`
-    Create Terminal Tester  ${UART}
+    Setup MicroPython
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
     Wait For Line On Uart   Tang Nano 4K with GW1NSR-LV4C
@@ -31,14 +43,7 @@ Should Boot Successfully and Interaction with REPL
     Wait For Line On Uart   Hello from external Flash
 
 Verify Hardware SPI Implementation
-    Execute Command         $repl = @${REPL}
-    Execute Command         $bin = @${BIN}
-    Execute Command         include @${RESC}
-    Execute Command         sysbus.cpu VectorTableOffset ${BOOT_ADDR}
-    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord ${BOOT_ADDR}`
-    ${pc_addr}=             Evaluate  hex(int("${BOOT_ADDR}", 16) + 4)
-    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord ${pc_addr}`
-    Create Terminal Tester  ${UART}
+    Setup MicroPython
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
@@ -63,14 +68,7 @@ Verify Hardware SPI Implementation
     Wait For Line On Uart   SREAD_OK b'\\x00'
 
 Verify Watchdog Timer Implementation
-    Execute Command         $repl = @${REPL}
-    Execute Command         $bin = @${BIN}
-    Execute Command         include @${RESC}
-    Execute Command         sysbus.cpu VectorTableOffset ${BOOT_ADDR}
-    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord ${BOOT_ADDR}`
-    ${pc_addr}=             Evaluate  hex(int("${BOOT_ADDR}", 16) + 4)
-    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord ${pc_addr}`
-    Create Terminal Tester  ${UART}
+    Setup MicroPython
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
@@ -95,14 +93,7 @@ Verify Watchdog Timer Implementation
     Should Contain          ${ctrl_val}      0x00000003
 
 Verify Real-Time Clock Implementation
-    Execute Command         $repl = @${REPL}
-    Execute Command         $bin = @${BIN}
-    Execute Command         include @${RESC}
-    Execute Command         sysbus.cpu VectorTableOffset ${BOOT_ADDR}
-    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord ${BOOT_ADDR}`
-    ${pc_addr}=             Evaluate  hex(int("${BOOT_ADDR}", 16) + 4)
-    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord ${pc_addr}`
-    Create Terminal Tester  ${UART}
+    Setup MicroPython
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
@@ -131,14 +122,7 @@ Verify Real-Time Clock Implementation
     Wait For Line On Uart   RTC_TIME (2024, 1, 1, 1, 12, 0, 10, 0)
 
 Verify FPGA DMA Implementation
-    Execute Command         $repl = @${REPL}
-    Execute Command         $bin = @${BIN}
-    Execute Command         include @${RESC}
-    Execute Command         sysbus.cpu VectorTableOffset ${BOOT_ADDR}
-    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord ${BOOT_ADDR}`
-    ${pc_addr}=             Evaluate  hex(int("${BOOT_ADDR}", 16) + 4)
-    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord ${pc_addr}`
-    Create Terminal Tester  ${UART}
+    Setup MicroPython
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
 
@@ -161,10 +145,16 @@ Run MicroPython Compliance Tests
     Execute Command         $bin = @${BIN}
     Execute Command         include @${RESC}
     Execute Command         runMacro $setup_tcp_term
-    Execute Command         sysbus.cpu VectorTableOffset ${BOOT_ADDR}
-    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord ${BOOT_ADDR}`
-    ${pc_addr}=             Evaluate  hex(int("${BOOT_ADDR}", 16) + 4)
-    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord ${pc_addr}`
+    ${boot_addr_raw}=       Execute Command  sysbus GetSymbolAddress "isr_vector"
+    ${boot_addr}=           Evaluate  '''${boot_addr_raw}'''.strip()
+    Execute Command         sysbus.cpu VectorTableOffset ${boot_addr}
+    ${sp_val_raw}=          Execute Command  sysbus ReadDoubleWord ${boot_addr}
+    ${sp_val}=              Evaluate  '''${sp_val_raw}'''.strip()
+    Execute Command         sysbus.cpu SP ${sp_val}
+    ${pc_ptr}=              Evaluate  hex(int("${boot_addr}", 16) + 4)
+    ${pc_val_raw}=          Execute Command  sysbus ReadDoubleWord ${pc_ptr}
+    ${pc_val}=              Evaluate  '''${pc_val_raw}'''.strip()
+    Execute Command         sysbus.cpu PC ${pc_val}
     Start Emulation
 
     # Give Renode a moment to start the TCP terminal server
