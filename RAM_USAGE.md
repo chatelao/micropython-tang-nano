@@ -41,5 +41,5 @@ This document defines the formal usage plan for the various memory regions avail
 
 ## 5. Implementation Notes
 
-- PSRAM must be enabled in the FPGA bitstream and the controller initialized (if applicable) before `gc_add()` is called.
+- **PSRAM Configuration**: To utilize the PSRAM in hardware, the **Gowin PSRAM Memory Interface** IP (W955D8MBYA) must be instantiated in the FPGA bitstream. It should be configured for **Memory Mapped Mode** (AHB interface) and mapped to the base address `0xA0000000`.
 - In the simulation environment (Renode), the `fpga_ram` peripheral is used to model the PSRAM at `0x10000000`.
