@@ -71,7 +71,6 @@ dma0: Memory.MappedMemory @ sysbus 0x40002C00
     size: 0x400
 
 // FPGA RAM - AHB2 Master region
-// Moved to 0x10000000 to fit in MicroPython 31-bit small ints
 // Simulated PSRAM (8MB)
-fpga_ram: Memory.MappedMemory @ sysbus 0x10000000
+fpga_ram: Memory.MappedMemory @ sysbus 0xA0000000
     size: 0x800000

@@ -141,6 +141,7 @@ Verify FPGA DMA Implementation
     Should Match Regexp     ${ctrl_val}      0x0000000[45]
 
 Verify PSRAM Heap Expansion
+    [Tags]                  psram
     Setup MicroPython
     Start Emulation
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
@@ -171,6 +172,7 @@ Verify PSRAM Heap Expansion
     Wait For Line On Uart   ALLOC_AFTER True
 
 Run MicroPython Compliance Tests
+    [Tags]                  compliance
     Execute Command         $repl = @${REPL}
     Execute Command         $bin = @${BIN}
     Execute Command         include @${RESC}

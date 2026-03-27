@@ -7,7 +7,7 @@ This document analyzes the current memory usage of the MicroPython port and eval
 The GW1NSR-4C integrated Cortex-M3 "Hard Core" has a primary internal SRAM space of **22 KB** (mapped at `0x20000000`). This memory is physically implemented using the SoC's Block SRAM (BSRAM) resources.
 
 ### Current Allocation:
-- **Stack**: 2 KB (at the top of SRAM: `0x20005800` - `0x20005FFF`)
+- **Stack**: 2 KB (at the top of SRAM: `0x20005000` - `0x200057FF`)
 - **Data/BSS**: ~1-2 KB (statically allocated)
 - **Heap**: ~18-19 KB (the remaining space for MicroPython objects)
 
@@ -36,21 +36,19 @@ The Tang Nano 4K board includes an integrated **64 Mbit (8 MB) PSRAM** chip conn
 - **Capacity**: 8 MB is **~360x larger** than the current 22 KB internal SRAM.
 - **Accessibility**: The SoC includes a dedicated **PSRAM Memory Interface** reachable via the **AHB2 Master bus** (base `0xA0000000`).
 
-### Requirements for Integration:
+### Current Implementation:
 1. **FPGA Bitstream**: The PSRAM controller IP must be instantiated in the FPGA fabric and routed to the physical PSRAM pins.
-2. **MicroPython Heap**: The MicroPython heap can be moved to the PSRAM region by updating `main.c` and the linker script, though this would incur a performance penalty (latency) compared to internal SRAM.
+2. **MicroPython Heap**: The MicroPython heap is already integrated as a split heap in `main.c`, utilizing the 8 MB region for extended object storage.
 
-## 5. Summary and Recommendation
+## 5. Summary and Implementation Status
 
-| Region | Capacity | Performance | Helpfulness | Recommendation |
+| Region | Capacity | Performance | Helpfulness | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **FastRAM** (Internal) | 22 KB | Highest | Essential | Already in use. |
-| **FSRAM** (Shadow) | ~1-9 KB | Moderate | Low | Do not use for general heap. |
-| **PSRAM** (External) | 8 MB | Lower | **Highest** | **High Priority** for future heap expansion. |
+| **FastRAM** (Internal) | 22 KB | Highest | Essential | **Implemented** (Stack, Data, Fast Heap) |
+| **FSRAM** (Shadow) | ~1-9 KB | Moderate | Low | Reserved for FPGA communication |
+| **PSRAM** (External) | 8 MB | Lower | **Highest** | **Implemented** (Large Heap) |
 
 ### Conclusion:
-- **FastRAM (Internal SRAM)**: No further action needed; it is already optimized for the stack and core heap.
-- **FSRAM**: Not recommended for general MicroPython usage due to FPGA resource exhaustion.
-- **PSRAM**: This is the only viable path for significant memory expansion. It would allow for much larger Python scripts, framebuffers, and complex data structures.
-
-**Next Step Recommendation**: Future development should focus on implementing a "PSRAM variant" of the firmware that initializes the PSRAM controller in the FPGA and utilizes the 8 MB region for the MicroPython heap.
+- **FastRAM (Internal SRAM)**: Optimized for the stack and core heap.
+- **FSRAM**: Reserved for small, specialized buffers or communication mailboxes between the M3 and FPGA.
+- **PSRAM**: Successfully integrated as an extended heap, allowing for much larger Python scripts, framebuffers, and complex data structures.
