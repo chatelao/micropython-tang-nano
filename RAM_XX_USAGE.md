@@ -1,6 +1,6 @@
 # RAM Usage and Potential Expansion - Tang Nano 4K (GW1NSR-4C)
 
-This document analyzes the current memory usage of the MicroPython port and evaluates the feasibility and benefits of utilizing additional memory regions: **FastRAM**, **FSRAM**, and **External PSRAM**.
+This document analyzes the current memory usage of the MicroPython port and evaluates the feasibility and benefits of utilizing additional memory regions: **FastRAM** and **External PSRAM**.
 
 ## 1. Current Memory Architecture
 
@@ -19,16 +19,7 @@ The GW1NSR-4C integrated Cortex-M3 "Hard Core" has a primary internal SRAM space
 - The internal **22 KB SRAM** at `0x20000000` *is* the "FastRAM". It is connected via the high-speed AHB-Lite bus and provides optimal performance for the CPU.
 - **Status**: Already fully utilized. There are no additional hidden "FastRAM" pools within the M3 hard core itself.
 
-## 3. FSRAM (Fabric-based SRAM / Shadow RAM)
-
-**Definition**: **FSRAM** (Fabric SRAM) refers to memory implemented using the FPGA logic fabric. This includes **Shadow RAM (SSRAM)**, which utilizes LUTs as small distributed memory blocks.
-
-### Performance and Feasibility:
-- **Capacity**: Utilizing a significant amount of FSRAM (e.g., 8-16 KB) would consume thousands of LUT4 logic units, severely limiting the space available for user FPGA logic (total 4608 LUTs).
-- **Latency**: Accessing FSRAM from the M3 requires passing through the **AHB-to-FPGA Bridge** or **TARGEXP0 slave port**, introducing wait states compared to the internal SRAM.
-- **Helpfulness**: **Low**. Using FSRAM for the main MicroPython heap is inefficient due to the high logic cost and lower performance. It is better reserved for small, specialized buffers or communication mailboxes between the M3 and FPGA.
-
-## 4. External PSRAM (The High-Capacity Solution)
+## 3. External PSRAM (The High-Capacity Solution)
 
 The Tang Nano 4K board includes an integrated **64 Mbit (8 MB) PSRAM** chip connected to the GW1NSR-4C.
 
@@ -40,15 +31,13 @@ The Tang Nano 4K board includes an integrated **64 Mbit (8 MB) PSRAM** chip conn
 1. **FPGA Bitstream**: The PSRAM controller IP must be instantiated in the FPGA fabric and routed to the physical PSRAM pins.
 2. **MicroPython Heap**: The MicroPython heap is already integrated as a split heap in `main.c`, utilizing the 8 MB region for extended object storage.
 
-## 5. Summary and Implementation Status
+## 4. Summary and Implementation Status
 
 | Region | Capacity | Performance | Helpfulness | Status |
 | :--- | :--- | :--- | :--- | :--- |
 | **FastRAM** (Internal) | 22 KB | Highest | Essential | **Implemented** (Stack, Data, Fast Heap) |
-| **FSRAM** (Shadow) | ~1-9 KB | Moderate | Low | Reserved for FPGA communication |
 | **PSRAM** (External) | 8 MB | Lower | **Highest** | **Implemented** (Large Heap) |
 
 ### Conclusion:
 - **FastRAM (Internal SRAM)**: Optimized for the stack and core heap.
-- **FSRAM**: Reserved for small, specialized buffers or communication mailboxes between the M3 and FPGA.
 - **PSRAM**: Successfully integrated as an extended heap, allowing for much larger Python scripts, framebuffers, and complex data structures.
