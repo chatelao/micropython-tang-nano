@@ -4,7 +4,6 @@ import sys
 def test_structure():
     expected_dirs = [
         'definitions',
-        'documentation',
         'src',
         'src/fpga/bitstream',
         'test',
