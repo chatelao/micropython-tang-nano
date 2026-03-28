@@ -7,12 +7,16 @@ Library         OperatingSystem
 
 *** Variables ***
 ${RESC}         ${CURDIR}/../tang_nano_4k.resc
+${REPL}         ${CURDIR}/../tang_nano_4k.repl
+${BIN}          ${CURDIR}/../../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
 ${EXAMPLE}      ${CURDIR}/../../examples/tt_echo/tt_echo.py
 
 *** Test Cases ***
 Verify Tiny Tapeout Echo Example
     [Documentation]    Verifies that the tt_echo.py example works by sending it to the REPL.
+    Execute Command         $repl = @${REPL}
+    Execute Command         $bin = @${BIN}
     Execute Command         include @${RESC}
     Execute Command         sysbus.cpu VectorTableOffset 0x60000000
     Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
