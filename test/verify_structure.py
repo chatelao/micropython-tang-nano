@@ -17,6 +17,7 @@ def test_structure():
         'ROADMAP.md',
         'src/fpga/bitstream/tang_nano_4k_m3.fs',
         'GEMINI.md',
+        'HOWTO_TT.md',
         'examples/blink/blink.py',
         'examples/tt_echo/tt_project.v',
         'examples/tt_echo/tt_echo.py'
