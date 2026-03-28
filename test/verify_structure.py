@@ -8,13 +8,19 @@ def test_structure():
         'src',
         'src/fpga/bitstream',
         'test',
+        'code',
+        'code/blink',
+        'code/tt_echo',
         '.github'
     ]
     expected_files = [
         'README.md',
         'ROADMAP.md',
         'src/fpga/bitstream/tang_nano_4k_m3.fs',
-        'GEMINI.md'
+        'GEMINI.md',
+        'code/blink/blink.py',
+        'code/tt_echo/tt_project.v',
+        'code/tt_echo/tt_echo.py'
     ]
 
     missing = []
