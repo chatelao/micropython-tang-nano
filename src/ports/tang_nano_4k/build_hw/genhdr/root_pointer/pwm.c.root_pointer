@@ -1,1 +1,0 @@
-MP_REGISTER_ROOT_POINTER(struct _machine_pwm_obj_t *active_pwm[8]);

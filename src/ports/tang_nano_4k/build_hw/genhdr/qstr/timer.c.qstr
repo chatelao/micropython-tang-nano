@@ -1,8 +1,0 @@
-Q(period)
-Q(mode)
-Q(callback)
-Q(init)
-Q(deinit)
-Q(ONE_SHOT)
-Q(PERIODIC)
-Q(Timer)
