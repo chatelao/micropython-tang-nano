@@ -89,6 +89,8 @@ jobs:
           tests-to-run: |
             test/tang_nano_4k.robot
             test/test_blink.robot
+            test/examples/test_blink.robot
+            test/examples/test_tt_echo.robot
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
