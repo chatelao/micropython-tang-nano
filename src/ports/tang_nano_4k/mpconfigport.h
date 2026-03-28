@@ -30,11 +30,13 @@ typedef long mp_off_t;
 extern const struct _mp_obj_module_t mp_module_machine;
 extern const struct _mp_obj_module_t mp_module_time;
 extern const struct _mp_obj_module_t mp_module_gc;
+extern const struct _mp_obj_module_t mp_module_struct;
 #define MICROPY_PORT_BUILTIN_MODULES \
     { MP_ROM_QSTR(MP_QSTR_machine), MP_ROM_PTR(&mp_module_machine) }, \
     { MP_ROM_QSTR(MP_QSTR_time), MP_ROM_PTR(&mp_module_time) }, \
     { MP_ROM_QSTR(MP_QSTR_utime), MP_ROM_PTR(&mp_module_time) }, \
-    { MP_ROM_QSTR(MP_QSTR_gc), MP_ROM_PTR(&mp_module_gc) },
+    { MP_ROM_QSTR(MP_QSTR_gc), MP_ROM_PTR(&mp_module_gc) }, \
+    { MP_ROM_QSTR(MP_QSTR_struct), MP_ROM_PTR(&mp_module_struct) },
 
 #define MICROPY_ENABLE_SCHEDULER (1)
 
@@ -52,7 +54,7 @@ extern const struct _mp_obj_module_t mp_module_gc;
 #define MICROPY_PY_UOS (1)
 #define MICROPY_PY_IO (1)
 #define MICROPY_PY_IO_IOBASE (1)
-#define MICROPY_LONGINT_IMPL (1)
+#define MICROPY_LONGINT_IMPL (MICROPY_LONGINT_IMPL_MPZ)
 #define MICROPY_ENABLE_FINALISER (1)
 #define MICROPY_READER_VFS (1)
 #define MICROPY_PY_GC (1)
@@ -94,3 +96,4 @@ extern const struct _mp_obj_module_t mp_module_gc;
 #define MICROPY_PY_BUILTINS_SLICE (1)
 #define MICROPY_PY_ARRAY_SLICE_ASSIGN (1)
 #define MICROPY_PY_COLLECTIONS (1)
+#define MICROPY_PY_STRUCT (1)
