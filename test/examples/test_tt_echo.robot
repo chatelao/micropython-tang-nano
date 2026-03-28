@@ -26,7 +26,7 @@ Verify Tiny Tapeout Echo Example
     Wait For Line On Uart   Tang Nano 4K with GW1NSR-LV4C
 
     # Wait for REPL to be ready
-    Wait For Text On Uart   >>>
+    Sleep                   2s
 
     # Enter Paste Mode (Ctrl-E)
     Write Char On Uart      \x05

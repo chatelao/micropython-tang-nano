@@ -22,7 +22,8 @@ def test_structure():
         'examples/tt_echo/tt_project.v',
         'examples/tt_echo/tt_echo.py',
         'test/examples/test_blink.robot',
-        'test/examples/test_tt_echo.robot'
+        'test/examples/test_tt_echo.robot',
+        'test/common.resource'
     ]
 
     missing = []
