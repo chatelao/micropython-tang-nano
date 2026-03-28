@@ -25,7 +25,7 @@ uart0: UART.CMSDK_APB_UART @ sysbus 0x40004000
 i2c0: Memory.MappedMemory @ sysbus 0x40002000
     size: 0x400
 
-// SPI Master - Mapped as memory for simulation
+// SPI Master / NEORV32 Control (Slot 1)
 spi0: Memory.MappedMemory @ sysbus 0x40002400
     size: 0x400
 

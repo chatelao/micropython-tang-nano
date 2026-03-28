@@ -82,7 +82,29 @@ machine.mem32[addr] = 0xDEADBEEF
 
 ---
 
-### Variant 4: High-Speed AHB/DMA (Performance)
+### Variant 4: RISC-V Co-processor (Advanced)
+By combining APB2 for control and shared PSRAM for data, you can integrate a RISC-V co-processor (like NEORV32) into your FPGA design.
+
+**MicroPython Usage:**
+```python
+import machine
+
+# 1. Load RISC-V code to shared PSRAM (AHB Expansion region)
+machine.mem32[0xA0000000] = binary_data
+
+# 2. Start RISC-V via APB2 Slot 1 (Control Register)
+machine.mem32[0x40002400] = 0x00 # Release reset
+
+# 3. Use APB2 Slot 1 as a mailbox
+riscv_response = machine.mem32[0x40002404]
+```
+
+**FPGA-Side Wiring:**
+The RISC-V core is instantiated as an AHB Master (for instruction/data access to PSRAM) and an APB Slave (for control/mailbox access from the M3).
+
+---
+
+### Variant 5: High-Speed AHB/DMA (Performance)
 Uses the 128-bit wide AHB expansion ports (`INTEXP0` and `TARGEXP0`) for massive data transfers.
 
 **MicroPython Usage:**
