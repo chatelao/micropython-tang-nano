@@ -3,7 +3,7 @@
 ## Goal
 This project aims to port MicroPython to the "Sipeed Tang Nano 4K" FPGA development board.
 
-For a comprehensive overview of the port, including hardware details, installation, and usage, see the [Tang Nano 4K MicroPython Port Guide](documentation/TANG_NANO_MICROPYTHON_GUIDE.md).
+For a comprehensive overview of the port, including hardware details, installation, and usage, see the [Tang Nano 4K MicroPython Port Guide](M3_MICROPYTHON.md).
 
 ## Supported MicroPython Features
 - **Core Modules**: `machine`, `time`/`utime`, `uos`, `io`.
@@ -52,12 +52,18 @@ For a comprehensive overview of the port, including hardware details, installati
 
 ## Project Structure
 - `/definitions` - Datasheets and Standards to be used.
-- `/documentation` - Concepts and implementation progress for different areas (see the [External Flash Guide](documentation/EXTERNAL_FLASH_GUIDE.md)).
 - `/examples` - Example MicroPython scripts and FPGA projects.
 - `/src` - Source files for the MicroPython port.
 - `/test` - Unit, System, and End-2-End test concepts and cases.
 - `/.github` - Workflows for CI/CD.
+- `AUDIT.md` - Comprehensive project audit report.
+- `COMPLIANCE_TESTS.md` - MicroPython compliance testing results.
+- `GEMINI.md` - Project goal and structural guidelines.
+- `M3_FPGA_INTEGRATIONS.md` - Guide to communication interfaces between M3 and FPGA.
+- `M3_MICROPYTHON.md` - Supported MicroPython features and port guide.
 - `ROADMAP.md` - Progress tracking and future steps.
+- `SERIAL_PORT_ACCESS.md` - Guide to accessing the Cortex-M3 serial port.
+- `TOOLCHAIN_SETUP.md` - Instructions for setting up the ARM toolchain.
 
 ## UART Configuration
 The MicroPython REPL is accessible via the Cortex-M3 UART0 peripheral.
@@ -74,6 +80,8 @@ Use a serial terminal with the following configuration:
 - **Parity**: None
 - **Stop Bits**: 1
 - **Flow Control**: None (8N1)
+
+For detailed serial port instructions, see [SERIAL_PORT_ACCESS.md](SERIAL_PORT_ACCESS.md).
 
 ## Split Flash Installation
 The Tang Nano 4K has only 32KB of internal code flash, which is insufficient for a full MicroPython build (~125KB). To solve this, we use a **Split Flash** architecture:
@@ -111,7 +119,7 @@ To access the external flash at `0x60000000`, you must instantiate the **SPI Fla
     *   File: `build/firmware_ext.bin`
     *   Address: `0x000000` (The M3 sees this at `0x60000000`)
 
-For detailed instructions, see the [Tang Nano 4K MicroPython Port Guide](documentation/TANG_NANO_MICROPYTHON_GUIDE.md).
+For more details on M3-FPGA integration, see [M3_FPGA_INTEGRATIONS.md](M3_FPGA_INTEGRATIONS.md).
 
 ## Progress
 Update `ROADMAP.md` for the current status and upcoming tasks.
