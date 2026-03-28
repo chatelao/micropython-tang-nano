@@ -12,16 +12,31 @@ ${BIN}          ${CURDIR}/../../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
 ${EXAMPLE}      ${CURDIR}/../../examples/blink/blink.py
 
-*** Test Cases ***
-Verify Blink Example
-    [Documentation]    Verifies that the blink.py example works by sending it to the REPL.
+*** Keywords ***
+Setup MicroPython
     Execute Command         $repl = @${REPL}
     Execute Command         $bin = @${BIN}
     Execute Command         include @${RESC}
-    Execute Command         sysbus.cpu VectorTableOffset 0x60000000
-    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
-    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
+    ${boot_addr_raw}=       Execute Command  sysbus GetSymbolAddress "isr_vector"
+    ${boot_addr}=           Evaluate  '''${boot_addr_raw}'''.strip()
+    Log                     Boot Addr: ${boot_addr}
+    # For booting, we need to set VTOR, SP and PC manually in Renode
+    Execute Command         sysbus.cpu VectorTableOffset ${boot_addr}
+    ${sp_val_raw}=          Execute Command  sysbus ReadDoubleWord ${boot_addr}
+    ${sp_val}=              Evaluate  '''${sp_val_raw}'''.strip()
+    Log                     SP Val: ${sp_val}
+    Execute Command         sysbus.cpu SP ${sp_val}
+    ${pc_ptr}=              Evaluate  hex(int("${boot_addr}", 16) + 4)
+    ${pc_val_raw}=          Execute Command  sysbus ReadDoubleWord ${pc_ptr}
+    ${pc_val}=              Evaluate  '''${pc_val_raw}'''.strip()
+    Log                     PC Val: ${pc_val}
+    Execute Command         sysbus.cpu PC ${pc_val}
     Create Terminal Tester  ${UART}
+
+*** Test Cases ***
+Verify Blink Example
+    [Documentation]    Verifies that the blink.py example works by sending it to the REPL.
+    Setup MicroPython
     Start Emulation
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
