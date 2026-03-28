@@ -7,6 +7,7 @@ def test_structure():
         'src',
         'src/fpga/bitstream',
         'test',
+        'test/examples',
         'examples',
         'examples/blink',
         'examples/tt_echo',
@@ -19,6 +20,8 @@ def test_structure():
         'FPGA_BRIDGE_USAGE.md',
         'GEMINI.md',
         'HOWTO_TT.md',
+        'test/examples/test_blink.robot',
+        'test/examples/test_tt_echo.robot',
         'examples/blink/blink.py',
         'examples/tt_echo/tt_project.v',
         'examples/tt_echo/tt_echo.py'
