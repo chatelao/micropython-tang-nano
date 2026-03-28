@@ -16,7 +16,7 @@ For a comprehensive overview of the port, including hardware details, installati
     - `SPI` / `SoftSPI`: Hardware and software SPI Master support.
     - `RTC`: Real-Time Clock for date and time management.
     - `WDT`: Hardware Watchdog Timer.
-    - `FPGABridge`: Low-level access to the 16-bit M3-to-FPGA GPIO bridge (See [HOWTO_TT.md](HOWTO_TT.md)).
+    - `FPGABridge`: Low-level access to the 16-bit M3-to-FPGA GPIO bridge (See [FPGA_BRIDGE_USAGE.md](FPGA_BRIDGE_USAGE.md)).
     - `Flash`: Block device interface for the onboard SPI Flash.
 - **Filesystem**: LittleFS (LFS2) on external SPI Flash.
 - **Runtime**: Garbage Collector, REPL over UART0.
@@ -58,6 +58,7 @@ For a comprehensive overview of the port, including hardware details, installati
 - `/.github` - Workflows for CI/CD.
 - `AUDIT.md` - Comprehensive project audit report.
 - `COMPLIANCE_TESTS.md` - MicroPython compliance testing results.
+- `FPGA_BRIDGE_USAGE.md` - Detailed guide on using MicroPython to interact with the FPGA.
 - `GEMINI.md` - Project goal and structural guidelines.
 - `HOWTO_TT.md` - Guide to loading and testing Tiny Tapeout modules.
 - `M3_FPGA_INTEGRATIONS.md` - Guide to communication interfaces between M3 and FPGA.
