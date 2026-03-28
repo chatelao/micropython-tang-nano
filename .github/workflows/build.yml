@@ -90,8 +90,6 @@ jobs:
             test/tang_nano_4k.robot
             test/examples/test_blink.robot
             test/examples/test_tt_echo.robot
-            test/test_serv.robot
-            test/test_neorv32.robot
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

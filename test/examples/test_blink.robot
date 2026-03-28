@@ -2,8 +2,6 @@
 Suite Setup     Setup
 Suite Teardown  Teardown
 Resource        ${RENODEKEYWORDS}
-Library         OperatingSystem
-Library         String
 
 *** Variables ***
 ${RESC}         ${CURDIR}/../tang_nano_4k.resc
