@@ -68,6 +68,8 @@ def run_compliance(attach=False, test_filter=None):
 
     if test_filter:
         cmd.extend(test_filter)
+    else:
+        cmd.extend(["basics", "micropython"])
 
     with open(os.path.join(root_dir, "compliance_output.log"), "w") as out:
         result = subprocess.run(cmd, stdout=out, stderr=subprocess.STDOUT, text=True, cwd=test_dir)
