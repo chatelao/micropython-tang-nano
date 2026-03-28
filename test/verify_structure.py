@@ -10,6 +10,7 @@ def test_structure():
         'examples',
         'examples/blink',
         'examples/tt_echo',
+        'test/examples',
         '.github'
     ]
     expected_files = [
@@ -19,7 +20,9 @@ def test_structure():
         'GEMINI.md',
         'examples/blink/blink.py',
         'examples/tt_echo/tt_project.v',
-        'examples/tt_echo/tt_echo.py'
+        'examples/tt_echo/tt_echo.py',
+        'test/examples/test_blink.robot',
+        'test/examples/test_tt_echo.robot'
     ]
 
     missing = []
