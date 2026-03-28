@@ -23,6 +23,9 @@ This document lists the MicroPython features and modules supported by the ARM Co
 | **FPGA Bridge** | Hard | Dedicated 16-bit bi-directional communication bridge to FPGA fabric. |
 | **FPGA DMA** | Hard | High-speed Direct Memory Access between M3 and FPGA. |
 | **Floating Point** | Soft | Software-emulated single-precision floating point arithmetic. |
+| **Big Integers** | Soft | Arbitrary-precision integer support via `MPZ` library. |
+| **Collections** | Soft | Support for `namedtuple` and basic `deque`. |
+| **Struct Module** | Soft | Packing and unpacking of binary data. |
 | **GC (Garbage Coll.)** | Soft | Automatic heap management and object lifecycle tracking. |
 
 ## Feature Notes
@@ -38,9 +41,22 @@ These features are supported by the MicroPython core but are currently disabled 
 | Feature | Compilation Flag | Description |
 | :--- | :--- | :--- |
 | **Math Module** | `MICROPY_PY_MATH=1` | Standard math functions (`sin`, `cos`, `sqrt`, etc.). |
-| **Big Integers** | `MICROPY_LONGINT_IMPL=MICROPY_LONGINT_IMPL_MPZ` | Arbitrary-precision integer support (replaces 31-bit limit). |
 | **Complex Numbers** | `MICROPY_PY_BUILTINS_COMPLEX=1` | Support for the `complex` type and associated arithmetic. |
 | **Built-in Help** | `MICROPY_PY_BUILTINS_HELP=1` | Enables the interactive `help()` system in the REPL. |
+| **Asyncio Support** | `MICROPY_PY_ASYNCIO=1` | Lightweight cooperative multitasking via `asyncio`. |
+| **JSON Module** | `MICROPY_PY_JSON=1` | Parsing and serializing JSON data (`ujson`). |
+| **Regex Module** | `MICROPY_PY_RE=1` | Regular expression support (`ure`). |
+| **Heapq Module** | `MICROPY_PY_HEAPQ=1` | Min-priority queue algorithm implementation. |
+| **Hashlib Module** | `MICROPY_PY_HASHLIB=1` | Common hashing algorithms (SHA256, etc.). |
+| **Binascii Module** | `MICROPY_PY_BINASCII=1` | Conversions between binary and various ASCII-encodings. |
+| **Random Module** | `MICROPY_PY_RANDOM=1` | Pseudo-random number generation. |
+| **Select Module** | `MICROPY_PY_SELECT=1` | Wait for events on a set of streams. |
+| **Framebuf Module** | `MICROPY_PY_FRAMEBUF=1` | Simple frame buffer implementation for displays. |
+| **Uctypes Module** | `MICROPY_PY_UCTYPES=1` | Access binary data structures in a structured way. |
+| **Deflate Module** | `MICROPY_PY_DEFLATE=1` | DEFLATE compression/decompression support. |
 | **String Methods** | `MICROPY_PY_BUILTINS_STR_COUNT=1` | Adds `count`, `partition`, `splitlines` to the `str` class. |
 | **Advanced Built-ins**| `MICROPY_PY_BUILTINS_ENUMERATE=1` | Adds `enumerate`, `filter`, `reversed`, `min`, `max`, and `property`. |
 | **Frozen Set** | `MICROPY_PY_BUILTINS_FROZENSET=1` | Support for immutable `frozenset` objects. |
+| **Detailed Errors** | `MICROPY_ERROR_REPORTING=3` | Provides verbose exception messages (DETAILED). |
+| **Computed Gotos** | `MICROPY_OPT_COMPUTED_GOTO=1` | VM optimization using jump tables (requires GCC). |
+| **Source Lines** | `MICROPY_ENABLE_SOURCE_LINE=1` | Includes source line numbers in tracebacks. |
