@@ -1,0 +1,2 @@
+MP_REGISTER_ROOT_POINTER(mp_obj_t pin_irq_handler[16]);
+MP_REGISTER_ROOT_POINTER(struct _machine_pin_obj_t *pin_obj[16]);

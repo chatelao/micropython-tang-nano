@@ -72,7 +72,11 @@ extern const struct _mp_obj_module_t mp_module_struct;
 
 // Optimization to reduce size
 #define MICROPY_PY_BUILTINS_COMPLEX (0)
+#ifdef SIMULATION
 #define MICROPY_ERROR_REPORTING (MICROPY_ERROR_REPORTING_DETAILED)
+#else
+#define MICROPY_ERROR_REPORTING (MICROPY_ERROR_REPORTING_NONE)
+#endif
 #define MICROPY_PY_MATH (0)
 #define MICROPY_COMP_CONST_FOLDING (0)
 #define MICROPY_COMP_CONST_TUPLE (0)
