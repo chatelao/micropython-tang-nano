@@ -21,7 +21,7 @@ module tt_um_minimal_echo (
     assign uo_out  = ui_in;
 
     // Set UIO to output and show b'10101010
-    assign uio_out = 8'b10101010;
+    assign uio_out = 8'b10101100;
     assign uio_oe  = 8'b11111111;
 
 endmodule
