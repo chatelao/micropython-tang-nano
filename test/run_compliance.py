@@ -52,9 +52,9 @@ def run_compliance(attach=False, test_filter=None):
     bridge_script = os.path.join(root_dir, "test/socket_bridge.py")
     device_cmd = f"python3 {bridge_script}"
 
-    # Exclude float and net tests because they are disabled in mpconfigport.h
+    # Exclude net tests because they are disabled in mpconfigport.h
     # and not supported by our current port's hardware configuration.
-    exclude_tests = ["-e", "float", "-e", "net"]
+    exclude_tests = ["-e", "net"]
 
     # Run tests from the test directory
     print(f"Running tests in {test_dir}...")
