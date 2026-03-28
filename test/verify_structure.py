@@ -16,6 +16,7 @@ def test_structure():
         'README.md',
         'ROADMAP.md',
         'src/fpga/bitstream/tang_nano_4k_m3.fs',
+        'FPGA_BRIDGE_USAGE.md',
         'GEMINI.md',
         'HOWTO_TT.md',
         'examples/blink/blink.py',
