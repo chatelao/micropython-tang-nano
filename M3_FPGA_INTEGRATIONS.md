@@ -38,7 +38,7 @@ The M3's GPIO signals must be instantiated in your RTL. In Gowin EDA, these appe
 
 ---
 
-### Variant 2: APB2 Expansion Slots (Register-Mapped)
+### Variant 2: APB2 Expansion Slots (Register-Mapped) - (Default)
 The M3 provides 12 slots of 256 bytes each on the APB2 bus. This allows you to implement custom register-mapped peripherals in the FPGA.
 
 **Register Map:**
