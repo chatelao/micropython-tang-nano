@@ -40,9 +40,10 @@ Verify Tiny Tapeout Echo Example
     Start Emulation
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
+    Wait For Line On Uart   Tang Nano 4K with GW1NSR-LV4C
 
     # Wait for REPL to be ready
-    Wait For Line On Uart   >>>
+    Sleep                   2s
 
     # Load and send example script line by line
     ${script}=    Get File    ${EXAMPLE}
