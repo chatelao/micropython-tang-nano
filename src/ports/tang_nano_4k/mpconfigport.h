@@ -2,12 +2,11 @@
 #include <stdint.h>
 
 // options to control how MicroPython is built
-#define MICROPY_CONFIG_ROM_LEVEL (MICROPY_CONFIG_ROM_LEVEL_MINIMUM)
+#define MICROPY_CONFIG_ROM_LEVEL (MICROPY_CONFIG_ROM_LEVEL_CORE_FEATURES)
 
 #define MICROPY_ENABLE_GC (1)
 #define MICROPY_GC_SPLIT_HEAP (1)
 #define MICROPY_HELPER_REPL (1)
-#define MICROPY_ENABLE_COMPILER (1)
 #define MICROPY_PY_TIME (1)
 
 // type definitions for the specific machine
@@ -47,8 +46,6 @@ extern const struct _mp_obj_module_t mp_module_gc;
 
 #define MICROPY_OBJ_REPR (MICROPY_OBJ_REPR_C)
 #define MICROPY_FLOAT_IMPL (MICROPY_FLOAT_IMPL_FLOAT)
-#define MICROPY_PY_BUILTINS_FLOAT (1)
-#define MICROPY_PY_MATH (1)
 
 #define MICROPY_VFS (1)
 #define MICROPY_VFS_LFS2 (1)
@@ -56,5 +53,39 @@ extern const struct _mp_obj_module_t mp_module_gc;
 #define MICROPY_PY_IO (1)
 #define MICROPY_ENABLE_FINALISER (1)
 #define MICROPY_READER_VFS (1)
-#define MICROPY_PY_BUILTINS_BYTEARRAY (1)
 #define MICROPY_PY_GC (1)
+
+// Additional features for CORE_FEATURES level that are useful
+#define MICROPY_PY_ASSIGN_EXPR (1)
+#define MICROPY_PY_BUILTINS_DICT_FROMKEYS (1)
+#define MICROPY_PY_BUILTINS_HELP (1)
+#define MICROPY_PY_BUILTINS_HELP_TEXT tang_nano_4k_help_text
+
+// Explicitly disable VFS FAT and POSIX to avoid missing headers
+#define MICROPY_VFS_FAT (0)
+#define MICROPY_VFS_POSIX (0)
+
+#define FFCONF_H "lib/oofatfs/ffconf.h"
+
+// Optimization to reduce size
+#define MICROPY_PY_BUILTINS_COMPLEX (0)
+#define MICROPY_ERROR_REPORTING (MICROPY_ERROR_REPORTING_TERSE)
+#define MICROPY_PY_MATH (0)
+#define MICROPY_COMP_CONST_FOLDING (0)
+#define MICROPY_COMP_CONST_TUPLE (0)
+#define MICROPY_OPT_COMPUTED_GOTO (0)
+#define MICROPY_OPT_LOAD_ATTR_FAST_PATH (0)
+#define MICROPY_OPT_MAP_LOOKUP_CACHE (0)
+
+// Reduce some other features to save space
+#define MICROPY_PY_BUILTINS_STR_COUNT (0)
+#define MICROPY_PY_BUILTINS_STR_OP_MODULO (0)
+#define MICROPY_PY_BUILTINS_STR_PARTITION (0)
+#define MICROPY_PY_BUILTINS_STR_SPLITLINES (0)
+#define MICROPY_PY_BUILTINS_SET (0)
+#define MICROPY_PY_BUILTINS_FROZENSET (0)
+#define MICROPY_PY_BUILTINS_PROPERTY (0)
+#define MICROPY_PY_BUILTINS_ENUMERATE (0)
+#define MICROPY_PY_BUILTINS_FILTER (0)
+#define MICROPY_PY_BUILTINS_REVERSED (0)
+#define MICROPY_PY_BUILTINS_MIN_MAX (0)

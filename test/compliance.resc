@@ -19,9 +19,9 @@ macro reset
 """
     sysbus LoadELF $bin
     # For booting from external flash, we need to set VTOR, SP and PC manually in Renode
-    sysbus.cpu VectorTableOffset 0x00000000
-    sysbus.cpu SP `sysbus ReadDoubleWord 0x00000000`
-    sysbus.cpu PC `sysbus ReadDoubleWord 0x00000004`
+    sysbus.cpu VectorTableOffset 0x60000000
+    sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
+    sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
 """
 
 runMacro $reset
