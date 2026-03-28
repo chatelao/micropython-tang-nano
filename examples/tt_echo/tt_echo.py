@@ -27,4 +27,13 @@ for val in test_values:
 
     time.sleep_ms(100)
 
+# Demonstrate reading the UIO value from the FPGA
+# 1. Configure bridge bits 8-15 as inputs (by clearing their output enable)
+#    Register: FPGA_GPIO_OUTENCLR (0x40010014)
+machine.mem32[0x40010014] = 0xFF00
+
+# 2. Read the value from the bridge and extract the upper 8 bits (UIO)
+uio_val = (bridge.read() >> 8) & 0xFF
+print("UIO value read from FPGA: 0x{:02X} (binary: {:08b})".format(uio_val, uio_val))
+
 print("Test Complete")
