@@ -62,6 +62,10 @@ jobs:
         run: |
           make -C src/ports/tang_nano_4k/ BUILD=build_hw
 
+      - name: Build Tang Nano 4K port (Split Flash variant)
+        run: |
+          make -C src/ports/tang_nano_4k/ BUILD=build_split SPLIT_FLASH=1
+
       - name: Prepare artifacts
         run: |
           mkdir dist
@@ -69,6 +73,9 @@ jobs:
           cp src/ports/tang_nano_4k/build/firmware.elf dist/firmware_sim.elf
           cp src/ports/tang_nano_4k/build_hw/firmware.bin dist/firmware_hw.bin
           cp src/ports/tang_nano_4k/build_hw/firmware.elf dist/firmware_hw.elf
+          cp src/ports/tang_nano_4k/build_split/firmware_int.bin dist/firmware_split_int.bin
+          cp src/ports/tang_nano_4k/build_split/firmware_ext.bin dist/firmware_split_ext.bin
+          cp src/ports/tang_nano_4k/build_split/firmware.elf dist/firmware_split.elf
           cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/tang_nano_4k_m3.fs
 
       - name: Set up Python
@@ -92,6 +99,9 @@ jobs:
             dist/firmware_sim.elf
             dist/firmware_hw.bin
             dist/firmware_hw.elf
+            dist/firmware_split_int.bin
+            dist/firmware_split_ext.bin
+            dist/firmware_split.elf
             dist/tang_nano_4k_m3.fs
             COMPLIANCE_TESTS.md
             compliance_output.log
@@ -107,6 +117,9 @@ jobs:
             dist/firmware_sim.elf
             dist/firmware_hw.bin
             dist/firmware_hw.elf
+            dist/firmware_split_int.bin
+            dist/firmware_split_ext.bin
+            dist/firmware_split.elf
             dist/tang_nano_4k_m3.fs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
