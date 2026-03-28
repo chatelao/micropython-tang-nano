@@ -9,7 +9,7 @@ ${RESC}         ${CURDIR}/tang_nano_4k.resc
 ${REPL}         ${CURDIR}/tang_nano_4k.repl
 ${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
-${TEST_SCRIPT}  ${CURDIR}/../test_timer.py
+${TEST_SCRIPT}  ${CURDIR}/test_timer.py
 
 *** Test Cases ***
 Should Run Timer Test
