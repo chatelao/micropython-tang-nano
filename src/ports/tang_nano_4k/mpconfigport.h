@@ -86,3 +86,9 @@ extern const struct _mp_obj_module_t mp_module_struct;
 
 // Specific feature enabling
 #define MICROPY_PY_SYS_MAXSIZE (1)
+#define MICROPY_PY_BUILTINS_PROPERTY (1)
+
+// Disable features that require port-specific implementations not yet available
+#define MICROPY_PY_UCTYPES (0)
+#define MICROPY_PY_SYS_STDFILES (0)
+#define MICROPY_PY_SYS_STDIO_BUFFER (0)
