@@ -33,7 +33,11 @@ This document lists the MicroPython features and modules supported by the ARM Co
 
 ## Potential / Optional Features (Currently Disabled)
 
-These features are supported by the MicroPython core but are currently disabled to fit the firmware within the 128KB Code Flash limit. They can be enabled by modifying `mpconfigport.h` or the `Makefile` if additional space is reclaimed.
+These features are supported by the MicroPython core but are currently disabled to fit the firmware within the 128KB Code Flash limit.
+
+> **Note**: The 128KB limit refers to the architectural address space for instruction memory (Code Flash) on the GW1NSR-4C. While the core can address 128KB, the physical internal flash on the chip is limited to 32KB, requiring a [Split Flash architecture](README.md#split-flash-installation) for full builds.
+
+They can be enabled by modifying `mpconfigport.h` or the `Makefile` if additional space is reclaimed.
 
 | Feature | Compilation Flag | Description |
 | :--- | :--- | :--- |
