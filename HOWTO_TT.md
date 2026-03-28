@@ -28,7 +28,10 @@ To accommodate the 24 TT signals (8 in, 8 out, 8 bidir) within a 16-bit bridge, 
 | `[7:0]` | `ui_in` / `uo_out` | Multiplexed or shared data bus. |
 | `[15:8]` | `uio_in` / `uio_out` | Bidirectional I/O bus. |
 
-*Note: `ena`, `clk`, and `rst_n` are typically managed by the FPGA wrapper (e.g., using the system clock or a dedicated control register).*
+*Note on Control Signals:* The `machine.FPGABridge` provides only 16 bits of connectivity. Since a full TT interface (24 data/IO pins + 3 control pins) exceeds this, we recommend managing `ena`, `clk`, and `rst_n` directly in the FPGA wrapper:
+*   **`clk`**: Should be connected to a hardware clock (e.g., the 27MHz crystal or M3 `HCLK`) for stability and speed.
+*   **`rst_n`**: Typically tied to the system reset to ensure the module initializes on power-up.
+*   **`ena`**: Can be tied to `1'b1` (always enabled) or controlled via a separate **APB2 Register** (see [M3_FPGA_INTEGRATIONS.md](M3_FPGA_INTEGRATIONS.md)) to save bridge bits.
 
 ## 3. FPGA Wrapper (Verilog)
 
