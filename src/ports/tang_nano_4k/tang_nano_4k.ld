@@ -10,7 +10,7 @@ MEMORY
 
 INCLUDE regions.ld
 
-STACK_SIZE = 2K;
+STACK_SIZE = 4K;
 
 SECTIONS
 {
