@@ -33,9 +33,16 @@ Verify Tiny Tapeout Echo Example
     # Test values
     # AA (170), 55 (85), 00 (0), FF (255), 12 (18)
     FOR    ${val}    IN    170  85  0  255  18
+        ${hex_val}=         Evaluate    hex(${val})
         Write Line To Uart  bridge.write(${val}); print("REC:" + hex(bridge.read() & 0xFF))
-        Wait For Line On Uart    REC:
+        Wait For Line On Uart    REC:${hex_val}
     END
+
+    # Test UIO read (bits 8-15)
+    # Default should be 0x00 in simulation
+    Write Line To Uart      machine.mem32[0x40010014] = 0xFF00
+    Write Line To Uart      print("UIO:" + hex((bridge.read() >> 8) & 0xFF))
+    Wait For Line On Uart   UIO:0x0
 
     Write Line To Uart      print("D" + "ONE")
     Wait For Line On Uart   DONE
