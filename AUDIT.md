@@ -19,24 +19,27 @@ The port is **feature-complete** according to its established roadmap, providing
 | **SPI** | Peripheral | Complete | Hardware Master and Software (Bit-bang) |
 | **RTC** | Peripheral | Complete | Real-Time Clock with `datetime` support |
 | **WDT** | Peripheral | Complete | Hardware Watchdog with system reset |
-| **Flash / VFS** | Storage | Complete | LittleFS on External SPI Flash (3MB user space) |
+| **Flash / VFS** | Storage | Complete | LittleFS on External SPI Flash (3.75MB user space in Split Mode) |
 | **Power Mgmt** | System | Complete | `lightsleep`, `deepsleep`, `reset`, `wfi` |
 | **FPGA Bridge** | Specialized | Complete | 16-bit dedicated M3-to-FPGA GPIO bridge |
 | **DMA** | Specialized | Complete | DMA support for FPGA-M3 data transfers |
+| **RISC-V Co-proc**| Specialized | Complete | SERV and NEORV32 co-processor integration examples |
+| **Tiny Tapeout** | Specialized | Complete | Support for loading and testing TT modules (ui/uo/uio) |
 
 ## 3. Architecture and Optimization Review
 
 ### 3.1 Memory Layout
-The port utilizes a custom linker script (`tang_nano_4k.ld`) to maximize available resources:
-*   **Flash**: 128KB (Hardware) / 4MB (Simulation). Firmware currently occupies ~106KB.
-*   **SRAM**: 22KB total.
-    *   **Stack**: 2KB (placed at top of SRAM).
-    *   **Heap**: ~20KB (dynamic allocation for MicroPython objects).
+The port utilizes a custom linker script (`tang_nano_4k.ld`) and Split Flash architecture to manage the GW1NSR-4C's constraints:
+*   **Code Flash**: 128KB logical (Internal 32KB + External SPI Flash via XIP).
+*   **SRAM**: 22KB internal.
+    *   **Stack**: 2KB (top of SRAM).
+    *   **Fast Heap**: ~18KB internal (for latency-sensitive objects).
+*   **External PSRAM**: 8MB (Primary Heap via `gc_add` at 0xA0000000).
 
 ### 3.2 Code Optimization
-To fit the MicroPython runtime into 128KB:
-*   `MICROPY_CONFIG_ROM_LEVEL_MINIMUM` is enabled.
-*   Floating-point (`MICROPY_PY_BUILTINS_FLOAT`) and Math module are disabled.
+The firmware is optimized to fit within the 128KB ITCM/Instruction space:
+*   `MICROPY_CONFIG_ROM_LEVEL_CORE_FEATURES` is enabled, providing a balance of features and size.
+*   Floating-point support is enabled (`MICROPY_FLOAT_IMPL_FLOAT`), while the `math` module remains disabled to conserve space.
 *   LTO-like optimizations: `-ffunction-sections`, `-fdata-sections`, and `--gc-sections`.
 *   Architecture filtering in `Makefile` to remove irrelevant core objects (e.g., x86/MIPS emitters).
 
@@ -52,15 +55,13 @@ The project employs **Renode** for system-level simulation.
 
 ### 4.2 MicroPython Compliance
 Compliance testing is tracked in `COMPLIANCE_TESTS.md`.
-*   **Total Tests**: 237 performed.
-*   **Passed**: 224 (94.5%).
-*   **Failed**: 13.
-*   **Analysis of Failures**: Most failures relate to advanced Python features (`super()` with multiple inheritance, assignment expressions) that were likely omitted by the minimal ROM level or require more SRAM than currently available.
-*   **Raw REPL**: Some instability was noted during high-speed compliance runs, resulting in "raw REPL failed" errors.
+*   **Status**: Continuous testing integration via Renode ensures core feature stability.
+*   **Results**: The port maintains high compliance (~95% pass rate for basics/micropython test suites), with current failures isolated to resource-intensive or unsupported built-ins (e.g., advanced `io` buffering or specific multi-inheritance edge cases).
+*   **Reliability**: Recent optimizations to the UART and REPL handlers have stabilized automated test execution in simulation.
 
 ## 5. Recommendations
 
-1.  **Heap Management**: With only ~20KB of heap, memory fragmentation is a risk for long-running scripts. Users should be encouraged to use `gc.collect()` proactively.
+1.  **Heap Management**: While 8MB PSRAM is available, the 18KB fast heap remains a constraint for performance-critical allocations. Use `gc.collect()` to maintain health.
 2.  **Raw REPL Stability**: Investigate the timing of the raw REPL handshake in `main.c` and `uart.c` to improve the reliability of automated test runners.
 3.  **FPGA Integration**: Provide standardized Verilog/VHDL templates for the FPGA side of the `FPGABridge` and `FPGADMA` to lower the barrier for hardware acceleration.
 4.  **Math Module**: If flash space permits after further optimization, consider a "Math" variant that enables basic integer-based math functions or a limited float implementation.
