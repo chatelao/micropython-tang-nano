@@ -11,6 +11,8 @@
 #include "py/mperrno.h"
 #include "py/stackctrl.h"
 #include "shared/runtime/pyexec.h"
+#include "py/builtin.h"
+#include "py/pairheap.h"
 #include "mphalport.h"
 #include "pin.h"
 #include "timer.h"
@@ -146,6 +148,19 @@ void Reset_Handler(void) {
     main(0, NULL);
     for (;;);
 }
+
+const char tang_nano_4k_help_text[] =
+    "Welcome to MicroPython on Tang Nano 4K!\n"
+    "\n"
+    "Control commands:\n"
+    "  CTRL-A        -- on a blank line, enter raw REPL mode\n"
+    "  CTRL-B        -- on a blank line, enter normal REPL mode\n"
+    "  CTRL-C        -- interrupt a running script\n"
+    "  CTRL-D        -- on a blank line, do a soft reset of the board\n"
+    "  CTRL-E        -- on a blank line, enter paste mode\n"
+    "\n"
+    "For further help on a specific object, type help(obj)\n"
+    "For a list of available modules, type help('modules')\n";
 
 const uint32_t isr_vector[] __attribute__((section(".isr_vector"), aligned(256))) = {
     (uint32_t)&_estack,
