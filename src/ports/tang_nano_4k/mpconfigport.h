@@ -51,6 +51,8 @@ extern const struct _mp_obj_module_t mp_module_gc;
 #define MICROPY_VFS_LFS2 (1)
 #define MICROPY_PY_UOS (1)
 #define MICROPY_PY_IO (1)
+#define MICROPY_PY_IO_IOBASE (1)
+#define MICROPY_LONGINT_IMPL (1)
 #define MICROPY_ENABLE_FINALISER (1)
 #define MICROPY_READER_VFS (1)
 #define MICROPY_PY_GC (1)
@@ -58,8 +60,7 @@ extern const struct _mp_obj_module_t mp_module_gc;
 // Additional features for CORE_FEATURES level that are useful
 #define MICROPY_PY_ASSIGN_EXPR (1)
 #define MICROPY_PY_BUILTINS_DICT_FROMKEYS (1)
-#define MICROPY_PY_BUILTINS_HELP (1)
-#define MICROPY_PY_BUILTINS_HELP_TEXT tang_nano_4k_help_text
+#define MICROPY_PY_BUILTINS_HELP (0)
 
 // Explicitly disable VFS FAT and POSIX to avoid missing headers
 #define MICROPY_VFS_FAT (0)
@@ -69,7 +70,7 @@ extern const struct _mp_obj_module_t mp_module_gc;
 
 // Optimization to reduce size
 #define MICROPY_PY_BUILTINS_COMPLEX (0)
-#define MICROPY_ERROR_REPORTING (MICROPY_ERROR_REPORTING_TERSE)
+#define MICROPY_ERROR_REPORTING (MICROPY_ERROR_REPORTING_NONE)
 #define MICROPY_PY_MATH (0)
 #define MICROPY_COMP_CONST_FOLDING (0)
 #define MICROPY_COMP_CONST_TUPLE (0)
@@ -79,13 +80,17 @@ extern const struct _mp_obj_module_t mp_module_gc;
 
 // Reduce some other features to save space
 #define MICROPY_PY_BUILTINS_STR_COUNT (0)
-#define MICROPY_PY_BUILTINS_STR_OP_MODULO (0)
+#define MICROPY_PY_BUILTINS_STR_OP_MODULO (1)
 #define MICROPY_PY_BUILTINS_STR_PARTITION (0)
 #define MICROPY_PY_BUILTINS_STR_SPLITLINES (0)
-#define MICROPY_PY_BUILTINS_SET (0)
+#define MICROPY_PY_BUILTINS_SET (1)
 #define MICROPY_PY_BUILTINS_FROZENSET (0)
 #define MICROPY_PY_BUILTINS_PROPERTY (0)
 #define MICROPY_PY_BUILTINS_ENUMERATE (0)
 #define MICROPY_PY_BUILTINS_FILTER (0)
 #define MICROPY_PY_BUILTINS_REVERSED (0)
 #define MICROPY_PY_BUILTINS_MIN_MAX (0)
+#define MICROPY_PY_BUILTINS_HELP (0)
+#define MICROPY_PY_BUILTINS_SLICE (1)
+#define MICROPY_PY_ARRAY_SLICE_ASSIGN (1)
+#define MICROPY_PY_COLLECTIONS (1)

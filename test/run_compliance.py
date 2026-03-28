@@ -62,6 +62,7 @@ def run_compliance(attach=False, test_filter=None):
     cmd = [
         "python3", "run-tests.py",
         "-j", "1",
+        "--print-failures",
         "-t", f"exec:{device_cmd}"
     ] + exclude_tests
 
