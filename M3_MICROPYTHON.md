@@ -30,3 +30,17 @@ This document lists the MicroPython features and modules supported by the ARM Co
 - **Hard Features**: These utilize the physical peripheral blocks integrated into the GW1NSR-4C's Cortex-M3 subsystem. They offer higher performance and lower CPU overhead.
 - **Soft Features**: These are implemented via MicroPython's core software or "bit-banging" techniques. While flexible (e.g., SoftI2C can use any pins), they consume more CPU cycles than their hardware counterparts.
 - **FPGA Integration**: Features like the `FPGABridge` and `FPGADMA` are unique to this SoC, allowing MicroPython to interact directly with custom logic implemented in the FPGA fabric.
+
+## Potential / Optional Features (Currently Disabled)
+
+These features are supported by the MicroPython core but are currently disabled to fit the firmware within the 128KB Code Flash limit. They can be enabled by modifying `mpconfigport.h` or the `Makefile` if additional space is reclaimed.
+
+| Feature | Compilation Flag | Description |
+| :--- | :--- | :--- |
+| **Math Module** | `MICROPY_PY_MATH=1` | Standard math functions (`sin`, `cos`, `sqrt`, etc.). |
+| **Big Integers** | `MICROPY_LONGINT_IMPL=MICROPY_LONGINT_IMPL_MPZ` | Arbitrary-precision integer support (replaces 31-bit limit). |
+| **Complex Numbers** | `MICROPY_PY_BUILTINS_COMPLEX=1` | Support for the `complex` type and associated arithmetic. |
+| **Built-in Help** | `MICROPY_PY_BUILTINS_HELP=1` | Enables the interactive `help()` system in the REPL. |
+| **String Methods** | `MICROPY_PY_BUILTINS_STR_COUNT=1` | Adds `count`, `partition`, `splitlines` to the `str` class. |
+| **Advanced Built-ins**| `MICROPY_PY_BUILTINS_ENUMERATE=1` | Adds `enumerate`, `filter`, `reversed`, `min`, `max`, and `property`. |
+| **Frozen Set** | `MICROPY_PY_BUILTINS_FROZENSET=1` | Support for immutable `frozenset` objects. |
