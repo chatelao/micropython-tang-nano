@@ -4,57 +4,41 @@ Suite Teardown  Teardown
 Test Setup      Reset Emulation
 Resource        ${RENODEKEYWORDS}
 Library         OperatingSystem
+Resource        ${CURDIR}/../common.resource
 
 *** Variables ***
-${RESC}         ${CURDIR}/../tang_nano_4k.resc
-${REPL}         ${CURDIR}/../tang_nano_4k.repl
-${BIN}          ${CURDIR}/../../src/ports/tang_nano_4k/build/firmware.elf
-${UART}         sysbus.uart0
-${EXAMPLE}      ${CURDIR}/../../examples/blink/blink.py
-
-*** Keywords ***
-Setup MicroPython
-    Execute Command         $repl = @${REPL}
-    Execute Command         $bin = @${BIN}
-    Execute Command         include @${RESC}
-    ${boot_addr_raw}=       Execute Command  sysbus GetSymbolAddress "isr_vector"
-    ${boot_addr}=           Evaluate  '''${boot_addr_raw}'''.strip()
-    Log                     Boot Addr: ${boot_addr}
-    # For booting, we need to set VTOR, SP and PC manually in Renode
-    Execute Command         sysbus.cpu VectorTableOffset ${boot_addr}
-    ${sp_val_raw}=          Execute Command  sysbus ReadDoubleWord ${boot_addr}
-    ${sp_val}=              Evaluate  '''${sp_val_raw}'''.strip()
-    Log                     SP Val: ${sp_val}
-    Execute Command         sysbus.cpu SP ${sp_val}
-    ${pc_ptr}=              Evaluate  hex(int("${boot_addr}", 16) + 4)
-    ${pc_val_raw}=          Execute Command  sysbus ReadDoubleWord ${pc_ptr}
-    ${pc_val}=              Evaluate  '''${pc_val_raw}'''.strip()
-    Log                     PC Val: ${pc_val}
-    Execute Command         sysbus.cpu PC ${pc_val}
-    Create Terminal Tester  ${UART}
+${RESC_REL}         ${CURDIR}/../tang_nano_4k.resc
+${REPL_REL}         ${CURDIR}/../tang_nano_4k.repl
+${BIN_REL}          ${CURDIR}/../../src/ports/tang_nano_4k/build/firmware.elf
+${UART}             sysbus.uart0
+${EXAMPLE}          ${CURDIR}/../../examples/blink/blink.py
 
 *** Test Cases ***
 Verify Blink Example
-    [Documentation]    Verifies that the blink.py example works by sending it to the REPL.
-    Setup MicroPython
+    [Documentation]    Verifies that the blink.py example works by sending it via Paste Mode.
+    ${RESC}=                Normalize Path  ${RESC_REL}
+    ${REPL}=                Normalize Path  ${REPL_REL}
+    ${BIN}=                 Normalize Path  ${BIN_REL}
+    Setup MicroPython       ${RESC}    ${REPL}    ${BIN}    ${UART}
     Start Emulation
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
     Wait For Line On Uart   Tang Nano 4K with GW1NSR-LV4C
 
     # Wait for REPL to be ready
-    Sleep                   2s
+    Wait For Text On Uart   >>>
 
-    # Load and send example script line by line
+    # Enter Paste Mode (Ctrl-E)
+    Write Char On Uart      \x05
+    Wait For Text On Uart   paste mode; Ctrl-C to cancel, Ctrl-D to finish
+    Wait For Text On Uart   ===
+
+    # Send the entire script
     ${script}=    Get File    ${EXAMPLE}
-    ${lines}=     Evaluate    $script.splitlines()
-    FOR    ${line}    IN    @{lines}
-        Write Line To Uart    ${line}
-        Wait For Line On Uart    ${line}
-    END
+    Write Line To Uart      ${script}
 
-    # Send an extra newline to ensure the last block (if any) executes
-    Write Line To Uart      ${EMPTY}
+    # Finish Paste Mode and execute (Ctrl-D)
+    Write Char On Uart      \x04
 
     # Verify execution output
     Wait For Line On Uart    Starting blink test...
