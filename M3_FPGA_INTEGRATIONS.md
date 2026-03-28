@@ -38,8 +38,10 @@ The M3's GPIO signals must be instantiated in your RTL. In Gowin EDA, these appe
 
 ---
 
-### Variant 2: APB2 Expansion Slots (Register-Mapped)
+### Variant 2: APB2 Expansion Slots (Register-Mapped) - (Default)
 The M3 provides 12 slots of 256 bytes each on the APB2 bus. This allows you to implement custom register-mapped peripherals in the FPGA.
+
+**Reference Video:** [Custom APB2 Peripherals on Tang Nano 4K](https://youtu.be/6wGrsRgHWBU)
 
 **Register Map:**
 | Slot | Base Address |
@@ -59,6 +61,9 @@ machine.mem32[0x40002400] = 0x12345678
 # Read from Slot 1, Offset 4
 val = machine.mem32[0x40002404]
 ```
+
+**Practical Example (SERV RISC-V):**
+The SERV core is mapped to APB2 Slot 10 (`0x40002D00`) for control and results. See `examples/serv_riscv/` for details.
 
 **FPGA-Side Wiring:**
 Your RTL must implement an APB slave interface responding to the address range of the selected slot.
@@ -82,7 +87,29 @@ machine.mem32[addr] = 0xDEADBEEF
 
 ---
 
-### Variant 4: High-Speed AHB/DMA (Performance)
+### Variant 4: RISC-V Co-processor (Advanced)
+By combining APB2 for control and shared PSRAM for data, you can integrate a RISC-V co-processor (like NEORV32) into your FPGA design.
+
+**MicroPython Usage:**
+```python
+import machine
+
+# 1. Load RISC-V code to shared PSRAM (AHB Expansion region)
+machine.mem32[0xA0000000] = binary_data
+
+# 2. Start RISC-V via APB2 Slot 1 (Control Register)
+machine.mem32[0x40002400] = 0x00 # Release reset
+
+# 3. Use APB2 Slot 1 as a mailbox
+riscv_response = machine.mem32[0x40002404]
+```
+
+**FPGA-Side Wiring:**
+The RISC-V core is instantiated as an AHB Master (for instruction/data access to PSRAM) and an APB Slave (for control/mailbox access from the M3).
+
+---
+
+### Variant 5: High-Speed AHB/DMA (Performance)
 Uses the 128-bit wide AHB expansion ports (`INTEXP0` and `TARGEXP0`) for massive data transfers.
 
 **MicroPython Usage:**

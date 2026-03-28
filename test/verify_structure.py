@@ -7,23 +7,28 @@ def test_structure():
         'src',
         'src/fpga/bitstream',
         'test',
+        'test/examples',
         'examples',
         'examples/blink',
         'examples/tt_echo',
-        'test/examples',
         '.github'
     ]
     expected_files = [
         'README.md',
         'ROADMAP.md',
         'src/fpga/bitstream/tang_nano_4k_m3.fs',
+        'FPGA_BRIDGE_USAGE.md',
         'GEMINI.md',
-        'examples/blink/blink.py',
-        'examples/tt_echo/tt_project.v',
-        'examples/tt_echo/tt_echo.py',
+        'HOWTO_TT.md',
         'test/examples/test_blink.robot',
         'test/examples/test_tt_echo.robot',
-        'test/common.resource'
+        'test/examples/test_neorv32.robot',
+        'test/examples/test_serv.robot',
+        'test/common.resource',
+        'examples/serv_riscv/serv_test.py',
+        'examples/blink/blink.py',
+        'examples/tt_echo/tt_project.v',
+        'examples/tt_echo/tt_echo.py'
     ]
 
     missing = []
