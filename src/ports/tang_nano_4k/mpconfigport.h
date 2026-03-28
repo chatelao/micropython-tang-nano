@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 // options to control how MicroPython is built
-#define MICROPY_CONFIG_ROM_LEVEL (MICROPY_CONFIG_ROM_LEVEL_EXTRA_FEATURES)
+#define MICROPY_CONFIG_ROM_LEVEL (MICROPY_CONFIG_ROM_LEVEL_CORE_FEATURES)
 
 #define MICROPY_ENABLE_GC (1)
 #define MICROPY_GC_SPLIT_HEAP (1)
@@ -64,9 +64,15 @@ extern const struct _mp_obj_module_t mp_module_struct;
 #define MICROPY_READER_VFS (1)
 #define MICROPY_PY_GC (1)
 
-// Additional features
-#define MICROPY_PY_BUILTINS_HELP (1)
-#define MICROPY_PY_BUILTINS_HELP_TEXT tang_nano_4k_help_text
+// Additional features for CORE_FEATURES level that are useful
+#define MICROPY_PY_ASSIGN_EXPR (1)
+#define MICROPY_PY_BUILTINS_DICT_FROMKEYS (1)
+#define MICROPY_PY_BUILTINS_MEMORYVIEW (1)
+#define MICROPY_PY_BUILTINS_PROPERTY (1)
+#define MICROPY_PY_BUILTINS_ENUMERATE (1)
+#define MICROPY_PY_BUILTINS_FILTER (1)
+#define MICROPY_PY_BUILTINS_REVERSED (1)
+#define MICROPY_PY_BUILTINS_MIN_MAX (1)
 
 // Explicitly disable VFS FAT and POSIX to avoid missing headers
 #define MICROPY_VFS_FAT (0)
@@ -75,20 +81,53 @@ extern const struct _mp_obj_module_t mp_module_struct;
 #define FFCONF_H "lib/oofatfs/ffconf.h"
 
 // Optimization to reduce size
+#if defined(SIMULATION) || defined(SPLIT_FLASH)
 #define MICROPY_PY_BUILTINS_COMPLEX (1)
+#define MICROPY_PY_MATH (1)
+#define MICROPY_PY_CMATH (1)
+#define MICROPY_PY_BUILTINS_HELP (1)
+#define MICROPY_PY_BUILTINS_HELP_TEXT tang_nano_4k_help_text
+#else
+#define MICROPY_PY_BUILTINS_COMPLEX (0)
+#define MICROPY_PY_MATH (0)
+#define MICROPY_PY_CMATH (0)
+#define MICROPY_PY_BUILTINS_HELP (0)
+#endif
+
 #ifdef SIMULATION
 #define MICROPY_ERROR_REPORTING (MICROPY_ERROR_REPORTING_DETAILED)
 #else
 #define MICROPY_ERROR_REPORTING (MICROPY_ERROR_REPORTING_NONE)
 #endif
-#define MICROPY_PY_MATH (1)
-#define MICROPY_PY_CMATH (1)
 
 // Specific feature enabling
 #define MICROPY_PY_SYS_MAXSIZE (1)
-#define MICROPY_PY_BUILTINS_PROPERTY (1)
 
 // Disable features that require port-specific implementations not yet available
+#ifndef MICROPY_PY_ERRNO
+#define MICROPY_PY_ERRNO (0)
+#endif
+#ifndef MICROPY_PY_OS
+#define MICROPY_PY_OS (0)
+#endif
+#ifndef MICROPY_PY_UCTYPES
 #define MICROPY_PY_UCTYPES (0)
+#endif
+#ifndef MICROPY_PY_SYS_STDFILES
 #define MICROPY_PY_SYS_STDFILES (0)
+#endif
+#ifndef MICROPY_PY_SYS_STDIO_BUFFER
 #define MICROPY_PY_SYS_STDIO_BUFFER (0)
+#endif
+
+// Reduce some other features to save space
+#define MICROPY_PY_BUILTINS_STR_COUNT (0)
+#define MICROPY_PY_BUILTINS_STR_OP_MODULO (1)
+#define MICROPY_PY_BUILTINS_STR_PARTITION (0)
+#define MICROPY_PY_BUILTINS_STR_SPLITLINES (0)
+#define MICROPY_PY_BUILTINS_SET (1)
+#define MICROPY_PY_BUILTINS_FROZENSET (0)
+#define MICROPY_PY_BUILTINS_SLICE (1)
+#define MICROPY_PY_ARRAY_SLICE_ASSIGN (1)
+#define MICROPY_PY_COLLECTIONS (1)
+#define MICROPY_PY_STRUCT (1)
