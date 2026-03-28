@@ -28,6 +28,28 @@ For a comprehensive overview of the port, including hardware details, installati
 - **Connectivity**: No built-in network or Bluetooth stacks.
 - **Big Integers**: Support for arbitrary-precision integers is disabled.
 
+## Memory Layout
+
+### Memory Regions
+| Region | Capacity | Base Address | Role | MicroPython Usage |
+| :--- | :--- | :--- | :--- | :--- |
+| **Internal SRAM** | 22 KB | `0x20000000` | Fast RAM | Stack (2KB), Static Data, Fast Heap (~18KB) |
+| **External PSRAM** | 8 MB | `0xA0000000` | Large RAM | Extended Heap |
+| **Internal Flash** | 32 KB* | `0x00000000` | Boot Flash | Vectors, Bootloader, Init |
+| **External Flash** | 4 MB | `0x60000000` | Main Storage | Runtime Code, ROData, VFS (LittleFS) |
+
+*\* Note: Internal Flash address space is 128 KB, but physical hardware is limited to 32 KB.*
+
+### Filesystem (LittleFS2) Configuration
+| Mode | FS Offset | FS Size | Description |
+| :--- | :--- | :--- | :--- |
+| **Standard** | `0x100000` | ~3 MB | 1 MB offset to avoid firmware overlap |
+| **SPLIT_FLASH** | `0x40000` | ~3.75 MB | 256 KB offset for firmware in external flash |
+
+### Implementation Notes
+- **Bus Access**: Memory-mapped access to PSRAM (`0xA0000000`) and External Flash (`0x60000000`) requires specific IP cores (Gowin PSRAM and SPI Flash Interface) to be present in the FPGA bitstream.
+- **Heap Management**: MicroPython is configured with `MICROPY_GC_SPLIT_HEAP=1` to manage the two distinct RAM regions.
+
 ## Project Structure
 - `/definitions` - Datasheets and Standards to be used.
 - `/documentation` - Concepts and implementation progress for different areas (see the [External Flash Guide](documentation/EXTERNAL_FLASH_GUIDE.md)).
