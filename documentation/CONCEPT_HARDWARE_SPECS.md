@@ -53,9 +53,3 @@ This document outlines the hardware specifications for the Sipeed Tang Nano 4K d
 | UART0_TXD | Pin 18 | 3 | IOB13A |
 | UART0_RXD | Pin 19 | 3 | IOB13B |
 
-## Implementation Status
-- [x] Research target hardware specifications.
-- [x] Document basic specifications.
-- [x] Detailed memory map for Cortex-M3.
-- [x] Peripheral register mapping.
-- [x] Implement SoftI2C support.
