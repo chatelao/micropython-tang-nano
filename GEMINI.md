@@ -6,7 +6,7 @@
 
 # Project structure
 - / - Keep only GEMINI.md, README.md and ROADMAP.md in the root directory
-- /definitions - Datasheets and Standards to be used, download and convert to ".md" on first time read
+- `/definitions` - Datasheets and Standards to be used, download and convert to ".md" on first time read
 - /documentation - Keep "CONCEPT_xxx.md" for different areas of work, mark the implementation progress within the concepts 
 - /test - Unit, System and End-2-End test concepts and cases to be executed after each change. Use Renode to verify the binaries.
 - /src - Source files, only accepted if working and covered by tests 
