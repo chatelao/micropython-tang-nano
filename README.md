@@ -17,6 +17,7 @@ For a comprehensive overview of the port, including hardware details, installati
     - `RTC`: Real-Time Clock for date and time management.
     - `WDT`: Hardware Watchdog Timer.
     - `FPGABridge`: Low-level access to the 16-bit M3-to-FPGA GPIO bridge (See [HOWTO_TT.md](HOWTO_TT.md)).
+- `SERV RISC-V`: Example of running a RISC-V core in the FPGA fabric (See `examples/serv_riscv/`).
     - `Flash`: Block device interface for the onboard SPI Flash.
 - **Filesystem**: LittleFS (LFS2) on external SPI Flash.
 - **Runtime**: Garbage Collector, REPL over UART0.
