@@ -29,7 +29,7 @@ Verify SERV RISC-V Example
 
     # Add a hook to simulate core execution
     # Note: Using Write Watchpoint with correctly formatted Python block
-    Execute Command         sysbus AddWatchpointHook 0x40002D00 4 Write @ "if value == 0x2: self.Bus.WriteDoubleWord(0x40002D04, 0x1); self.Bus.WriteDoubleWord(0x40002D08, 42)"
+    Execute Command         sysbus AddWatchpointHook 0x40002D00 4 Write "if value == 0x2: self.Bus.WriteDoubleWord(0x40002D04, 0x1); self.Bus.WriteDoubleWord(0x40002D08, 42)"
 
     Execute Command         sysbus.cpu VectorTableOffset 0x60000000
     Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
