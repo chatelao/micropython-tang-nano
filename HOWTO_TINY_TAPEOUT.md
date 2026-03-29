@@ -88,7 +88,14 @@ module top (
     output wire spi_cs_n,
     output wire spi_sclk,
     output wire spi_mosi,
-    input  wire spi_miso
+    input  wire spi_miso,
+
+    // Debug Ports (Mirroring for observation)
+    output wire [7:0] debug_ui_in,
+    output wire [7:0] debug_uo_out,
+    output wire       debug_clk,
+    output wire       debug_rst_n,
+    output wire       debug_ena
 );
 
     // APB2 Slot 1 Signals (0x40002400)
@@ -105,6 +112,13 @@ module top (
 
     // Wires from TT module (R)
     wire [7:0] uo_out, uio_out, uio_oe;
+
+    // --- Debug Mirroring ---
+    wire [7:0] debug_ui_in   = ui_in;
+    wire [7:0] debug_uo_out  = uo_out;
+    wire       debug_clk     = ctrl[0];
+    wire       debug_rst_n   = ctrl[1];
+    wire       debug_ena     = ctrl[2];
 
     always @(posedge clk_27m or negedge rst_n) begin
         if (!rst_n) begin
@@ -142,6 +156,27 @@ module top (
         .rst_n  (ctrl[1])
     );
 
+    // --- TT Wrapper Instantiation ---
+    tt_m3_wrapper tt_wrapper_inst (
+        .PCLK(clk_27m),
+        .PRESETn(rst_n),
+        .PADDR(paddr),
+        .PSEL(psel),
+        .PENABLE(penable),
+        .PWRITE(pwrite),
+        .PWDATA(pwdata),
+        .PRDATA(prdata),
+        .PREADY(pready),
+
+        // Connect debug outputs to top-level ports
+        .debug_ui_in(debug_ui_in),
+        .debug_uo_out(debug_uo_out),
+        .debug_clk(debug_clk),
+        .debug_rst_n(debug_rst_n),
+        .debug_ena(debug_ena)
+        // ... (other debug ports as needed)
+    );
+
     // --- M3 IP Instantiation ---
     Gowin_EMPU_M3 m3_inst (
         // APB2 Slot 1
@@ -156,7 +191,7 @@ module top (
         .UART0_TXD(uart_tx),
         .UART0_RXD(uart_rx),
         .RESET_N(rst_n),
-        .CLK(clk_27m),
+        .CLK(clk_27m)
         // ... (AHB Expansion for Flash) ...
     );
 endmodule
@@ -232,6 +267,35 @@ openfpgaflasher -b <bitstream.fs> -m <firmware_int.bin> -e <firmware_ext.bin>
 openfpgaflasher examples/tt_echo/tt_echo.fs -m src/ports/tang_nano_4k/build/firmware_int.bin -e src/ports/tang_nano_4k/build/firmware_ext.bin
 ```
 
-## 9. Verification
+## 9. Debugging and Signal Mirroring
 
-See `examples/tt_echo/` for a complete working example.
+To observe Tiny Tapeout signals for "display / debug purpose only," you can mirror the internal interface signals to the Tang Nano 4K header pins. This is especially useful for logic analyzers when using manual clock stepping from MicroPython.
+
+### Recommended Pin Mapping (CST)
+
+Create a `.cst` file (e.g., `tt_echo.cst`) to map these signals:
+
+| TT Signal | Debug Wire | FPGA Pin | Header Pin |
+| :--- | :--- | :--- | :--- |
+| `clk` | `debug_clk` | 44 | J2.9 |
+| `rst_n` | `debug_rst_n` | 43 | J2.8 |
+| `ena` | `debug_ena` | 42 | J2.7 |
+| `ui_in[0]` | `debug_ui_in[0]` | 41 | J2.6 |
+| `uo_out[0]`| `debug_uo_out[0]`| 32 | J2.5 |
+
+### Verilog Mirroring Logic
+
+In your top-level module, assign the internal signals to output ports that correspond to the pins in your `.cst` file:
+
+```verilog
+    // Mirroring for observation
+    assign debug_clk    = ctrl[0];
+    assign debug_rst_n  = ctrl[1];
+    assign debug_ena    = ctrl[2];
+    assign debug_ui_in  = ui_in;
+    assign debug_uo_out = uo_out;
+```
+
+## 10. Verification
+
+See `examples/tt_echo/` for a complete working example, including the updated `tt_wrapper.v` and `tt_echo.cst`.

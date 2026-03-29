@@ -21,10 +21,30 @@ module tt_m3_wrapper (
     input  wire        PWRITE,  // APB Write
     input  wire [31:0] PWDATA,  // APB Write Data
     output reg  [31:0] PRDATA,  // APB Read Data
-    output wire        PREADY   // APB Ready
+    output wire        PREADY,  // APB Ready
+
+    // --- Debug Ports (Mirroring for observation) ---
+    output wire [7:0]  debug_ui_in,
+    output wire [7:0]  debug_uo_out,
+    output wire [7:0]  debug_uio_in,
+    output wire [7:0]  debug_uio_out,
+    output wire [7:0]  debug_uio_oe,
+    output wire        debug_ena,
+    output wire        debug_clk,
+    output wire        debug_rst_n
 );
 
     assign PREADY = 1'b1;
+
+    // Debug assignments
+    assign debug_ui_in   = ui_in;
+    assign debug_uo_out  = uo_out;
+    assign debug_uio_in  = uio_in;
+    assign debug_uio_out = uio_out;
+    assign debug_uio_oe  = uio_oe;
+    assign debug_ena     = ctrl[2];
+    assign debug_clk     = ctrl[0];
+    assign debug_rst_n   = ctrl[1];
 
     // Registers (W)
     reg  [7:0] ui_in;   // Input to TT module
