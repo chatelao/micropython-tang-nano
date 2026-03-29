@@ -1,0 +1,73 @@
+// Physical Constraints for TT Echo on Tang Nano 4K
+
+IO_LOC "clk_27m" 45;
+IO_PORT "clk_27m" IO_TYPE=LVCMOS33;
+IO_LOC "rst_n" 10;
+IO_PORT "rst_n" IO_TYPE=LVCMOS33;
+IO_LOC "uart_tx" 18;
+IO_PORT "uart_tx" IO_TYPE=LVCMOS33;
+IO_LOC "uart_rx" 19;
+IO_PORT "uart_rx" IO_TYPE=LVCMOS33;
+
+// ui_in [7:0]
+IO_LOC "tt_ui_in[0]" 28;
+IO_LOC "tt_ui_in[1]" 29;
+IO_LOC "tt_ui_in[2]" 30;
+IO_LOC "tt_ui_in[3]" 31;
+IO_LOC "tt_ui_in[4]" 32;
+IO_LOC "tt_ui_in[5]" 33;
+IO_LOC "tt_ui_in[6]" 34;
+IO_LOC "tt_ui_in[7]" 35;
+
+// uo_out [7:0]
+IO_LOC "tt_uo_out[0]" 20;
+IO_LOC "tt_uo_out[1]" 21;
+IO_LOC "tt_uo_out[2]" 22;
+IO_LOC "tt_uo_out[3]" 23;
+IO_LOC "tt_uo_out[4]" 27;
+IO_LOC "tt_uo_out[5]" 40;
+IO_LOC "tt_uo_out[6]" 41;
+IO_LOC "tt_uo_out[7]" 42;
+
+// uio [7:0] (Bidirectional)
+IO_LOC "tt_uio[0]" 13;
+IO_LOC "tt_uio[1]" 14;
+IO_LOC "tt_uio[2]" 15;
+IO_LOC "tt_uio[3]" 16;
+IO_LOC "tt_uio[4]" 17;
+IO_LOC "tt_uio[5]" 43;
+IO_LOC "tt_uio[6]" 44;
+IO_LOC "tt_uio[7]" 46;
+
+// Control Signals
+IO_LOC "tt_ena" 1;
+IO_LOC "tt_clk" 2;
+IO_LOC "tt_rst_n" 39;
+
+IO_PORT "tt_ui_in[0]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_ui_in[1]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_ui_in[2]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_ui_in[3]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_ui_in[4]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_ui_in[5]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_ui_in[6]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_ui_in[7]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uo_out[0]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uo_out[1]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uo_out[2]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uo_out[3]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uo_out[4]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uo_out[5]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uo_out[6]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uo_out[7]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uio[0]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uio[1]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uio[2]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uio[3]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uio[4]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uio[5]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uio[6]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_uio[7]" IO_TYPE=LVCMOS33;
+IO_PORT "tt_ena" IO_TYPE=LVCMOS33;
+IO_PORT "tt_clk" IO_TYPE=LVCMOS33;
+IO_PORT "tt_rst_n" IO_TYPE=LVCMOS33;

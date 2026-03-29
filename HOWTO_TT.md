@@ -63,7 +63,7 @@ To enable M3-to-FPGA communication and serial console access, your Gowin project
     *   **Memory Mapped**: Enabled (Base Address `0x60000000`).
 
 ### Physical Pin Routing (CST File)
-Route the UART0 and SPI signals to the following physical pins:
+Route the UART0, SPI, and TT signals to the following physical pins:
 
 | Signal | FPGA Pin | Description |
 | :--- | :--- | :--- |
@@ -72,9 +72,15 @@ Route the UART0 and SPI signals to the following physical pins:
 | **SPI CS_N** | Pin 36 | External Flash Chip Select |
 | **SPI SCLK** | Pin 37 | External Flash Clock |
 | **SPI MOSI** | Pin 38 | External Flash Data Out |
-| **SPI MISO** | Pin 39 | External Flash Data In |
+| **SPI MISO** | Pin 39 | (Reserved for Flash/Reset) |
+| **TT ui_in[7:0]** | Pins 28-35 | Mirror of TT inputs |
+| **TT uo_out[7:0]** | Pins 20-23, 27, 40-42 | TT dedicated outputs |
+| **TT uio[7:0]** | Pins 13-17, 43-44, 46 | Bidirectional IOs |
+| **TT ena** | Pin 1 | TT Enable |
+| **TT clk** | Pin 2 | TT Clock |
+| **TT rst_n** | Pin 39 | TT Reset (Active Low) |
 
-## 5. FPGA Wrapper (Verilog)
+## 5. FPGA Top-Level and Wrapper (Verilog)
 
 The following wrapper demonstrates how to connect the M3 `Gowin_EMPU_M3` IP to a TT module via the APB2 bus.
 
