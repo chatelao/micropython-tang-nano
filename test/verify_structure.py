@@ -19,7 +19,7 @@ def test_structure():
         'src/fpga/bitstream/tang_nano_4k_m3.fs',
         'FPGA_BRIDGE_USAGE.md',
         'GEMINI.md',
-        'HOWTO_TT.md',
+        'HOWTO_TINY_TAPEOUT.md',
         'test/examples/test_blink.robot',
         'test/examples/test_tt_echo.robot',
         'examples/blink/blink.py',
