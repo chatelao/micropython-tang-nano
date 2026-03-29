@@ -1,0 +1,24 @@
+// Physical Constraints for Tiny Tapeout Echo Debug on Tang Nano 4K
+// Mirroring signals to header pins for observation (Logic Analyzer/Debug)
+
+// TT Control Signals
+IO_LOC "debug_clk" 44;     // IOT17B (J2.9)
+IO_LOC "debug_rst_n" 43;   // IOT17A (J2.8)
+IO_LOC "debug_ena" 42;     // IOT20B (J2.7)
+
+// TT ui_in (Inputs to TT) - Bits 0-3
+IO_LOC "debug_ui_in[0]" 41; // IOT20A (J2.6)
+IO_LOC "debug_ui_in[1]" 40; // IOT26B (J2.5)
+IO_LOC "debug_ui_in[2]" 39; // IOT26A (J2.4)
+IO_LOC "debug_ui_in[3]" 33; // IOR9B  (J2.3)
+
+// TT uo_out (Outputs from TT) - Bits 0-3
+IO_LOC "debug_uo_out[0]" 32; // IOR11A (J2.2)
+IO_LOC "debug_uo_out[1]" 31; // IOR11B (J2.1)
+IO_LOC "debug_uo_out[2]" 30; // IOR15A (J1.10)
+IO_LOC "debug_uo_out[3]" 29; // IOR15B (J1.9)
+
+// Standard Pins for Reference
+IO_LOC "uart_tx" 18;
+IO_LOC "uart_rx" 19;
+IO_LOC "clk_27m" 45;
