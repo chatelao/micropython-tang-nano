@@ -63,7 +63,32 @@ You have two alternatives to connect the Cortex-M3 UART0 (routed to Pins 18/19 b
 
 ---
 
-## 3. Advanced Details & Reference
+## 3. Open-Source FPGA Toolchain (Alternative)
+
+For an entirely open-source workflow without Gowin EDA, you can use **Project Apicula**, **Yosys**, and **nextpnr-himbaechel** to generate the bitstream.
+
+### Synthesis (Yosys)
+```bash
+yosys -p "read_verilog examples/my_tt_project/tt_wrapper.v examples/my_tt_project/tt_project.v; synth_gowin -json tt_project.json"
+```
+
+### Place & Route (nextpnr-himbaechel)
+```bash
+nextpnr-himbaechel --json tt_project.json \
+                   --write tt_pnr.json \
+                   --device GW1NSR-LV4CQN48PC7/I6 \
+                   --vopt family=GW1NS-4 \
+                   --vopt cst=examples/my_tt_project/tt_echo.cst
+```
+
+### Pack (gowin_pack)
+```bash
+gowin_pack -d GW1NS-4 -o tt_project.fs tt_pnr.json
+```
+
+---
+
+## 4. Advanced Details & Reference
 
 ### Tiny Tapeout Interface Mapping
 The standard TT interface is mapped to the M3 via **APB2 Slot 1** (`0x40002400`).
