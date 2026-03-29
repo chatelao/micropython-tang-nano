@@ -4,9 +4,9 @@ Suite Teardown  Teardown
 Resource        ${RENODEKEYWORDS}
 
 *** Variables ***
-${RESC}         ${CURDIR}/tang_nano_4k.resc
-${REPL}         ${CURDIR}/tang_nano_4k.repl
-${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
+${RESC}         ${CURDIR}/../tang_nano_4k.resc
+${REPL}         ${CURDIR}/../tang_nano_4k.repl
+${BIN}          ${CURDIR}/../../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
 
 *** Test Cases ***
@@ -18,19 +18,27 @@ Verify SERV RISC-V Example
 
     # Simulate the SERV core registers at 0x40002D00
     # 0x00: CTRL, 0x04: STATUS, 0x08: RESULT, 0x40-0x7F: IMEM
-    Execute Command         sysbus CreateMemoryRegion "serv_regs" 0x40002D00 0x100
+    # Unregister dma0 (0x40002C00, size 0x400) to avoid conflict
+    # Note: Registration must be page-aligned (0x400)
+    Execute Command         sysbus Unregister sysbus.dma0
+    Execute Command         machine LoadPlatformDescriptionFromString "serv_regs: Memory.MappedMemory @ sysbus 0x40002C00 { size: 0x400 }"
     # Initial state
     Execute Command         sysbus WriteDoubleWord 0x40002D00 0x1
     Execute Command         sysbus WriteDoubleWord 0x40002D04 0x0
     Execute Command         sysbus WriteDoubleWord 0x40002D08 0x0
 
-    # Add a hook to simulate core execution
-    # Note: Using Write Watchpoint with correctly formatted Python block
-    Execute Command         sysbus AddWatchpointHook 0x40002D00 4 Write @ "if value == 0x2: self.Bus.WriteDoubleWord(0x40002D04, 0x1); self.Bus.WriteDoubleWord(0x40002D08, 42)"
+    # Mocking: We will manually update STATUS/RESULT via Robot commands after MicroPython starts the core
 
-    Execute Command         sysbus.cpu VectorTableOffset 0x60000000
-    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
-    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
+    ${boot_addr_raw}=       Execute Command  sysbus GetSymbolAddress "isr_vector"
+    ${boot_addr}=           Evaluate  '''${boot_addr_raw}'''.strip()
+    Execute Command         sysbus.cpu VectorTableOffset ${boot_addr}
+    ${sp_val_raw}=          Execute Command  sysbus ReadDoubleWord ${boot_addr}
+    ${sp_val}=              Evaluate  '''${sp_val_raw}'''.strip()
+    Execute Command         sysbus.cpu SP ${sp_val}
+    ${pc_ptr}=              Evaluate  hex(int("${boot_addr}", 16) + 4)
+    ${pc_val_raw}=          Execute Command  sysbus ReadDoubleWord ${pc_ptr}
+    ${pc_val}=              Evaluate  '''${pc_val_raw}'''.strip()
+    Execute Command         sysbus.cpu PC ${pc_val}
 
     Create Terminal Tester  ${UART}
     Start Emulation
@@ -50,9 +58,13 @@ Verify SERV RISC-V Example
     Write Line To Uart      machine.mem32[IMEM_BASE] = 0x02a00513; machine.mem32[IMEM_BASE + 4] = 0x00100073; print("LOADED")
     Wait For Line On Uart   LOADED
 
-    # Run the core and check result
+    # Run the core
     Write Line To Uart      machine.mem32[REG_CTRL] = 0x02; print("RUNNING")
     Wait For Line On Uart   RUNNING
+
+    # Mock completion from Renode side
+    Execute Command         sysbus WriteDoubleWord 0x40002D04 0x1
+    Execute Command         sysbus WriteDoubleWord 0x40002D08 42
 
     # Check for halt and result
     Write Line To Uart      print("HALT:" + str(machine.mem32[REG_STATUS] & 0x01))
