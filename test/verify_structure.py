@@ -25,6 +25,7 @@ def test_structure():
         'test/examples/test_tt_echo.robot',
         'test/examples/test_neorv32.robot',
         'test/examples/test_serv.robot',
+        'test/examples/test_tt_vga_hdmi.robot',
         'examples/blink/blink.py',
         'examples/tt_echo/tt_project.v',
         'examples/tt_echo/tt_echo.py',

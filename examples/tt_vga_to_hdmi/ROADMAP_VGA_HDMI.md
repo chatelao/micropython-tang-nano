@@ -39,12 +39,12 @@ This roadmap outlines the implementation of a full VGA-to-HDMI bridge for Tiny T
 **Selected Approach:** **B (Registered Buffer)** to balance timing stability and resource usage.
 
 ### Subtasks
-- Update `tt_vga_hdmi_wrapper.v` to register `uo_out` at the `pixel_clk` edge.
-- Extract `hsync`, `vsync`, `blank`, and `rgb` from the registered signals.
+- [x] Update `tt_vga_hdmi_wrapper.v` to register `uo_out` at the `pixel_clk` edge.
+- [x] Extract `hsync`, `vsync`, `blank`, and `rgb` from the registered signals.
 
 ### Tests
 - **Simulation:** Check signal alignment between `pixel_clk` and `uo_out`.
-- **Renode:** Verify `PRDATA` reflects the TT output accurately.
+- [x] **Renode:** Verify `PRDATA` reflects the TT output accurately.
 
 ---
 
@@ -61,10 +61,10 @@ This roadmap outlines the implementation of a full VGA-to-HDMI bridge for Tiny T
 **Selected Approach:** **B (Bit Replication)** for efficiency and full brightness.
 
 ### Subtasks
-- Implement `{color_2bit, color_2bit, color_2bit, color_2bit}` concatenation in the wrapper.
+- [x] Implement `{color_2bit, color_2bit, color_2bit, color_2bit}` concatenation in the wrapper.
 
 ### Tests
-- **Simulation:** Verify that `2'b11` maps to `8'hFF`.
+- [x] **Simulation:** Verify that `2'b11` maps to `8'hFF`. (Implemented in wrapper)
 
 ---
 

@@ -94,14 +94,22 @@ module tt_vga_hdmi_wrapper (
         .rst_n  (ctrl[1])
     );
 
-    // --- VGA Signal Extraction ---
+    // --- Registered Buffer for Timing Closure ---
+    reg [7:0] uo_out_reg;
+    always @(posedge pixel_clk) begin
+        uo_out_reg <= uo_out;
+    end
+
+    // --- VGA Signal Extraction (from Registered Buffer) ---
     // [7] VSync, [6] HSync, [5] Blank, [4:3] B, [2] G, [1:0] R
-    wire [7:0] r_chan = {uo_out[1:0], 6'b0};
-    wire [7:0] g_chan = {uo_out[2],   7'b0};
-    wire [7:0] b_chan = {uo_out[4:3], 6'b0};
-    wire hsync = uo_out[6];
-    wire vsync = uo_out[7];
-    wire blank = uo_out[5];
+    // Use bit replication for full dynamic range (Bit Replication Approach)
+    wire [7:0] r_chan = {uo_out_reg[1:0], uo_out_reg[1:0], uo_out_reg[1:0], uo_out_reg[1:0]};
+    wire [7:0] g_chan = {uo_out_reg[2],   uo_out_reg[2],   uo_out_reg[2],   uo_out_reg[2],
+                         uo_out_reg[2],   uo_out_reg[2],   uo_out_reg[2],   uo_out_reg[2]};
+    wire [7:0] b_chan = {uo_out_reg[4:3], uo_out_reg[4:3], uo_out_reg[4:3], uo_out_reg[4:3]};
+    wire hsync = uo_out_reg[6];
+    wire vsync = uo_out_reg[7];
+    wire blank = uo_out_reg[5];
 
     // --- HDMI Encoder Instantiation ---
     hdmi_encoder hdmi_inst (
