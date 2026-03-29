@@ -8,6 +8,8 @@ The port is **feature-complete** according to its established roadmap, providing
 
 ## 2. Feature Matrix
 
+### 2.1 Supported Features Matrix
+
 | Feature | Category | Status | Implementation Detail |
 | :--- | :--- | :--- | :--- |
 | **Core REPL** | System | Complete | UART0 (115200 8N1) |
@@ -25,6 +27,20 @@ The port is **feature-complete** according to its established roadmap, providing
 | **DMA** | Specialized | Complete | DMA support for FPGA-M3 data transfers |
 | **RISC-V Co-proc**| Specialized | Complete | SERV and NEORV32 co-processor integration examples |
 | **Tiny Tapeout** | Specialized | Complete | Support for loading and testing TT modules (ui/uo/uio) |
+
+### 2.2 Unsupported Features / Gaps
+
+| Feature | Category | Status | Reason / Detail |
+| :--- | :--- | :--- | :--- |
+| **Networking** | Connectivity | Unsupported | No hardware MAC/PHY or software stack (`network`, `usocket`). |
+| **Bluetooth** | Connectivity | Unsupported | No hardware support on GW1NSR-4C. |
+| **Hardware FPU** | Core | Unsupported | Cortex-M3 lacks a hardware FPU; uses software emulation. |
+| **AsyncIO** | Software | Disabled | `asyncio` disabled to conserve flash space. |
+| **Math Module** | Software | Disabled | `math` module disabled; basic arithmetic only. |
+| **JSON / Regex** | Software | Disabled | `ujson` and `ure` modules disabled to save space. |
+| **Complex Numbers**| Software | Disabled | `complex` type support is not compiled in. |
+| **Advanced Built-ins**| Software | Disabled | `enumerate`, `filter`, `reversed`, `property` etc., are disabled. |
+| **Built-in Help** | System | Disabled | Interactive `help()` system removed to save flash. |
 
 ## 3. Architecture and Optimization Review
 
