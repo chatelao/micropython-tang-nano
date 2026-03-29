@@ -4,22 +4,32 @@ Suite Teardown  Teardown
 Resource        ${RENODEKEYWORDS}
 
 *** Variables ***
-${RESC}         ${CURDIR}/tang_nano_4k.resc
-${REPL}         ${CURDIR}/tang_nano_4k.repl
-${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
+${RESC}         ${CURDIR}/../tang_nano_4k.resc
+${REPL}         ${CURDIR}/../tang_nano_4k.repl
+${BIN}          ${CURDIR}/../../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
+
+*** Keywords ***
+Setup MicroPython
+    Execute Command         $repl = @${REPL}
+    Execute Command         $bin = @${BIN}
+    Execute Command         include @${RESC}
+    ${boot_addr_raw}=       Execute Command  sysbus GetSymbolAddress "isr_vector"
+    ${boot_addr}=           Evaluate  '''${boot_addr_raw}'''.strip()
+    Execute Command         sysbus.cpu VectorTableOffset ${boot_addr}
+    ${sp_val_raw}=          Execute Command  sysbus ReadDoubleWord ${boot_addr}
+    ${sp_val}=              Evaluate  '''${sp_val_raw}'''.strip()
+    Execute Command         sysbus.cpu SP ${sp_val}
+    ${pc_ptr}=              Evaluate  hex(int("${boot_addr}", 16) + 4)
+    ${pc_val_raw}=          Execute Command  sysbus ReadDoubleWord ${pc_ptr}
+    ${pc_val}=              Evaluate  '''${pc_val_raw}'''.strip()
+    Execute Command         sysbus.cpu PC ${pc_val}
+    Create Terminal Tester  ${UART}
 
 *** Test Cases ***
 Verify NEORV32 RISC-V Example
     [Documentation]    Verifies that the neorv32.py example works by simulating the M3 and its control over the FPGA fabric.
-    Execute Command         $repl = @${REPL}
-    Execute Command         $bin = @${BIN}
-    Execute Command         include @${RESC}
-    # Ensure we boot from the MicroPython runtime location in simulation
-    Execute Command         sysbus.cpu VectorTableOffset 0x60000000
-    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
-    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
-    Create Terminal Tester  ${UART}
+    Setup MicroPython
     Start Emulation
 
     Wait For Line On Uart   MicroPython started on Tang Nano 4K
@@ -45,7 +55,8 @@ Verify NEORV32 RISC-V Example
     Execute Command         sysbus WriteDoubleWord 0x40002404 0xCAFEBABE
 
     # 5. Read back the response in MicroPython
-    Write Line To Uart      print("RESP:" + hex(machine.mem32[0x40002404]))
+    # Using & 0xFFFFFFFF to handle signedness in hex conversion
+    Write Line To Uart      print("RESP:" + hex(machine.mem32[0x40002404] & 0xFFFFFFFF))
     Wait For Line On Uart   RESP:0xcafebabe
 
     Write Line To Uart      print("D" + "ONE")
