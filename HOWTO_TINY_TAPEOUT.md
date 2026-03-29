@@ -227,6 +227,11 @@ To flash the FPGA bitstream, the internal MCU firmware, and the external flash f
 openfpgaflasher -b <bitstream.fs> -m <firmware_int.bin> -e <firmware_ext.bin>
 ```
 
+**Options:**
+*   `-b <bitstream.fs>`: Path to the FPGA bitstream file.
+*   `-m <firmware_int.bin>`: Path to the internal MCU firmware (vectors and reset handler).
+*   `-e <firmware_ext.bin>`: Path to the external SPI flash firmware (MicroPython runtime).
+
 **Example from the project root:**
 ```bash
 openfpgaflasher examples/tt_echo/tt_echo.fs -m src/ports/tang_nano_4k/build/firmware_int.bin -e src/ports/tang_nano_4k/build/firmware_ext.bin
