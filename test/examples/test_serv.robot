@@ -4,9 +4,9 @@ Suite Teardown  Teardown
 Resource        ${RENODEKEYWORDS}
 
 *** Variables ***
-${RESC}         ${CURDIR}/tang_nano_4k.resc
-${REPL}         ${CURDIR}/tang_nano_4k.repl
-${BIN}          ${CURDIR}/../src/ports/tang_nano_4k/build/firmware.elf
+${RESC}         ${CURDIR}/../tang_nano_4k.resc
+${REPL}         ${CURDIR}/../tang_nano_4k.repl
+${BIN}          ${CURDIR}/../../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
 
 *** Test Cases ***

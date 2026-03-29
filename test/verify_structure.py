@@ -10,6 +10,8 @@ def test_structure():
         'test/examples',
         'examples',
         'examples/blink',
+        'examples/neorv32',
+        'examples/serv_riscv',
         'examples/tt_echo',
         '.github'
     ]
@@ -21,6 +23,8 @@ def test_structure():
         'GEMINI.md',
         'HOWTO_TT.md',
         'test/examples/test_blink.robot',
+        'test/examples/test_neorv32.robot',
+        'test/examples/test_serv.robot',
         'test/examples/test_tt_echo.robot',
         'examples/blink/blink.py',
         'examples/tt_echo/tt_project.v',
