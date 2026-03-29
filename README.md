@@ -67,7 +67,7 @@ For a comprehensive overview of the port, including hardware details, installati
 - `M3_MICROPYTHON.md` - Supported MicroPython features and port guide.
 - `ROADMAP.md` - Progress tracking and future steps.
 - `SERIAL_PORT_ACCESS.md` - Guide to accessing the Cortex-M3 serial port.
-- `TOOLCHAIN_SETUP.md` - Instructions for setting up the ARM toolchain.
+- [`TOOLCHAIN_SETUP.md`](TOOLCHAIN_SETUP.md) - Instructions for setting up the ARM and FPGA toolchains.
 
 ## UART Configuration
 The MicroPython REPL is accessible via the Cortex-M3 UART0 peripheral.
