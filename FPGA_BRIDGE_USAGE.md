@@ -114,4 +114,4 @@ Currently, `machine.Pin` is the primary way to handle interrupts. To use `USER_I
 
 - **Address Range**: `0x40010000` (GPIO Bridge), `0x40002400` - `0x40002FFF` (APB2).
 - **Signal Mapping**: Refer to [M3_FPGA_INTEGRATIONS.md](M3_FPGA_INTEGRATIONS.md) for RTL wiring details.
-- **Tiny Tapeout**: Refer to [HOWTO_TT.md](HOWTO_TT.md) for specific mapping to Tiny Tapeout modules.
+- **Tiny Tapeout**: Refer to [HOWTO_TINY_TAPEOUT.md](HOWTO_TINY_TAPEOUT.md) for specific mapping to Tiny Tapeout modules.

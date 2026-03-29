@@ -62,7 +62,7 @@ For a comprehensive overview of the port, including hardware details, installati
 - `COMPLIANCE_TESTS.md` - MicroPython compliance testing results.
 - `FPGA_BRIDGE_USAGE.md` - Detailed guide on using MicroPython to interact with the FPGA.
 - `GEMINI.md` - Project goal and structural guidelines.
-- `HOWTO_TT.md` - Guide to loading and testing Tiny Tapeout modules.
+- `HOWTO_TINY_TAPEOUT.md` - Guide to loading and testing Tiny Tapeout modules.
 - `M3_FPGA_INTEGRATIONS.md` - Guide to communication interfaces between M3 and FPGA.
 - `M3_MICROPYTHON.md` - Supported MicroPython features and port guide.
 - `ROADMAP.md` - Progress tracking and future steps.
