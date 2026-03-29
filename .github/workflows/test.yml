@@ -1,0 +1,60 @@
+name: Reusable Test Workflow
+
+on:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download firmware artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: firmware-dist
+          path: dist
+
+      - name: Prepare firmware for tests
+        run: |
+          mkdir -p src/ports/tang_nano_4k/build
+          cp dist/firmware_sim.elf src/ports/tang_nano_4k/build/firmware.elf
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Cache MicroPython core
+        id: cache-micropython
+        uses: actions/cache@v4
+        with:
+          path: src/lib/micropython
+          key: micropython-v1.24.1-${{ runner.os }}-${{ hashFiles('src/ports/tang_nano_4k/mpconfigport.h') }}
+
+      - name: Clone MicroPython core
+        if: steps.cache-micropython.outputs.cache-hit != 'true'
+        run: |
+          git clone --depth 1 --branch v1.24.1 https://github.com/micropython/micropython.git src/lib/micropython
+
+      - name: Run Renode tests
+        uses: antmicro/renode-test-action@v5
+        with:
+          tests-to-run: |
+            test/tang_nano_4k.robot
+            test/examples/test_blink.robot
+            test/examples/test_tt_echo.robot
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            COMPLIANCE_TESTS.md
+            compliance_output.log
+            renode_output.log
+            report.html
+            log.html
+            robot_output.xml
+          if-no-files-found: warn
