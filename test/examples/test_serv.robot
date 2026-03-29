@@ -18,7 +18,7 @@ Verify SERV RISC-V Example
 
     # Simulate the SERV core registers at 0x40002D00
     # 0x00: CTRL, 0x04: STATUS, 0x08: RESULT, 0x40-0x7F: IMEM
-    Execute Command         sysbus CreateMemoryRegion "serv_regs" 0x40002D00 0x100
+    Execute Command         machine LoadPlatformDescriptionFromString "serv_regs: Memory.MappedMemory @ sysbus 0x40002D00 { size: 0x100 }"
     # Initial state
     Execute Command         sysbus WriteDoubleWord 0x40002D00 0x1
     Execute Command         sysbus WriteDoubleWord 0x40002D04 0x0
