@@ -197,6 +197,41 @@ print("Received from TT: 0x{:02x}".format(val))
 4.  **Bitstream**: Generate the `.fs` bitstream file.
 5.  **Program**: Load the `.fs` file into the FPGA.
 
-## 8. Verification
+## 8. Flashing with openfpgaflasher
+
+As an alternative to the official Gowin Programmer, you can use the open-source `openfpgaflasher` tool. This is particularly useful for Linux and macOS users as it allows flashing both the FPGA bitstream and the MicroPython firmware (internal and external) in a single step.
+
+### Installation
+
+The tool is written in Python and can be installed via pip:
+
+```bash
+pip install openfpgaflasher
+```
+
+### Prerequisites
+
+*   **Python 3.6+**
+*   **pyusb**: Usually installed automatically with the tool.
+*   **Linux Users**: You may need to add udev rules for the onboard BL702 debugger. Create a file `/etc/udev/rules.d/99-tangnano.rules` with the following content:
+    ```text
+    ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="0666", GROUP="plugdev"
+    ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="05dc", MODE="0666", GROUP="plugdev"
+    ```
+
+### Usage: Flashing Everything
+
+To flash the FPGA bitstream, the internal MCU firmware, and the external flash firmware simultaneously, use the following command:
+
+```bash
+openfpgaflasher -b <bitstream.fs> -m <firmware_int.bin> -e <firmware_ext.bin>
+```
+
+**Example from the project root:**
+```bash
+openfpgaflasher examples/tt_echo/tt_echo.fs -m src/ports/tang_nano_4k/build/firmware_int.bin -e src/ports/tang_nano_4k/build/firmware_ext.bin
+```
+
+## 9. Verification
 
 See `examples/tt_echo/` for a complete working example.
