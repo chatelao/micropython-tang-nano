@@ -1,0 +1,72 @@
+// Physical Constraints for Tiny Tapeout on Tang Nano 4K
+
+IO_LOC "clk" 45;
+IO_PORT "clk" IO_TYPE=LVCMOS33;
+
+IO_LOC "uart0_tx" 18;
+IO_PORT "uart0_tx" IO_TYPE=LVCMOS33;
+IO_LOC "uart0_rx" 19;
+IO_PORT "uart0_rx" IO_TYPE=LVCMOS33;
+
+// UI IN (8 pins)
+IO_LOC "ui_in[0]" 27;
+IO_LOC "ui_in[1]" 28;
+IO_LOC "ui_in[2]" 29;
+IO_LOC "ui_in[3]" 30;
+IO_LOC "ui_in[4]" 31;
+IO_LOC "ui_in[5]" 32;
+IO_LOC "ui_in[6]" 33;
+IO_LOC "ui_in[7]" 34;
+IO_PORT "ui_in[0]" IO_TYPE=LVCMOS33;
+IO_PORT "ui_in[1]" IO_TYPE=LVCMOS33;
+IO_PORT "ui_in[2]" IO_TYPE=LVCMOS33;
+IO_PORT "ui_in[3]" IO_TYPE=LVCMOS33;
+IO_PORT "ui_in[4]" IO_TYPE=LVCMOS33;
+IO_PORT "ui_in[5]" IO_TYPE=LVCMOS33;
+IO_PORT "ui_in[6]" IO_TYPE=LVCMOS33;
+IO_PORT "ui_in[7]" IO_TYPE=LVCMOS33;
+
+// UO OUT (8 pins)
+IO_LOC "uo_out[0]" 41;
+IO_LOC "uo_out[1]" 42;
+IO_LOC "uo_out[2]" 43;
+IO_LOC "uo_out[3]" 44;
+IO_LOC "uo_out[4]" 4;
+IO_LOC "uo_out[5]" 3;
+IO_LOC "uo_out[6]" 2;
+IO_LOC "uo_out[7]" 1;
+IO_PORT "uo_out[0]" IO_TYPE=LVCMOS33;
+IO_PORT "uo_out[1]" IO_TYPE=LVCMOS33;
+IO_PORT "uo_out[2]" IO_TYPE=LVCMOS33;
+IO_PORT "uo_out[3]" IO_TYPE=LVCMOS33;
+IO_PORT "uo_out[4]" IO_TYPE=LVCMOS33;
+IO_PORT "uo_out[5]" IO_TYPE=LVCMOS33;
+IO_PORT "uo_out[6]" IO_TYPE=LVCMOS33;
+IO_PORT "uo_out[7]" IO_TYPE=LVCMOS33;
+
+// UIO (8 pins)
+IO_LOC "uio[0]" 13;
+IO_LOC "uio[1]" 14;
+IO_LOC "uio[2]" 15;
+IO_LOC "uio[3]" 16;
+IO_LOC "uio[4]" 17;
+IO_LOC "uio[5]" 20;
+IO_LOC "uio[6]" 21;
+IO_LOC "uio[7]" 22;
+IO_PORT "uio[0]" IO_TYPE=LVCMOS33;
+IO_PORT "uio[1]" IO_TYPE=LVCMOS33;
+IO_PORT "uio[2]" IO_TYPE=LVCMOS33;
+IO_PORT "uio[3]" IO_TYPE=LVCMOS33;
+IO_PORT "uio[4]" IO_TYPE=LVCMOS33;
+IO_PORT "uio[5]" IO_TYPE=LVCMOS33;
+IO_PORT "uio[6]" IO_TYPE=LVCMOS33;
+IO_PORT "uio[7]" IO_TYPE=LVCMOS33;
+
+IO_LOC "ena" 10;
+IO_PORT "ena" IO_TYPE=LVCMOS33;
+
+IO_LOC "tt_clk" 11;
+IO_PORT "tt_clk" IO_TYPE=LVCMOS33;
+
+IO_LOC "rst_n" 46;
+IO_PORT "rst_n" IO_TYPE=LVCMOS33;
