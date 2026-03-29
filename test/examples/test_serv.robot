@@ -16,19 +16,19 @@ Verify SERV RISC-V Example
     Execute Command         $bin = @${BIN}
     Execute Command         include @${RESC}
 
-    # Simulate the SERV core registers at 0x40002D00
+    # Simulate the SERV core registers at 0x40002C00 (Aligned to 0x400)
     # 0x00: CTRL, 0x04: STATUS, 0x08: RESULT, 0x40-0x7F: IMEM
     # Unregister dma0 (APB2 Slot 9 at 0x40002C00) to avoid conflict
     Execute Command         sysbus Unregister sysbus.dma0
-    Execute Command         machine LoadPlatformDescriptionFromString "serv_regs: Memory.MappedMemory @ sysbus 0x40002D00 { size: 0x100 }"
+    Execute Command         machine LoadPlatformDescriptionFromString "serv_regs: Memory.MappedMemory @ sysbus 0x40002C00 { size: 0x400 }"
     # Initial state
-    Execute Command         sysbus WriteDoubleWord 0x40002D00 0x1
-    Execute Command         sysbus WriteDoubleWord 0x40002D04 0x0
-    Execute Command         sysbus WriteDoubleWord 0x40002D08 0x0
+    Execute Command         sysbus WriteDoubleWord 0x40002C00 0x1
+    Execute Command         sysbus WriteDoubleWord 0x40002C04 0x0
+    Execute Command         sysbus WriteDoubleWord 0x40002C08 0x0
 
     # Add a hook to simulate core execution
     # Note: Using Write Watchpoint with correctly formatted Python block
-    Execute Command         sysbus AddWatchpointHook 0x40002D00 4 Write @ "if value == 0x2: self.Bus.WriteDoubleWord(0x40002D04, 0x1); self.Bus.WriteDoubleWord(0x40002D08, 42)"
+    Execute Command         sysbus AddWatchpointHook 0x40002C00 4 Write @ "if value == 0x2: self.Bus.WriteDoubleWord(0x40002C04, 0x1); self.Bus.WriteDoubleWord(0x40002C08, 42)"
 
     Execute Command         sysbus.cpu VectorTableOffset 0x60000000
     Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
@@ -44,7 +44,7 @@ Verify SERV RISC-V Example
     Sleep                   2s
 
     # Load and run the serv_test.py script
-    Write Line To Uart      import machine; import time; SERV_BASE = 0x40002D00; REG_CTRL = SERV_BASE + 0x00; REG_STATUS = SERV_BASE + 0x04; REG_RESULT = SERV_BASE + 0x08; IMEM_BASE = SERV_BASE + 0x40
+    Write Line To Uart      import machine; import time; SERV_BASE = 0x40002C00; REG_CTRL = SERV_BASE + 0x00; REG_STATUS = SERV_BASE + 0x04; REG_RESULT = SERV_BASE + 0x08; IMEM_BASE = SERV_BASE + 0x40
     Write Line To Uart      machine.mem32[REG_CTRL] = 0x01; print("SERV_RESET")
     Wait For Line On Uart   SERV_RESET
 
