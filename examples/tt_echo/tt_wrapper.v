@@ -21,7 +21,7 @@ module tt_m3_wrapper (
     output reg  [31:0] PRDATA,  // APB Read Data
     output wire        PREADY,  // APB Ready
 
-    // External Pins
+    // External Pins (Mirrors of TT module signals)
     output wire [7:0]  tt_ui_in,
     output wire [7:0]  tt_uo_out,
     input  wire [7:0]  tt_uio_in,
@@ -58,7 +58,7 @@ module tt_m3_wrapper (
         if (!PRESETn) begin
             ui_in      <= 8'h0;
             uio_in_reg <= 8'h0;
-            ctrl       <= 3'h0;
+            ctrl       <= 3'h0; // Reset active (rst_n=0), Ena=0, Clk=0
         end else if (PSEL && PENABLE && PWRITE) begin
             case (PADDR[3:0])
                 4'h0: ui_in      <= PWDATA[7:0];

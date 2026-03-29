@@ -9,7 +9,7 @@ IO_PORT "uart_tx" IO_TYPE=LVCMOS33;
 IO_LOC "uart_rx" 19;
 IO_PORT "uart_rx" IO_TYPE=LVCMOS33;
 
-// ui_in [7:0]
+// ui_in [7:0] (Header pins 28-35)
 IO_LOC "tt_ui_in[0]" 28;
 IO_LOC "tt_ui_in[1]" 29;
 IO_LOC "tt_ui_in[2]" 30;
@@ -19,7 +19,7 @@ IO_LOC "tt_ui_in[5]" 33;
 IO_LOC "tt_ui_in[6]" 34;
 IO_LOC "tt_ui_in[7]" 35;
 
-// uo_out [7:0]
+// uo_out [7:0] (Header pins 20-23, 27, 40-42)
 IO_LOC "tt_uo_out[0]" 20;
 IO_LOC "tt_uo_out[1]" 21;
 IO_LOC "tt_uo_out[2]" 22;
@@ -29,7 +29,7 @@ IO_LOC "tt_uo_out[5]" 40;
 IO_LOC "tt_uo_out[6]" 41;
 IO_LOC "tt_uo_out[7]" 42;
 
-// uio [7:0] (Bidirectional)
+// uio [7:0] (Header pins 13-17, 43-44, 46)
 IO_LOC "tt_uio[0]" 13;
 IO_LOC "tt_uio[1]" 14;
 IO_LOC "tt_uio[2]" 15;
@@ -42,7 +42,7 @@ IO_LOC "tt_uio[7]" 46;
 // Control Signals
 IO_LOC "tt_ena" 1;
 IO_LOC "tt_clk" 2;
-IO_LOC "tt_rst_n" 39;
+IO_LOC "tt_rst_n" 48;
 
 IO_PORT "tt_ui_in[0]" IO_TYPE=LVCMOS33;
 IO_PORT "tt_ui_in[1]" IO_TYPE=LVCMOS33;

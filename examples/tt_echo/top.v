@@ -72,9 +72,9 @@ module top (
         .PRDATA1(prdata),
         .PREADY1(pready),
 
-        .UART0TXD(uart_tx),
-        .UART0RXD(uart_rx),
-        .RESETN(rst_n),
+        .UART0_TXD(uart_tx),
+        .UART0_RXD(uart_rx),
+        .RESET_N(rst_n),
         .CLK(clk_27m)
     );
 
