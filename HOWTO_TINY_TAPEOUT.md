@@ -37,12 +37,35 @@ The Tang Nano 4K has only 32KB of internal code flash, which is insufficient for
 | **Bootloader/Vectors** | `firmware_int.bin` | Internal Flash | `0x00000000` |
 | **MicroPython Runtime** | `firmware_ext.bin` | External SPI Flash | `0x000000` (Mapped to `0x60000000`) |
 
+### Installation with Gowin Programmer
+1.  **Flash Internal Flash**:
+    *   Access Mode: `MCU Mode`
+    *   Operation: `Flash Erase, Program, Verify`
+    *   File: `build/firmware_int.bin`
+2.  **Flash External Flash**:
+    *   Access Mode: `External Flash Mode`
+    *   Operation: `exFlash Erase, Program, Verify`
+    *   File: `build/firmware_ext.bin`
+    *   Address: `0x000000`
+
 ## 4. Gowin EDA Project Setup
 
-### Physical Pin Routing (CST File)
-Route the UART0, SPI, and TT signals to the following physical pins:
+To enable M3-to-FPGA communication and serial console access, your Gowin project must include specific IP cores and routing.
 
-| Signal | FPGA Pin (Header) | Description |
+### IP Core Configuration
+1.  **Gowin_EMPU_M3**:
+    *   Enable **APB2 Expansion** (for Slot 1 access).
+    *   Enable **UART0** for the MicroPython REPL.
+    *   Enable **AHB Master** (Expansion) to access the External Flash.
+2.  **SPI Flash Interface (IPUG1015)**:
+    *   **Protocol**: Single SPI.
+    *   **Bus Interface**: `AHB`.
+    *   **Memory Mapped**: Enabled (Base Address `0x60000000`).
+
+### Physical Pin Routing (CST File)
+Route the UART0 and SPI signals to the following physical pins:
+
+| Signal | FPGA Pin | Description |
 | :--- | :--- | :--- |
 | **UART0 TX** | Pin 18 | MicroPython REPL Output |
 | **UART0 RX** | Pin 19 | MicroPython REPL Input |
@@ -95,15 +118,54 @@ machine.mem32[REG_CTRL] = 0x6 # rst_n=1, ena=1, clk=0
 # 2. Send data to ui_in
 machine.mem32[REG_DATA] = 0x42
 
-# 3. Read data from uo_out
+# 3. Toggle clock for synchronous designs
+machine.mem32[REG_CTRL] |= 0x1 # clk=1
+machine.mem32[REG_CTRL] &= ~0x1 # clk=0
+
+# 4. Read data from uo_out
 val = machine.mem32[REG_DATA] & 0xFF
 print("Received from TT: 0x{:02x}".format(val))
 ```
 
-## 7. Flashing with openfpgaflasher
+## 7. Compilation and Bitstream Generation
 
-Use the open-source `openfpgaflasher` tool to flash the bitstream and MicroPython firmware:
+1.  **Synthesize**: Run Synthesis in Gowin EDA.
+2.  **Floorplan**: Verify pins 18, 19, 36-39.
+3.  **Place & Route**: Run the "Place & Route" tool.
+4.  **Bitstream**: Generate the `.fs` bitstream file.
+5.  **Program**: Load the `.fs` file into the FPGA.
 
+## 8. Flashing with openfpgaflasher
+
+As an alternative to the official Gowin Programmer, you can use the open-source `openfpgaflasher` tool. This is particularly useful for Linux and macOS users as it allows flashing both the FPGA bitstream and the MicroPython firmware (internal and external) in a single step.
+
+### Installation
+
+The tool is written in Python and can be installed via pip:
+
+```bash
+pip install openfpgaflasher
+```
+
+### Prerequisites
+
+*   **Python 3.6+**
+*   **pyusb**: Usually installed automatically with the tool.
+*   **Linux Users**: You may need to add udev rules for the onboard BL702 debugger. Create a file `/etc/udev/rules.d/99-tangnano.rules` with the following content:
+    ```text
+    ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="0666", GROUP="plugdev"
+    ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="05dc", MODE="0666", GROUP="plugdev"
+    ```
+
+### Usage: Flashing Everything
+
+To flash the FPGA bitstream, the internal MCU firmware, and the external flash firmware simultaneously, use the following command:
+
+```bash
+openfpgaflasher -b <bitstream.fs> -m <firmware_int.bin> -e <firmware_ext.bin>
+```
+
+**Example from the project root:**
 ```bash
 openfpgaflasher examples/tt_echo/tt_echo.fs -m src/ports/tang_nano_4k/build/firmware_int.bin -e src/ports/tang_nano_4k/build/firmware_ext.bin
 ```
