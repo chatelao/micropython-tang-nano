@@ -64,10 +64,10 @@ The standard TT interface is mapped to the M3 via **APB2 Slot 1** (`0x40002400`)
 
 | Register | Address | Description |
 | :--- | :--- | :--- |
+| `CTRL` | `0x4000240C` | `[0]=clk`, `[1]=rst_n`, `[2]=ena` |
 | `DATA` | `0x40002400` | **Write**: `ui_in`, **Read**: `uo_out` |
 | `UIO_DATA` | `0x40002404` | **Write**: `uio_in`, **Read**: `uio_out` |
 | `UIO_OE` | `0x40002408` | **Read**: `uio_oe` (from TT module) |
-| `CTRL` | `0x4000240C` | `[0]=clk`, `[1]=rst_n`, `[2]=ena` |
 
 ### MicroPython Interaction Example
 ```python
