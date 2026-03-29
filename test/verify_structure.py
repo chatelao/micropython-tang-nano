@@ -11,6 +11,7 @@ def test_structure():
         'examples',
         'examples/blink',
         'examples/tt_echo',
+        'examples/tt_vga_to_hdmi',
         '.github'
     ]
     expected_files = [
@@ -29,6 +30,12 @@ def test_structure():
         'examples/tt_echo/tt_echo.py',
         'examples/tt_echo/tt.py',
         'examples/tt_echo/TT_HELPERS.md',
+        'examples/tt_vga_to_hdmi/README.md',
+        'examples/tt_vga_to_hdmi/tt_project.v',
+        'examples/tt_vga_to_hdmi/tt_vga_hdmi.py',
+        'examples/tt_vga_to_hdmi/tt_vga_hdmi_wrapper.v',
+        'examples/tt_vga_to_hdmi/hdmi_encoder.v',
+        'examples/tt_vga_to_hdmi/tt_vga_hdmi.cst',
         'generate_tt_docs.py'
     ]
 
