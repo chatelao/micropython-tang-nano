@@ -4,41 +4,7 @@ This example demonstrates a minimal integration of a Tiny Tapeout (TT) module in
 
 ## End-to-End Integration Diagram
 
-```puml
-@startuml CONTEXT_DIAGRAM
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
-
-LAYOUT_WITH_LEGEND()
-
-Person(user, "User", "Interaction via Serial Terminal")
-
-System_Boundary(tn4k, "Tang Nano 4K (GW1NSR-4C)") {
-    Component(bl702, "BL702", "USB-to-UART Bridge", "Handles USB communication and JTAG/UART bridging")
-
-    Container_Boundary(m3_subsystem, "Cortex-M3 Subsystem") {
-        Component(m3, "Cortex-M3 Hard Core", "ARMv7-M", "Executes the MicroPython runtime")
-        Component(micropython, "MicroPython", "Software", "Provides REPL and high-level hardware control")
-    }
-
-    Container_Boundary(fpga_fabric, "FPGA Fabric") {
-        Component(apb2_bus, "APB2 Slot 1", "Bus Interface", "Memory-mapped I/O at 0x40002400")
-
-        Container_Boundary(tt_logic, "Tiny Tapeout Wrapper") {
-            Component(tt_wrapper, "tt_wrapper.v", "Verilog", "Bridges APB2 to TT signals (ui_in, uo_out, etc.)")
-            Component(tt_project, "tt_project.v", "Verilog (TT)", "The actual Tiny Tapeout user module")
-        }
-    }
-}
-
-Rel(user, bl702, "USB / Serial", "115200 8N1")
-Rel(bl702, m3, "UART0", "TX/RX Pins 18/19")
-Rel(micropython, m3, "Runs on")
-Rel_D(m3, apb2_bus, "MMIO", "APB2 Protocol")
-Rel_D(apb2_bus, tt_wrapper, "Signal Mapping")
-Rel_D(tt_wrapper, tt_project, "TT Interface", "ui_in, uo_out, clk, rst_n, ena")
-
-@enduml
-```
+![End-to-End Integration](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/examples/tt_echo/architecture.puml)
 
 ## Example Files
 
