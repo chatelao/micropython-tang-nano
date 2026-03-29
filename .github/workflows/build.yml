@@ -109,13 +109,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/firmware_sim.bin
-            dist/firmware_sim.elf
-            dist/firmware_hw.bin
-            dist/firmware_hw.elf
             dist/firmware_split_int.bin
             dist/firmware_split_ext.bin
-            dist/firmware_split.elf
             dist/tang_nano_4k_m3.fs
             COMPLIANCE_TESTS.md
             compliance_output.log
