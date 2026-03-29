@@ -27,7 +27,9 @@ def test_structure():
         'examples/blink/blink.py',
         'examples/tt_echo/tt_project.v',
         'examples/tt_echo/tt_echo.py',
-        'examples/tt_echo/tt.py'
+        'examples/tt_echo/tt.py',
+        'examples/tt_echo/TT_HELPERS.md',
+        'generate_tt_docs.py'
     ]
 
     missing = []
