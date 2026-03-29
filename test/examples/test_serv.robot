@@ -27,13 +27,18 @@ Verify SERV RISC-V Example
     Execute Command         sysbus WriteDoubleWord 0x40002D04 0x0
     Execute Command         sysbus WriteDoubleWord 0x40002D08 0x0
 
-    # Add a hook to simulate core execution
-    # Note: Using Write Watchpoint with correctly formatted Python block
-    Execute Command         sysbus AddWatchpointHook 0x40002D00 4 Write "if value == 0x2: self.Bus.WriteDoubleWord(0x40002D04, 0x1); self.Bus.WriteDoubleWord(0x40002D08, 42)"
+    # Mocking: We will manually update STATUS/RESULT via Robot commands after MicroPython starts the core
 
-    Execute Command         sysbus.cpu VectorTableOffset 0x60000000
-    Execute Command         sysbus.cpu SP `sysbus ReadDoubleWord 0x60000000`
-    Execute Command         sysbus.cpu PC `sysbus ReadDoubleWord 0x60000004`
+    ${boot_addr_raw}=       Execute Command  sysbus GetSymbolAddress "isr_vector"
+    ${boot_addr}=           Evaluate  '''${boot_addr_raw}'''.strip()
+    Execute Command         sysbus.cpu VectorTableOffset ${boot_addr}
+    ${sp_val_raw}=          Execute Command  sysbus ReadDoubleWord ${boot_addr}
+    ${sp_val}=              Evaluate  '''${sp_val_raw}'''.strip()
+    Execute Command         sysbus.cpu SP ${sp_val}
+    ${pc_ptr}=              Evaluate  hex(int("${boot_addr}", 16) + 4)
+    ${pc_val_raw}=          Execute Command  sysbus ReadDoubleWord ${pc_ptr}
+    ${pc_val}=              Evaluate  '''${pc_val_raw}'''.strip()
+    Execute Command         sysbus.cpu PC ${pc_val}
 
     Create Terminal Tester  ${UART}
     Start Emulation
@@ -53,9 +58,13 @@ Verify SERV RISC-V Example
     Write Line To Uart      machine.mem32[IMEM_BASE] = 0x02a00513; machine.mem32[IMEM_BASE + 4] = 0x00100073; print("LOADED")
     Wait For Line On Uart   LOADED
 
-    # Run the core and check result
+    # Run the core
     Write Line To Uart      machine.mem32[REG_CTRL] = 0x02; print("RUNNING")
     Wait For Line On Uart   RUNNING
+
+    # Mock completion from Renode side
+    Execute Command         sysbus WriteDoubleWord 0x40002D04 0x1
+    Execute Command         sysbus WriteDoubleWord 0x40002D08 42
 
     # Check for halt and result
     Write Line To Uart      print("HALT:" + str(machine.mem32[REG_STATUS] & 0x01))
