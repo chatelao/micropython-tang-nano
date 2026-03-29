@@ -26,7 +26,8 @@ def test_structure():
         'test/examples/test_serv.robot',
         'examples/blink/blink.py',
         'examples/tt_echo/tt_project.v',
-        'examples/tt_echo/tt_echo.py'
+        'examples/tt_echo/tt_echo.py',
+        'examples/tt_echo/tt.py'
     ]
 
     missing = []
