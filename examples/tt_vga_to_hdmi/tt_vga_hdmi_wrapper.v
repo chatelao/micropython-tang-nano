@@ -28,6 +28,11 @@ module tt_vga_hdmi_wrapper (
 
     // Wires from TT module (R)
     wire [7:0] uo_out;
+    wire [7:0] uio_out;
+
+    // Wires from Audio DSP
+    wire [15:0] audio_pcm;
+    wire        audio_strobe;
 
     // --- APB Write Logic ---
     always @(posedge PCLK or negedge PRESETn) begin
@@ -44,6 +49,7 @@ module tt_vga_hdmi_wrapper (
     always @(*) begin
         case (PADDR[3:0])
             4'h0:    PRDATA = {24'h0, uo_out};
+            4'h4:    PRDATA = {16'h0, audio_pcm}; // Audio PCM Read
             4'hC:    PRDATA = {29'h0, ctrl};
             default: PRDATA = 32'h0;
         endcase
@@ -87,11 +93,20 @@ module tt_vga_hdmi_wrapper (
         .ui_in  (8'h00),
         .uo_out (uo_out),
         .uio_in (8'h00),
-        .uio_out(),
+        .uio_out(uio_out),
         .uio_oe (),
         .ena    (ctrl[2]),
         .clk    (pixel_clk),
         .rst_n  (ctrl[1])
+    );
+
+    // --- Audio DSP Integration ---
+    audio_dsp dsp_inst (
+        .clk        (pixel_clk),
+        .rst_n      (ctrl[1]),
+        .audio_bit  (uio_out[7]),
+        .pcm_out    (audio_pcm),
+        .strobe_48k (audio_strobe)
     );
 
     // --- Registered Buffer for Timing Closure ---
@@ -121,6 +136,8 @@ module tt_vga_hdmi_wrapper (
         .hsync        (hsync),
         .vsync        (vsync),
         .blank        (blank),
+        .audio_l      (audio_pcm), // Placeholder for future Data Island
+        .audio_r      (audio_pcm), // Placeholder for future Data Island
         .tmds_p       (tmds_p),
         .tmds_clk_p   (tmds_clk_p)
     );

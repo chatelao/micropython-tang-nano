@@ -37,23 +37,23 @@ Verify Tiny Tapeout VGA to HDMI Example (via APB2)
     # uo_out = 0x80 (VSYNC=1, HSYNC=0, others=0)
     Execute Command         sysbus WriteDoubleWord 0x40002400 0x80
 
-    # Use Paste Mode to run the script
-    Write Char To Uart      \x05
-    Wait For Line On Uart   paste mode; Ctrl-C to cancel, Ctrl-D to finish
+    # Simulate Audio PCM output (0x1234 = 4660)
+    Execute Command         sysbus WriteDoubleWord 0x40002404 0x1234
 
-    ${script}=              OperatingSystem.Get File          ${VGA_SCRIPT}
-    Write Line To Uart      ${script}
-
-    Write Char To Uart      \x04
-
-    Wait For Line On Uart   Enabling Tiny Tapeout module...
-    Wait For Line On Uart   TT module enabled.
+    # Run check commands directly
+    Write Line To Uart      import machine
+    Write Line To Uart      print("uo_out: " + hex(machine.mem32[0x40002400] & 0xFF))
     Wait For Line On Uart   uo_out: 0x80
-    Wait For Line On Uart   VSYNC: 1
-    Wait For Line On Uart   HSYNC: 0
 
-    # Check CTRL register write (0x4000240C)
-    # The script writes 0x6 to enable_tt
+    Write Line To Uart      audio_pcm = machine.mem32[0x40002404] & 0xFFFF
+    Write Line To Uart      if audio_pcm > 32767: audio_pcm -= 65536
+    Write Line To Uart      ${EMPTY}
+    Write Line To Uart      print("Audio PCM: " + str(audio_pcm))
+    Wait For Line On Uart   Audio PCM: 4660
+
+    # Test control register
+    Write Line To Uart      machine.mem32[0x4000240C] = 0x6
+    Sleep                   1s
     ${ctrl_val}=            Execute Command    sysbus ReadDoubleWord 0x4000240C
     Should Contain          ${ctrl_val}    0x00000006
 

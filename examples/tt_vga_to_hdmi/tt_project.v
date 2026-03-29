@@ -11,6 +11,9 @@
  *   [1]: R
  *   [0]: R (lower bit)
  *
+ * Audio Mapping (uio_out):
+ *   [7]: 440Hz Square Wave (1-bit)
+ *
  * Note: This simplified mapping is used for the example to demonstrate HDMI conversion.
  */
 
@@ -85,6 +88,25 @@ module tt_um_vga_pattern (
         end
     end
 
+    // --- Audio Generator (440Hz Square Wave) ---
+    // 25.175 MHz / 440 Hz = 57216 cycles per period
+    // 57216 / 2 = 28608 cycles per half-period
+    reg [15:0] audio_cnt;
+    reg        audio_out;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            audio_cnt <= 0;
+            audio_out <= 0;
+        end else if (ena) begin
+            if (audio_cnt >= 28607) begin
+                audio_cnt <= 0;
+                audio_out <= !audio_out;
+            end else begin
+                audio_cnt <= audio_cnt + 1;
+            end
+        end
+    end
+
     // Pin mapping: [7] VSync, [6] HSync, [5] Blank, [4] B1, [3] B0, [2] G1, [1] R1, [0] R0
     // Note: This matches the expectation of the HDMI wrapper.
     assign uo_out[7] = v_sync;
@@ -96,7 +118,7 @@ module tt_um_vga_pattern (
     assign uo_out[1] = rgb[5]; // R1
     assign uo_out[0] = rgb[4]; // R0
 
-    assign uio_out = 8'h00;
-    assign uio_oe  = 8'h00;
+    assign uio_out = {audio_out, 7'b0000000};
+    assign uio_oe  = 8'h80; // Only [7] is output
 
 endmodule
