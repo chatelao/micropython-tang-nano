@@ -25,8 +25,15 @@ cp -r examples/tt_echo examples/my_tt_project
     make -C src/ports/tang_nano_4k/
     ```
 2.  **FPGA Bitstream**:
-    - **Option A (Official)**: Use Gowin EDA (Proprietary). Add `tt_wrapper.v` and `tt_project.v` to a new project and run "Place & Route".
-    - **Option B (Open-Source)**: Use Yosys, nextpnr-himbaechel, and gowin_pack. (See Section 3 for details).
+    - **Option A: Official Gowin EDA**
+        - Open Gowin EDA and create a new project.
+        - Add `tt_wrapper.v` and `tt_project.v` to the project.
+        - Run "Place & Route" to generate the `.fs` bitstream.
+    - **Option B: Open-Source (Project Apicula)**
+        - Use Yosys for synthesis: `yosys -p "synth_gowin -json project.json" tt_wrapper.v tt_project.v`.
+        - Use nextpnr for P&R: `nextpnr-himbaechel --json project.json --write project_pnr.json --device GW1NSR-LV4CQN48PC7/I6 --family GW1NS-4`.
+        - Use gowin_pack for bitstream: `gowin_pack -d GW1NS-4 -o bitstream.fs project_pnr.json`.
+        *Note: Requires `apycula`, `yosys`, and `nextpnr-himbaechel` to be installed.*
 
 ### Step 4: Install Everything
 Use `openfpgaflasher` to load the bitstream and MicroPython firmware in one command:

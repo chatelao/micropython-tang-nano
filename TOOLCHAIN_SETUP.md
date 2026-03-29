@@ -1,98 +1,88 @@
 # Toolchain Setup Guide
 
-This document provides instructions for setting up the necessary toolchains for the MicroPython for Tang Nano 4K project.
+This guide describes how to set up the necessary toolchains for developing, compiling, and flashing MicroPython and FPGA bitstreams for the Tang Nano 4K (GW1NSR-4C).
 
-## 1. ARM GNU Toolchain
+## 1. ARM GNU Toolchain (MicroPython Firmware)
 
-The MicroPython firmware for the Cortex-M3 is compiled using the ARM GNU Toolchain.
+The MicroPython port for the Cortex-M3 requires the ARM GNU Toolchain.
 
 ### Recommended Version
-- **Version**: 10.3-2021.10
-- **Triple**: `arm-none-eabi-`
+- **Version**: `10.3-2021.10` (arm-none-eabi)
+- **Download**: [ARM Developer Website](https://developer.arm.com/downloads/-/gnu-rm)
 
 ### Installation (Ubuntu/Debian)
 ```bash
-sudo apt update
-sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi gdb-arm-none-eabi libnewlib-arm-none-eabi
+sudo apt-get update
+sudo apt-get install gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential
 ```
 
-For the exact 10.3-2021.10 version, download from the [ARM Developer website](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) and add the `bin` directory to your `PATH`.
+### Verification
+```bash
+arm-none-eabi-gcc --version
+```
 
 ---
 
-## 2. Open-Source FPGA Toolchain (Gowin)
+## 2. FPGA Toolchains (Bitstream Generation)
 
-For an entirely open-source workflow, you can use **Project Apicula**, **Yosys**, and **nextpnr-himbaechel** to generate bitstreams for the Tang Nano 4K (GW1NSR-4C).
+You have two options for generating the FPGA bitstream (`.fs` file).
 
-### Prerequisites
-Ensure you have Python 3 and `pip` installed.
+### Option A: Official Gowin EDA (Recommended)
+The official IDE provided by Gowin Semiconductor.
 
-### Installation Steps
+- **Download**: [Gowin Download Center](https://www.gowinsemi.com/en/support/download_eda/) (Requires registration).
+- **Includes**: Synthesis, Place & Route, and the Gowin Programmer.
 
-1.  **Project Apicula**: Provides the documentation and bitstream tools.
-    ```bash
-    pip install apycula
-    ```
+### Option B: Open-Source (Project Apicula)
+A fully open-source toolchain for Gowin FPGAs.
 
-2.  **Yosys**: For Verilog synthesis.
-    ```bash
-    # Follow instructions at https://github.com/YosysHQ/yosys
-    sudo apt install yosys
-    ```
+- **Tools**:
+    - **Apycula**: Documentation and bitstream tools (`pip install apycula`).
+    - **Yosys**: Verilog synthesis.
+    - **nextpnr-himbaechel**: Universal Place & Route tool.
 
-3.  **nextpnr-himbaechel**: The place-and-route tool supporting Gowin devices.
-    ```bash
-    # Follow instructions at https://github.com/YosysHQ/nextpnr
-    # Ensure you build with -DARCH=gowin
-    ```
+#### Installation
+```bash
+# Install Apycula
+pip install apycula
 
-### Usage Overview
-
-To generate a bitstream (`.fs`):
-
-1.  **Synthesis**:
-    ```bash
-    yosys -p "read_verilog top.v; synth_gowin -json top.json"
-    ```
-
-2.  **Place & Route**:
-    ```bash
-    nextpnr-himbaechel --json top.json \
-                       --write top_pnr.json \
-                       --device GW1NSR-LV4CQN48PC7/I6 \
-                       --vopt family=GW1NS-4 \
-                       --vopt cst=pins.cst
-    ```
-
-3.  **Pack**:
-    ```bash
-    gowin_pack -d GW1NS-4 -o bitstream.fs top_pnr.json
-    ```
+# Install Yosys and nextpnr (Example for Ubuntu)
+sudo apt install yosys
+# For nextpnr-himbaechel, you may need to build from source or use a pre-built nightly.
+```
 
 ---
 
 ## 3. Flashing Tools
 
 ### openfpgaflasher
-The project uses `openfpgaflasher` for unified flashing of the FPGA bitstream and MCU firmware.
+An open-source tool for flashing Gowin FPGAs and the Tang Nano 4K.
 
-```bash
-pip install openfpgaflasher
-```
+- **Installation**:
+  ```bash
+  pip install openfpgaflasher
+  ```
 
-Usage:
-```bash
-openfpgaflasher -b bitstream.fs -m firmware_int.bin -e firmware_ext.bin
-```
+- **Usage (Unified Flash)**:
+  ```bash
+  openfpgaflasher -b bitstream.fs -m firmware_int.bin -e firmware_ext.bin
+  ```
 
 ---
 
-## 4. Renode Simulation
+## 4. MicroPython Build Dependencies
 
-To run the integration tests, you need Renode installed.
+To compile MicroPython, you must first build the `mpy-cross` compiler:
 
-- **Installation**: Follow instructions at [renode.io](https://renode.io/).
-- **Robot Framework**:
-  ```bash
-  pip install robotframework==6.1 psutil pyyaml
-  ```
+```bash
+# Build mpy-cross (one-time)
+make -C src/lib/micropython/mpy-cross
+
+# Build Tang Nano 4K port
+make -C src/ports/tang_nano_4k/
+```
+
+Additional Python dependencies for tests and scripts:
+```bash
+pip install psutil robotframework==6.1 pyyaml
+```
