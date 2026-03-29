@@ -45,6 +45,8 @@ jobs:
             test/tang_nano_4k.robot
             test/examples/test_blink.robot
             test/examples/test_tt_echo.robot
+            test/examples/test_neorv32.robot
+            test/examples/test_serv.robot
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
