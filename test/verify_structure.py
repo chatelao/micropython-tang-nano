@@ -22,6 +22,8 @@ def test_structure():
         'HOWTO_TT.md',
         'test/examples/test_blink.robot',
         'test/examples/test_tt_echo.robot',
+        'test/examples/test_neorv32.robot',
+        'test/examples/test_serv.robot',
         'examples/blink/blink.py',
         'examples/tt_echo/tt_project.v',
         'examples/tt_echo/tt_echo.py'
