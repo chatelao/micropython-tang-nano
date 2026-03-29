@@ -139,7 +139,11 @@ OBJ += $(addprefix $(BUILD)/, $(patsubst $(TOP)/%, %, $(filter $(TOP)/%, $(SRC_C
 
 $(BUILD)/lib/littlefs/%.o: CFLAGS += $(CFLAGS_MOD)
 
-all: $(BUILD)/firmware.bin
+all: docs $(BUILD)/firmware.bin
+
+docs:
+	$(ECHO) "GEN Tiny Tapeout Documentation"
+	$(Q)python3 ../../../generate_tt_docs.py
 
 $(BUILD)/regions.ld: | $(BUILD)
 	$(ECHO) "GEN $@"
