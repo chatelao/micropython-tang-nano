@@ -20,6 +20,8 @@ try:
     docs_content += "This library provides a simplified interface for interacting with Tiny Tapeout designs via the APB2 bus (Slot 1).\n\n"
 
     docs_content += "## Functions\n\n"
+    docs_content += "| Function | Description |\n"
+    docs_content += "| --- | --- |\n"
 
     # List of functions in the order we want to display them
     functions = [
@@ -38,9 +40,10 @@ try:
         if hasattr(tt, name):
             obj = getattr(tt, name)
             sig = inspect.signature(obj)
-            doc = obj.__doc__ or "No documentation available."
-            docs_content += f"### `tt.{name}{sig}`\n"
-            docs_content += f"{doc}\n\n"
+            doc = inspect.getdoc(obj) or "No documentation available."
+            # Clean up the docstring for Markdown table compatibility
+            doc = doc.replace('\n', ' ').replace('|', '\\|')
+            docs_content += f"| `tt.{name}{sig}` | {doc} |\n"
 
     # Ensure output directory exists (it should be examples/tt_echo)
     output_path = os.path.join(tt_path, 'TT_HELPERS.md')
