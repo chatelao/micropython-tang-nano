@@ -134,27 +134,87 @@ endmodule
 module hdmi_encoder (
     input  wire        pixel_clk,    // ~25.2 MHz for 640x480
     input  wire        pixel_clk_x5, // ~126 MHz (5x for DDR serialization)
+    input  wire        rst_n,        // Reset (Active Low)
     input  wire [7:0]  red,
     input  wire [7:0]  green,
     input  wire [7:0]  blue,
-    input  wire        hsync,
-    input  wire        vsync,
-    input  wire [2:0]  mode,         // HDMI Mode: 0: Control, 1: Video, 2: V-Guard, 3: Island, 4: I-Guard
-    input  wire [15:0] audio_l,      // 16-bit PCM Audio (Left)
-    input  wire [15:0] audio_r,      // 16-bit PCM Audio (Right)
+    input  wire        hsync_in,     // External HSync from TT module
+    input  wire        vsync_in,     // External VSync from TT module
+    input  wire        blank_in,     // External Blank from TT module
+    input  wire [11:0] island_data,  // 4-bit per channel TERC4 data
     output wire [2:0]  tmds_p,
-    output wire        tmds_clk_p
+    output wire        tmds_clk_p,
+    // Debug/Packetizer Sync
+    output reg  [4:0]  packet_cnt_out,
+    output wire        packet_en_out,
+    output wire        hsync_out,
+    output wire        vsync_out
 );
+
+    // --- Synchronization Logic ---
+    reg [11:0] h_pos;
+    reg hsync_d;
+    always @(posedge pixel_clk) begin
+        hsync_d <= hsync_in;
+        if (hsync_in && !hsync_d) begin // Rising edge of HSync
+            h_pos <= 0;
+        end else begin
+            h_pos <= h_pos + 1;
+        end
+    end
+
+    // Data Island placement: during back porch (96 to 144 clocks after HSync start)
+    // Data Islands occur during the blanking interval (blank_in is true)
+    localparam DATA_ISLAND_START = 100;
+    wire data_island_preamble = (h_pos >= DATA_ISLAND_START - 10 && h_pos < DATA_ISLAND_START - 2) && blank_in;
+    wire data_island_guard    = ((h_pos >= DATA_ISLAND_START - 2  && h_pos < DATA_ISLAND_START) || (h_pos >= DATA_ISLAND_START + 32 && h_pos < DATA_ISLAND_START + 34)) && blank_in;
+    wire data_island_period   = (h_pos >= DATA_ISLAND_START      && h_pos < DATA_ISLAND_START + 32) && blank_in;
+
+    // Video Preamble and Guard Band (just before blank_in goes low)
+    localparam VIDEO_START = 144;
+    wire video_preamble = (h_pos >= VIDEO_START - 10 && h_pos < VIDEO_START - 2) && blank_in;
+    wire video_guard    = (h_pos >= VIDEO_START - 2  && h_pos < VIDEO_START) && blank_in;
+
+    always @(posedge pixel_clk) begin
+        if (data_island_period)
+            packet_cnt_out <= h_pos[4:0] - DATA_ISLAND_START[4:0];
+        else
+            packet_cnt_out <= 0;
+    end
+
+    assign packet_en_out  = data_island_period;
+    assign hsync_out      = hsync_in;
+    assign vsync_out      = vsync_in;
+
+    // CTL signals for preambles
+    wire ctl0 = video_preamble || data_island_preamble;
+    wire ctl1 = 1'b0;
+    wire ctl2 = data_island_preamble;
+    wire ctl3 = 1'b0;
+
+    // Mode selection (Priority order: Video -> Guard/Island/Preamble -> Control)
+    reg [2:0] mode;
+    always @(*) begin
+        if (!blank_in)
+            mode = 3'd1; // Video
+        else if (video_guard)
+            mode = 3'd2; // Video Guard
+        else if (data_island_period)
+            mode = 3'd3; // Island
+        else if (data_island_guard)
+            mode = 3'd4; // Island Guard
+        else
+            mode = 3'd0; // Control
+    end
 
     wire [9:0] tmds_red, tmds_green, tmds_blue;
     wire [9:0] tmds_clk = 10'b1111100000;
 
-    tmds_encoder #(.CN(2)) encode_red   (.clk(pixel_clk), .video_data(red),   .control_data(2'b00),          .island_data(4'b0000), .mode(mode), .tmds(tmds_red));
-    tmds_encoder #(.CN(1)) encode_green (.clk(pixel_clk), .video_data(green), .control_data(2'b00),          .island_data(4'b0000), .mode(mode), .tmds(tmds_green));
-    tmds_encoder #(.CN(0)) encode_blue  (.clk(pixel_clk), .video_data(blue),  .control_data({vsync, hsync}), .island_data(4'b0000), .mode(mode), .tmds(tmds_blue));
+    tmds_encoder #(.CN(2)) encode_red   (.clk(pixel_clk), .video_data(red),   .control_data({ctl3, ctl2}),   .island_data(island_data[11:8]), .mode(mode), .tmds(tmds_red));
+    tmds_encoder #(.CN(1)) encode_green (.clk(pixel_clk), .video_data(green), .control_data({ctl1, ctl0}),   .island_data(island_data[7:4]),  .mode(mode), .tmds(tmds_green));
+    tmds_encoder #(.CN(0)) encode_blue  (.clk(pixel_clk), .video_data(blue),  .control_data({vsync_in, hsync_in}), .island_data(island_data[3:0]),  .mode(mode), .tmds(tmds_blue));
 
     // Serialization using OSER10 primitives (DDR 5x clock)
-    // This provides much better timing closure than a fabric shift register.
     OSER10 #(
         .GSREN("false"),
         .LSREN("true")
@@ -164,7 +224,7 @@ module hdmi_encoder (
         .D5(tmds_red[5]), .D6(tmds_red[6]), .D7(tmds_red[7]), .D8(tmds_red[8]), .D9(tmds_red[9]),
         .FCLK(pixel_clk_x5),
         .PCLK(pixel_clk),
-        .RESET(1'b0)
+        .RESET(!rst_n)
     );
 
     OSER10 #(
@@ -176,7 +236,7 @@ module hdmi_encoder (
         .D5(tmds_green[5]), .D6(tmds_green[6]), .D7(tmds_green[7]), .D8(tmds_green[8]), .D9(tmds_green[9]),
         .FCLK(pixel_clk_x5),
         .PCLK(pixel_clk),
-        .RESET(1'b0)
+        .RESET(!rst_n)
     );
 
     OSER10 #(
@@ -188,7 +248,7 @@ module hdmi_encoder (
         .D5(tmds_blue[5]), .D6(tmds_blue[6]), .D7(tmds_blue[7]), .D8(tmds_blue[8]), .D9(tmds_blue[9]),
         .FCLK(pixel_clk_x5),
         .PCLK(pixel_clk),
-        .RESET(1'b0)
+        .RESET(!rst_n)
     );
 
     OSER10 #(
@@ -200,7 +260,7 @@ module hdmi_encoder (
         .D5(tmds_clk[5]), .D6(tmds_clk[6]), .D7(tmds_clk[7]), .D8(tmds_clk[8]), .D9(tmds_clk[9]),
         .FCLK(pixel_clk_x5),
         .PCLK(pixel_clk),
-        .RESET(1'b0)
+        .RESET(!rst_n)
     );
 
 endmodule
