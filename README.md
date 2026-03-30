@@ -42,6 +42,15 @@ For a comprehensive overview of the port, including hardware details, installati
 
 *\* Note: Internal Flash address space is 128 KB, but physical hardware is limited to 32 KB.*
 
+### Memory Map Summary
+| Component | Address Range | Description |
+| :--- | :--- | :--- |
+| **MicroPython Part 1** | `0x00000000` - `0x00007FFF` | Internal Flash: Vector table and Reset Handler (32KB). |
+| **MicroPython Part 2** | `0x60000000` - `0x6001FFFF` | External Flash: Main MicroPython runtime (~125KB). |
+| **SPI Flash Access** | `0x60000000` - `0x603FFFFF` | XIP (Execute-In-Place) mapping of the 4MB SPI Flash. |
+| **APB2 Bus** | `0x40002400` - `0x40002FFF` | FPGA Peripherals (12 slots, 256 bytes each). |
+| **Tiny Tapeout (TT)** | `0x40002400` - `0x400024FF` | Default mapping for TT Logic and Wrapper (APB2 Slot 1). |
+
 ### Filesystem (LittleFS2) Configuration
 | Mode | FS Offset | FS Size | Description |
 | :--- | :--- | :--- | :--- |
