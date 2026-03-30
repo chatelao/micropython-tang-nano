@@ -8,7 +8,7 @@
 
 # Planning & Progress tracking
 - Keep an up to date file `ROADMAP.md` with the next 5 steps and all past steps having checkboxes.
-- Feature-specific roadmaps: `examples/tt_vga_to_hdmi/ROADMAP_VGA_HDMI.md`.
+- Feature-specific roadmaps: `examples/tiny-tapeouts/tt_vga_to_hdmi/ROADMAP_VGA_HDMI.md`.
 
 # Project structure
 - `/` - Keep root directory clean with relevant `.md` files: `AUDIT.md`, `COMPLIANCE_TESTS.md`, `GEMINI.md`, `HOWTO_TINY_TAPEOUT.md`, `M3_FPGA_INTEGRATIONS.md`, `M3_MICROPYTHON.md`, `README.md`, `ROADMAP.md`, `SERIAL_PORT_ACCESS.md`, `TOOLCHAIN_SETUP.md`.

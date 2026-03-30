@@ -10,8 +10,12 @@ def test_structure():
         'test/examples',
         'examples',
         'examples/blink',
-        'examples/tt_echo',
-        'examples/tt_vga_to_hdmi',
+        'examples/tiny-tapeouts',
+        'examples/tiny-tapeouts/tt_echo',
+        'examples/tiny-tapeouts/tt_vga_to_hdmi',
+        'examples/cpus',
+        'examples/cpus/neorv32',
+        'examples/cpus/serv_riscv',
         '.github'
     ]
     expected_files = [
@@ -34,16 +38,18 @@ def test_structure():
         'test/examples/test_serv.robot',
         'test/examples/test_tt_vga_hdmi.robot',
         'examples/blink/blink.py',
-        'examples/tt_echo/tt_project.v',
-        'examples/tt_echo/tt_echo.py',
-        'examples/tt_echo/tt.py',
-        'examples/tt_echo/TT_HELPERS.md',
-        'examples/tt_vga_to_hdmi/README.md',
-        'examples/tt_vga_to_hdmi/tt_project.v',
-        'examples/tt_vga_to_hdmi/tt_vga_hdmi.py',
-        'examples/tt_vga_to_hdmi/tt_vga_hdmi_wrapper.v',
-        'examples/tt_vga_to_hdmi/hdmi_encoder.v',
-        'examples/tt_vga_to_hdmi/tt_vga_hdmi.cst',
+        'examples/tiny-tapeouts/tt_echo/tt_project.v',
+        'examples/tiny-tapeouts/tt_echo/tt_echo.py',
+        'examples/tiny-tapeouts/tt_echo/tt.py',
+        'examples/tiny-tapeouts/tt_echo/TT_HELPERS.md',
+        'examples/tiny-tapeouts/tt_vga_to_hdmi/README.md',
+        'examples/tiny-tapeouts/tt_vga_to_hdmi/tt_project.v',
+        'examples/tiny-tapeouts/tt_vga_to_hdmi/tt_vga_hdmi.py',
+        'examples/tiny-tapeouts/tt_vga_to_hdmi/tt_vga_hdmi_wrapper.v',
+        'examples/tiny-tapeouts/tt_vga_to_hdmi/hdmi_encoder.v',
+        'examples/tiny-tapeouts/tt_vga_to_hdmi/tt_vga_hdmi.cst',
+        'examples/cpus/neorv32/neorv32.py',
+        'examples/cpus/serv_riscv/serv_test.py',
         'generate_tt_docs.py'
     ]
 

@@ -4,7 +4,7 @@ This example demonstrates a minimal integration of a Tiny Tapeout (TT) module in
 
 ## End-to-End Integration Diagram
 
-![End-to-End Integration](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/examples/tt_echo/architecture.puml)
+![End-to-End Integration](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/examples/tiny-tapeouts/tt_echo/architecture.puml)
 
 ## Example Files
 
@@ -66,4 +66,4 @@ The TT module is mapped to **APB2 Slot 1** (Base Address: `0x40002400`).
 3.  The **FPGA Fabric** contains an APB2 slave (`tt_wrapper.v`) that translates these memory accesses into signals for the **TT Project**.
 4.  **Slow Debugging**: By toggling the `clk` bit in the `CTRL` register from MicroPython, you can manually step the clock of the TT module.
 
-For detailed instructions on how to set up the Gowin EDA project and flash the firmware, see the [HOWTO_TINY_TAPEOUT.md](../../HOWTO_TINY_TAPEOUT.md) guide in the root directory.
+For detailed instructions on how to set up the Gowin EDA project and flash the firmware, see the [HOWTO_TINY_TAPEOUT.md](../../../HOWTO_TINY_TAPEOUT.md) guide in the root directory.

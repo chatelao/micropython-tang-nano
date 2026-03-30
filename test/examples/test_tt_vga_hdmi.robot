@@ -8,7 +8,7 @@ ${RESC}         ${CURDIR}/../tang_nano_4k.resc
 ${REPL}         ${CURDIR}/../tang_nano_4k.repl
 ${BIN}          ${CURDIR}/../../src/ports/tang_nano_4k/build/firmware.elf
 ${UART}         sysbus.uart0
-${VGA_SCRIPT}   ${CURDIR}/../../examples/tt_vga_to_hdmi/tt_vga_hdmi.py
+${VGA_SCRIPT}   ${CURDIR}/../../examples/tiny-tapeouts/tt_vga_to_hdmi/tt_vga_hdmi.py
 
 *** Test Cases ***
 Verify Tiny Tapeout VGA to HDMI Example (via APB2)

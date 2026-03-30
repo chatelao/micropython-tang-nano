@@ -10,7 +10,7 @@ sys.modules['machine'] = MagicMock()
 repo_root = os.path.dirname(os.path.abspath(__file__))
 
 # Add the directory containing tt.py to sys.path
-tt_path = os.path.join(repo_root, 'examples/tt_echo')
+tt_path = os.path.join(repo_root, 'examples/tiny-tapeouts/tt_echo')
 sys.path.append(tt_path)
 
 try:

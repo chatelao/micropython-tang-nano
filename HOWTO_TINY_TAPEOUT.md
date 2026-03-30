@@ -7,14 +7,14 @@ This guide provides the shortest path to porting your Tiny Tapeout module to the
 The fastest way to get started is to use the existing `tt_echo` example as a template.
 
 ### Step 1: Duplicate the Example
-Copy the `examples/tt_echo` directory to a new folder for your project:
+Copy the `examples/tiny-tapeouts/tt_echo` directory to a new folder for your project:
 ```bash
-cp -r examples/tt_echo examples/my_tt_project
+cp -r examples/tiny-tapeouts/tt_echo examples/tiny-tapeouts/my_tt_project
 ```
 
 ### Step 2: Copy your Verilog Code
-1.  **Replace the project code**: Overwrite `examples/my_tt_project/tt_project.v` with your own Tiny Tapeout module's Verilog source code.
-2.  **Update the wrapper**: Open `examples/my_tt_project/tt_wrapper.v` and update the module instantiation at the bottom of the file (e.g., change `tt_um_minimal_echo` to your module name).
+1.  **Replace the project code**: Overwrite `examples/tiny-tapeouts/my_tt_project/tt_project.v` with your own Tiny Tapeout module's Verilog source code.
+2.  **Update the wrapper**: Open `examples/tiny-tapeouts/my_tt_project/tt_wrapper.v` and update the module instantiation at the bottom of the file (e.g., change `tt_um_minimal_echo` to your module name).
 
 ### Step 3: Compile Everything
 1.  **MicroPython Firmware**:
@@ -69,7 +69,7 @@ For an entirely open-source workflow without Gowin EDA, you can use **Project Ap
 
 ### Synthesis (Yosys)
 ```bash
-yosys -p "read_verilog examples/my_tt_project/tt_wrapper.v examples/my_tt_project/tt_project.v; synth_gowin -json tt_project.json"
+yosys -p "read_verilog examples/tiny-tapeouts/my_tt_project/tt_wrapper.v examples/tiny-tapeouts/my_tt_project/tt_project.v; synth_gowin -json tt_project.json"
 ```
 
 ### Place & Route (nextpnr-himbaechel)
@@ -78,7 +78,7 @@ nextpnr-himbaechel --json tt_project.json \
                    --write tt_pnr.json \
                    --device GW1NSR-LV4CQN48PC7/I6 \
                    --vopt family=GW1NS-4 \
-                   --vopt cst=examples/my_tt_project/tt_echo.cst
+                   --vopt cst=examples/tiny-tapeouts/my_tt_project/tt_echo.cst
 ```
 
 ### Pack (gowin_pack)
