@@ -2,6 +2,8 @@
 
 This document describes the communication interfaces between the ARM Cortex-M3 "Hard Core" and the FPGA fabric on the Sipeed Tang Nano 4K.
 
+![M3 Subsystem Architecture](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/m3_subsystem.puml)
+
 ## 1. Overview
 
 The GW1NSR-4C provides several dedicated paths for the Cortex-M3 to interact with logic implemented in the FPGA:
@@ -29,15 +31,23 @@ In your top-level Verilog, the signals are typically mapped as follows:
 
 The APB2 bus is the primary method for register-mapped communication between the M3 and custom FPGA IPs. The SoC provides 12 dedicated "slots," each with a 256-byte address range.
 
-### How it works
+### 3.1 IP Core Configuration (Gowin EDA)
+To use the APB2 expansion, you must enable it in the **Gowin_EMPU_M3** IP core configuration:
+1.  **IP Generator**: Select `Gowin_EMPU_M3`.
+2.  **Configuration Tab**:
+    *   **Enable APB Expansion**: Set to `Enable`.
+    *   This will expose the `APB_PSEL`, `APB_PENABLE`, `APB_PADDR`, `APB_PWRITE`, `APB_PWDATA`, `APB_PRDATA`, and `APB_PREADY` ports on the M3 IP core.
+3.  **Address Decoding**: The M3 uses the `PSEL` signal to indicate which slot is being accessed. You must implement a simple decoder if using multiple slots, or use the provided `PSELx` signals if the IP core version supports individual slot selects.
+
+### 3.2 Slot Mapping
 Think of these slots as pre-allocated memory windows. When you implement a peripheral in the FPGA (e.g., a motor controller or a display driver), you can map its internal registers to one of these slots. From MicroPython, you can then interact with your hardware by reading/writing to the corresponding memory address.
 
-| Slot | Base Address | Default Usage in Examples |
-| :--- | :--- | :--- |
-| Slot 1 | `0x40002400` | **Tiny Tapeout (TT) Wrapper**: Logic control & I/O |
-| Slot 2 | `0x40002500` | **NEORV32 Bridge**: RISC-V co-processor control |
-| Slot 3 | `0x40002600` | **SERV Bridge**: Minimal RISC-V control |
-| Slots 4-12 | `0x40002700`+ | Available for custom User IPs |
+| Slot | Base Address | M3 Address Range | Default Usage in Examples |
+| :--- | :--- | :--- | :--- |
+| Slot 1 | `0x40002400` | `0x40002400 - 0x400024FF` | **Tiny Tapeout (TT) Wrapper** |
+| Slot 2 | `0x40002500` | `0x40002500 - 0x400025FF` | **NEORV32 Bridge** |
+| Slot 3 | `0x40002600` | `0x40002600 - 0x400026FF` | **SERV Bridge** |
+| Slots 4-12 | `0x40002700`+ | `0x40002700 - 0x40002FFF` | Available for custom User IPs |
 
 ### MicroPython Example
 ```python
@@ -50,7 +60,31 @@ val = machine.mem32[0x40002704]
 
 ## 4. AHB Expansion (XIP & PSRAM)
 
-The AHB bus is used for high-bandwidth peripherals.
+The AHB bus is used for high-bandwidth peripherals like PSRAM and External SPI Flash (XIP).
+
+### 4.1 PSRAM Memory Interface (AHB)
+To use the 8MB external PSRAM, instantiate the **PSRAM Memory Interface** IP:
+1.  **IP Generator**: Select `PSRAM Memory Interface`.
+2.  **Configuration**:
+    *   **Memory Model**: `W955D8MBYA` (for Tang Nano 4K).
+    *   **Memory Clock**: `166 MHz` (Max).
+    *   **DQ Width**: `16` (2CH mode is often used for full performance).
+    *   **Bus Interface**: `AHB` (required for M3 mapping at 0xA0000000).
+3.  **M3 Connection**: Enable **AHB Expansion** in the `Gowin_EMPU_M3` core and connect it to the PSRAM IP.
+
+### 4.2 External Flash Interface (XIP)
+To access the external flash at `0x60000000` for MicroPython code execution:
+1.  **IP Generator**: Select `SPI Flash Interface`.
+2.  **Configuration**:
+    *   **Protocol**: `Single SPI` (Standard).
+    *   **Bus Interface**: `AHB` (required for XIP).
+    *   **Memory Mapped**: Enable `Memory Mapped Mode`.
+    *   **Base Address**: Set to `0x60000000`.
+3.  **Pin Constraints**: Map the SPI signals to the following hardware pins:
+    *   `CS_N`: Pin 36
+    *   `SCLK`: Pin 37
+    *   `MOSI`: Pin 38
+    *   `MISO`: Pin 39
 
 | Range | Usage | IP Core Required |
 | :--- | :--- | :--- |

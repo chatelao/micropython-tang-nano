@@ -90,19 +90,14 @@ Use a serial terminal with the following configuration:
 For detailed serial port instructions, see [SERIAL_PORT_ACCESS.md](SERIAL_PORT_ACCESS.md).
 
 ## IP Core Configuration (Gowin EDA)
-To access the external flash at `0x60000000`, you must instantiate the **SPI Flash Interface** IP in your Gowin project:
-1.  **IP Generator**: Select `SPI Flash Interface`.
-2.  **Configuration**:
-    *   **Protocol**: Single SPI (Standard).
-    *   **Bus Interface**: `AHB` (required for XIP).
-    *   **Memory Mapped**: Enable `Memory Mapped Mode`.
-    *   **Base Address**: Set to `0x60000000` in the AHB expansion configuration.
-3.  **M3 Connection**: Connect the IP core to the Cortex-M3 **AHB Master** port (typically via the AHB Expansion interface).
-4.  **Pin Constraints**: Map the SPI signals to the following pins:
-    *   `CS_N`: Pin 36
-    *   `SCLK`: Pin 37
-    *   `MOSI`: Pin 38
-    *   `MISO`: Pin 39
+Setting up the SoC subsystem on the Tang Nano 4K requires specific IP core configurations in Gowin EDA:
+
+- **Cortex-M3 (Gowin_EMPU_M3)**: Enable APB and AHB expansion to allow the M3 to communicate with logic and memory in the FPGA fabric.
+- **APB2 Expansion**: Each slot (256 bytes) is mapped starting at `0x40002400`.
+- **External PSRAM**: Requires the `PSRAM Memory Interface` IP (Model: W955D8MBYA) mapped to `0xA0000000`.
+- **External SPI Flash (XIP)**: Requires the `SPI Flash Interface` IP mapped to `0x60000000`.
+
+For step-by-step instructions and pin constraints, see the **[M3-FPGA Integration Guide](M3_FPGA_INTEGRATIONS.md#3-apb2-expansion-slots)**.
 
 ### Installation with Gowin Programmer
 1.  **Build** the firmware with `SPLIT_FLASH=1`.
