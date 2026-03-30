@@ -1,6 +1,7 @@
 /*
  * hdmi_packetizer.v: HDMI Audio Packetizer with ACR and ECC support.
  * Formats PCM audio (Type 0x02) and ACR (Type 0x01) into Data Island packets.
+ * Complies with HDMI 1.3a bit mapping and subpacket layout.
  */
 
 `default_nettype none
@@ -32,7 +33,6 @@ module hdmi_packetizer (
 
     // --- Packet Type Selection ---
     // Alternate between ACR (Type 0x01) and Audio Sample (Type 0x02)
-    // Audio samples are sent every line (~31.5kHz). ACR should be frequent.
     reg packet_type_sel;
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -70,7 +70,10 @@ module hdmi_packetizer (
     endfunction
 
     // --- Header Construction ---
-    wire [23:0] header_data = packet_type_sel ? 24'h001002 : 24'h000001;
+    // HB0: Type, HB1: Info, HB2: Info
+    // ACR (Type 0x01): HB1=0, HB2=0.
+    // Audio (Type 0x02): HB1=0, HB2[3:0]=sample_present. SB0 present = 0x01.
+    wire [23:0] header_data = packet_type_sel ? 24'h010002 : 24'h000001;
     wire [31:0] header_with_ecc = {
         1'b0, bch15_12(header_data[23:12]),
         1'b0, bch15_12(header_data[11:0]),
@@ -78,26 +81,53 @@ module hdmi_packetizer (
     };
 
     // --- Subpacket Construction ---
-    // ACR Packet (Type 0x01): N = 6144 (0x001800), CTS = 25200 (0x006270)
-    // Subpacket 0-3 share the same ACR data in different layouts.
-    wire [55:0] acr_data = {8'h00, 24'h001800, 24'h006270};
 
-    // Audio Sample Packet (Type 0x02):
-    wire [55:0] sp_data = {8'h00, r_samp, 8'h00, l_samp};
+    // ACR Packet (Type 0x01): N = 6144 (0x001800), CTS = 25175 (0x006257) for 25.175 MHz
+    // Layout: PB0=0, PB1=CTS[19:12], PB2=CTS[11:4], PB3=CTS[3:0]<<4, PB4=N[19:12], PB5=N[11:4], PB6=N[3:0]
+    // PB0=0x00, PB1=0x06, PB2=0x25, PB3=0x70, PB4=0x01, PB5=0x80, PB6=0x00
+    wire [55:0] acr_sp_data = {8'h00, 8'h80, 8'h01, 8'h70, 8'h25, 8'h06, 8'h00};
 
-    wire [55:0] current_sp_data = packet_type_sel ? sp_data : acr_data;
-    wire [63:0] sp_with_ecc = {crc8_56(current_sp_data), current_sp_data};
+    // Audio Sample Packet (Type 0x02): L-PCM, 16-bit
+    // PB0: [3:0] sample_present=0x1.
+    // PB1-3: Left channel (24 bits, LSB first)
+    // PB4-6: Right channel (24 bits, LSB first)
+    wire [55:0] audio_sp_data = {
+        (r_samp[15] ? 8'hFF : 8'h00), r_samp[15:8], r_samp[7:0],
+        (l_samp[15] ? 8'hFF : 8'h00), l_samp[15:8], l_samp[7:0],
+        8'h01
+    };
 
-    // --- Bit Mapping ---
+    // Construct 4 subpackets.
+    wire [55:0] sp0_data = packet_type_sel ? audio_sp_data : acr_sp_data;
+    wire [55:0] sp1_data = packet_type_sel ? 56'h0 : acr_sp_data;
+    wire [55:0] sp2_data = packet_type_sel ? 56'h0 : acr_sp_data;
+    wire [55:0] sp3_data = packet_type_sel ? 56'h0 : acr_sp_data;
+
+    wire [63:0] sp0_with_ecc = {crc8_56(sp0_data), sp0_data};
+    wire [63:0] sp1_with_ecc = {crc8_56(sp1_data), sp1_data};
+    wire [63:0] sp2_with_ecc = {crc8_56(sp2_data), sp2_data};
+    wire [63:0] sp3_with_ecc = {crc8_56(sp3_data), sp3_data};
+
+    // --- Bit Mapping (HDMI 1.3a) ---
+    // Pixel n carries:
+    // Ch0: D0=HSync, D1=VSync, D2=Header[n], D3=SB0[n]
+    // Ch1: D4=SB1[n], D5=SB2[n], D6=SB3[n], D7=SB0[n+32]
+    // Ch2: D8=SB1[n+32], D9=SB2[n+32], D10=SB3[n+32]
     always @(*) begin
-        island_data = 12'h0;
+        island_data = 12'h000;
         island_data[0] = hsync;
         island_data[1] = vsync;
 
         if (packet_enable) begin
-            island_data[2]   = header_with_ecc[packet_cnt];
-            island_data[3]   = sp_with_ecc[packet_cnt];
-            island_data[6]   = sp_with_ecc[packet_cnt + 32];
+            island_data[2]  = header_with_ecc[packet_cnt];
+            island_data[3]  = sp0_with_ecc[packet_cnt];
+            island_data[4]  = sp1_with_ecc[packet_cnt];
+            island_data[5]  = sp2_with_ecc[packet_cnt];
+            island_data[6]  = sp3_with_ecc[packet_cnt];
+            island_data[7]  = sp0_with_ecc[packet_cnt + 32];
+            island_data[8]  = sp1_with_ecc[packet_cnt + 32];
+            island_data[9]  = sp2_with_ecc[packet_cnt + 32];
+            island_data[10] = sp3_with_ecc[packet_cnt + 32];
         end
     end
 

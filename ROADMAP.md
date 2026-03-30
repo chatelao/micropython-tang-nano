@@ -12,7 +12,7 @@ Next steps for the MicroPython for Tang Nano 4K project:
 - [x] 26. Add Tiny-Tapout (TT) module loading and testing guide.
 - [x] 27. Add NEORV32 (RISC-V) co-processor example with Renode test.
 - [x] 28. Add SERV RISC-V example with Renode integration test.
-- [ ] 29. Implement VGA-to-HDMI bridge with audio for Tiny Tapeout.
+- [x] 29. Implement VGA-to-HDMI bridge with audio for Tiny Tapeout.
 
 ## Completed Milestones
 - [x] 1. Initialize project structure and documentation.
