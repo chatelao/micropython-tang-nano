@@ -89,6 +89,41 @@ Use a serial terminal with the following configuration:
 
 For detailed serial port instructions, see [SERIAL_PORT_ACCESS.md](SERIAL_PORT_ACCESS.md).
 
+## Pinbelegung Tang Nano 4K
+
+### Onboard-Peripherie
+| Komponente | Pin | Bank | Logik |
+| :--- | :--- | :--- | :--- |
+| **LED** | 10 | 0 | Low-aktiv |
+| **Taste 1 (S1)** | 15 | 3 | High-aktiv |
+| **Taste 2 (S2)** | 14 | 3 | High-aktiv |
+| **System-Takt** | 45 | 1 | 27 MHz Quarz |
+
+### HDMI-Schnittstelle (TMDS)
+| Signal | Pin (+) | Pin (-) | Bank |
+| :--- | :--- | :--- | :--- |
+| **TMDS Lane 0** (Blau) | 30 | 29 | 2 |
+| **TMDS Lane 1** (Grün) | 32 | 31 | 2 |
+| **TMDS Lane 2** (Rot) | 35 | 34 | 2 |
+| **TMDS Takt** | 28 | 27 | 2 |
+
+### System & Programmierung
+| Funktion | Pins | Bank | Beschreibung |
+| :--- | :--- | :--- | :--- |
+| **JTAG** | 3, 4, 6, 7, 8 | 0 | TDI, TDO, TMS, TCK, JTAGSEL_N |
+| **SPI Flash** | 1, 2, 47, 48 | 0/1 | MCLK, MCS, MISO, MOSI |
+| **UART0 (REPL)** | 18 (TX), 19 (RX) | 3 | Debug-Konsole |
+
+### Freie Pins auf den Header-Leisten
+| Bank | Pins |
+| :--- | :--- |
+| **Bank 0** | 9 (DONE) |
+| **Bank 1** | 39, 40, 41, 42, 43, 44, 46 |
+| **Bank 2** | 33 |
+| **Bank 3** | 13, 16, 17, 20, 21, 22, 23 |
+
+*Hinweis: Die Pins für JTAG und Flash sollten für allgemeine Zwecke vermieden werden, um die Programmierbarkeit nicht zu beeinträchtigen.*
+
 ## IP Core Configuration (Gowin EDA)
 Setting up the SoC subsystem on the Tang Nano 4K requires specific IP core configurations in Gowin EDA:
 
