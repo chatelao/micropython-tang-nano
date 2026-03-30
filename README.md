@@ -39,8 +39,7 @@ For a comprehensive overview of the port, including hardware details, installati
 | **Config. Flash** | ~200 KB | - | `bitstream.fs` | **FPGA Logic** | SoC Internal Config Flash (Instant-on) |
 | **Internal Flash** | 32 KB* | `0x00000000` | `firmware_int.bin` | **M3 Boot** | Vector Table & Reset Handler |
 | **Internal SRAM** | 22 KB | `0x20000000` | - | **Fast RAM** | Stack (2KB) & Fast Heap (~18KB) |
-| **APB2 Peripherals**| 3 KB | `0x40002400` | - | **FPGA Slots** | 12 register-mapped slots for custom IP |
-| **TT Wrapper** | 16 B | `0x40002400` | - | **TT Wrapper**| APB2 Slot 1: TT Control and Data |
+| **APB2 Peripherals** | 16 B | `0x40002400` | - | **TT Wrapper**| APB2 Slot (1/12): TT Control and Data |
 | **External Flash** | 4 MB | `0x60000000` | `firmware_ext.bin` | **M3 Runtime** | SPI Flash Access (XIP) & VFS |
 | **External PSRAM** | 8 MB | `0xA0000000` | - | **Large RAM** | Primary Heap (External PSRAM) |
 
