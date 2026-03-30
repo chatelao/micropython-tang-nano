@@ -69,16 +69,18 @@ endmodule
  * Uses physical differential output primitives.
  */
 module hdmi_encoder (
-    input  wire       pixel_clk,     // 25.175 MHz for 640x480
-    input  wire       pixel_clk_x10, // 251.75 MHz (10x for serialization)
-    input  wire [7:0] red,
-    input  wire [7:0] green,
-    input  wire [7:0] blue,
-    input  wire       hsync,
-    input  wire       vsync,
-    input  wire       blank,
-    output wire [2:0] tmds_p,
-    output wire       tmds_clk_p
+    input  wire        pixel_clk,     // 25.175 MHz for 640x480
+    input  wire        pixel_clk_x10, // 251.75 MHz (10x for serialization)
+    input  wire [7:0]  red,
+    input  wire [7:0]  green,
+    input  wire [7:0]  blue,
+    input  wire        hsync,
+    input  wire        vsync,
+    input  wire        blank,
+    input  wire [15:0] audio_l,       // 16-bit PCM Audio (Left)
+    input  wire [15:0] audio_r,       // 16-bit PCM Audio (Right)
+    output wire [2:0]  tmds_p,
+    output wire        tmds_clk_p
 );
 
     wire [9:0] tmds_red, tmds_green, tmds_blue;
