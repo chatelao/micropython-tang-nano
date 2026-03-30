@@ -1,0 +1,42 @@
+@startuml CONTEXT_DIAGRAM
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+left to right direction
+
+Person(user, "User", "Interaction via Serial Terminal")
+
+System_Boundary(tn4k, "Tang Nano 4K (GW1NSR-4C)") {
+    Component(bl702, "BL702", "USB-to-UART Bridge", "Handles USB communication and JTAG/UART bridging")
+
+    Container_Boundary(m3_subsystem, "Cortex-M3 Subsystem") {
+        Component(m3, "Cortex-M3 Hard Core", "ARMv7-M", "Executes the MicroPython runtime")
+        Component(micropython, "MicroPython", "Software", "Provides REPL and high-level hardware control")
+    }
+
+    Container_Boundary(fpga_fabric, "FPGA Fabric") {
+        Component(apb2_bus, "APB2 Slot 1", "Bus Interface", "Memory-mapped I/O at 0x40002400")
+
+        Container_Boundary(vga_hdmi_logic, "VGA-to-HDMI Wrapper") {
+            Component(tt_wrapper, "tt_vga_hdmi_wrapper.v", "Verilog", "Bridges APB2 to TT and HDMI logic")
+            Component(tt_project, "tt_project.v", "Verilog (TT)", "Tiny Tapeout VGA Pattern Generator")
+            Component(audio_dsp, "audio_dsp.v", "Verilog", "CIC Decimation Filter (PWM to PCM)")
+            Component(hdmi_enc, "hdmi_encoder.v", "Verilog", "TMDS Encoding and Serialization")
+        }
+    }
+}
+
+System_Ext(monitor, "HDMI Monitor", "Physical Display")
+
+Rel(user, bl702, "USB / Serial", "115200 8N1")
+Rel(bl702, m3, "UART0", "TX/RX Pins 18/19")
+Rel(micropython, m3, "Runs on")
+Rel_D(m3, apb2_bus, "MMIO", "APB2 Protocol")
+Rel_D(apb2_bus, tt_wrapper, "Control & Status")
+Rel_D(tt_wrapper, tt_project, "TT Interface", "uo_out (VGA), clk, rst_n, ena")
+Rel_D(tt_project, audio_dsp, "1-bit Audio", "uio_out[7]")
+Rel_D(tt_project, hdmi_enc, "Digital VGA", "RGB, HSync, VSync, Blank")
+Rel_D(audio_dsp, hdmi_enc, "16-bit PCM", "Audio Data")
+Rel_D(hdmi_enc, monitor, "TMDS Signals", "HDMI Connector")
+
+@enduml

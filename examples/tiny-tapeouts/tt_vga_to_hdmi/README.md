@@ -4,6 +4,8 @@ This example demonstrates how to adapt a Tiny Tapeout (TT) VGA project to output
 
 ## Architecture
 
+![Architecture](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/examples/tiny-tapeouts/tt_vga_to_hdmi/architecture.puml)
+
 The integration follows this data path:
 1.  **MicroPython (Cortex-M3)**: Controls the Tiny Tapeout module (reset, enable) via the APB2 bus.
 2.  **TT Wrapper**: Provides the APB2 interface, handles clocking (via PLL), and hosts the Tiny Tapeout module.
