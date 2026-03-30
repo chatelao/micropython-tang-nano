@@ -4,7 +4,7 @@ This example demonstrates a minimal integration of a Tiny Tapeout (TT) module in
 
 ## End-to-End Integration Diagram
 
-![End-to-End Integration](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/examples/tt_echo/architecture.puml)
+![End-to-End Integration](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/examples/tt_echo/architecture.puml)
 
 ## Example Files
 
