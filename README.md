@@ -89,10 +89,7 @@ Use a serial terminal with the following configuration:
 
 For detailed serial port instructions, see [SERIAL_PORT_ACCESS.md](SERIAL_PORT_ACCESS.md).
 
-## Split Flash Installation
-The Tang Nano 4K has only 32KB of internal code flash, which is insufficient for a full MicroPython build (~125KB). To solve this, we use a **Split Flash** architecture (see the memory layout table above).
-
-### IP Core Configuration (Gowin EDA)
+## IP Core Configuration (Gowin EDA)
 To access the external flash at `0x60000000`, you must instantiate the **SPI Flash Interface** IP in your Gowin project:
 1.  **IP Generator**: Select `SPI Flash Interface`.
 2.  **Configuration**:
