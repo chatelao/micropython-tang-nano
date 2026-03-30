@@ -32,15 +32,27 @@ For a comprehensive overview of the port, including hardware details, installati
 
 ## Memory Layout
 
-### Memory Regions
-| Region | Capacity | Base Address | Role | MicroPython Usage |
-| :--- | :--- | :--- | :--- | :--- |
-| **Internal SRAM** | 22 KB | `0x20000000` | Fast RAM | Stack (2KB), Static Data, Fast Heap (~18KB) |
-| **External PSRAM (Default)** | 8 MB | `0xA0000000` | Large RAM | Primary Heap |
-| **Internal Flash** | 32 KB* | `0x00000000` | Boot Flash | Vectors, Bootloader, Init |
-| **External Flash (Default)** | 4 MB | `0x60000000` | Main Storage | Runtime Code, ROData, VFS (LittleFS) |
+### Memory Regions (System Memory Map)
 
-*\* Note: Internal Flash address space is 128 KB, but physical hardware is limited to 32 KB.*
+| Region | Capacity | Base Address | Component / Role | MicroPython Usage |
+| :--- | :--- | :--- | :--- | :--- |
+| **Internal Flash** | 32 KB* | `0x00000000` | **MicroPython Part 1** | Bootloader, Vector Table, Reset Handler |
+| **Internal SRAM** | 22 KB | `0x20000000` | **Fast RAM** | Stack (2KB), Static Data, Fast Heap (~18KB) |
+| **APB2 Peripherals**| 3 KB | `0x40002400` | **FPGA Logic Slots** | 12 Slots (256B each) for custom FPGA IPs |
+| **TT Wrapper** | 16 B | `0x40002400` | **Tiny Tapeout Wrapper**| APB2 Slot 1: Control and Data registers |
+| **External Flash** | 4 MB | `0x60000000` | **MicroPython Part 2** | **SPI Flash Access (XIP)**: Runtime & VFS |
+| **External PSRAM** | 8 MB | `0xA0000000` | **Large RAM** | Primary Heap (for large scripts/data) |
+
+*\* Note: Internal Flash address space is 128 KB, but physical hardware on Tang Nano 4K is limited to 32 KB.*
+
+### Component Locations in Memory
+
+- **MicroPython Part 1 (Internal)**: Located at `0x00000000`. Contains the essential boot code and interrupt vectors required for the Cortex-M3 to start.
+- **MicroPython Part 2 (External)**: Located at `0x60000000`. This is the bulk of the MicroPython runtime, including the bytecode interpreter and frozen modules, accessed via memory-mapped SPI Flash.
+- **APB2 (FPGA Peripherals)**: The memory region from `0x40002400` to `0x40002FFF` is reserved for peripherals implemented in the FPGA fabric (12 slots of 256 bytes each).
+- **SPI Flash Access**: The external SPI flash is memory-mapped to `0x60000000` via the AHB Expansion interface, allowing Execute-In-Place (XIP) functionality.
+- **Tiny Tapeout Wrapper**: Mapped to **APB2 Slot 1** (`0x40002400`). It provides the bridge between the Cortex-M3 and the Tiny Tapeout module pins.
+- **Tiny Tapeout Logic**: The actual user logic (TT project) is controlled via the `DATA` (`0x40002400`) and `CTRL` (`0x4000240C`) registers within the wrapper.
 
 ### Filesystem (LittleFS2) Configuration
 | Mode | FS Offset | FS Size | Description |
