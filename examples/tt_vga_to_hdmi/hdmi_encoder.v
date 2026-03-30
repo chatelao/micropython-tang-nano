@@ -66,56 +66,78 @@ endmodule
 
 /*
  * DVI/HDMI Encoder for Gowin (Tang Nano 4K).
- * Uses physical differential output primitives.
+ * Uses physical OSER10 primitives for serialization.
  */
 module hdmi_encoder (
-    input  wire        pixel_clk,     // 25.175 MHz for 640x480
-    input  wire        pixel_clk_x10, // 251.75 MHz (10x for serialization)
+    input  wire        pixel_clk,    // ~25.2 MHz for 640x480
+    input  wire        pixel_clk_x5, // ~126 MHz (5x for DDR serialization)
     input  wire [7:0]  red,
     input  wire [7:0]  green,
     input  wire [7:0]  blue,
     input  wire        hsync,
     input  wire        vsync,
     input  wire        blank,
-    input  wire [15:0] audio_l,       // 16-bit PCM Audio (Left)
-    input  wire [15:0] audio_r,       // 16-bit PCM Audio (Right)
+    input  wire [15:0] audio_l,      // 16-bit PCM Audio (Left)
+    input  wire [15:0] audio_r,      // 16-bit PCM Audio (Right)
     output wire [2:0]  tmds_p,
     output wire        tmds_clk_p
 );
 
     wire [9:0] tmds_red, tmds_green, tmds_blue;
+    wire [9:0] tmds_clk = 10'b1111100000;
 
     tmds_encoder encode_red   (.clk(pixel_clk), .data(red),   .ctrl(2'b00),          .blank(blank), .tmds(tmds_red));
     tmds_encoder encode_green (.clk(pixel_clk), .data(green), .ctrl(2'b00),          .blank(blank), .tmds(tmds_green));
     tmds_encoder encode_blue  (.clk(pixel_clk), .data(blue),  .ctrl({vsync, hsync}), .blank(blank), .tmds(tmds_blue));
 
-    // Serialization using 10x clock (Simple shift-register model)
-    // Note: On Tang Nano 4K, for better timing closure at 251MHz,
-    // the Gowin OSER10 primitive is highly recommended over this fabric shift register.
-    reg [9:0] shift_red=0, shift_green=0, shift_blue=0, shift_clk=10'b1111100000;
-    reg [3:0] mod10 = 0;
+    // Serialization using OSER10 primitives (DDR 5x clock)
+    // This provides much better timing closure than a fabric shift register.
+    OSER10 #(
+        .GSREN("false"),
+        .LSREN("true")
+    ) oser_red (
+        .Q(tmds_p[2]),
+        .D0(tmds_red[0]), .D1(tmds_red[1]), .D2(tmds_red[2]), .D3(tmds_red[3]), .D4(tmds_red[4]),
+        .D5(tmds_red[5]), .D6(tmds_red[6]), .D7(tmds_red[7]), .D8(tmds_red[8]), .D9(tmds_red[9]),
+        .FCLK(pixel_clk_x5),
+        .PCLK(pixel_clk),
+        .RESET(1'b0)
+    );
 
-    always @(posedge pixel_clk_x10) begin
-        if (mod10 == 9) begin
-            mod10 <= 0;
-            shift_red   <= tmds_red;
-            shift_green <= tmds_green;
-            shift_blue  <= tmds_blue;
-            shift_clk   <= 10'b1111100000;
-        end else begin
-            mod10 <= mod10 + 1;
-            shift_red   <= {1'b0, shift_red[9:1]};
-            shift_green <= {1'b0, shift_green[9:1]};
-            shift_blue  <= {1'b0, shift_blue[9:1]};
-            shift_clk   <= {1'b0, shift_clk[9:1]};
-        end
-    end
+    OSER10 #(
+        .GSREN("false"),
+        .LSREN("true")
+    ) oser_green (
+        .Q(tmds_p[1]),
+        .D0(tmds_green[0]), .D1(tmds_green[1]), .D2(tmds_green[2]), .D3(tmds_green[3]), .D4(tmds_green[4]),
+        .D5(tmds_green[5]), .D6(tmds_green[6]), .D7(tmds_green[7]), .D8(tmds_green[8]), .D9(tmds_green[9]),
+        .FCLK(pixel_clk_x5),
+        .PCLK(pixel_clk),
+        .RESET(1'b0)
+    );
 
-    // Direct output assignments. Physical differential conversion (LVDS25E)
-    // is specified in the .cst file for the _p pins.
-    assign tmds_p[2] = shift_red[0];
-    assign tmds_p[1] = shift_green[0];
-    assign tmds_p[0] = shift_blue[0];
-    assign tmds_clk_p = shift_clk[0];
+    OSER10 #(
+        .GSREN("false"),
+        .LSREN("true")
+    ) oser_blue (
+        .Q(tmds_p[0]),
+        .D0(tmds_blue[0]), .D1(tmds_blue[1]), .D2(tmds_blue[2]), .D3(tmds_blue[3]), .D4(tmds_blue[4]),
+        .D5(tmds_blue[5]), .D6(tmds_blue[6]), .D7(tmds_blue[7]), .D8(tmds_blue[8]), .D9(tmds_blue[9]),
+        .FCLK(pixel_clk_x5),
+        .PCLK(pixel_clk),
+        .RESET(1'b0)
+    );
+
+    OSER10 #(
+        .GSREN("false"),
+        .LSREN("true")
+    ) oser_clk (
+        .Q(tmds_clk_p),
+        .D0(tmds_clk[0]), .D1(tmds_clk[1]), .D2(tmds_clk[2]), .D3(tmds_clk[3]), .D4(tmds_clk[4]),
+        .D5(tmds_clk[5]), .D6(tmds_clk[6]), .D7(tmds_clk[7]), .D8(tmds_clk[8]), .D9(tmds_clk[9]),
+        .FCLK(pixel_clk_x5),
+        .PCLK(pixel_clk),
+        .RESET(1'b0)
+    );
 
 endmodule
