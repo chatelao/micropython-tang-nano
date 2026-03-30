@@ -36,7 +36,8 @@ For a comprehensive overview of the port, including hardware details, installati
 
 | Region | Capacity | Base Address | Component / Role | MicroPython Usage |
 | :--- | :--- | :--- | :--- | :--- |
-| **Internal Flash** | 32 KB* | `0x00000000` | **MicroPython Part 1** | Bootloader, Vector Table, Reset Handler |
+| **Config. Flash** | ~200 KB | - | **FPGA Bitstream** | **Internal SoC Flash**: Loaded into SRAM on power-up |
+| **Internal Flash** | 32 KB* | `0x00000000` | **M3 Bootloader** | **Internal SoC Flash**: Vector Table, Reset Handler |
 | **Internal SRAM** | 22 KB | `0x20000000` | **Fast RAM** | Stack (2KB), Static Data, Fast Heap (~18KB) |
 | **APB2 Peripherals**| 3 KB | `0x40002400` | **FPGA Logic Slots** | 12 Slots (256B each) for custom FPGA IPs |
 | **TT Wrapper** | 16 B | `0x40002400` | **Tiny Tapeout Wrapper**| APB2 Slot 1: Control and Data registers |
@@ -104,8 +105,9 @@ The Tang Nano 4K has only 32KB of internal code flash, which is insufficient for
 
 | Region | Address | Binary | Description |
 | :--- | :--- | :--- | :--- |
-| **Internal Flash** | `0x00000000` | `firmware_int.bin` | Vector table & Reset Handler (32KB) |
-| **External Flash** | `0x60000000` | `firmware_ext.bin` | MicroPython Runtime & Code (1MB) |
+| **Config. Flash** | - | `bitstream.fs` | **FPGA Logic**: SoC Internal Config Flash |
+| **Internal Flash** | `0x00000000` | `firmware_int.bin` | **M3 Boot**: Vectors & Reset Handler (32KB) |
+| **External Flash** | `0x60000000` | `firmware_ext.bin` | **M3 Runtime**: External SPI Flash (XIP) |
 
 ### IP Core Configuration (Gowin EDA)
 To access the external flash at `0x60000000`, you must instantiate the **SPI Flash Interface** IP in your Gowin project:
