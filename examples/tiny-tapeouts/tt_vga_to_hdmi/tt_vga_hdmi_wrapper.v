@@ -82,7 +82,6 @@ module tt_vga_hdmi_wrapper (
     );
 
     // Use a CLKDIV primitive to get the 1/5 clock for pixel_clk
-    // This ensures better phase alignment for OSER10 than using rPLL's CLKOUTD.
     CLKDIV #(
         .DIV_MODE("5")
     ) clk_div_inst (
@@ -113,6 +112,26 @@ module tt_vga_hdmi_wrapper (
         .strobe_48k (audio_strobe)
     );
 
+    // --- HDMI Infrastructure Wires ---
+    wire [11:0] island_data;
+    wire [4:0]  packet_cnt;
+    wire        packet_enable;
+    wire        hdmi_hsync, hdmi_vsync;
+
+    // --- Audio Packetizer Instantiation ---
+    hdmi_packetizer packetizer_inst (
+        .clk          (pixel_clk),
+        .rst_n        (ctrl[1]),
+        .audio_l      (audio_pcm),
+        .audio_r      (audio_pcm),
+        .audio_strobe (audio_strobe),
+        .packet_cnt   (packet_cnt),
+        .packet_enable(packet_enable),
+        .hsync        (hdmi_hsync),
+        .vsync        (hdmi_vsync),
+        .island_data  (island_data)
+    );
+
     // --- Registered Buffer for Timing Closure ---
     reg [7:0] uo_out_reg;
     always @(posedge pixel_clk) begin
@@ -121,29 +140,32 @@ module tt_vga_hdmi_wrapper (
 
     // --- VGA Signal Extraction (from Registered Buffer) ---
     // [7] VSync, [6] HSync, [5] Blank, [4:3] B, [2] G, [1:0] R
-    // Use bit replication for full dynamic range (Bit Replication Approach)
     wire [7:0] r_chan = {uo_out_reg[1:0], uo_out_reg[1:0], uo_out_reg[1:0], uo_out_reg[1:0]};
     wire [7:0] g_chan = {uo_out_reg[2],   uo_out_reg[2],   uo_out_reg[2],   uo_out_reg[2],
                          uo_out_reg[2],   uo_out_reg[2],   uo_out_reg[2],   uo_out_reg[2]};
     wire [7:0] b_chan = {uo_out_reg[4:3], uo_out_reg[4:3], uo_out_reg[4:3], uo_out_reg[4:3]};
-    wire hsync = uo_out_reg[6];
-    wire vsync = uo_out_reg[7];
-    wire blank = uo_out_reg[5];
+    wire hsync_raw = uo_out_reg[6];
+    wire vsync_raw = uo_out_reg[7];
+    wire blank_raw = uo_out_reg[5];
 
     // --- HDMI Encoder Instantiation ---
     hdmi_encoder hdmi_inst (
-        .pixel_clk   (pixel_clk),
-        .pixel_clk_x5(pixel_clk_x5),
-        .red         (r_chan),
-        .green       (g_chan),
-        .blue        (b_chan),
-        .hsync       (hsync),
-        .vsync       (vsync),
-        .mode        (blank ? 3'd0 : 3'd1), // Default to DVI-like Control/Video modes
-        .audio_l     (audio_pcm), // Placeholder for future Data Island
-        .audio_r     (audio_pcm), // Placeholder for future Data Island
-        .tmds_p      (tmds_p),
-        .tmds_clk_p  (tmds_clk_p)
+        .pixel_clk     (pixel_clk),
+        .pixel_clk_x5  (pixel_clk_x5),
+        .rst_n         (ctrl[1]),
+        .red           (r_chan),
+        .green         (g_chan),
+        .blue          (b_chan),
+        .hsync_in      (hsync_raw),
+        .vsync_in      (vsync_raw),
+        .blank_in      (blank_raw),
+        .island_data   (island_data),
+        .tmds_p        (tmds_p),
+        .tmds_clk_p    (tmds_clk_p),
+        .packet_cnt_out(packet_cnt),
+        .packet_en_out (packet_enable),
+        .hsync_out     (hdmi_hsync),
+        .vsync_out     (hdmi_vsync)
     );
 
 endmodule
