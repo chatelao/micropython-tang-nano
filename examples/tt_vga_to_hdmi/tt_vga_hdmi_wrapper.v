@@ -56,26 +56,20 @@ module tt_vga_hdmi_wrapper (
     end
 
     // Clock Generation
-    // Pixel Clock: 25.175 MHz, Serial Clock: 251.75 MHz.
-    // NOTE: To avoid undriven wires, we'll temporarily tie these to the 27M clock.
-    // In a real project, you MUST instantiate an rPLL (see below).
-    wire pixel_clk = CLK_27M;
-    wire pixel_clk_x10 = CLK_27M; // This will NOT work for HDMI but prevents undriven warnings.
+    // Pixel Clock: ~25.2 MHz, Serial Clock: ~126 MHz (5x for DDR Serialization).
+    wire pixel_clk;
+    wire pixel_clk_x5;
 
-    /*
-     * Concrete rPLL Template for Gowin GW1NSR-4C (Tang Nano 4K)
-     * To use this, instantiate the rPLL primitive using the Gowin IP Core Generator.
-     *
     rPLL #(
         .FCLKIN("27"),
-        .IDIV_SEL(26), // 27 / 27 = 1
-        .FBDIV_SEL(24), // 1 * 25 = 25 (Approx 25.175)
-        .ODIV_SEL(2),  // VCO / 2
+        .IDIV_SEL(2),      // 27 / 3 = 9 MHz
+        .FBDIV_SEL(55),    // 9 * 56 = 504 MHz (VCO)
+        .ODIV_SEL(4),      // 504 / 4 = 126 MHz (CLKOUT)
         .DEVICE("GW1NSR-4C")
     ) pll_inst (
         .CLKIN(CLK_27M),
-        .CLKOUT(pixel_clk_x10),
-        .CLKOUTD(pixel_clk),
+        .CLKOUT(pixel_clk_x5),
+        .CLKOUTD(),
         .RESET(1'b0),
         .RESET_P(1'b0),
         .CLKFB(1'b0),
@@ -86,7 +80,17 @@ module tt_vga_hdmi_wrapper (
         .PSDA(4'b0),
         .FDLY(4'b0)
     );
-    */
+
+    // Use a CLKDIV primitive to get the 1/5 clock for pixel_clk
+    // This ensures better phase alignment for OSER10 than using rPLL's CLKOUTD.
+    CLKDIV #(
+        .DIV_MODE("5")
+    ) clk_div_inst (
+        .CLKOUT(pixel_clk),
+        .HCLKIN(pixel_clk_x5),
+        .RESETN(ctrl[1]),
+        .CALIB(1'b0)
+    );
 
     // --- Tiny Tapeout Module Instantiation ---
     tt_um_vga_pattern tt_inst (
@@ -128,18 +132,18 @@ module tt_vga_hdmi_wrapper (
 
     // --- HDMI Encoder Instantiation ---
     hdmi_encoder hdmi_inst (
-        .pixel_clk    (pixel_clk),
-        .pixel_clk_x10(pixel_clk_x10),
-        .red          (r_chan),
-        .green        (g_chan),
-        .blue         (b_chan),
-        .hsync        (hsync),
-        .vsync        (vsync),
-        .blank        (blank),
-        .audio_l      (audio_pcm), // Placeholder for future Data Island
-        .audio_r      (audio_pcm), // Placeholder for future Data Island
-        .tmds_p       (tmds_p),
-        .tmds_clk_p   (tmds_clk_p)
+        .pixel_clk   (pixel_clk),
+        .pixel_clk_x5(pixel_clk_x5),
+        .red         (r_chan),
+        .green       (g_chan),
+        .blue        (b_chan),
+        .hsync       (hsync),
+        .vsync       (vsync),
+        .blank       (blank),
+        .audio_l     (audio_pcm), // Placeholder for future Data Island
+        .audio_r     (audio_pcm), // Placeholder for future Data Island
+        .tmds_p      (tmds_p),
+        .tmds_clk_p  (tmds_clk_p)
     );
 
 endmodule

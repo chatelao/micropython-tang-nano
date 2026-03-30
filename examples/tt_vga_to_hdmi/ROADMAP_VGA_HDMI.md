@@ -17,8 +17,8 @@ This roadmap outlines the implementation of a full VGA-to-HDMI bridge for Tiny T
 **Selected Approach:** **B (Gowin rPLL IP)** for its stability and native hardware support.
 
 ### Subtasks
-- Instantiate `rPLL` primitive in `tt_vga_hdmi_wrapper.v`.
-- Configure `FCLKIN=27MHz`, `CLKOUTD=25.175MHz`, `CLKOUT=125.875MHz` (for 5x DDR).
+- [x] Instantiate `rPLL` primitive in `tt_vga_hdmi_wrapper.v`.
+- [x] Configure `FCLKIN=27MHz`, `CLKOUTD=25.175MHz`, `CLKOUT=125.875MHz` (for 5x DDR).
 
 ### Tests
 - **Simulation:** Verify clock ratios in Icarus Verilog or Verilator.
@@ -81,12 +81,12 @@ This roadmap outlines the implementation of a full VGA-to-HDMI bridge for Tiny T
 **Selected Approach:** **B (CIC Filter)** as it provides the best trade-off between quality and resource usage on the GW1NSR-4C.
 
 ### Subtasks
-- Implement a 2-stage CIC filter in Verilog.
-- Normalize the output to 16-bit signed PCM.
-- Implement a 48kHz sampling clock trigger.
+- [x] Implement a 2-stage CIC filter in Verilog.
+- [x] Normalize the output to 16-bit signed PCM.
+- [x] Implement a 48kHz sampling clock trigger.
 
 ### Tests
-- **Simulation:** Feed a 50% PWM signal and verify it results in a steady-state PCM value.
+- [x] **Simulation:** Feed a 50% PWM signal and verify it results in a steady-state PCM value.
 - **Hardware:** Listen for clear tones on the HDMI audio channel.
 
 ---
@@ -126,8 +126,8 @@ This roadmap outlines the implementation of a full VGA-to-HDMI bridge for Tiny T
 **Selected Approach:** **B (OSER10 DDR)** combined with LVDS25E IO_TYPE.
 
 ### Subtasks
-- Instantiate 4x `OSER10` primitives (R, G, B, CLK).
-- Map outputs to pins 35, 32, 30, 28 in `tt_vga_hdmi.cst`.
+- [x] Instantiate 4x `OSER10` primitives (R, G, B, CLK).
+- [x] Map outputs to pins 35, 32, 30, 28 in `tt_vga_hdmi.cst`.
 
 ### Tests
 - **Hardware:** Use a logic analyzer or oscilloscope to verify the 251.75 Mbps bit rate.
