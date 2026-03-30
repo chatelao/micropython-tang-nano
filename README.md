@@ -34,7 +34,7 @@ For a comprehensive overview of the port, including hardware details, installati
 
 ### Memory Regions (System Memory Map)
 
-| Region | Capacity | Base Address | Binary | Component / Role | MicroPython Usage |
+| Region / Role | Capacity | Base Address | Binary |MicroPython Usage |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **FPGA Cfg. Flash**     | ~200 KB  | -            | `bitstream.fs`     | SoC Internal Config Flash (Instant-on)       |
 | **M3 Int. Boot-Flash**  |   32 KB* | `0x00000000` | `firmware_int.bin` | Vector Table & Reset Handler                 |
