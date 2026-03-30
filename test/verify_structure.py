@@ -28,6 +28,7 @@ def test_structure():
         'HOWTO_TINY_TAPEOUT.md',
         'M3_FPGA_INTEGRATIONS.md',
         'M3_MICROPYTHON.md',
+        'm3_subsystem.puml',
         'AUDIT.md',
         'COMPLIANCE_TESTS.md',
         'SERIAL_PORT_ACCESS.md',

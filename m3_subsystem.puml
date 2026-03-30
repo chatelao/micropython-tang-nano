@@ -1,0 +1,34 @@
+@startuml m3_subsystem
+!include https://raw.githubusercontent.com/plantuml-office/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_LEFT_RIGHT()
+
+title M3-FPGA Subsystem Architecture (Tang Nano 4K)
+
+Container_Boundary(soc, "GW1NSR-4C SoC") {
+    Component(m3, "Cortex-M3 Hard Core", "ARMv7-M", "Gowin_EMPU_M3 IP")
+
+    Boundary(fabric, "FPGA Fabric") {
+        Component(apb_slots, "APB2 Slots (0x40002400)", "Register-mapped", "Slot 1-12")
+        Component(psram_ctrl, "PSRAM Controller", "AHB (0xA0000000)", "W955D8MBYA (8MB)")
+        Component(flash_ctrl, "SPI Flash Interface", "AHB (0x60000000)", "XIP (4MB)")
+
+        Rel(m3, apb_slots, "APB2 Expansion")
+        Rel(m3, psram_ctrl, "AHB Expansion")
+        Rel(m3, flash_ctrl, "AHB Expansion")
+    }
+
+    Component(int_flash, "Internal Flash (32KB)", "0x00000000", "Bootloader & Vectors")
+    Component(int_sram, "Internal SRAM (22KB)", "0x20000000", "Stack & Fast Heap")
+
+    Rel(m3, int_flash, "I-Code/D-Code")
+    Rel(m3, int_sram, "System Bus")
+}
+
+Component_Ext(ext_psram, "External PSRAM", "Physical Chip", "8MB 166MHz")
+Component_Ext(ext_flash, "External SPI Flash", "Physical Chip", "4MB MicroPython FS")
+
+Rel(psram_ctrl, ext_psram, "DQ[15:0], SCLK, CS#")
+Rel(flash_ctrl, ext_flash, "MOSI, MISO, SCLK, CS# (Pins 36-39)")
+
+@enduml
