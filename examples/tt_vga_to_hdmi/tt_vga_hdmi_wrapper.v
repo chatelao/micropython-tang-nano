@@ -139,7 +139,7 @@ module tt_vga_hdmi_wrapper (
         .blue        (b_chan),
         .hsync       (hsync),
         .vsync       (vsync),
-        .blank       (blank),
+        .mode        (blank ? 3'd0 : 3'd1), // Default to DVI-like Control/Video modes
         .audio_l     (audio_pcm), // Placeholder for future Data Island
         .audio_r     (audio_pcm), // Placeholder for future Data Island
         .tmds_p      (tmds_p),

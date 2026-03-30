@@ -5,26 +5,30 @@
 
 `default_nettype none
 
-module tmds_encoder (
+module tmds_encoder #(
+    parameter integer CN = 0 // Channel Number (0, 1, or 2)
+) (
     input  wire       clk,
-    input  wire [7:0] data,
-    input  wire [1:0] ctrl,
-    input  wire       blank,
+    input  wire [7:0] video_data,
+    input  wire [1:0] control_data,
+    input  wire [3:0] island_data,
+    input  wire [2:0] mode, // 0: Control, 1: Video, 2: Video Guard, 3: Island, 4: Island Guard
     output reg  [9:0] tmds
 );
 
-    wire [3:0] n1d = data[0] + data[1] + data[2] + data[3] + data[4] + data[5] + data[6] + data[7];
-    wire xnor = (n1d > 4) || (n1d == 4 && data[0] == 0);
+    // --- Video Encoding (8b/10b TMDS) ---
+    wire [3:0] n1d = video_data[0] + video_data[1] + video_data[2] + video_data[3] + video_data[4] + video_data[5] + video_data[6] + video_data[7];
+    wire xnor = (n1d > 4) || (n1d == 4 && video_data[0] == 0);
     wire [8:0] q_m;
 
-    assign q_m[0] = data[0];
-    assign q_m[1] = xnor ? (q_m[0] ^~ data[1]) : (q_m[0] ^ data[1]);
-    assign q_m[2] = xnor ? (q_m[1] ^~ data[2]) : (q_m[1] ^ data[2]);
-    assign q_m[3] = xnor ? (q_m[2] ^~ data[3]) : (q_m[2] ^ data[3]);
-    assign q_m[4] = xnor ? (q_m[3] ^~ data[4]) : (q_m[3] ^ data[4]);
-    assign q_m[5] = xnor ? (q_m[4] ^~ data[5]) : (q_m[4] ^ data[5]);
-    assign q_m[6] = xnor ? (q_m[5] ^~ data[6]) : (q_m[5] ^ data[6]);
-    assign q_m[7] = xnor ? (q_m[6] ^~ data[7]) : (q_m[6] ^ data[7]);
+    assign q_m[0] = video_data[0];
+    assign q_m[1] = xnor ? (q_m[0] ^~ video_data[1]) : (q_m[0] ^ video_data[1]);
+    assign q_m[2] = xnor ? (q_m[1] ^~ video_data[2]) : (q_m[1] ^ video_data[2]);
+    assign q_m[3] = xnor ? (q_m[2] ^~ video_data[3]) : (q_m[2] ^ video_data[3]);
+    assign q_m[4] = xnor ? (q_m[3] ^~ video_data[4]) : (q_m[3] ^ video_data[4]);
+    assign q_m[5] = xnor ? (q_m[4] ^~ video_data[5]) : (q_m[4] ^ video_data[5]);
+    assign q_m[6] = xnor ? (q_m[5] ^~ video_data[6]) : (q_m[5] ^ video_data[6]);
+    assign q_m[7] = xnor ? (q_m[6] ^~ video_data[7]) : (q_m[6] ^ video_data[7]);
     assign q_m[8] = xnor ? 0 : 1;
 
     // Use an 8-bit signed counter for DC bias tracking to prevent overflow.
@@ -32,34 +36,93 @@ module tmds_encoder (
     wire [3:0] n1q_m = q_m[0] + q_m[1] + q_m[2] + q_m[3] + q_m[4] + q_m[5] + q_m[6] + q_m[7];
     wire [3:0] n0q_m = 8 - n1q_m;
 
-    always @(posedge clk) begin
-        if (blank) begin
-            case (ctrl)
-                2'b00:   tmds <= 10'b1101010100;
-                2'b01:   tmds <= 10'b0010101011;
-                2'b10:   tmds <= 10'b0101010100;
-                default: tmds <= 10'b1010101011;
-            endcase
-            dc_bias <= 0;
-        end else begin
-            if (dc_bias == 0 || n1q_m == n0q_m) begin
-                if (q_m[8] == 0) begin
-                    tmds <= {2'b10, ~q_m[7:0]};
-                    dc_bias <= dc_bias + $signed({1'b0, n0q_m}) - $signed({1'b0, n1q_m});
-                end else begin
-                    tmds <= {2'b01, q_m[7:0]};
-                    dc_bias <= dc_bias + $signed({1'b0, n1q_m}) - $signed({1'b0, n0q_m});
-                end
+    reg [9:0] q_out;
+    reg signed [7:0] dc_bias_next;
+
+    always @(*) begin
+        if (dc_bias == 0 || n1q_m == n0q_m) begin
+            if (q_m[8] == 0) begin
+                q_out = {2'b10, ~q_m[7:0]};
+                dc_bias_next = dc_bias + $signed({1'b0, n0q_m}) - $signed({1'b0, n1q_m});
             end else begin
-                if ((dc_bias > 0 && n1q_m > n0q_m) || (dc_bias < 0 && n0q_m > n1q_m)) begin
-                    tmds <= {1'b1, q_m[8], ~q_m[7:0]};
-                    dc_bias <= dc_bias + $signed({7'b0, q_m[8]}) + $signed({1'b0, n0q_m}) - $signed({1'b0, n1q_m});
-                end else begin
-                    tmds <= {1'b0, q_m[8], q_m[7:0]};
-                    dc_bias <= dc_bias - $signed({7'b0, ~q_m[8]}) + $signed({1'b0, n1q_m}) - $signed({1'b0, n0q_m});
-                end
+                q_out = {2'b01, q_m[7:0]};
+                dc_bias_next = dc_bias + $signed({1'b0, n1q_m}) - $signed({1'b0, n0q_m});
+            end
+        end else begin
+            if ((dc_bias > 0 && n1q_m > n0q_m) || (dc_bias < 0 && n0q_m > n1q_m)) begin
+                q_out = {1'b1, q_m[8], ~q_m[7:0]};
+                dc_bias_next = dc_bias + (q_m[8] ? 8'sd2 : 8'sd0) + $signed({1'b0, n0q_m}) - $signed({1'b0, n1q_m});
+            end else begin
+                q_out = {1'b0, q_m[8], q_m[7:0]};
+                dc_bias_next = dc_bias - (~q_m[8] ? 8'sd2 : 8'sd0) + $signed({1'b0, n1q_m}) - $signed({1'b0, n0q_m});
             end
         end
+    end
+
+    // --- Control Encoding (2b/10b) ---
+    reg [9:0] control_coding;
+    always @(*) begin
+        case (control_data)
+            2'b00:   control_coding = 10'b1101010100;
+            2'b01:   control_coding = 10'b0010101011;
+            2'b10:   control_coding = 10'b0101010100;
+            default: control_coding = 10'b1010101011;
+        endcase
+    end
+
+    // --- Island Encoding (TERC4) ---
+    wire [9:0] terc4_coding;
+    terc4_encoder terc4_inst (
+        .data(island_data),
+        .tmds(terc4_coding)
+    );
+
+    // --- Video Guard Band ---
+    wire [9:0] video_guard_band = (CN == 1) ? 10'b0100110011 : 10'b1011001100;
+
+    // --- Data Island Guard Band ---
+    reg [9:0] data_guard_band;
+    always @(*) begin
+        if (CN == 1 || CN == 2) begin
+            data_guard_band = 10'b0100110011;
+        end else begin
+            case (control_data)
+                2'b00:   data_guard_band = 10'b1010001110;
+                2'b01:   data_guard_band = 10'b1001110001;
+                2'b10:   data_guard_band = 10'b0101100011;
+                default: data_guard_band = 10'b1011000011;
+            endcase
+        end
+    end
+
+    // --- Mode Selection and DC Bias Update ---
+    always @(posedge clk) begin
+        case (mode)
+            3'd0: begin // Control
+                tmds <= control_coding;
+                dc_bias <= 0;
+            end
+            3'd1: begin // Video
+                tmds <= q_out;
+                dc_bias <= dc_bias_next;
+            end
+            3'd2: begin // Video Guard Band
+                tmds <= video_guard_band;
+                dc_bias <= 0;
+            end
+            3'd3: begin // Island
+                tmds <= terc4_coding;
+                dc_bias <= 0;
+            end
+            3'd4: begin // Island Guard Band
+                tmds <= data_guard_band;
+                dc_bias <= 0;
+            end
+            default: begin
+                tmds <= control_coding;
+                dc_bias <= 0;
+            end
+        endcase
     end
 
 endmodule
@@ -76,7 +139,7 @@ module hdmi_encoder (
     input  wire [7:0]  blue,
     input  wire        hsync,
     input  wire        vsync,
-    input  wire        blank,
+    input  wire [2:0]  mode,         // HDMI Mode: 0: Control, 1: Video, 2: V-Guard, 3: Island, 4: I-Guard
     input  wire [15:0] audio_l,      // 16-bit PCM Audio (Left)
     input  wire [15:0] audio_r,      // 16-bit PCM Audio (Right)
     output wire [2:0]  tmds_p,
@@ -86,9 +149,9 @@ module hdmi_encoder (
     wire [9:0] tmds_red, tmds_green, tmds_blue;
     wire [9:0] tmds_clk = 10'b1111100000;
 
-    tmds_encoder encode_red   (.clk(pixel_clk), .data(red),   .ctrl(2'b00),          .blank(blank), .tmds(tmds_red));
-    tmds_encoder encode_green (.clk(pixel_clk), .data(green), .ctrl(2'b00),          .blank(blank), .tmds(tmds_green));
-    tmds_encoder encode_blue  (.clk(pixel_clk), .data(blue),  .ctrl({vsync, hsync}), .blank(blank), .tmds(tmds_blue));
+    tmds_encoder #(.CN(2)) encode_red   (.clk(pixel_clk), .video_data(red),   .control_data(2'b00),          .island_data(4'b0000), .mode(mode), .tmds(tmds_red));
+    tmds_encoder #(.CN(1)) encode_green (.clk(pixel_clk), .video_data(green), .control_data(2'b00),          .island_data(4'b0000), .mode(mode), .tmds(tmds_green));
+    tmds_encoder #(.CN(0)) encode_blue  (.clk(pixel_clk), .video_data(blue),  .control_data({vsync, hsync}), .island_data(4'b0000), .mode(mode), .tmds(tmds_blue));
 
     // Serialization using OSER10 primitives (DDR 5x clock)
     // This provides much better timing closure than a fabric shift register.
