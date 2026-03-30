@@ -17,8 +17,8 @@ For a comprehensive overview of the port, including hardware details, installati
     - `RTC`: Real-Time Clock for date and time management.
     - `WDT`: Hardware Watchdog Timer.
     - `FPGABridge`: Low-level access to the 16-bit M3-to-FPGA GPIO bridge (See [FPGA_BRIDGE_USAGE.md](FPGA_BRIDGE_USAGE.md)).
-    - `NEORV32`: Integration example for the NEORV32 RISC-V co-processor (See `examples/neorv32/`).
-    - `SERV RISC-V`: Example of running a RISC-V core in the FPGA fabric (See `examples/serv_riscv/`).
+    - `NEORV32`: Integration example for the NEORV32 RISC-V co-processor (See `examples/cpus/neorv32/`).
+    - `SERV RISC-V`: Example of running a RISC-V core in the FPGA fabric (See `examples/cpus/serv_riscv/`).
     - `Flash`: Block device interface for the onboard SPI Flash.
 - **Filesystem**: LittleFS (LFS2) on external SPI Flash.
 - **Runtime**: Garbage Collector, REPL over UART0.

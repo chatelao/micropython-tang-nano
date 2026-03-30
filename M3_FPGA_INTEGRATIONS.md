@@ -63,7 +63,7 @@ val = machine.mem32[0x40002404]
 ```
 
 **Practical Example (SERV RISC-V):**
-The SERV core is mapped to APB2 Slot 10 (`0x40002D00`) for control and results. See `examples/serv_riscv/` for details.
+The SERV core is mapped to APB2 Slot 10 (`0x40002D00`) for control and results. See `examples/cpus/serv_riscv/` for details.
 
 **FPGA-Side Wiring:**
 Your RTL must implement an APB slave interface responding to the address range of the selected slot.
