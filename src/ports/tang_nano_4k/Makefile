@@ -95,6 +95,7 @@ SRC_C = \
 	$(TOP)/lib/littlefs/lfs2_util.c \
 	$(TOP)/shared/libc/printf.c \
 	$(TOP)/shared/runtime/stdout_helpers.c \
+	$(TOP)/shared/runtime/sys_stdio_mphal.c \
 
 SRC_QSTR += $(SRC_C)
 

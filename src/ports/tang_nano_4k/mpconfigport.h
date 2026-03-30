@@ -54,6 +54,7 @@ extern const struct _mp_obj_module_t mp_module_struct;
 #define MICROPY_PY_UOS (1)
 #define MICROPY_PY_IO (1)
 #define MICROPY_PY_IO_IOBASE (1)
+#define MICROPY_PY_SYS_STDFILES (1)
 #define MICROPY_LONGINT_IMPL (MICROPY_LONGINT_IMPL_MPZ)
 #define MICROPY_ENABLE_FINALISER (1)
 #define MICROPY_READER_VFS (1)
