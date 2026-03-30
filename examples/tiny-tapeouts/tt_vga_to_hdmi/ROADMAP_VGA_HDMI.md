@@ -98,18 +98,19 @@ This roadmap outlines the implementation of a full VGA-to-HDMI bridge for Tiny T
 | Approach | Description | Pros | Cons |
 | :--- | :--- | :--- | :--- |
 | **A: DVI-Only** | Only implement TMDS video encoding. | Low logic usage. | No audio support. |
-| **B: Custom TERC4** | Manually implement TERC4 encoding and Packetizer. | Deep understanding, optimized. | High complexity, error-prone. |
-| **C: hdl-util/hdmi** | Integrate the standard `hdl-util/hdmi` SystemVerilog core. | **Feature complete (Audio, InfoFrames)**. | High LUT usage (~800-1000). |
+| **B: Custom TERC4** | Manually implement TERC4 encoding and Packetizer. | **Deep understanding, optimized**. | High complexity, error-prone. |
+| **C: hdl-util/hdmi** | Integrate the standard `hdl-util/hdmi` SystemVerilog core. | Feature complete (Audio, InfoFrames). | High LUT usage (~800-1000). |
 
-**Selected Approach:** **C (hdl-util/hdmi)** to ensure compatibility and full audio support.
+**Selected Approach:** **B (Custom TERC4/Packetizer)** for maximum control and resource efficiency on the GW1NSR-4C.
 
 ### Subtasks
-- Port `hdmi.sv` and dependencies to the project.
-- Connect the PCM audio stream to the `audio_sample_word` port.
-- Configure ACR (Audio Clock Regeneration) parameters for 25.175MHz.
+- [x] Implement TERC4 encoder in `terc4_encoder.v`.
+- [x] Implement HDMI Packetizer for Audio and ACR in `hdmi_packetizer.v`.
+- [x] Configure ACR (Audio Clock Regeneration) parameters for 25.175MHz (N=6144, CTS=25175).
+- [x] Implement Data Island bit mapping (Header + 4 Subpackets) in the packetizer.
 
 ### Tests
-- **Simulation:** Verify TERC4 guard bands and preamble in the TMDS stream.
+- [x] **Simulation:** Verify Data Island bit mapping and ECC (BCH/CRC) in `hdmi_packetizer.v`.
 
 ---
 
