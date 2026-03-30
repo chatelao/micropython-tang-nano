@@ -27,15 +27,26 @@ In your top-level Verilog, the signals are typically mapped as follows:
 
 ## 3. APB2 Expansion Slots
 
-The APB2 bus is used for register-mapped communication. Each slot provides a 256-byte address range.
+The APB2 bus is the primary method for register-mapped communication between the M3 and custom FPGA IPs. The SoC provides 12 dedicated "slots," each with a 256-byte address range.
+
+### How it works
+Think of these slots as pre-allocated memory windows. When you implement a peripheral in the FPGA (e.g., a motor controller or a display driver), you can map its internal registers to one of these slots. From MicroPython, you can then interact with your hardware by reading/writing to the corresponding memory address.
 
 | Slot | Base Address | Default Usage in Examples |
 | :--- | :--- | :--- |
-| Slot 1 | `0x40002400` | Tiny Tapeout (TT) Wrapper |
-| Slot 2 | `0x40002500` | NEORV32 RISC-V Bridge |
-| Slot 3 | `0x40002600` | SERV RISC-V Bridge |
-| ... | ... | ... |
-| Slot 12 | `0x40002F00` | User Defined |
+| Slot 1 | `0x40002400` | **Tiny Tapeout (TT) Wrapper**: Logic control & I/O |
+| Slot 2 | `0x40002500` | **NEORV32 Bridge**: RISC-V co-processor control |
+| Slot 3 | `0x40002600` | **SERV Bridge**: Minimal RISC-V control |
+| Slots 4-12 | `0x40002700`+ | Available for custom User IPs |
+
+### MicroPython Example
+```python
+import machine
+# Write to a register in Slot 4
+machine.mem32[0x40002700] = 0xAABBCCDD
+# Read back from a register in Slot 4
+val = machine.mem32[0x40002704]
+```
 
 ## 4. AHB Expansion (XIP & PSRAM)
 

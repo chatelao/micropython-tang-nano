@@ -34,15 +34,15 @@ For a comprehensive overview of the port, including hardware details, installati
 
 ### Memory Regions (System Memory Map)
 
-| Region | Capacity | Base Address | Component / Role | MicroPython Usage |
-| :--- | :--- | :--- | :--- | :--- |
-| **Config. Flash** | ~200 KB | - | **FPGA Bitstream** | **Internal SoC Flash**: Loaded into SRAM on power-up |
-| **Internal Flash** | 32 KB* | `0x00000000` | **M3 Bootloader** | **Internal SoC Flash**: Vector Table, Reset Handler |
-| **Internal SRAM** | 22 KB | `0x20000000` | **Fast RAM** | Stack (2KB), Static Data, Fast Heap (~18KB) |
-| **APB2 Peripherals**| 3 KB | `0x40002400` | **FPGA Logic Slots** | 12 Slots (256B each) for custom FPGA IPs |
-| **TT Wrapper** | 16 B | `0x40002400` | **Tiny Tapeout Wrapper**| APB2 Slot 1: Control and Data registers |
-| **External Flash** | 4 MB | `0x60000000` | **MicroPython Part 2** | **SPI Flash Access (XIP)**: Runtime & VFS |
-| **External PSRAM** | 8 MB | `0xA0000000` | **Large RAM** | Primary Heap (for large scripts/data) |
+| Region | Capacity | Base Address | Binary | Component / Role | MicroPython Usage |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Config. Flash** | ~200 KB | - | `bitstream.fs` | **FPGA Logic** | SoC Internal Config Flash (Instant-on) |
+| **Internal Flash** | 32 KB* | `0x00000000` | `firmware_int.bin` | **M3 Boot** | Vector Table & Reset Handler |
+| **Internal SRAM** | 22 KB | `0x20000000` | - | **Fast RAM** | Stack (2KB) & Fast Heap (~18KB) |
+| **APB2 Peripherals**| 3 KB | `0x40002400` | - | **FPGA Slots** | 12 register-mapped slots for custom IP |
+| **TT Wrapper** | 16 B | `0x40002400` | - | **TT Wrapper**| APB2 Slot 1: TT Control and Data |
+| **External Flash** | 4 MB | `0x60000000` | `firmware_ext.bin` | **M3 Runtime** | SPI Flash Access (XIP) & VFS |
+| **External PSRAM** | 8 MB | `0xA0000000` | - | **Large RAM** | Primary Heap (External PSRAM) |
 
 *\* Note: Internal Flash address space is 128 KB, but physical hardware on Tang Nano 4K is limited to 32 KB.*
 
@@ -101,13 +101,7 @@ Use a serial terminal with the following configuration:
 For detailed serial port instructions, see [SERIAL_PORT_ACCESS.md](SERIAL_PORT_ACCESS.md).
 
 ## Split Flash Installation
-The Tang Nano 4K has only 32KB of internal code flash, which is insufficient for a full MicroPython build (~125KB). To solve this, we use a **Split Flash** architecture:
-
-| Region | Address | Binary | Description |
-| :--- | :--- | :--- | :--- |
-| **Config. Flash** | - | `bitstream.fs` | **FPGA Logic**: SoC Internal Config Flash |
-| **Internal Flash** | `0x00000000` | `firmware_int.bin` | **M3 Boot**: Vectors & Reset Handler (32KB) |
-| **External Flash** | `0x60000000` | `firmware_ext.bin` | **M3 Runtime**: External SPI Flash (XIP) |
+The Tang Nano 4K has only 32KB of internal code flash, which is insufficient for a full MicroPython build (~125KB). To solve this, we use a **Split Flash** architecture (see the memory layout table above).
 
 ### IP Core Configuration (Gowin EDA)
 To access the external flash at `0x60000000`, you must instantiate the **SPI Flash Interface** IP in your Gowin project:
