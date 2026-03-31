@@ -9,7 +9,7 @@ build_bitstream() {
     local out_fs=$4
 
     echo "Building bitstream for ${name}..."
-    yosys -p "read_verilog ${v_files}; synth_gowin -json ${name}.json"
+    yosys -p "read_verilog src/verilog/gowin_m3_blackbox.v ${v_files}; synth_gowin -json ${name}.json"
     nextpnr-himbaechel --json ${name}.json \
                        --write ${name}_pnr.json \
                        --device GW1NSR-LV4CQN48PC7/I6 \
@@ -23,10 +23,10 @@ build_bitstream() {
 mkdir -p dist/blink dist/tt_echo dist/tt_vga_hdmi dist/neorv32 dist/serv_riscv
 
 # 1. Blink
-build_bitstream "blink" "examples/blink/blink_wrapper.v" "examples/blink/blink.cst" "dist/blink/bitstream.fs"
+build_bitstream "blink" "examples/blink/blink_wrapper.v" "examples/blink/blink.cst" "dist/blink/blink.fs"
 
 # 2. TT Echo
-build_bitstream "tt_echo" "examples/tiny-tapeouts/tt_echo/tt_wrapper.v examples/tiny-tapeouts/tt_echo/tt_project.v" "examples/tiny-tapeouts/tt_echo/tt_echo.cst" "dist/tt_echo/bitstream.fs"
+build_bitstream "tt_echo" "examples/tiny-tapeouts/tt_echo/tt_wrapper.v examples/tiny-tapeouts/tt_echo/tt_project.v" "examples/tiny-tapeouts/tt_echo/tt_echo.cst" "dist/tt_echo/tt_echo.fs"
 
 # 3. TT VGA to HDMI
 V_FILES_VGA="examples/tiny-tapeouts/tt_vga_to_hdmi/tt_vga_hdmi_wrapper.v \
@@ -35,23 +35,23 @@ V_FILES_VGA="examples/tiny-tapeouts/tt_vga_to_hdmi/tt_vga_hdmi_wrapper.v \
              examples/tiny-tapeouts/tt_vga_to_hdmi/hdmi_packetizer.v \
              examples/tiny-tapeouts/tt_vga_to_hdmi/terc4_encoder.v \
              examples/tiny-tapeouts/tt_vga_to_hdmi/audio_dsp.v"
-build_bitstream "tt_vga_hdmi" "${V_FILES_VGA}" "examples/tiny-tapeouts/tt_vga_to_hdmi/tt_vga_hdmi.cst" "dist/tt_vga_hdmi/bitstream.fs"
+build_bitstream "tt_vga_hdmi" "${V_FILES_VGA}" "examples/tiny-tapeouts/tt_vga_to_hdmi/tt_vga_hdmi.cst" "dist/tt_vga_hdmi/tt_vga_hdmi.fs"
 
 # 4. NEORV32 (Using a mock/template for now if source is missing, but script is ready)
 # Note: For now, we skip if actual CPU RTL isn't present in the repo to avoid build failure.
 if [ -f "examples/cpus/neorv32/neorv32_top.v" ]; then
-    build_bitstream "neorv32" "examples/cpus/neorv32/neorv32_wrapper.v examples/cpus/neorv32/neorv32_top.v" "src/verilog/tang_nano_4k.cst" "dist/neorv32/bitstream.fs"
+    build_bitstream "neorv32" "examples/cpus/neorv32/neorv32_wrapper.v examples/cpus/neorv32/neorv32_top.v" "src/verilog/tang_nano_4k.cst" "dist/neorv32/neorv32.fs"
 else
     echo "Skipping NEORV32 bitstream (source missing)"
     mkdir -p dist/neorv32
-    cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/neorv32/bitstream.fs
+    cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/neorv32/neorv32.fs
 fi
 
 # 5. SERV
 if [ -f "examples/cpus/serv_riscv/serv_top.v" ]; then
-    build_bitstream "serv" "examples/cpus/serv_riscv/serv_wrapper.v examples/cpus/serv_riscv/serv_top.v" "src/verilog/tang_nano_4k.cst" "dist/serv_riscv/bitstream.fs"
+    build_bitstream "serv" "examples/cpus/serv_riscv/serv_wrapper.v examples/cpus/serv_riscv/serv_top.v" "src/verilog/tang_nano_4k.cst" "dist/serv_riscv/serv_riscv.fs"
 else
     echo "Skipping SERV bitstream (source missing)"
     mkdir -p dist/serv_riscv
-    cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/serv_riscv/bitstream.fs
+    cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/serv_riscv/serv_riscv.fs
 fi

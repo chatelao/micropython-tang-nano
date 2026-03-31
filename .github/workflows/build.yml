@@ -34,12 +34,10 @@ jobs:
 
       - name: Install FPGA toolchain
         run: |
-          sudo apt-get update
-          sudo apt-get install -y yosys
+          wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2024-03-31/oss-cad-suite-linux-x64-20240331.tgz
+          tar xf oss-cad-suite-linux-x64-20240331.tgz
+          echo "${{ github.workspace }}/oss-cad-suite/bin" >> $GITHUB_PATH
           pip install apycula
-          # nextpnr-himbaechel is needed for Gowin, but might not be in apt.
-          # For this environment, we'll use a pre-built binary if available or skip if simulated.
-          # Assuming 'nextpnr-himbaechel' is available in the path for this task.
 
       - name: Cache MicroPython core
         id: cache-micropython
@@ -81,28 +79,28 @@ jobs:
         run: |
           # 1. Blink
           make -C src/ports/tang_nano_4k/ BUILD=build_blink SPLIT_FLASH=1 FROZEN_MANIFEST=../../../examples/blink/manifest.py EXAMPLE=blink
-          cp src/ports/tang_nano_4k/build_blink/firmware_blink_int.bin dist/blink/firmware_int.bin
-          cp src/ports/tang_nano_4k/build_blink/firmware_blink_ext.bin dist/blink/firmware_ext.bin
+          cp src/ports/tang_nano_4k/build_blink/firmware_blink_int.bin dist/blink/blink_int.bin
+          cp src/ports/tang_nano_4k/build_blink/firmware_blink_ext.bin dist/blink/blink_ext.bin
 
           # 2. TT Echo
           make -C src/ports/tang_nano_4k/ BUILD=build_tt_echo SPLIT_FLASH=1 FROZEN_MANIFEST=../../../examples/tiny-tapeouts/tt_echo/manifest.py EXAMPLE=tt_echo
-          cp src/ports/tang_nano_4k/build_tt_echo/firmware_tt_echo_int.bin dist/tt_echo/firmware_int.bin
-          cp src/ports/tang_nano_4k/build_tt_echo/firmware_tt_echo_ext.bin dist/tt_echo/firmware_ext.bin
+          cp src/ports/tang_nano_4k/build_tt_echo/firmware_tt_echo_int.bin dist/tt_echo/tt_echo_int.bin
+          cp src/ports/tang_nano_4k/build_tt_echo/firmware_tt_echo_ext.bin dist/tt_echo/tt_echo_ext.bin
 
           # 3. TT VGA to HDMI
           make -C src/ports/tang_nano_4k/ BUILD=build_tt_vga_hdmi SPLIT_FLASH=1 FROZEN_MANIFEST=../../../examples/tiny-tapeouts/tt_vga_to_hdmi/manifest.py EXAMPLE=tt_vga_hdmi
-          cp src/ports/tang_nano_4k/build_tt_vga_hdmi/firmware_tt_vga_hdmi_int.bin dist/tt_vga_hdmi/firmware_int.bin
-          cp src/ports/tang_nano_4k/build_tt_vga_hdmi/firmware_tt_vga_hdmi_ext.bin dist/tt_vga_hdmi/firmware_ext.bin
+          cp src/ports/tang_nano_4k/build_tt_vga_hdmi/firmware_tt_vga_hdmi_int.bin dist/tt_vga_hdmi/tt_vga_hdmi_int.bin
+          cp src/ports/tang_nano_4k/build_tt_vga_hdmi/firmware_tt_vga_hdmi_ext.bin dist/tt_vga_hdmi/tt_vga_hdmi_ext.bin
 
           # 4. NEORV32
           make -C src/ports/tang_nano_4k/ BUILD=build_neorv32 SPLIT_FLASH=1 FROZEN_MANIFEST=../../../examples/cpus/neorv32/manifest.py EXAMPLE=neorv32
-          cp src/ports/tang_nano_4k/build_neorv32/firmware_neorv32_int.bin dist/neorv32/firmware_int.bin
-          cp src/ports/tang_nano_4k/build_neorv32/firmware_neorv32_ext.bin dist/neorv32/firmware_ext.bin
+          cp src/ports/tang_nano_4k/build_neorv32/firmware_neorv32_int.bin dist/neorv32/neorv32_int.bin
+          cp src/ports/tang_nano_4k/build_neorv32/firmware_neorv32_ext.bin dist/neorv32/neorv32_ext.bin
 
           # 5. SERV
           make -C src/ports/tang_nano_4k/ BUILD=build_serv SPLIT_FLASH=1 FROZEN_MANIFEST=../../../examples/cpus/serv_riscv/manifest.py EXAMPLE=serv
-          cp src/ports/tang_nano_4k/build_serv/firmware_serv_int.bin dist/serv_riscv/firmware_int.bin
-          cp src/ports/tang_nano_4k/build_serv/firmware_serv_ext.bin dist/serv_riscv/firmware_ext.bin
+          cp src/ports/tang_nano_4k/build_serv/firmware_serv_int.bin dist/serv_riscv/serv_riscv_int.bin
+          cp src/ports/tang_nano_4k/build_serv/firmware_serv_ext.bin dist/serv_riscv/serv_riscv_ext.bin
 
       - name: Prepare base artifacts
         run: |
@@ -111,10 +109,22 @@ jobs:
           cp src/ports/tang_nano_4k/build/firmware.elf dist/firmware_sim.elf
           cp src/ports/tang_nano_4k/build_hw/firmware.bin dist/firmware_hw.bin
           cp src/ports/tang_nano_4k/build_hw/firmware.elf dist/firmware_hw.elf
-          cp src/ports/tang_nano_4k/build_split/firmware_int.bin dist/base/firmware_int.bin
-          cp src/ports/tang_nano_4k/build_split/firmware_ext.bin dist/base/firmware_ext.bin
+          cp src/ports/tang_nano_4k/build_split/firmware_int.bin dist/base/tang_nano_4k_int.bin
+          cp src/ports/tang_nano_4k/build_split/firmware_ext.bin dist/base/tang_nano_4k_ext.bin
           cp src/ports/tang_nano_4k/build_split/firmware.elf dist/firmware_split.elf
-          cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/base/bitstream.fs
+          cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/base/tang_nano_4k_m3.fs
+
+      - name: Flatten release artifacts
+        run: |
+          mkdir -p dist/release
+          cp dist/base/* dist/release/
+          cp dist/blink/* dist/release/
+          cp dist/tt_echo/* dist/release/
+          cp dist/tt_vga_hdmi/* dist/release/
+          cp dist/neorv32/* dist/release/
+          cp dist/serv_riscv/* dist/release/
+          cp dist/firmware_hw.bin dist/release/
+          cp dist/firmware_sim.bin dist/release/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -150,14 +160,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/base/*
-            dist/blink/*
-            dist/tt_echo/*
-            dist/tt_vga_hdmi/*
-            dist/neorv32/*
-            dist/serv_riscv/*
-            dist/firmware_hw.bin
-            dist/firmware_sim.bin
+            dist/release/*
             COMPLIANCE_TESTS.md
             compliance_output.log
             renode_output.log
