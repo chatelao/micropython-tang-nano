@@ -10,11 +10,25 @@ build_bitstream() {
 
     echo "Building bitstream for ${name}..."
     yosys -p "read_verilog src/verilog/gowin_m3_blackbox.v ${v_files}; synth_gowin -json ${name}.json"
-    nextpnr-himbaechel --json ${name}.json \
-                       --write ${name}_pnr.json \
-                       --device GW1NSR-LV4CQN48PC7/I6 \
-                       --vopt family=GW1NS-4 \
-                       --vopt cst=${cst_file}
+
+    # Detect nextpnr executable (nextpnr-himbaechel or nextpnr-gowin)
+    if command -v nextpnr-himbaechel >/dev/null 2>&1; then
+        nextpnr-himbaechel --json ${name}.json \
+                           --write ${name}_pnr.json \
+                           --device GW1NSR-LV4CQN48PC7/I6 \
+                           --vopt family=GW1NS-4 \
+                           --vopt cst=${cst_file}
+    elif command -v nextpnr-gowin >/dev/null 2>&1; then
+        nextpnr-gowin --json ${name}.json \
+                      --write ${name}_pnr.json \
+                      --device GW1NSR-LV4CQN48PC7/I6 \
+                      --family GW1NS-4 \
+                      --cst ${cst_file}
+    else
+        echo "Error: nextpnr-himbaechel or nextpnr-gowin not found"
+        exit 1
+    fi
+
     gowin_pack -d GW1NS-4 -o ${out_fs} ${name}_pnr.json
     rm ${name}.json ${name}_pnr.json
 }
