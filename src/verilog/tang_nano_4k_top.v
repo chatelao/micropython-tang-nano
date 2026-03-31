@@ -76,7 +76,7 @@ module tang_nano_4k_top (
                         apb_psel_psram ? apb_pready_psram : 1'b1;
 
     // --- M3 IP Core Instantiation ---
-    EMCU m3_inst (
+    Gowin_EMPU_M3 m3_inst (
         .MSSCLK      (clk_27m),
         .UART0RXD    (uart_rx),
         .UART0TXD    (uart_tx),

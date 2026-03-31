@@ -11,6 +11,10 @@ build_bitstream() {
     echo "Building bitstream for ${name}..."
     yosys -p "read_verilog src/verilog/gowin_m3_blackbox.v ${v_files}; synth_gowin -json ${name}.json"
 
+    # Fixup: Yosys synthesized with Gowin_EMPU_M3 (to avoid name collision with built-in EMCU)
+    # but nextpnr knows it as EMCU. Rename in the JSON.
+    sed -i 's/"type": "Gowin_EMPU_M3"/"type": "EMCU"/g' ${name}.json
+
     # Detect nextpnr executable (nextpnr-himbaechel or nextpnr-gowin)
     if command -v nextpnr-himbaechel >/dev/null 2>&1; then
         nextpnr-himbaechel --json ${name}.json \

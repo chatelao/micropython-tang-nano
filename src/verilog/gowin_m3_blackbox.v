@@ -1,10 +1,10 @@
 /*
- * Blackbox definition for EMCU (ARM Cortex-M3 Hard Core)
+ * Blackbox definition for Gowin_EMPU_M3 (ARM Cortex-M3 Hard Core)
  * to allow synthesis with Yosys.
  */
 
 (* blackbox *)
-module EMCU (
+module Gowin_EMPU_M3 (
     input  wire        MSSCLK,
     input  wire        UART0RXD,
     output wire        UART0TXD,
