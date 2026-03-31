@@ -94,6 +94,8 @@ For detailed serial port instructions, see [SERIAL_PORT_ACCESS.md](SERIAL_PORT_A
 
 ## Pinout Tang Nano 4K
 
+<img width="1440" height="1034" alt="image" src="https://github.com/user-attachments/assets/47908f11-3643-4ec7-9593-debdb9dc6cd9" />
+
 ### Onboard Peripherals
 
 | Component | Pin | Bank | Logic |
