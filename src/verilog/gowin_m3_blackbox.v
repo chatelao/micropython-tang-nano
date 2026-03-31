@@ -5,7 +5,7 @@
 
 (* blackbox, keep *)
 module Gowin_EMPU_M3 (
-    input  wire        MSSCLK,
+    input  wire        SYS_CLK,
     input  wire        UART0RXD,
     output wire        UART0TXD,
 

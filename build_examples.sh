@@ -14,10 +14,9 @@ build_bitstream() {
 
     # Fixup:
     # 1. Yosys synthesized with Gowin_EMPU_M3 (to avoid name collision with built-in EMCU)
-    #    but nextpnr knows it as EMCU. Rename in the JSON.
-    # 2. nextpnr-gowin expects port names without brackets for hard IPs (e.g. GPIOOUTEN9 instead of GPIOOUTEN [9])
-    sed -i 's/"type": "Gowin_EMPU_M3"/"type": "EMCU"/g' ${name}.json
-    sed -i 's/ \[\([0-9]\+\)\]/\1/g' ${name}.json
+    #    but nextpnr knows it as EMCU.
+    # 2. nextpnr-gowin expects port names without brackets or dots for hard IPs (e.g. GPIOOUTEN9 instead of GPIOOUTEN [9] or GPIOOUTEN.9)
+    python3 fix_json.py ${name}.json
 
     # Detect nextpnr executable (nextpnr-himbaechel or nextpnr-gowin)
     if command -v nextpnr-himbaechel >/dev/null 2>&1; then
