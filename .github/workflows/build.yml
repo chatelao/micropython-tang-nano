@@ -32,6 +32,15 @@ jobs:
       - name: Add ARM Toolchain to PATH
         run: echo "${{ github.workspace }}/arm-toolchain/bin" >> $GITHUB_PATH
 
+      - name: Install FPGA toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yosys
+          pip install apycula
+          # nextpnr-himbaechel is needed for Gowin, but might not be in apt.
+          # For this environment, we'll use a pre-built binary if available or skip if simulated.
+          # Assuming 'nextpnr-himbaechel' is available in the path for this task.
+
       - name: Cache MicroPython core
         id: cache-micropython
         uses: actions/cache@v4
@@ -63,17 +72,49 @@ jobs:
         run: |
           make -C src/ports/tang_nano_4k/ BUILD=build_split SPLIT_FLASH=1
 
-      - name: Prepare artifacts
+      - name: Build examples bitstreams
         run: |
-          mkdir dist
+          mkdir -p dist
+          bash build_examples.sh
+
+      - name: Build examples firmware
+        run: |
+          # 1. Blink
+          make -C src/ports/tang_nano_4k/ BUILD=build_blink SPLIT_FLASH=1 FROZEN_MANIFEST=../../../examples/blink/manifest.py EXAMPLE=blink
+          cp src/ports/tang_nano_4k/build_blink/firmware_blink_int.bin dist/blink/firmware_int.bin
+          cp src/ports/tang_nano_4k/build_blink/firmware_blink_ext.bin dist/blink/firmware_ext.bin
+
+          # 2. TT Echo
+          make -C src/ports/tang_nano_4k/ BUILD=build_tt_echo SPLIT_FLASH=1 FROZEN_MANIFEST=../../../examples/tiny-tapeouts/tt_echo/manifest.py EXAMPLE=tt_echo
+          cp src/ports/tang_nano_4k/build_tt_echo/firmware_tt_echo_int.bin dist/tt_echo/firmware_int.bin
+          cp src/ports/tang_nano_4k/build_tt_echo/firmware_tt_echo_ext.bin dist/tt_echo/firmware_ext.bin
+
+          # 3. TT VGA to HDMI
+          make -C src/ports/tang_nano_4k/ BUILD=build_tt_vga_hdmi SPLIT_FLASH=1 FROZEN_MANIFEST=../../../examples/tiny-tapeouts/tt_vga_to_hdmi/manifest.py EXAMPLE=tt_vga_hdmi
+          cp src/ports/tang_nano_4k/build_tt_vga_hdmi/firmware_tt_vga_hdmi_int.bin dist/tt_vga_hdmi/firmware_int.bin
+          cp src/ports/tang_nano_4k/build_tt_vga_hdmi/firmware_tt_vga_hdmi_ext.bin dist/tt_vga_hdmi/firmware_ext.bin
+
+          # 4. NEORV32
+          make -C src/ports/tang_nano_4k/ BUILD=build_neorv32 SPLIT_FLASH=1 FROZEN_MANIFEST=../../../examples/cpus/neorv32/manifest.py EXAMPLE=neorv32
+          cp src/ports/tang_nano_4k/build_neorv32/firmware_neorv32_int.bin dist/neorv32/firmware_int.bin
+          cp src/ports/tang_nano_4k/build_neorv32/firmware_neorv32_ext.bin dist/neorv32/firmware_ext.bin
+
+          # 5. SERV
+          make -C src/ports/tang_nano_4k/ BUILD=build_serv SPLIT_FLASH=1 FROZEN_MANIFEST=../../../examples/cpus/serv_riscv/manifest.py EXAMPLE=serv
+          cp src/ports/tang_nano_4k/build_serv/firmware_serv_int.bin dist/serv_riscv/firmware_int.bin
+          cp src/ports/tang_nano_4k/build_serv/firmware_serv_ext.bin dist/serv_riscv/firmware_ext.bin
+
+      - name: Prepare base artifacts
+        run: |
+          mkdir -p dist/base
           cp src/ports/tang_nano_4k/build/firmware.bin dist/firmware_sim.bin
           cp src/ports/tang_nano_4k/build/firmware.elf dist/firmware_sim.elf
           cp src/ports/tang_nano_4k/build_hw/firmware.bin dist/firmware_hw.bin
           cp src/ports/tang_nano_4k/build_hw/firmware.elf dist/firmware_hw.elf
-          cp src/ports/tang_nano_4k/build_split/firmware_int.bin dist/firmware_split_int.bin
-          cp src/ports/tang_nano_4k/build_split/firmware_ext.bin dist/firmware_split_ext.bin
+          cp src/ports/tang_nano_4k/build_split/firmware_int.bin dist/base/firmware_int.bin
+          cp src/ports/tang_nano_4k/build_split/firmware_ext.bin dist/base/firmware_ext.bin
           cp src/ports/tang_nano_4k/build_split/firmware.elf dist/firmware_split.elf
-          cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/tang_nano_4k_m3.fs
+          cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/base/bitstream.fs
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -109,9 +150,14 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/firmware_split_int.bin
-            dist/firmware_split_ext.bin
-            dist/tang_nano_4k_m3.fs
+            dist/base/*
+            dist/blink/*
+            dist/tt_echo/*
+            dist/tt_vga_hdmi/*
+            dist/neorv32/*
+            dist/serv_riscv/*
+            dist/firmware_hw.bin
+            dist/firmware_sim.bin
             COMPLIANCE_TESTS.md
             compliance_output.log
             renode_output.log
