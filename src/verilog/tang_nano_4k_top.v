@@ -77,7 +77,7 @@ module tang_nano_4k_top (
 
     // --- M3 IP Core Instantiation ---
     EMCU m3_inst (
-        .SYS_CLK     (clk_27m),
+        .MSSCLK      (clk_27m),
         .UART0RXD    (uart_rx),
         .UART0TXD    (uart_tx),
 

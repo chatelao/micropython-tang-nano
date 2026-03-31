@@ -33,7 +33,7 @@ module blink_wrapper (
         .GPIOI      (m3_gpio_i),
         .GPIOO      (m3_gpio_o),
         .GPIOOUTEN  (m3_gpio_oe),
-        .SYS_CLK    (clk_27m)
+        .MSSCLK     (clk_27m)
     );
 
 endmodule

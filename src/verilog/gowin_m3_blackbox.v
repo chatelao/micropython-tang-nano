@@ -5,7 +5,7 @@
 
 (* blackbox *)
 module EMCU (
-    input  wire        SYS_CLK,
+    input  wire        MSSCLK,
     input  wire        UART0RXD,
     output wire        UART0TXD,
 
