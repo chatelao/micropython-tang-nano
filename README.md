@@ -44,7 +44,7 @@ For a comprehensive overview of the port, including hardware details, installati
 | **FPGA Cfg. Flash**     | ~200 KB  | -            | `bitstream.fs`     | SoC Internal Config Flash (Instant-on)       |
 | **M3 Int. Boot-Flash**  |   32 KB* | `0x00000000` | `firmware_int.bin` | Vector Table & Reset Handler                 |
 | **M3 Internal SRAM**    |   22 KB  | `0x20000000` | -                  | Stack (2KB) & Fast Heap (~18KB)              |
-| **M3 APB2 Peripherals** |   16 B   | `0x40002400` | -                  | TT Wrapper, Slot (1/12): TT Control and Data |
+| **M3 APB2 Devices** |   16 B   | `0x40002400` | -                  | TT Wrapper, Slot (1/12): TT Control and Data |
 | **M3 Ext. Run-Flash**   |    4 MB  | `0x60000000` | `firmware_ext.bin` | SPI Flash Access (XIP) & VFS                 |
 | **M3 Ext. PSRAM**       |    8 MB  | `0xA0000000` | -                  | Primary Heap (External PSRAM)                |
 
