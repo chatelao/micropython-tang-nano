@@ -9,11 +9,15 @@ build_bitstream() {
     local out_fs=$4
 
     echo "Building bitstream for ${name}..."
-    yosys -p "read_verilog src/verilog/gowin_m3_blackbox.v ${v_files}; synth_gowin -json ${name}.json"
+    # We use splitnets -ports to ensure bus bits are separate for nextpnr/apicula compatibility
+    yosys -p "read_verilog src/verilog/gowin_m3_blackbox.v ${v_files}; synth_gowin; splitnets -ports; write_json ${name}.json"
 
-    # Fixup: Yosys synthesized with Gowin_EMPU_M3 (to avoid name collision with built-in EMCU)
-    # but nextpnr knows it as EMCU. Rename in the JSON.
+    # Fixup:
+    # 1. Yosys synthesized with Gowin_EMPU_M3 (to avoid name collision with built-in EMCU)
+    #    but nextpnr knows it as EMCU. Rename in the JSON.
+    # 2. nextpnr-gowin expects port names without brackets for hard IPs (e.g. GPIOOUTEN9 instead of GPIOOUTEN [9])
     sed -i 's/"type": "Gowin_EMPU_M3"/"type": "EMCU"/g' ${name}.json
+    sed -i 's/ \[\([0-9]\+\)\]/\1/g' ${name}.json
 
     # Detect nextpnr executable (nextpnr-himbaechel or nextpnr-gowin)
     if command -v nextpnr-himbaechel >/dev/null 2>&1; then
