@@ -50,17 +50,6 @@ For a comprehensive overview of the port, including hardware details, installati
 
 *\* Note: Internal Flash address space is 128 KB, but physical hardware on Tang Nano 4K is limited to 32 KB.*
 
-### Component Locations in Memory
-
-| Component | Location / Address | Description |
-| :--- | :--- | :--- |
-| **MicroPython Part 1** | `0x00000000` | Essential boot code and interrupt vectors (Internal Flash) |
-| **MicroPython Part 2** | `0x60000000` | Bulk of MicroPython runtime, bytecode interpreter, and frozen modules (External SPI Flash XIP) |
-| **APB2 Peripherals** | `0x40002400` - `0x40002FFF` | Peripherals implemented in the FPGA fabric (12 slots of 256 bytes each) |
-| **SPI Flash Access** | `0x60000000` | Memory-mapped AHB Expansion interface for Execute-In-Place (XIP) |
-| **Tiny Tapeout Wrapper** | **APB2 Slot 1** (`0x40002400`) | Bridge between the Cortex-M3 and Tiny Tapeout module pins |
-| **Tiny Tapeout Logic** | `0x40002400` / `0x4000240C` | User logic control via `DATA` and `CTRL` registers |
-
 ## Project Structure
 
 | Path | Description |
