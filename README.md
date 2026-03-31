@@ -120,7 +120,8 @@ For detailed serial port instructions, see [SERIAL_PORT_ACCESS.md](SERIAL_PORT_A
 | :--- | :--- | :--- | :--- |
 | **JTAG** | 3, 4, 6, 7, 8 | 0 | TDI, TDO, TMS, TCK, JTAGSEL_N |
 | **SPI Flash** | 1, 2, 47, 48 | 0/1 | MCLK, MCS, MISO, MOSI |
-| **UART0 (REPL)** | 18 (TX), 19 (RX) | 3 | Debug Console |
+| **UART0 (REPL)** | 44 (TX) | 3 | Debug Console, GPIO27 on BL702 (RX) |
+| **UART0 (REPL)** | 46 (RX) | 3 | Debug Console, GPIO26 on BL702 (TX) |
 
 ### Available Header Pins
 
