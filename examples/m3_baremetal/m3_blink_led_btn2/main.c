@@ -18,12 +18,11 @@ void main(void) {
 
     while (1) {
         // Read buttons (Active-Low on Tang Nano 4K)
-        uint32_t buttons = REG_GPIO_DATA & 0x6; // Bit 1 and 2
+        // GPIO1: Button S1, GPIO2: Button S2 (Used as hardware Reset)
+        uint32_t buttons = REG_GPIO_DATA & 0x2; // Bit 1
 
         if (!(buttons & (1 << 1))) {
-            delay_val = 100000; // Fast blink if Button 1 pressed (GND)
-        } else if (!(buttons & (1 << 2))) {
-            delay_val = 1000000; // Slow blink if Button 2 pressed (GND)
+            delay_val = 250000;  // Double blink rate if Button 1 pressed (GND)
         } else {
             delay_val = 500000;  // Normal blink
         }
