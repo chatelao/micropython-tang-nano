@@ -1,0 +1,27 @@
+@startuml flash_xip_signals
+!include https://raw.githubusercontent.com/plantuml-office/C4-PlantUML/master/C4_Component.puml
+
+title M3 to External Flash (XIP) Signal Path
+
+Container_Boundary(fpga, "Tang Nano 4K (FPGA)") {
+    Component(m3, "Cortex-M3 Hard Core", "AHB-Lite Master")
+
+    Boundary(logic, "FPGA Fabric") {
+        Component(decoder, "Address Decoder", "Combinational", "HSEL if HADDR[31:28] == 0x6")
+        Component(flash_ctrl, "SPI Flash Interface IP", "AHB-Lite Slave", "Gowin IP Core")
+
+        Rel(m3, decoder, "HADDR[31:28]")
+        Rel(m3, flash_ctrl, "HADDR, HWDATA, HWRITE, HTRANS")
+        Rel(decoder, flash_ctrl, "HSEL_FLASH")
+        Rel(flash_ctrl, m3, "HRDATA, HREADY")
+    }
+}
+
+Component_Ext(ext_flash, "External SPI Flash", "Physical Chip", "4MB XIP")
+
+Rel(flash_ctrl, ext_flash, "flash_cs_n (Pin 36)")
+Rel(flash_ctrl, ext_flash, "flash_sclk (Pin 37)")
+Rel(flash_ctrl, ext_flash, "flash_mosi (Pin 38)")
+Rel(ext_flash, flash_ctrl, "flash_miso (Pin 39)")
+
+@enduml

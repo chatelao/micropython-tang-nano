@@ -4,6 +4,12 @@ This example demonstrates how to configure the Cortex-M3 on the Tang Nano 4K to 
 
 ## Documentation
 
+### Architecture & Signals
+
+![M3 to External Flash XIP](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/examples/m3_baremetal/m3_ext_flash_boot/docs/flash_xip_signals.puml)
+
+### Technical Reference
+
 The following technical documents are available for reference:
 
 | Document | Description | Location |
