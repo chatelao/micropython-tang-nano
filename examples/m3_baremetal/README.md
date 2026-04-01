@@ -9,7 +9,6 @@ This directory contains baremetal C examples for the ARM Cortex-M3 "Hard Core" o
 | `m3_blink_led_btn2` | Basic GPIO interaction: Blink the onboard LED based on Button S2 state. |
 | `m3_ext_flash_boot` | Demonstrates booting from external SPI Flash (XIP). |
 | `m3_ext_psgram` | Shows how to initialize and use the external 8MB PSRAM. |
-| `common/` | Shared infrastructure (Linker script, Startup code, Register definitions). |
 
 ## 2. Documentation
 

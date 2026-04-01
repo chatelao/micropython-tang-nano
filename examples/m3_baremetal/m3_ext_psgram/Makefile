@@ -5,10 +5,9 @@ OBJCOPY = $(CROSS_COMPILE)objcopy
 SIZE = $(CROSS_COMPILE)size
 
 CFLAGS = -mthumb -mcpu=cortex-m3 -O2 -Wall -g
-LDFLAGS = -T ../common/m3.ld -Wl,-Map=firmware.map,--cref,--gc-sections --specs=nano.specs --specs=nosys.specs
-LDFLAGS += -Wl,--defsym=MAIN_FLASH=INT_FLASH
+LDFLAGS = -T m3.ld -Wl,-Map=firmware.map,--cref,--gc-sections --specs=nano.specs --specs=nosys.specs
 
-SRC = main.c ../common/startup.c
+SRC = main.c startup.c
 OBJ = $(SRC:.c=.o)
 
 # FPGA Tools
@@ -34,6 +33,6 @@ bitstream.fs: top.v psram_memory.v top.cst
 	$(GOWIN_PACK) -d GW1NS-4 top_pnr.json $@
 
 clean:
-	rm -f *.o *.elf *.bin *.map *.json *.fs ../common/*.o
+	rm -f *.o *.elf *.bin *.map *.json *.fs
 
 .PHONY: all clean
