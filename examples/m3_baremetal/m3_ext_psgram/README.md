@@ -2,9 +2,22 @@
 
 This example demonstrates how to initialize and use the external 8MB PSRAM (Pseudo-SRAM) on the Sipeed Tang Nano 4K (GW1NSR-4C) SoC. The PSRAM is mapped at 0xA0000000.
 
+## Architecture
+
+The diagram below illustrates the integration of the Cortex-M3 hard core with the FPGA fabric and the external PSRAM via the AHB-Lite expansion bus.
+
+![PSRAM Architecture](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/examples/m3_baremetal/m3_ext_psgram/architecture.puml)
+
 ## Memory Mapping
 
-- **PSRAM Range**: `0xA0000000` to `0xA07FFFFF` (8MB)
+The following table details the memory-mapped regions for the PSRAM example:
+
+| Region | Start Address | End Address | Size | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Internal Flash** | `0x00000000` | `0x00007FFF` | 32KB | Bootloader and Vector Table |
+| **Internal SRAM** | `0x20000000` | `0x200057FF` | 22KB | Stack and Fast Heap |
+| **External Flash** | `0x60000000` | `0x603FFFFF` | 4MB | XIP (Execute-in-Place) Storage |
+| **External PSRAM** | `0xA0000000` | `0xA07FFFFF` | 8MB | Primary Extended Heap |
 
 ## Documentation
 
