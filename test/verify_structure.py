@@ -19,7 +19,9 @@ def test_structure():
         'examples/m3_baremetal',
         'examples/m3_baremetal/m3_blink_led_btn2',
         'examples/m3_baremetal/m3_ext_flash_boot',
+        'examples/m3_baremetal/m3_ext_flash_boot/docs',
         'examples/m3_baremetal/m3_ext_psgram',
+        'examples/m3_baremetal/m3_ext_psgram/docs',
         '.github'
     ]
     expected_files = [

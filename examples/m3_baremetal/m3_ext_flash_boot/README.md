@@ -4,14 +4,14 @@ This example demonstrates how to configure the Cortex-M3 on the Tang Nano 4K to 
 
 ## Documentation
 
-The following technical documents are available in the `../docs/` folder for reference:
+The following technical documents are available for reference:
 
-| Document | Description |
-| :--- | :--- |
-| [IPUG1015-1.1E_Gowin SPI Flash Interface (With External Flash) IP User Guide.pdf](../docs/IPUG1015-1.1E_Gowin%20SPI%20Flash%20Interface%20(With%20External%20Flash)%20IP%20User%20Guide.pdf) | IP guide for AHB-mapped SPI Flash (XIP) controller. |
-| [IPUG931-2.1E_Gowin_EMPU(GW1NS-4C) Software Programming Reference Manual.pdf](../docs/IPUG931-2.1E_Gowin_EMPU(GW1NS-4C)%20Software%20Programming%20Reference%20Manual.pdf) | Primary reference for M3 register mapping and SoC peripherals. |
-| [GW1NSR_DATASHEET_DS861E.pdf](../docs/GW1NSR_DATASHEET_DS861E.pdf) | Hardware datasheet for the GW1NSR-4C SoC. |
-| [IPUG944E.pdf](../docs/IPUG944E.pdf) | IP guide EMPU M3 core. |
+| Document | Description | Location |
+| :--- | :--- | :--- |
+| Gowin SPI Flash Interface (With External Flash) IP User Guide. | IP guide for AHB-mapped SPI Flash (XIP) controller. | [IPUG1015](docs/IPUG1015-1.1E_Gowin%20SPI%20Flash%20Interface%20(With%20External%20Flash)%20IP%20User%20Guide.pdf) |
+| Gowin_EMPU(GW1NS-4C) Software Programming Reference Manual. | Primary reference for M3 register mapping and SoC peripherals. | [IPUG931](../docs/IPUG931-2.1E_Gowin_EMPU(GW1NS-4C)%20Software%20Programming%20Reference%20Manual.pdf) |
+| GW1NSR Datasheet. | Hardware datasheet for the GW1NSR-4C SoC. | [DS861E](../docs/GW1NSR_DATASHEET_DS861E.pdf) |
+| Gowin_EMPU M3 IP User Guide. | IP guide EMPU M3 core. | [IPUG944E](../docs/IPUG944E.pdf) |
 
 ## How to Build
 
