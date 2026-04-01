@@ -1,0 +1,17 @@
+-d C:\Users\chatelain\Dropbox\Privat-2026\2026-03-31_MicroPython-On-TangNano4k\micropython-tang-nano\micropython-tang-nano\examples\m3_baremetal\m3_blink_led_btn2\impl\gwsynthesis\m3_blink_led_btn2.vg
+-p GW1NSR-4C-QFN48P-6
+-pn GW1NSR-LV4CQN48PC6/I5
+-cst C:\Users\chatelain\Dropbox\Privat-2026\2026-03-31_MicroPython-On-TangNano4k\micropython-tang-nano\micropython-tang-nano\examples\m3_baremetal\m3_blink_led_btn2\src\top.cst
+-cfg C:\Users\chatelain\Dropbox\Privat-2026\2026-03-31_MicroPython-On-TangNano4k\micropython-tang-nano\micropython-tang-nano\examples\m3_baremetal\m3_blink_led_btn2\impl\pnr\device.cfg
+-bit
+-tr
+-ph
+-timing
+-cst_error
+-convert_sdp32_36_to_sdp16_18
+-place_option 0
+-route_option 0
+-clock_route_order 0
+-correct_hold 1
+-route_maxfan 23
+-global_freq 50.000

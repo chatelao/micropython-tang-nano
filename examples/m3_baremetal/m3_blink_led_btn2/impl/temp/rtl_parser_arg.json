@@ -1,0 +1,21 @@
+{
+ "Device" : "GW1NSR-4C",
+ "Files" : [
+  {
+   "Path" : "C:/Users/chatelain/Dropbox/Privat-2026/2026-03-31_MicroPython-On-TangNano4k/micropython-tang-nano/micropython-tang-nano/examples/m3_baremetal/m3_blink_led_btn2/src/gowin_empu/gowin_empu.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/chatelain/Dropbox/Privat-2026/2026-03-31_MicroPython-On-TangNano4k/micropython-tang-nano/micropython-tang-nano/examples/m3_baremetal/m3_blink_led_btn2/src/top.v",
+   "Type" : "verilog"
+  }
+ ],
+ "IncludePath" : [
+
+ ],
+ "LoopLimit" : 2000,
+ "ResultFile" : "C:/Users/chatelain/Dropbox/Privat-2026/2026-03-31_MicroPython-On-TangNano4k/micropython-tang-nano/micropython-tang-nano/examples/m3_baremetal/m3_blink_led_btn2/impl/temp/rtl_parser.result",
+ "Top" : "",
+ "VerilogStd" : "verilog_2001",
+ "VhdlStd" : "vhdl_93"
+}

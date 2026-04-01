@@ -1,0 +1,20 @@
+[
+ {
+  "InstFile" : "C:/Users/chatelain/Dropbox/Privat-2026/2026-03-31_MicroPython-On-TangNano4k/micropython-tang-nano/micropython-tang-nano/examples/m3_baremetal/m3_blink_led_btn2/src/top.v",
+  "InstLine" : 1,
+  "InstName" : "top",
+  "ModuleFile" : "C:/Users/chatelain/Dropbox/Privat-2026/2026-03-31_MicroPython-On-TangNano4k/micropython-tang-nano/micropython-tang-nano/examples/m3_baremetal/m3_blink_led_btn2/src/top.v",
+  "ModuleLine" : 1,
+  "ModuleName" : "top",
+  "SubInsts" : [
+   {
+    "InstFile" : "C:/Users/chatelain/Dropbox/Privat-2026/2026-03-31_MicroPython-On-TangNano4k/micropython-tang-nano/micropython-tang-nano/examples/m3_baremetal/m3_blink_led_btn2/src/top.v",
+    "InstLine" : 9,
+    "InstName" : "m3_inst",
+    "ModuleFile" : "C:/Users/chatelain/Dropbox/Privat-2026/2026-03-31_MicroPython-On-TangNano4k/micropython-tang-nano/micropython-tang-nano/examples/m3_baremetal/m3_blink_led_btn2/src/gowin_empu/gowin_empu.v",
+    "ModuleLine" : 9,
+    "ModuleName" : "Gowin_EMPU_Top"
+   }
+  ]
+ }
+]
