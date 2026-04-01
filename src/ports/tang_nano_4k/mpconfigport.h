@@ -61,9 +61,9 @@ extern const struct _mp_obj_module_t mp_module_struct;
 #define MICROPY_PY_GC (1)
 
 // Additional features for CORE_FEATURES level that are useful
-#define MICROPY_PY_ASSIGN_EXPR (1)
-#define MICROPY_PY_BUILTINS_DICT_FROMKEYS (1)
-#define MICROPY_PY_BUILTINS_MEMORYVIEW (1)
+#define MICROPY_PY_ASSIGN_EXPR (0)
+#define MICROPY_PY_BUILTINS_DICT_FROMKEYS (0)
+#define MICROPY_PY_BUILTINS_MEMORYVIEW (0)
 
 // Explicitly disable VFS FAT and POSIX to avoid missing headers
 #define MICROPY_VFS_FAT (0)
@@ -87,10 +87,10 @@ extern const struct _mp_obj_module_t mp_module_struct;
 
 // Reduce some other features to save space
 #define MICROPY_PY_BUILTINS_STR_COUNT (0)
-#define MICROPY_PY_BUILTINS_STR_OP_MODULO (1)
+#define MICROPY_PY_BUILTINS_STR_OP_MODULO (0)
 #define MICROPY_PY_BUILTINS_STR_PARTITION (0)
 #define MICROPY_PY_BUILTINS_STR_SPLITLINES (0)
-#define MICROPY_PY_BUILTINS_SET (1)
+#define MICROPY_PY_BUILTINS_SET (0)
 #define MICROPY_PY_BUILTINS_FROZENSET (0)
 #define MICROPY_PY_BUILTINS_PROPERTY (0)
 #define MICROPY_PY_BUILTINS_ENUMERATE (0)
