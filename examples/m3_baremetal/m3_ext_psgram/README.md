@@ -12,10 +12,10 @@ The following technical documents are available for reference:
 
 | Document | Description | Location |
 | :--- | :--- | :--- |
+| Gowin_EMPU M3 IP User Guide. | IP guide EMPU M3 core. | [IPUG944E](../docs/IPUG944E.pdf) |
 | Gowin PSRAM IP User Guide. | IP guide for Gowin PSRAM core. | [IPUG525E](docs/IPUG525E-PSRAM-User-Guide.pdf) |
 | Gowin_EMPU(GW1NS-4C) Software Programming Reference Manual. | Primary reference for M3 register mapping and SoC peripherals. | [IPUG931](../docs/IPUG931-2.1E_Gowin_EMPU(GW1NS-4C)%20Software%20Programming%20Reference%20Manual.pdf) |
 | GW1NSR Datasheet. | Hardware datasheet for the GW1NSR-4C SoC. | [DS861E](../docs/GW1NSR_DATASHEET_DS861E.pdf) |
-| Gowin_EMPU M3 IP User Guide. | IP guide EMPU M3 core. | [IPUG944E](../docs/IPUG944E.pdf) |
 
 ## How to Build
 
