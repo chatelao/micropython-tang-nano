@@ -14,7 +14,7 @@ The following table details the memory-mapped regions for the PSRAM example:
 
 | Region | Start Address | End Address | Size | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Internal ROM** | `0x00000000` | `0x00007FFF` | 32KB | Bootloader and Vector Table |
+| **Internal Flash** | `0x00000000` | `0x00007FFF` | 32KB | Bootloader and Vector Table |
 | **Internal SRAM** | `0x20000000` | `0x200057FF` | 22KB | Stack and Fast Heap |
 | **External PSRAM** | `0xA0000000` | `0xA07FFFFF` | 8MB | Primary Extended Heap |
 

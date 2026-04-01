@@ -3,7 +3,7 @@ ENTRY(Reset_Handler)
 
 MEMORY
 {
-    ROM       (rx)  : ORIGIN = 0x00000000, LENGTH = 32K
+    INT_FLASH (rx)  : ORIGIN = 0x00000000, LENGTH = 32K
     SRAM      (rwx) : ORIGIN = 0x20000000, LENGTH = 22K
     PSRAM     (rwx) : ORIGIN = 0xA0000000, LENGTH = 8M
 }
@@ -18,7 +18,7 @@ SECTIONS
         . = ALIGN(256);
         KEEP(*(.isr_vector))
         *(.boot*)
-    } > ROM
+    } > INT_FLASH
 
     /* .text section */
     .text :
@@ -27,13 +27,13 @@ SECTIONS
         *(.text*)
         *(.rodata*)
         _etext = .;
-    } > ROM
+    } > INT_FLASH
 
     /* Secure Gateway stubs */
     .gnu.sgstubs : ALIGN(1024)
     {
         *(.gnu.sgstubs*)
-    } > ROM
+    } > INT_FLASH
 
     .data : AT (_etext)
     {
