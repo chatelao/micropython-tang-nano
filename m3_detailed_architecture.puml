@@ -1,6 +1,7 @@
 @startuml m3_detailed_architecture
 !include https://raw.githubusercontent.com/plantuml-office/C4-PlantUML/master/C4_Component.puml
 
+LAYOUT_LEFT_RIGHT()
 LAYOUT_WITH_LEGEND()
 
 title Cortex-M3 Detailed Architecture & Signal Mapping (Tang Nano 4K)
@@ -35,23 +36,25 @@ Container_Boundary(soc, "GW1NSR-4C SoC") {
     Rel(apb, uart0, "Peripheral Access")
 
     ' AHB Signal Mapping
-    Rel(ahb, psram_ctrl, "HADDR, HWDATA, HRDATA,\nHSEL, HTRANS, HWRITE, HREADY", "AHB-Lite")
+    Rel(ahb, psram_ctrl, "HADDR[31:0], HWDATA[31:0], HRDATA[31:0],\nHSEL, HTRANS[1:0], HWRITE, HREADY", "AHB-Lite")
 
     ' APB Signal Mapping
-    Rel(apb, flash_ctrl, "PADDR, PWDATA, PRDATA,\nPSEL, PENABLE, PWRITE", "APB2")
-    Rel(apb, tt_wrapper, "PADDR, PWDATA, PRDATA,\nPSEL, PENABLE, PWRITE", "APB2 (Slot 1)")
+    Rel(apb, flash_ctrl, "PADDR[11:0], PWDATA[31:0], PRDATA[31:0],\nPSEL, PENABLE, PWRITE", "APB2")
+    Rel(apb, tt_wrapper, "PADDR[11:0], PWDATA[31:0], PRDATA[31:0],\nPSEL, PENABLE, PWRITE", "APB2 (Slot 1)")
 
     ' FPGA External/Internal Signal Mapping
-    Rel(tt_wrapper, hdmi_enc, "VGA (R,G,B,HS,VS,DE),\nAudio PCM", "Parallel Video/Audio")
+    Rel(tt_wrapper, hdmi_enc, "R[7:0], G[7:0], B[7:0],\nHSync, VSync, DE, Audio_PCM[15:0]", "VGA + Audio")
     Rel(tt_wrapper, tt_wrapper, "debug_ui_in, debug_uo_out,\ndebug_clk, debug_rst_n, debug_ena", "TT-Debug-Ping")
 }
 
 Component_Ext(ext_psram, "External PSRAM", "8MB", "Winbond Chip")
 Component_Ext(ext_flash, "External SPI Flash", "4MB", "MicroPython VFS / XIP")
 Component_Ext(hdmi_port, "HDMI Port", "Physical Connector", "TMDS Differential")
+Component_Ext(debug_pins, "Debug Header", "Physical Pins", "Ping Interface")
 
 Rel(psram_ctrl, ext_psram, "DQ[15:0], SCLK, CS#")
-Rel(flash_ctrl, ext_flash, "MOSI, MISO, SCLK, CS#")
-Rel(hdmi_enc, hdmi_port, "tmds_p[2:0], tmds_clk_p", "LVDS25E")
+Rel(flash_ctrl, ext_flash, "MOSI, MISO, SCLK, CS# (Pins 36-39)")
+Rel(hdmi_enc, hdmi_port, "tmds_p[2:0], tmds_clk_p", "LVDS25E (Pins 27-35)")
+Rel(tt_wrapper, debug_pins, "debug_clk, debug_rst_n, debug_ena,\ndebug_ui_in[7:0], debug_uo_out[7:0]", "Pins 39-44")
 
 @enduml
