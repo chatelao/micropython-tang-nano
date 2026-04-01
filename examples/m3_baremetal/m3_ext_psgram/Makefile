@@ -28,8 +28,8 @@ firmware.bin: firmware.elf
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-bitstream.fs: top.v top.cst
-	$(YOSYS) -p "synth_gowin -top top -json top.json" top.v
+bitstream.fs: top.v psram_memory.v top.cst
+	$(YOSYS) -p "synth_gowin -top top -json top.json" top.v psram_memory.v
 	$(NEXTPNR) --device GW1NSR-LV4CQN48PC7/I6 --family GW1NS-4 --json top.json --write top_pnr.json --vopt family=GW1NS-4 --vopt device=GW1NSR-4C --cst top.cst
 	$(GOWIN_PACK) -d GW1NS-4 top_pnr.json $@
 
