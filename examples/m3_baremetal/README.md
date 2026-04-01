@@ -1,0 +1,39 @@
+# Cortex-M3 Baremetal Examples
+
+This directory contains baremetal C examples for the ARM Cortex-M3 "Hard Core" on the Sipeed Tang Nano 4K (GW1NSR-4C). These examples demonstrate how to interact with the FPGA fabric, PSRAM, and Flash without a high-level operating system or the MicroPython runtime.
+
+## 1. Examples Overview
+
+| Example | Description |
+| :--- | :--- |
+| `m3_blink_led_btn2` | Basic GPIO interaction: Blink the onboard LED based on Button S2 state. |
+| `m3_ext_flash_boot` | Demonstrates booting from external SPI Flash (XIP). |
+| `m3_ext_psgram` | Shows how to initialize and use the external 8MB PSRAM. |
+| `common/` | Shared infrastructure (Linker script, Startup code, Register definitions). |
+
+## 2. Documentation
+
+The following technical documents are available in the `docs/` folder for reference:
+
+| Document | Description |
+| :--- | :--- |
+| [IPUG931-2.1E_Gowin_EMPU(GW1NS-4C) Software Programming Reference Manual.pdf](docs/IPUG931-2.1E_Gowin_EMPU(GW1NS-4C)%20Software%20Programming%20Reference%20Manual.pdf) | Primary reference for M3 register mapping and SoC peripherals. |
+| [GW1NSR_DATASHEET_DS861E.pdf](docs/GW1NSR_DATASHEET_DS861E.pdf) | Hardware datasheet for the GW1NSR-4C SoC. |
+| [IPUG525E-PSRAM-User-Guide.pdf](docs/IPUG525E-PSRAM-User-Guide.pdf) | Configuration and usage guide for the PSRAM IP core. |
+| [IPUG1015-1.1E_Gowin SPI Flash Interface IP User Guide.pdf](docs/IPUG1015-1.1E_Gowin%20SPI%20Flash%20Interface%20(With%20External%20Flash)%20IP%20User%20Guide.pdf) | Guide for the AHB-mapped SPI Flash (XIP) controller. |
+| [IPUG944E.pdf](docs/IPUG944E.pdf) | Gowin EMPU M3 IP User Guide. |
+| [Tang Nano 4K - Sipeed Wiki.pdf](docs/Tang%20Nano%204K%20-%20Sipeed%20Wiki.pdf) | Board-level overview and pinout from Sipeed. |
+| [Tang nano 4K.pdf](docs/Tang%20nano%204K.pdf) | Additional board reference. |
+| [UG292-1.0E_GW1NS_GW1NSR_GW1NSE_GW1NSER series Schematic Manual.pdf](docs/UG292-1.0E_GW1NS_GW1NSR_GW1NSE_GW1NSER%20series%20of%20FPGA%20Products%20Schematic%20Manual.pdf) | FPGA product schematic reference manual. |
+
+## 3. Getting Started
+
+To build these examples, you need the `arm-none-eabi-gcc` toolchain installed. Refer to [TOOLCHAIN_SETUP.md](../../TOOLCHAIN_SETUP.md) for detailed instructions.
+
+### Build and Deployment
+Each example directory contains its own `Makefile`. To build an example:
+```bash
+cd m3_blink_led_btn2
+make
+```
+This will generate the FPGA bitstream (`.fs`) and the MCU firmware (`.bin`). Use `openfpgaflasher` to deploy the results to your Tang Nano 4K.
