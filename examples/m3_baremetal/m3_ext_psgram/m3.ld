@@ -3,33 +3,37 @@ ENTRY(Reset_Handler)
 
 MEMORY
 {
-    INT_FLASH (rx)  : ORIGIN = 0x00000000, LENGTH = 32K
-    EXT_FLASH (rx)  : ORIGIN = 0x60000000, LENGTH = 4M
+    ROM       (rx)  : ORIGIN = 0x00000000, LENGTH = 32K
     SRAM      (rwx) : ORIGIN = 0x20000000, LENGTH = 22K
+    PSRAM     (rwx) : ORIGIN = 0xA0000000, LENGTH = 8M
 }
-
-REGION_ALIAS("MAIN_FLASH", INT_FLASH);
 
 STACK_SIZE = 2K;
 
 SECTIONS
 {
-    /* .isr_vector always in internal flash at 0x00000000 */
+    /* .isr_vector always at 0x00000000 */
     .isr_vector :
     {
         . = ALIGN(256);
         KEEP(*(.isr_vector))
         *(.boot*)
-    } > INT_FLASH
+    } > ROM
 
-    /* .text can be in either internal or external flash */
+    /* .text section */
     .text :
     {
         . = ALIGN(4);
         *(.text*)
         *(.rodata*)
         _etext = .;
-    } > MAIN_FLASH
+    } > ROM
+
+    /* Secure Gateway stubs */
+    .gnu.sgstubs : ALIGN(1024)
+    {
+        *(.gnu.sgstubs*)
+    } > ROM
 
     .data : AT (_etext)
     {
@@ -49,6 +53,13 @@ SECTIONS
         . = ALIGN(4);
         _ebss = .;
     } > SRAM
+
+    /* Extended PSRAM section */
+    .psram (NOLOAD) :
+    {
+        . = ALIGN(4);
+        *(.psram*)
+    } > PSRAM
 
     .stack (NOLOAD) :
     {

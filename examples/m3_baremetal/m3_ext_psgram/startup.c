@@ -15,7 +15,7 @@ void Reset_Handler(void) {
     // Set stack pointer
     __asm volatile ("ldr sp, =_estack");
 
-    // Copy .data section from flash to RAM
+    // Copy .data section from ROM to RAM
     for (uint32_t *src = &_etext, *dest = &_sdata; dest < &_edata;) {
         *dest++ = *src++;
     }
