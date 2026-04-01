@@ -5,6 +5,7 @@ QSTR_DEFS = qstrdefsport.h
 
 # MicroPython feature configurations
 SPLIT_FLASH ?= 0
+FROZEN_MANIFEST ?=
 MICROPY_ROM_TEXT_COMPRESSION ?= 0
 MICROPY_PY_BUILTINS_FLOAT ?= 1
 MICROPY_PY_MATH ?= 1
@@ -13,6 +14,10 @@ MICROPY_PY_SYS_STDFILES ?= 1
 
 # include py core make definitions
 include $(TOP)/py/py.mk
+
+# Specify mpy-cross location
+MICROPY_MPYCROSS = $(TOP)/mpy-cross/build/mpy-cross
+MICROPY_MPYCROSS_DEPENDENCY = $(MICROPY_MPYCROSS)
 
 CROSS_COMPILE ?= arm-none-eabi-
 
@@ -97,6 +102,10 @@ SRC_C = \
 	$(TOP)/shared/runtime/stdout_helpers.c \
 	$(TOP)/shared/runtime/sys_stdio_mphal.c
 
+ifneq ($(FROZEN_MANIFEST),)
+SRC_C += $(BUILD)/frozen_content.c
+endif
+
 SRC_QSTR += $(SRC_C)
 
 # Include REPL and compiler only if enabled
@@ -150,6 +159,13 @@ $(BUILD)/regions.ld: | $(BUILD)
 	$(ECHO) "GEN $@"
 	$(Q)echo 'REGION_ALIAS("MAIN_FLASH", $(if $(filter 1,$(SPLIT_FLASH)),EXT_FLASH,INT_FLASH));' > $@
 
+# Output filenames
+ifneq ($(EXAMPLE),)
+FW_BASE = firmware_$(EXAMPLE)
+else
+FW_BASE = firmware
+endif
+
 $(BUILD)/firmware.elf: $(OBJ) $(BUILD)/regions.ld
 	$(ECHO) "LINK $@"
 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJ) $(LIBS)
@@ -158,13 +174,14 @@ $(BUILD)/firmware.elf: $(OBJ) $(BUILD)/regions.ld
 ifeq ($(SPLIT_FLASH), 1)
 $(BUILD)/firmware.bin: $(BUILD)/firmware.elf
 	$(ECHO) "BIN $@"
-	$(Q)$(OBJCOPY) -O binary -j .isr_vector $(BUILD)/firmware.elf $(BUILD)/firmware_int.bin
-	$(Q)$(OBJCOPY) -O binary -j .text -j .data $(BUILD)/firmware.elf $(BUILD)/firmware_ext.bin
-	$(Q)cp $(BUILD)/firmware_int.bin $@ # Dummy for default 'all' target
+	$(Q)$(OBJCOPY) -O binary -j .isr_vector $(BUILD)/firmware.elf $(BUILD)/$(FW_BASE)_int.bin
+	$(Q)$(OBJCOPY) -O binary -j .text -j .data $(BUILD)/firmware.elf $(BUILD)/$(FW_BASE)_ext.bin
+	$(Q)cp $(BUILD)/$(FW_BASE)_int.bin $@ # Dummy for default 'all' target
 else
 $(BUILD)/firmware.bin: $(BUILD)/firmware.elf
 	$(ECHO) "BIN $@"
-	$(Q)$(OBJCOPY) -O binary $^ $@
+	$(Q)$(OBJCOPY) -O binary $^ $(BUILD)/$(FW_BASE).bin
+	$(if $(filter-out $(FW_BASE).bin,firmware.bin),$(Q)cp $(BUILD)/$(FW_BASE).bin $@,) # Dummy for default 'all' target
 endif
 
 include $(TOP)/py/mkrules.mk
