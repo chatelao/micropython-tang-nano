@@ -2,6 +2,7 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
+LAYOUT_LEFT_RIGHT()
 
 title AHB-Lite External PSRAM Architecture (Tang Nano 4K)
 
