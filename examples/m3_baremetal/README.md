@@ -15,16 +15,23 @@ This directory contains baremetal C examples for the ARM Cortex-M3 "Hard Core" o
 
 The following technical documents are available in the `docs/` folder for reference:
 
+### 2.1. General Documentation
+
 | Document | Description |
 | :--- | :--- |
 | [IPUG931-2.1E_Gowin_EMPU(GW1NS-4C) Software Programming Reference Manual.pdf](docs/IPUG931-2.1E_Gowin_EMPU(GW1NS-4C)%20Software%20Programming%20Reference%20Manual.pdf) | Primary reference for M3 register mapping and SoC peripherals. |
 | [GW1NSR_DATASHEET_DS861E.pdf](docs/GW1NSR_DATASHEET_DS861E.pdf) | Hardware datasheet for the GW1NSR-4C SoC. |
-| [IPUG525E-PSRAM-User-Guide.pdf](docs/IPUG525E-PSRAM-User-Guide.pdf) | Configuration and usage guide for the PSRAM IP core. |
-| [IPUG1015-1.1E_Gowin SPI Flash Interface IP User Guide.pdf](docs/IPUG1015-1.1E_Gowin%20SPI%20Flash%20Interface%20(With%20External%20Flash)%20IP%20User%20Guide.pdf) | Guide for the AHB-mapped SPI Flash (XIP) controller. |
-| [IPUG944E.pdf](docs/IPUG944E.pdf) | Gowin EMPU M3 IP User Guide. |
 | [Tang Nano 4K - Sipeed Wiki.pdf](docs/Tang%20Nano%204K%20-%20Sipeed%20Wiki.pdf) | Board-level overview and pinout from Sipeed. |
 | [Tang nano 4K.pdf](docs/Tang%20nano%204K.pdf) | Additional board reference. |
 | [UG292-1.0E_GW1NS_GW1NSR_GW1NSE_GW1NSER series Schematic Manual.pdf](docs/UG292-1.0E_GW1NS_GW1NSR_GW1NSE_GW1NSER%20series%20of%20FPGA%20Products%20Schematic%20Manual.pdf) | FPGA product schematic reference manual. |
+
+### 2.2. IP core documentation
+
+| Document | Description |
+| :--- | :--- |
+| EMPU M3 IP User Guide.                 | [IPUG944E.pdf](docs/IPUG944E.pdf) |
+| PSRAM IP core.                         | [IPUG525E-PSRAM-User-Guide.pdf](docs/IPUG525E-PSRAM-User-Guide.pdf) |
+| AHB-mapped SPI Flash (XIP) controller. | [IPUG1015-1.1E_Gowin SPI Flash Interface IP User Guide.pdf](docs/IPUG1015-1.1E_Gowin%20SPI%20Flash%20Interface%20(With%20External%20Flash)%20IP%20User%20Guide.pdf) |
 
 ## 3. Getting Started
 
