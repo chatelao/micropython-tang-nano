@@ -30,12 +30,13 @@ module blink_wrapper (
     assign m3_gpio_i[15:3] = 13'b0;
 
     // --- M3 IP Core Instantiation ---
-    // This instantiates the Cortex-M3 hard core.
-    Gowin_EMPU_M3 m3_inst (
+    // This instantiates the Cortex-M3 hard core (EMCU primitive).
+    EMCU m3_inst (
+        .MSSCLK     (clk_27m),
+        .MSSRSTN    (1'b1),
         .GPIOI      (m3_gpio_i),
         .GPIOO      (m3_gpio_o),
-        .GPIOOUTEN  (m3_gpio_oe),
-        .SYS_CLK    (clk_27m)
+        .GPIOOUTEN  (m3_gpio_oe)
     );
 
 endmodule

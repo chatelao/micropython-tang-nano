@@ -76,8 +76,9 @@ module tang_nano_4k_top (
                         apb_psel_psram ? apb_pready_psram : 1'b1;
 
     // --- M3 IP Core Instantiation ---
-    Gowin_EMPU_M3 m3_inst (
-        .SYS_CLK     (clk_27m),
+    EMCU m3_inst (
+        .MSSCLK      (clk_27m),
+        .MSSRSTN     (1'b1),
         .UART0RXD    (uart_rx),
         .UART0TXD    (uart_tx),
 
@@ -88,6 +89,8 @@ module tang_nano_4k_top (
         .HWRITE      (ahb_write),
         .HTRANS      (ahb_trans),
         .HREADY      (ahb_ready),
+        .HCLK        (clk_27m),
+        .HRESETN     (sys_reset_n),
 
         // APB2 Expansion
         .PSEL        (apb_psel),
@@ -96,7 +99,9 @@ module tang_nano_4k_top (
         .PWRITE      (apb_pwrite),
         .PWDATA      (apb_pwdata),
         .PRDATA      (apb_prdata),
-        .PREADY      (apb_pready)
+        .PREADY      (apb_pready),
+        .PCLK        (clk_27m),
+        .PRESETN     (sys_reset_n)
     );
 
     // --- SPI Flash Interface (AHB Bridge) ---
