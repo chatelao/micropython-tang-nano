@@ -1,0 +1,24 @@
+@startuml architecture
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title AHB-Lite External PSRAM Architecture (Tang Nano 4K)
+
+Container_Boundary(soc, "GW1NSR-4C SoC") {
+    Component(m3, "Cortex-M3 Hard Core", "ARMv7-M", "Gowin_EMPU_M3 IP")
+
+    Container_Boundary(fabric, "FPGA Fabric") {
+        Component(psram_sub, "PSRAM Memory Subsystem", "Verilog (psram_memory.v)", "AHB-Lite Address Decoding (HSEL)")
+        Component(psram_ctrl, "PSRAM Controller IP", "Gowin IP", "AHB-Lite to PSRAM Bridge")
+
+        Rel(m3, psram_sub, "AHB Expansion", "HADDR, HWDATA, HRDATA, HWRITE, HTRANS, HREADY")
+        Rel(psram_sub, psram_ctrl, "Internal AHB", "hsel, haddr, hwdata, hrdata, hwrite, htrans, hready")
+    }
+}
+
+Component_Ext(psram_chip, "External PSRAM (SiP)", "W955D8MBYA (8MB)", "Co-packaged with GW1NSR-4C")
+
+Rel(psram_ctrl, psram_chip, "PSRAM Bus", "SCLK, CS#, DQ[15:0], ADQ[15:0]")
+
+@enduml
