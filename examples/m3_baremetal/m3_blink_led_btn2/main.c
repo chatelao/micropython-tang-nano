@@ -1,5 +1,5 @@
 /* main.c - m3_blink_led_btn2 */
-#include "../common/m3_regs.h"
+#include "m3_regs.h"
 
 void delay(volatile uint32_t count) {
     while (count--) {
