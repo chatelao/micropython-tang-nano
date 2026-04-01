@@ -1,0 +1,22 @@
+// top.cst - m3_ext_flash_boot
+IO_LOC "clk_27m" 45;
+IO_PORT "clk_27m" IO_TYPE=LVCMOS33;
+
+IO_LOC "led_pin" 10;
+IO_PORT "led_pin" IO_TYPE=LVCMOS33;
+
+// SPI Flash (XIP)
+IO_LOC "flash_cs_n" 36;
+IO_LOC "flash_sclk" 37;
+IO_LOC "flash_mosi" 38;
+IO_LOC "flash_miso" 39;
+IO_PORT "flash_cs_n" IO_TYPE=LVCMOS33;
+IO_PORT "flash_sclk" IO_TYPE=LVCMOS33;
+IO_PORT "flash_mosi" IO_TYPE=LVCMOS33;
+IO_PORT "flash_miso" IO_TYPE=LVCMOS33;
+
+// UART0
+IO_LOC "uart_tx" 18;
+IO_LOC "uart_rx" 19;
+IO_PORT "uart_tx" IO_TYPE=LVCMOS33;
+IO_PORT "uart_rx" IO_TYPE=LVCMOS33;
