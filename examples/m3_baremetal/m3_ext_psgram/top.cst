@@ -1,0 +1,6 @@
+// top.cst - m3_ext_psgram
+IO_LOC "clk_27m" 45;
+IO_PORT "clk_27m" IO_TYPE=LVCMOS33;
+
+IO_LOC "led_pin" 10;
+IO_PORT "led_pin" IO_TYPE=LVCMOS33;
