@@ -63,6 +63,13 @@ jobs:
         run: |
           make -C src/ports/tang_nano_4k/ BUILD=build_split SPLIT_FLASH=1
 
+      - name: Build M3 Baremetal examples
+        run: |
+          # Build only the C firmware to avoid dependency on FPGA tools (Yosys)
+          make -C examples/m3_baremetal/m3_blink_led_btn2/src/ firmware.bin
+          make -C examples/m3_baremetal/m3_ext_flash_boot/ int_blink.bin ext_blink.bin
+          make -C examples/m3_baremetal/m3_ext_psgram/ firmware.bin
+
       - name: Prepare artifacts
         run: |
           mkdir dist
@@ -74,6 +81,10 @@ jobs:
           cp src/ports/tang_nano_4k/build_split/firmware_ext.bin dist/firmware_split_ext.bin
           cp src/ports/tang_nano_4k/build_split/firmware.elf dist/firmware_split.elf
           cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/tang_nano_4k_m3.fs
+          cp examples/m3_baremetal/m3_blink_led_btn2/src/firmware.bin dist/m3_blink.bin
+          cp examples/m3_baremetal/m3_ext_flash_boot/int_blink.bin dist/m3_flash_int.bin
+          cp examples/m3_baremetal/m3_ext_flash_boot/ext_blink.bin dist/m3_flash_ext.bin
+          cp examples/m3_baremetal/m3_ext_psgram/firmware.bin dist/m3_psram.bin
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -112,6 +123,10 @@ jobs:
             dist/firmware_split_int.bin
             dist/firmware_split_ext.bin
             dist/tang_nano_4k_m3.fs
+            dist/m3_blink.bin
+            dist/m3_flash_int.bin
+            dist/m3_flash_ext.bin
+            dist/m3_psram.bin
             COMPLIANCE_TESTS.md
             compliance_output.log
             renode_output.log
