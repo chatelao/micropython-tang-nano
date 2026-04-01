@@ -29,9 +29,9 @@ The following technical documents are available in the `docs/` folder for refere
 
 | Document | Description |
 | :--- | :--- |
-| EMPU M3 IP User Guide.                 | [IPUG944E](docs/IPUG944E.pdf) |
-| PSRAM IP core.                         | [IPUG525E](docs/IPUG525E-PSRAM-User-Guide.pdf) |
-| AHB-mapped SPI Flash (XIP) controller. | [IPUG1015](docs/IPUG1015-1.1E_Gowin%20SPI%20Flash%20Interface%20(With%20External%20Flash)%20IP%20User%20Guide.pdf) |
+| IP guide EMPU M3 core.                        | [IPUG944E](docs/IPUG944E.pdf) |
+| IP guide PSRAM core.                         | [IPUG525E](docs/IPUG525E-PSRAM-User-Guide.pdf) |
+| IP guide AHB-mapped SPI Flash (XIP) controller. | [IPUG1015](docs/IPUG1015-1.1E_Gowin%20SPI%20Flash%20Interface%20(With%20External%20Flash)%20IP%20User%20Guide.pdf) |
 
 ## 3. Getting Started
 
