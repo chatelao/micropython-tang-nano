@@ -50,20 +50,26 @@ def run_compliance(attach=False, test_filter=None):
 
     # Use socket_bridge.py as the device executor
     bridge_script = os.path.join(root_dir, "test/socket_bridge.py")
-    device_cmd = f"python3 {bridge_script}"
+    device_cmd = f"{sys.executable} {bridge_script}"
 
     # Exclude net tests because they are disabled in mpconfigport.h
     # and not supported by our current port's hardware configuration.
     exclude_tests = ["-e", "net"]
 
     # Run tests from the test directory
+    run_tests_script = os.path.join(test_dir, "run-tests.py")
+    if not os.path.exists(run_tests_script):
+        print(f"Error: {run_tests_script} not found. Did you initialize submodules?")
+        print("Run: git submodule update --init --recursive")
+        sys.exit(1)
+
     print(f"Running tests in {test_dir}...")
     # Use -j1 to avoid multiple concurrent connections to the same Renode port
     cmd = [
-        "python3", "run-tests.py",
+        sys.executable, run_tests_script,
         "-j", "1",
         "--print-failures",
-        "-t", f"exec:{device_cmd}"
+        "--test-instance", f"exec:{device_cmd}"
     ] + exclude_tests
 
     if test_filter:
