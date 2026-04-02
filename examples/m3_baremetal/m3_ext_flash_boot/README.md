@@ -1,6 +1,6 @@
 # M3 External Flash Boot Example
 
-This example demonstrates how to configure the Cortex-M3 on the Tang Nano 4K to boot from external SPI Flash. This uses the XIP (eXecute In Place) feature, mapping the flash memory to the 0x60000000 address range.
+This example demonstrates how to configure the Cortex-M3 on the Tang Nano 4K to boot from external SPI Flash. This uses the XIP (eXecute In Place) feature, mapping the flash memory to the 0xA0000000 address range (the standard AHB expansion window for the GW1NS-4C).
 
 ## Documentation
 
