@@ -4,7 +4,7 @@ ENTRY(Reset_Handler)
 MEMORY
 {
     INT_FLASH (rx)  : ORIGIN = 0x00000000, LENGTH = 32K
-    EXT_FLASH (rx)  : ORIGIN = 0x60000000, LENGTH = 4M
+    EXT_FLASH (rx)  : ORIGIN = 0xA0000000, LENGTH = 64K
     SRAM      (rwx) : ORIGIN = 0x20000000, LENGTH = 22K
 }
 
@@ -28,6 +28,12 @@ SECTIONS
         . = ALIGN(4);
         *(.text*)
         *(.rodata*)
+        . = ALIGN(4);
+    } > MAIN_FLASH
+
+    .ARM.exidx :
+    {
+        *(.ARM.exidx*)
         _etext = .;
     } > MAIN_FLASH
 

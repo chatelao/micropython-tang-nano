@@ -1,9 +1,9 @@
 module top (
-    input  wire clk_27m,   // Pin 45
+    input  wire clk_27m,  // Pin 45
     inout wire [15:0] m3_gpio,
     // output wire led_pin,   // Pin 10
     // input  wire btn1_pin,  // Pin 15
-    input  wire btn2_pin   // Pin 14
+    input wire btn2_pin   // Pin 14
 );
     // --- M3 IP Core Instantiation ---
     Gowin_EMPU_Top m3_inst (
