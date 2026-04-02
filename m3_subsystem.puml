@@ -20,15 +20,19 @@ Container_Boundary(soc, "GW1NSR-4C SoC") {
 
     Component(int_flash, "Internal Flash (32KB)", "0x00000000", "Bootloader & Vectors")
     Component(int_sram, "Internal SRAM (22KB)", "0x20000000", "Stack & Fast Heap")
+    Component(uart0, "UART0 (0x40004000)", "115200 8N1", "Serial Console")
 
     Rel(m3, int_flash, "I-Code/D-Code")
     Rel(m3, int_sram, "System Bus")
+    Rel(m3, uart0, "APB")
 }
 
 Component_Ext(ext_psram, "External PSRAM", "Physical Chip", "8MB 166MHz")
 Component_Ext(ext_flash, "External SPI Flash", "Physical Chip", "4MB MicroPython FS")
+Component_Ext(host_pc, "Host PC", "Serial Terminal", "via USB-C Bridge")
 
 Rel(psram_ctrl, ext_psram, "DQ[15:0], SCLK, CS#")
 Rel(flash_ctrl, ext_flash, "MOSI, MISO, SCLK, CS# (Pins 36-39)")
+Rel(uart0, host_pc, "TX/RX (Pins 18/19)")
 
 @enduml

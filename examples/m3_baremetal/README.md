@@ -16,7 +16,7 @@ This directory contains baremetal C examples for the ARM Cortex-M3 "Hard Core" o
 This section provides a visual overview of the M3 subsystem and its integration with external peripherals.
 
 ### 2.1. System-Level Architecture
-The diagram below shows the high-level integration of the Cortex-M3 hard core with the FPGA fabric and internal/external memories.
+The diagram below shows the high-level integration of the Cortex-M3 hard core with the FPGA fabric, internal/external memories, and the **UART0** serial console.
 
 ![M3-FPGA Subsystem Architecture](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/m3_subsystem.puml)
 
