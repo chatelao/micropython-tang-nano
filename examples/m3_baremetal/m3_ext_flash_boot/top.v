@@ -4,10 +4,6 @@
 module top (
     input  wire clk_27m,      // Pin 45
 
-    // UART0 (optional, but keep for completeness)
-    output wire uart_tx,      // Pin 18
-    input  wire uart_rx,      // Pin 19
-
     // SPI Flash (XIP)
     output wire flash_cs_n,   // Pin 36
     output wire flash_sclk,   // Pin 37

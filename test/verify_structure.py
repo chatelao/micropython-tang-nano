@@ -22,6 +22,7 @@ def test_structure():
         'examples/m3_baremetal/m3_ext_flash_boot/docs',
         'examples/m3_baremetal/m3_ext_psgram',
         'examples/m3_baremetal/m3_ext_psgram/docs',
+        'examples/m3_baremetal/m3_uart_echo',
         '.github'
     ]
     expected_files = [
@@ -59,13 +60,13 @@ def test_structure():
         'examples/tiny-tapeouts/tt_vga_to_hdmi/tt_vga_hdmi.cst',
         'examples/cpus/neorv32/neorv32.py',
         'examples/cpus/serv_riscv/serv_test.py',
-        'examples/m3_baremetal/m3_blink_led_btn2/m3.ld',
-        'examples/m3_baremetal/m3_blink_led_btn2/m3_regs.h',
-        'examples/m3_baremetal/m3_blink_led_btn2/startup.c',
-        'examples/m3_baremetal/m3_blink_led_btn2/main.c',
-        'examples/m3_baremetal/m3_blink_led_btn2/top.v',
-        'examples/m3_baremetal/m3_blink_led_btn2/top.cst',
-        'examples/m3_baremetal/m3_blink_led_btn2/Makefile',
+        'examples/m3_baremetal/m3_blink_led_btn2/src/m3.ld',
+        'examples/m3_baremetal/m3_blink_led_btn2/src/m3_regs.h',
+        'examples/m3_baremetal/m3_blink_led_btn2/src/startup.c',
+        'examples/m3_baremetal/m3_blink_led_btn2/src/main.c',
+        'examples/m3_baremetal/m3_blink_led_btn2/src/top.v',
+        'examples/m3_baremetal/m3_blink_led_btn2/src/top.cst',
+        'examples/m3_baremetal/m3_blink_led_btn2/src/Makefile',
         'examples/m3_baremetal/m3_ext_flash_boot/m3.ld',
         'examples/m3_baremetal/m3_ext_flash_boot/m3_regs.h',
         'examples/m3_baremetal/m3_ext_flash_boot/startup.c',
@@ -80,6 +81,13 @@ def test_structure():
         'examples/m3_baremetal/m3_ext_psgram/top.v',
         'examples/m3_baremetal/m3_ext_psgram/top.cst',
         'examples/m3_baremetal/m3_ext_psgram/Makefile',
+        'examples/m3_baremetal/m3_uart_echo/m3.ld',
+        'examples/m3_baremetal/m3_uart_echo/m3_regs.h',
+        'examples/m3_baremetal/m3_uart_echo/startup.c',
+        'examples/m3_baremetal/m3_uart_echo/main.c',
+        'examples/m3_baremetal/m3_uart_echo/top.v',
+        'examples/m3_baremetal/m3_uart_echo/top.cst',
+        'examples/m3_baremetal/m3_uart_echo/Makefile',
         'generate_tt_docs.py'
     ]
 

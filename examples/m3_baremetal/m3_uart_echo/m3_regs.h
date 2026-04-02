@@ -3,19 +3,19 @@
 
 #include <stdint.h>
 
+// --- UART0 ---
+#define UART0_BASE          (0x40004000)
+#define REG_UART0_DATA      (*(volatile uint32_t *)(UART0_BASE + 0x00))
+#define REG_UART0_STATE     (*(volatile uint32_t *)(UART0_BASE + 0x04))
+#define REG_UART0_CTRL      (*(volatile uint32_t *)(UART0_BASE + 0x08))
+#define REG_UART0_BAUDDIV   (*(volatile uint32_t *)(UART0_BASE + 0x10))
+
 // --- GPIO (CMSDK) ---
 #define GPIO_BASE           (0x40010000)
 #define REG_GPIO_DATA       (*(volatile uint32_t *)(GPIO_BASE + 0x00))
 #define REG_GPIO_DATAOUT    (*(volatile uint32_t *)(GPIO_BASE + 0x04))
 #define REG_GPIO_OUTENSET   (*(volatile uint32_t *)(GPIO_BASE + 0x10))
 #define REG_GPIO_OUTENCLR   (*(volatile uint32_t *)(GPIO_BASE + 0x14))
-#define REG_GPIO_INTENSET   (*(volatile uint32_t *)(GPIO_BASE + 0x20))
-#define REG_GPIO_INTENCLR   (*(volatile uint32_t *)(GPIO_BASE + 0x24))
-#define REG_GPIO_INTTYPESET (*(volatile uint32_t *)(GPIO_BASE + 0x28))
-#define REG_GPIO_INTTYPECLR (*(volatile uint32_t *)(GPIO_BASE + 0x2C))
-#define REG_GPIO_INTPOLSET  (*(volatile uint32_t *)(GPIO_BASE + 0x30))
-#define REG_GPIO_INTPOLCLR  (*(volatile uint32_t *)(GPIO_BASE + 0x34))
-#define REG_GPIO_INTSTATUS  (*(volatile uint32_t *)(GPIO_BASE + 0x38))
 
 // --- NVIC ---
 #define NVIC_ISER0          (*(volatile uint32_t *)(0xE000E100))
@@ -24,7 +24,5 @@
 // --- Memory Regions ---
 #define SRAM_BASE           (0x20000000)
 #define SRAM_SIZE           (22 * 1024)
-#define PSRAM_BASE          (0xA0000000)
-#define PSRAM_SIZE          (8 * 1024 * 1024)
 
 #endif // M3_REGS_H

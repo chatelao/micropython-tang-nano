@@ -9,12 +9,29 @@ This directory contains baremetal C examples for the ARM Cortex-M3 "Hard Core" o
 | `m3_blink_led_btn2` | Basic GPIO interaction: Blink the onboard LED based on Button S2 state. |
 | `m3_ext_flash_boot` | Demonstrates booting from external SPI Flash (XIP). |
 | `m3_ext_psgram` | Shows how to initialize and use the external 8MB PSRAM. |
+| `m3_uart_echo` | UART-over-M3 character echo with case conversion and LED toggling. |
 
-## 2. Documentation
+## 2. Architecture
+
+This section provides a visual overview of the M3 subsystem and its integration with external peripherals.
+
+### 2.1. System-Level Architecture
+The diagram below shows the high-level integration of the Cortex-M3 hard core with the FPGA fabric and internal/external memories.
+
+![M3-FPGA Subsystem Architecture](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/m3_subsystem.puml)
+
+### 2.2. Module-Specific Architectures
+
+| Integration | Description | Architecture Diagram |
+| :--- | :--- | :--- |
+| **External PSRAM** | AHB-Lite expansion for the 8MB PSRAM SiP. | ![PSRAM Architecture](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/examples/m3_baremetal/m3_ext_psgram/architecture.puml) |
+| **External Flash (XIP)** | Booting from external SPI Flash using the XIP controller. | ![Flash XIP Architecture](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/chatelao/micropython-tang-nano/main/examples/m3_baremetal/m3_ext_flash_boot/docs/flash_xip_signals.puml) |
+
+## 3. Documentation
 
 The following technical documents are available in the `docs/` folder for reference:
 
-### 2.1. General Documentation
+### 3.1. General Documentation
 
 | Document | Description |
 | :--- | :--- |
@@ -24,7 +41,7 @@ The following technical documents are available in the `docs/` folder for refere
 | [Tang nano 4K.pdf](docs/Tang%20nano%204K.pdf) | Additional board reference. |
 | [UG292-1.0E_GW1NS_GW1NSR_GW1NSE_GW1NSER series Schematic Manual.pdf](docs/UG292-1.0E_GW1NS_GW1NSR_GW1NSE_GW1NSER%20series%20of%20FPGA%20Products%20Schematic%20Manual.pdf) | FPGA product schematic reference manual. |
 
-### 2.2. IP core documentation
+### 3.2. IP core documentation
 
 | Document | Description | Location |
 | :--- | :--- | :--- |
@@ -32,7 +49,7 @@ The following technical documents are available in the `docs/` folder for refere
 | IP guide PSRAM core. | PSRAM initialization and timing. | [IPUG525E](m3_ext_psgram/docs/IPUG525E-PSRAM-User-Guide.pdf) |
 | IP guide AHB-mapped SPI Flash (XIP) controller. | External Flash XIP configuration. | [IPUG1015](m3_ext_flash_boot/docs/IPUG1015-1.1E_Gowin%20SPI%20Flash%20Interface%20(With%20External%20Flash)%20IP%20User%20Guide.pdf) |
 
-## 3. Getting Started
+## 4. Getting Started
 
 To build these examples, you need the `arm-none-eabi-gcc` toolchain installed. Refer to [TOOLCHAIN_SETUP.md](../../TOOLCHAIN_SETUP.md) for detailed instructions.
 

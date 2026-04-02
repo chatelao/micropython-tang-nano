@@ -1,0 +1,12 @@
+// top.cst - m3_uart_echo
+IO_LOC "clk_27m" 45;
+IO_PORT "clk_27m" IO_TYPE=LVCMOS33;
+
+IO_LOC "uart_tx" 18;
+IO_PORT "uart_tx" IO_TYPE=LVCMOS33;
+
+IO_LOC "uart_rx" 19;
+IO_PORT "uart_rx" IO_TYPE=LVCMOS33;
+
+IO_LOC "led_pin" 10;
+IO_PORT "led_pin" IO_TYPE=LVCMOS33;

@@ -14,9 +14,3 @@ IO_PORT "flash_cs_n" IO_TYPE=LVCMOS33;
 IO_PORT "flash_sclk" IO_TYPE=LVCMOS33;
 IO_PORT "flash_mosi" IO_TYPE=LVCMOS33;
 IO_PORT "flash_miso" IO_TYPE=LVCMOS33;
-
-// UART0
-IO_LOC "uart_tx" 18;
-IO_LOC "uart_rx" 19;
-IO_PORT "uart_tx" IO_TYPE=LVCMOS33;
-IO_PORT "uart_rx" IO_TYPE=LVCMOS33;
