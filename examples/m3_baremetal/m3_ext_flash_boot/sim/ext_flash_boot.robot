@@ -20,6 +20,7 @@ Verify External Flash Boot Blink
     # Check if LED (GPIO 0) toggles
     # By default, Renode logs GPIO changes at Info level (2).
     Execute Command         logLevel 2 gpio0
+    Create Log Tester       0
 
     Start Emulation
 
