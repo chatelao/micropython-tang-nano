@@ -1,0 +1,26 @@
+# ext_flash_boot.resc
+
+using sysbus
+mach create "tang_nano_4k"
+
+$repl?=@../../../../test/tang_nano_4k.repl
+$int_bin?=@../int_blink.bin
+$ext_bin?=@../ext_blink.bin
+
+machine LoadPlatformDescription $repl
+
+# Set CPU performance to match 27MHz hardware
+sysbus.cpu PerformanceInMips 27
+
+showAnalyzer uart0
+
+macro reset
+"""
+    sysbus LoadBinary $int_bin 0x00000000
+    sysbus LoadBinary $ext_bin 0x60000000
+    sysbus.cpu VectorTableOffset 0x00000000
+    sysbus.cpu SP `sysbus ReadDoubleWord 0x00000000`
+    sysbus.cpu PC `sysbus ReadDoubleWord 0x00000004`
+"""
+
+runMacro $reset
