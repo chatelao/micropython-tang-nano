@@ -20,6 +20,9 @@ jobs:
         run: |
           mkdir -p src/ports/tang_nano_4k/build
           cp dist/firmware_sim.elf src/ports/tang_nano_4k/build/firmware.elf
+          # Bare-metal examples
+          cp dist/m3_ext_flash_int.bin examples/m3_baremetal/m3_ext_flash_boot/int_blink.bin
+          cp dist/m3_ext_flash_ext.bin examples/m3_baremetal/m3_ext_flash_boot/ext_blink.bin
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -47,6 +50,7 @@ jobs:
             test/examples/test_tt_echo.robot
             test/examples/test_neorv32.robot
             test/examples/test_serv.robot
+            examples/m3_baremetal/m3_ext_flash_boot/sim/ext_flash_boot.robot
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
