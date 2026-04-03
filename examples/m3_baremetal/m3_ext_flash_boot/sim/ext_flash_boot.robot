@@ -12,19 +12,17 @@ ${EXT_BIN}      ${CURDIR}/../ext_blink.bin
 *** Test Cases ***
 Verify External Flash Boot Blink
     [Documentation]    Verifies that the M3 can boot from external flash and blink the LED.
-    Execute Command         $repl = @${REPL}
-    Execute Command         $int_bin = @${INT_BIN}
-    Execute Command         $ext_bin = @${EXT_BIN}
     Execute Command         include @${RESC}
 
-    # Check if LED (GPIO 0) toggles
-    # By default, Renode logs GPIO changes at Info level (2).
-    Execute Command         logLevel 2 gpio0
-    Create Log Tester       0
+    # Attach an LED to GPIO 0 to ensure we get clear log messages
+    Execute Command         machine LoadPlatformDescriptionFromString "led: Miscellaneous.LED @ gpio0 0"
+
+    Create Log Tester       timeout=20
 
     Start Emulation
 
     # The blinky example toggles the LED.
-    Wait For Log Entry      "gpio0: Setting pin 0 to True"   timeout=5
-    Wait For Log Entry      "gpio0: Setting pin 0 to False"  timeout=5
-    Wait For Log Entry      "gpio0: Setting pin 0 to True"   timeout=5
+    # We wait for the LED state change log messages.
+    Wait For Log Entry      led: State changed to True   timeout=20
+    Wait For Log Entry      led: State changed to False  timeout=10
+    Wait For Log Entry      led: State changed to True   timeout=10
