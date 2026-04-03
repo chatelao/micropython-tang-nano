@@ -5,7 +5,7 @@ MEMORY
 {
     INT_FLASH (rx)  : ORIGIN = 0x00000000, LENGTH = 32K
     SRAM      (rwx) : ORIGIN = 0x20000000, LENGTH = 22K
-    PSRAM     (rwx) : ORIGIN = 0xA0000000, LENGTH = 8M
+    PSRAM     (rwx) : ORIGIN = 0x60000000, LENGTH = 8M
 }
 
 STACK_SIZE = 2K;

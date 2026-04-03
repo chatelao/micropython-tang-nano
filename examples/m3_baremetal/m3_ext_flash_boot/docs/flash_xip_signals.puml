@@ -9,7 +9,7 @@ Container_Boundary(fpga, "Tang Nano 4K (FPGA)") {
     Component(m3, "Cortex-M3 Hard Core", "AHB-Lite Master")
 
     Boundary(logic, "FPGA Fabric") {
-        Component(decoder, "Address Decoder", "Combinational", "HSEL if HADDR[31:28] == 0x6")
+        Component(decoder, "Address Decoder", "Combinational", "HSEL if HADDR[31:28] == 0xA")
         Component(flash_ctrl, "SPI Flash Interface IP", "AHB-Lite Slave", "Gowin IP Core")
 
         Rel(m3, decoder, "HADDR[31:28]")

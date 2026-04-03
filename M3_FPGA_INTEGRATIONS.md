@@ -70,16 +70,16 @@ To use the 8MB external PSRAM, instantiate the **PSRAM Memory Interface** IP:
     *   **Memory Clock**: `166 MHz` (Max).
     *   **DQ Width**: `16` (2CH mode is often used for full performance).
     *   **Bus Interface**: `AHB` (required for M3 mapping at 0xA0000000).
-3.  **M3 Connection**: Enable **AHB Expansion** in the `Gowin_EMPU_M3` core and connect it to the PSRAM IP.
+3.  **M3 Connection**: Enable **AHB Expansion** in the `Gowin_EMPU_M3` core and connect it to the PSRAM IP at `0x60000000`.
 
 ### 4.2 External Flash Interface (XIP)
-To access the external flash at `0x60000000` for MicroPython code execution:
+To access the external flash at `0xA0000000` for MicroPython code execution:
 1.  **IP Generator**: Select `SPI Flash Interface`.
 2.  **Configuration**:
     *   **Protocol**: `Single SPI` (Standard).
     *   **Bus Interface**: `AHB` (required for XIP).
     *   **Memory Mapped**: Enable `Memory Mapped Mode`.
-    *   **Base Address**: Set to `0x60000000`.
+    *   **Base Address**: Set to `0xA0000000`.
 3.  **Pin Constraints**: Map the SPI signals to the following hardware pins:
     *   `CS_N`: Pin 36
     *   `SCLK`: Pin 37
@@ -88,8 +88,8 @@ To access the external flash at `0x60000000` for MicroPython code execution:
 
 | Range | Usage | IP Core Required |
 | :--- | :--- | :--- |
-| `0x60000000` - `0x6FFFFFFF` | External SPI Flash (XIP) | Gowin SPI Flash Interface |
-| `0xA0000000` - `0xA07FFFFF` | External PSRAM (8MB) | Gowin PSRAM Controller |
+| `0x60000000` - `0x607FFFFF` | External PSRAM (8MB) | Gowin PSRAM Controller |
+| `0xA0000000` - `0xAFFFFFFF` | External SPI Flash (XIP) | Gowin SPI Flash Interface |
 
 ## 5. FPGA Interrupts (NVIC)
 

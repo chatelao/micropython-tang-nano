@@ -2,8 +2,8 @@
 - Create a working MicroPython implementation for Tang Nano 4K.
 
 # Default Architecture
-- **Flash**: "Split Flash" architecture is the default. Internal Flash (`0x00000000`) is used for the vector table and reset handler, while External SPI Flash (`0x60000000`) stores the MicroPython runtime and filesystem.
-- **RAM**: 8MB External PSRAM (`0xA0000000`) is the default primary heap for MicroPython, utilizing the `MICROPY_GC_SPLIT_HEAP` configuration.
+- **Flash**: "Split Flash" architecture is the default. Internal Flash (`0x00000000`) is used for the vector table and reset handler, while External SPI Flash (`0xA0000000`) stores the MicroPython runtime and filesystem.
+- **RAM**: 8MB External PSRAM (`0x60000000`) is the default primary heap for MicroPython, utilizing the `MICROPY_GC_SPLIT_HEAP` configuration.
 - **FPGA Bridge**: APB2 Expansion Slots (Variant 2 in `M3_FPGA_INTEGRATIONS.md`) are the default method for M3-to-FPGA communication, providing register-mapped access.
 
 # Planning & Progress tracking

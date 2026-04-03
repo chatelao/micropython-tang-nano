@@ -29,8 +29,8 @@ module top (
     wire        ahb_ready;
     wire        ahb_hsel_flash;
 
-    // AHB Address Decoding (Flash: 0x60000000)
-    assign ahb_hsel_flash = (ahb_addr[31:28] == 4'h6);
+    // AHB Address Decoding (Flash: 0xA0000000)
+    assign ahb_hsel_flash = (ahb_addr[31:28] == 4'hA);
 
     wire [31:0] flash_rdata;
     wire        flash_ready;
