@@ -26,7 +26,8 @@ This bitstream routes the ARM Cortex-M3 "Hard Core" signals to the physical pins
 | WatchDog | `0x40008000` | Watchdog |
 | GPIO0 | `0x40010000` | 16-bit GPIO Interface |
 | SYSCON | `0x4001F000` | System Control |
-| AHB2 Master | `0xA0000000` | AHB Expansion (e.g., PSRAM/HyperRAM) |
+| AHB Expansion | `0x60000000` | AHB Expansion (e.g., PSRAM) |
+| AHB2 Master | `0xA0000000` | AHB Expansion (e.g., SPI Flash XIP) |
 
 ### APB2 Expansion Slots (FPGA Peripherals)
 Used for user-defined peripherals in the FPGA fabric.

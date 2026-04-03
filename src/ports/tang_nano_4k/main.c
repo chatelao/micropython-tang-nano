@@ -24,7 +24,7 @@
 extern char _sheap, _eheap;
 static char *stack_top;
 
-#define PSRAM_BASE (0xA0000000)
+#define PSRAM_BASE (0x60000000)
 #define PSRAM_SIZE (8 * 1024 * 1024)
 
 int main(int argc, char **argv) {

@@ -39,7 +39,7 @@ FLASH_LENGTH = 32K
 else
 # Simulation support for standard mode
 ifeq ($(SIMULATION), 1)
-FLASH_ORIGIN = 0x60000000
+FLASH_ORIGIN = 0xA0000000
 FLASH_LENGTH = 4M
 else
 FLASH_ORIGIN = 0x00000000
