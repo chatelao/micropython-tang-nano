@@ -15,7 +15,11 @@ YOSYS = yosys
 NEXTPNR = nextpnr-himbaechel
 GOWIN_PACK = gowin_pack
 
-all: int_blink.bin ext_blink.bin bitstream.fs
+all: firmware bitstream
+
+firmware: int_blink.bin ext_blink.bin
+
+bitstream: bitstream.fs
 
 firmware.elf: $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJ)
