@@ -23,13 +23,13 @@ The following technical documents are available for reference:
 
 Run `make` in this directory to generate the bitstream and firmware.
 
-## Advanced Integration: AHB-based Bank Switching & Overlays
+## Flash Paging (Bank Switching) & Trampolines
 
-For applications requiring more than the default 64KB XIP window, a bank-switching approach using the AHB expansion bus can be implemented. This involves a hardware bank register in the FPGA fabric and software "trampolines" to manage transitions between flash pages.
+For applications requiring more than the default 64KB XIP window, a paging (bank-switching) approach using the AHB expansion bus can be implemented. This involves a hardware bank register in the FPGA fabric and software "trampolines" to manage transitions between flash pages.
 
-### C-Code Trampoline (Wrapper)
+### Solid C-Code Trampoline (Wrapper)
 
-This code must be executed from the internal SRAM of the Cortex-M3 to avoid instruction fetch conflicts during bank switching.
+The trampoline **must** be executed from internal SRAM to avoid instruction fetch conflicts (I-Bus lockup) while the Flash controller is switching banks. This implementation preserves interrupt state and handles function arguments/return values.
 
 ```c
 #include <stdint.h>
@@ -37,35 +37,50 @@ This code must be executed from the internal SRAM of the Cortex-M3 to avoid inst
 /* Physical address of the Custom AHB Bank Register in your FPGA fabric */
 #define HW_BANK_REG ((volatile uint32_t*)0x40000000)
 
-/* Declaration of the actual target function in XIP Flash */
-extern void __real_target_func(void);
+/* Ensure the trampoline is placed in SRAM (mapped via .data or .ramfunc) */
+__attribute__((section(".data"), noinline))
+uint32_t __wrap_paged_function(uint32_t arg1, uint32_t arg2) {
+    extern uint32_t __real_paged_function(uint32_t, uint32_t);
 
-/* Ensure the trampoline is placed in SRAM */
-__attribute__((section(".sram_text")))
-void __wrap_target_func(void) {
-    /* 1. Disable interrupts to prevent HardFaults during the transition */
-    asm volatile("cpsid i" : : : "memory");
+    /* 1. Save and disable interrupts to prevent HardFaults during transition */
+    uint32_t pri = __get_PRIMASK();
+    __disable_irq();
 
-    /* 2. Save current bank state */
+    /* 2. Save current bank and switch to the target page (e.g., Page 2) */
     uint32_t old_bank = *HW_BANK_REG;
+    *HW_BANK_REG = 2;
 
-    /* 3. Switch to the new bank (e.g., Page 1) */
-    *HW_BANK_REG = 1;
+    /* 3. Mandatory synchronization barriers for memory and pipeline */
+    __asm volatile("dsb" : : : "memory");
+    __asm volatile("isb" : : : "memory");
 
-    /* 4. Mandatory pipeline and bus synchronization */
-    __asm__ volatile("dsb\n\tisb" : : : "memory");
+    /* 4. Execute the actual function in the paged flash window */
+    uint32_t result = __real_paged_function(arg1, arg2);
 
-    /* 5. Execute the target function in the paged 64KB window */
-    __real_target_func();
-
-    /* 6. Restore original bank state */
+    /* 5. Restore original bank state */
     *HW_BANK_REG = old_bank;
 
-    /* 7. Re-synchronize hardware */
-    __asm__ volatile("dsb\n\tisb" : : : "memory");
+    /* 6. Re-synchronize hardware after restoration */
+    __asm volatile("dsb" : : : "memory");
+    __asm volatile("isb" : : : "memory");
 
-    /* 8. Re-enable interrupts */
-    __asm__ volatile("cpsie i" : : : "memory");
+    /* 7. Restore interrupt state */
+    __set_PRIMASK(pri);
+
+    return result;
+}
+
+/* Helper macros for ARM CMSDK/HAL style access if not using <cmsis_gcc.h> */
+static inline uint32_t __get_PRIMASK(void) {
+    uint32_t result;
+    __asm volatile ("mrs %0, primask" : "=r" (result) :: "memory");
+    return result;
+}
+static inline void __set_PRIMASK(uint32_t pri) {
+    __asm volatile ("msr primask, %0" : : "r" (pri) : "memory");
+}
+static inline void __disable_irq(void) {
+    __asm volatile ("cpsid i" : : : "memory");
 }
 ```
 *Source: ARMv7-M Architecture Reference Manual, Chapter A3.8.3 (Memory Barriers) and B5.2.3 (CPS Instruction).*
