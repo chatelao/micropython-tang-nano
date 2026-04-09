@@ -1,0 +1,1 @@
+freeze(".", "blink.py")

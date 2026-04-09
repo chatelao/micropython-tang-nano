@@ -33,12 +33,12 @@ module tang_nano_4k_top (
     end
 
     // --- AHB Expansion Bus (For Flash XIP) ---
-    wire [31:0] ahb_addr;
-    wire [31:0] ahb_wdata;
-    wire [31:0] ahb_rdata;
-    wire        ahb_write;
-    wire [1:0]  ahb_trans;
-    wire        ahb_ready;
+    (* keep *) wire [31:0] ahb_addr;
+    (* keep *) wire [31:0] ahb_wdata;
+    (* keep *) wire [31:0] ahb_rdata;
+    (* keep *) wire        ahb_write;
+    (* keep *) wire [1:0]  ahb_trans;
+    (* keep *) wire        ahb_ready;
     wire        ahb_hsel_flash;
 
     // AHB Address Decoding (Flash: 0x60000000)
@@ -52,17 +52,17 @@ module tang_nano_4k_top (
     assign ahb_ready = ahb_hsel_flash ? flash_ready : 1'b1;
 
     // --- APB2 Expansion Bus ---
-    wire [11:0] apb_paddr;   // 12-bit address for 4KB expansion range
-    wire [31:0] apb_pwdata;
+    (* keep *) wire [11:0] apb_paddr;   // 12-bit address for 4KB expansion range
+    (* keep *) wire [31:0] apb_pwdata;
     wire [31:0] apb_prdata_tt;
     wire [31:0] apb_prdata_psram;
-    wire [31:0] apb_prdata;
-    wire        apb_psel;    // Shared Select
-    wire        apb_penable;
-    wire        apb_pwrite;
+    (* keep *) wire [31:0] apb_prdata;
+    (* keep *) wire        apb_psel;    // Shared Select
+    (* keep *) wire        apb_penable;
+    (* keep *) wire        apb_pwrite;
     wire        apb_pready_tt;
     wire        apb_pready_psram;
-    wire        apb_pready;
+    (* keep *) wire        apb_pready;
 
     // APB Slot Decoding
     // Slot 1 (TT):    0x40002400 (Offset 0x400) -> PADDR[11:8] = 4'h4
@@ -76,8 +76,9 @@ module tang_nano_4k_top (
                         apb_psel_psram ? apb_pready_psram : 1'b1;
 
     // --- M3 IP Core Instantiation ---
-    Gowin_EMPU_M3 m3_inst (
-        .SYS_CLK     (clk_27m),
+    EMCU m3_inst (
+        .MSSCLK      (clk_27m),
+        .MSSRSTN     (1'b1),
         .UART0RXD    (uart_rx),
         .UART0TXD    (uart_tx),
 
@@ -88,6 +89,8 @@ module tang_nano_4k_top (
         .HWRITE      (ahb_write),
         .HTRANS      (ahb_trans),
         .HREADY      (ahb_ready),
+        .HCLK        (clk_27m),
+        .HRESETN     (sys_reset_n),
 
         // APB2 Expansion
         .PSEL        (apb_psel),
@@ -96,7 +99,9 @@ module tang_nano_4k_top (
         .PWRITE      (apb_pwrite),
         .PWDATA      (apb_pwdata),
         .PRDATA      (apb_prdata),
-        .PREADY      (apb_pready)
+        .PREADY      (apb_pready),
+        .PCLK        (clk_27m),
+        .PRESETN     (sys_reset_n)
     );
 
     // --- SPI Flash Interface (AHB Bridge) ---
