@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.1 (Python 3.12.13 on linux)" generated="20260412 16:23:50.609" rpa="false" schemaversion="4">
+<suite id="s1" name="Test Suite" source="/app/examples/m3_baremetal/m3_ext_flash_boot/sim/ext_flash_boot.robot">
+<kw name="Setup" library="renode-keywords" type="SETUP">
+<msg timestamp="20260412 16:23:46.350" level="TRACE">Arguments: [  ]</msg>
+<kw name="Evaluate" library="BuiltIn">
+<var>${SYSTEM}</var>
+<arg>platform.system()</arg>
+<arg>modules=platform</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20260412 16:23:46.351" level="TRACE">Arguments: [ 'platform.system()' | modules='platform' ]</msg>
+<msg timestamp="20260412 16:23:46.351" level="TRACE">Return: 'Linux'</msg>
+<msg timestamp="20260412 16:23:46.351" level="INFO">${SYSTEM} = Linux</msg>
+<status status="PASS" starttime="20260412 16:23:46.351" endtime="20260412 16:23:46.351"/>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${CONFIGURATION}</var>
+<arg>not ${SKIP_RUNNING_SERVER} and ${SERVER_REMOTE_DEBUG}</arg>
+<arg>Debug</arg>
+<arg>${CONFIGURATION}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20260412 16:23:46.352" level="TRACE">Arguments: [ 'not True and False' | 'Debug' | '${CONFIGURATION}' ]</msg>
+<msg timestamp="20260412 16:23:46.352" level="TRACE">Return: 'Release'</msg>
+<msg timestamp="20260412 16:23:46.352" level="INFO">${CONFIGURATION} = Release</msg>
+<status status="PASS" starttime="20260412 16:23:46.351" endtime="20260412 16:23:46.352"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>@{PARAMS}</var>
+<arg>--robot-server-port</arg>
+<arg>${PORT_NUMBER}</arg>
+<arg>--hide-log</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20260412 16:23:46.352" level="TRACE">Arguments: [ '--robot-server-port' | '49152' | '--hide-log' ]</msg>
+<msg timestamp="20260412 16:23:46.352" level="TRACE">Return: ['--robot-server-port', '49152', '--hide-log']</msg>
+<msg timestamp="20260412 16:23:46.352" level="INFO">@{PARAMS} = [ --robot-server-port | 49152 | --hide-log ]</msg>
+<status status="PASS" starttime="20260412 16:23:46.352" endtime="20260412 16:23:46.352"/>
+</kw>
+<if>
+<branch type="IF" condition="${DISABLE_GUI}">
+<kw name="Insert Into List" library="Collections">
+<arg>${PARAMS}</arg>
+<arg>0</arg>
+<arg>--disable-gui</arg>
+<doc>Inserts ``value`` into ``list`` to the position specified with ``index``.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:46.353" endtime="20260412 16:23:46.353"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:46.353" endtime="20260412 16:23:46.353"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:46.352" endtime="20260412 16:23:46.353"/>
+</if>
+<if>
+<branch type="IF" condition="not ${SKIP_RUNNING_SERVER}">
+<kw name="File Should Exist" library="OperatingSystem">
+<arg>${DIRECTORY}/${BINARY_NAME}</arg>
+<arg>msg=Robot Framework remote server binary not found (${DIRECTORY}/${BINARY_NAME}). Did you forget to build it in ${CONFIGURATION} configuration?</arg>
+<doc>Fails unless the given ``path`` points to an existing file.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:46.353" endtime="20260412 16:23:46.353"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:46.353" endtime="20260412 16:23:46.353"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:46.353" endtime="20260412 16:23:46.353"/>
+</if>
+<if>
+<branch type="IF" condition="not ${SKIP_RUNNING_SERVER} and not ${SERVER_REMOTE_DEBUG} and not '${SYSTEM}' == 'Windows' and not ${NET_PLATFORM}">
+<kw name="Start Process" library="Process">
+<arg>mono</arg>
+<arg>${BINARY_NAME}</arg>
+<arg>@{PARAMS}</arg>
+<arg>cwd=${DIRECTORY}</arg>
+<doc>Starts a new process on background.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:46.354" endtime="20260412 16:23:46.354"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:46.354" endtime="20260412 16:23:46.354"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:46.354" endtime="20260412 16:23:46.354"/>
+</if>
+<if>
+<branch type="IF" condition="not ${SKIP_RUNNING_SERVER} and not ${SERVER_REMOTE_DEBUG} and '${SYSTEM}' == 'Windows'">
+<kw name="Start Process" library="Process">
+<arg>${BINARY_NAME}</arg>
+<arg>@{PARAMS}</arg>
+<arg>cwd=${DIRECTORY}</arg>
+<arg>shell=true</arg>
+<doc>Starts a new process on background.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:46.354" endtime="20260412 16:23:46.354"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:46.354" endtime="20260412 16:23:46.354"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:46.354" endtime="20260412 16:23:46.355"/>
+</if>
+<if>
+<branch type="IF" condition="not ${SKIP_RUNNING_SERVER} and not ${SERVER_REMOTE_DEBUG} and ${NET_PLATFORM}">
+<kw name="Start Process" library="Process">
+<arg>dotnet ${BINARY_NAME}</arg>
+<arg>@{PARAMS}</arg>
+<arg>cwd=${DIRECTORY}</arg>
+<arg>shell=true</arg>
+<doc>Starts a new process on background.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:46.355" endtime="20260412 16:23:46.355"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:46.355" endtime="20260412 16:23:46.355"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:46.355" endtime="20260412 16:23:46.355"/>
+</if>
+<if>
+<branch type="IF" condition="not ${SKIP_RUNNING_SERVER} and ${SERVER_REMOTE_DEBUG} and not '${SYSTEM}' == 'Windows' and not ${NET_PLATFORM}">
+<kw name="Start Process" library="Process">
+<arg>mono</arg>
+<arg>--debug</arg>
+<arg>--debugger-agent\=transport\=dt_socket,address\=0.0.0.0:${SERVER_REMOTE_PORT},server\=y,suspend\=${SERVER_REMOTE_SUSPEND}</arg>
+<arg>${BINARY_NAME}</arg>
+<arg>@{PARAMS}</arg>
+<arg>cwd=${DIRECTORY}</arg>
+<doc>Starts a new process on background.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:46.355" endtime="20260412 16:23:46.355"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:46.355" endtime="20260412 16:23:46.355"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:46.355" endtime="20260412 16:23:46.355"/>
+</if>
+<if>
+<branch type="IF" condition="not ${SKIP_RUNNING_SERVER} and ${SERVER_REMOTE_DEBUG} and '${SYSTEM}' == 'Windows'">
+<kw name="Fatal Error" library="BuiltIn">
+<arg>Windows doesn't support server remote debug option.</arg>
+<doc>Stops the whole test execution.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:46.356" endtime="20260412 16:23:46.356"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:46.356" endtime="20260412 16:23:46.356"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:46.356" endtime="20260412 16:23:46.356"/>
+</if>
+<if>
+<branch type="IF" condition="not '${SYSTEM}' == 'Windows'">
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>60s</arg>
+<arg>1s</arg>
+<arg>Import Library</arg>
+<arg>Remote</arg>
+<arg>http://127.0.0.1:${PORT_NUMBER}/</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<msg timestamp="20260412 16:23:46.356" level="TRACE">Arguments: [ '60s' | '1s' | 'Import Library' | 'Remote' | 'http://127.0.0.1:${PORT_NUMBER}/' ]</msg>
+<kw name="Import Library" library="BuiltIn">
+<arg>Remote</arg>
+<arg>http://127.0.0.1:${PORT_NUMBER}/</arg>
+<doc>Imports a library with the given name and optional arguments.</doc>
+<msg timestamp="20260412 16:23:46.357" level="TRACE">Arguments: [ 'Remote' | 'http://127.0.0.1:${PORT_NUMBER}/' ]</msg>
+<msg timestamp="20260412 16:23:46.995" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:46.357" endtime="20260412 16:23:46.995"/>
+</kw>
+<msg timestamp="20260412 16:23:46.995" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:46.356" endtime="20260412 16:23:46.995"/>
+</kw>
+<status status="PASS" starttime="20260412 16:23:46.356" endtime="20260412 16:23:46.995"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:46.356" endtime="20260412 16:23:46.995"/>
+</if>
+<if>
+<branch type="IF" condition="'${SYSTEM}' == 'Windows'">
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>60s</arg>
+<arg>1s</arg>
+<arg>Import Library</arg>
+<arg>Remote</arg>
+<arg>http://localhost:${PORT_NUMBER}/</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:46.996" endtime="20260412 16:23:46.996"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:46.996" endtime="20260412 16:23:46.996"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:46.995" endtime="20260412 16:23:46.996"/>
+</if>
+<kw name="Setup Renode" library="renode-keywords">
+<msg timestamp="20260412 16:23:46.997" level="TRACE">Arguments: [  ]</msg>
+<kw name="Set Default Uart Timeout" library="Remote">
+<arg>${DEFAULT_UART_TIMEOUT}</arg>
+<msg timestamp="20260412 16:23:46.997" level="TRACE">Arguments: [ '8' ]</msg>
+<msg timestamp="20260412 16:23:47.033" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20260412 16:23:46.997" endtime="20260412 16:23:47.034"/>
+</kw>
+<if>
+<branch type="IF" condition="${SAVE_LOGS}">
+<kw name="Enable Logging To Cache" library="Remote">
+<msg timestamp="20260412 16:23:47.034" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20260412 16:23:47.042" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20260412 16:23:47.034" endtime="20260412 16:23:47.042"/>
+</kw>
+<status status="PASS" starttime="20260412 16:23:47.034" endtime="20260412 16:23:47.042"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:47.034" endtime="20260412 16:23:47.042"/>
+</if>
+<kw name="Set Variable" library="BuiltIn">
+<var>${allowed_chars}</var>
+<arg>abcdefghijklmnopqrstuvwxyz01234567890_-</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20260412 16:23:47.043" level="TRACE">Arguments: [ 'abcdefghijklmnopqrstuvwxyz01234567890_-' ]</msg>
+<msg timestamp="20260412 16:23:47.043" level="TRACE">Return: 'abcdefghijklmnopqrstuvwxyz01234567890_-'</msg>
+<msg timestamp="20260412 16:23:47.043" level="INFO">${allowed_chars} = abcdefghijklmnopqrstuvwxyz01234567890_-</msg>
+<status status="PASS" starttime="20260412 16:23:47.043" endtime="20260412 16:23:47.043"/>
+</kw>
+<kw name="Convert To Lower Case" library="String">
+<var>${metrics_fname}</var>
+<arg>${SUITE_NAME}</arg>
+<doc>Converts string to lower case.</doc>
+<msg timestamp="20260412 16:23:47.043" level="TRACE">Arguments: [ 'ext_flash_boot' ]</msg>
+<msg timestamp="20260412 16:23:47.043" level="TRACE">Return: 'ext_flash_boot'</msg>
+<msg timestamp="20260412 16:23:47.044" level="INFO">${metrics_fname} = ext_flash_boot</msg>
+<status status="PASS" starttime="20260412 16:23:47.043" endtime="20260412 16:23:47.044"/>
+</kw>
+<kw name="Replace String" library="String">
+<var>${metrics_fname}</var>
+<arg>${metrics_fname}</arg>
+<arg>${SPACE}</arg>
+<arg>_</arg>
+<doc>Replaces ``search_for`` in the given ``string`` with ``replace_with``.</doc>
+<msg timestamp="20260412 16:23:47.044" level="TRACE">Arguments: [ 'ext_flash_boot' | ' ' | '_' ]</msg>
+<msg timestamp="20260412 16:23:47.044" level="TRACE">Return: 'ext_flash_boot'</msg>
+<msg timestamp="20260412 16:23:47.044" level="INFO">${metrics_fname} = ext_flash_boot</msg>
+<status status="PASS" starttime="20260412 16:23:47.044" endtime="20260412 16:23:47.044"/>
+</kw>
+<kw name="Replace String Using Regexp" library="String">
+<var>${metrics_fname}</var>
+<arg>${metrics_fname}</arg>
+<arg>[^${allowed_chars}]+</arg>
+<arg>${EMPTY}</arg>
+<doc>Replaces ``pattern`` in the given ``string`` with ``replace_with``.</doc>
+<msg timestamp="20260412 16:23:47.046" level="TRACE">Arguments: [ 'ext_flash_boot' | '[^abcdefghijklmnopqrstuvwxyz01234567890_-]+' | '' ]</msg>
+<msg timestamp="20260412 16:23:47.046" level="TRACE">Return: 'ext_flash_boot'</msg>
+<msg timestamp="20260412 16:23:47.046" level="INFO">${metrics_fname} = ext_flash_boot</msg>
+<status status="PASS" starttime="20260412 16:23:47.044" endtime="20260412 16:23:47.046"/>
+</kw>
+<kw name="Join Path" library="OperatingSystem">
+<var>${metrics_path}</var>
+<arg>${RESULTS_DIRECTORY}</arg>
+<arg>profiler-${metrics_fname}</arg>
+<doc>Joins the given path part(s) to the given base path.</doc>
+<msg timestamp="20260412 16:23:47.046" level="TRACE">Arguments: [ '/app/' | 'profiler-ext_flash_boot' ]</msg>
+<msg timestamp="20260412 16:23:47.047" level="TRACE">Return: '/app/profiler-ext_flash_boot'</msg>
+<msg timestamp="20260412 16:23:47.047" level="INFO">${metrics_path} = /app/profiler-ext_flash_boot</msg>
+<status status="PASS" starttime="20260412 16:23:47.046" endtime="20260412 16:23:47.047"/>
+</kw>
+<if>
+<branch type="IF" condition="${CREATE_EXECUTION_METRICS}">
+<kw name="Execute Command" library="Remote">
+<arg>EnableProfilerGlobally "${metrics_path}"</arg>
+<status status="NOT RUN" starttime="20260412 16:23:47.047" endtime="20260412 16:23:47.047"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:47.047" endtime="20260412 16:23:47.047"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:47.047" endtime="20260412 16:23:47.047"/>
+</if>
+<kw name="Reset Emulation" library="Remote">
+<msg timestamp="20260412 16:23:47.047" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20260412 16:23:47.070" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20260412 16:23:47.047" endtime="20260412 16:23:47.071"/>
+</kw>
+<msg timestamp="20260412 16:23:47.071" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:46.996" endtime="20260412 16:23:47.071"/>
+</kw>
+<msg timestamp="20260412 16:23:47.071" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:46.350" endtime="20260412 16:23:47.071"/>
+</kw>
+<test id="s1-t1" name="Verify External Flash Boot Blink" line="12">
+<kw name="Reset Emulation" library="Remote" type="SETUP">
+<msg timestamp="20260412 16:23:47.072" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20260412 16:23:47.077" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20260412 16:23:47.072" endtime="20260412 16:23:47.077"/>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arg>$repl = @${REPL}</arg>
+<msg timestamp="20260412 16:23:47.078" level="TRACE">Arguments: [ '$repl = @/app/examples/m3_baremetal/m3_ext_flash_boot/sim/../../../../test/tang_nano_4k.repl' ]</msg>
+<msg timestamp="20260412 16:23:47.119" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20260412 16:23:47.077" endtime="20260412 16:23:47.120"/>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arg>$bin = @${BIN}</arg>
+<msg timestamp="20260412 16:23:47.120" level="TRACE">Arguments: [ '$bin = @/app/examples/m3_baremetal/m3_ext_flash_boot/sim/../firmware.elf' ]</msg>
+<msg timestamp="20260412 16:23:47.125" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20260412 16:23:47.120" endtime="20260412 16:23:47.125"/>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arg>include @${RESC}</arg>
+<msg timestamp="20260412 16:23:47.126" level="TRACE">Arguments: [ 'include @/app/examples/m3_baremetal/m3_ext_flash_boot/sim/ext_flash_boot.resc' ]</msg>
+<msg timestamp="20260412 16:23:49.524" level="FAIL">KeywordException: Could not execute command 'include @/app/examples/m3_baremetal/m3_ext_flash_boot/sim/ext_flash_boot.resc': There was an error executing command 'sysbus LoadELF $bin'Error while loading ELF: Could not load ELF from path: /app/examples/m3_baremetal/m3_ext_flash_boot/firmware.elfCould not load ELF from path: /app/examples/m3_baremetal/m3_ext_flash_boot/firmware.elfThere was an error executing command 'runMacro $reset'Parsing line 'sysbus LoadELF $bin' failed.
+</msg>
+<msg timestamp="20260412 16:23:49.524" level="DEBUG">KeywordException:    at Antmicro.Renode.RobotFramework.RenodeKeywords.ExecuteCommand(String command, String machine)
+   at InvokeStub_RenodeKeywords.ExecuteCommand(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+</msg>
+<status status="FAIL" starttime="20260412 16:23:47.125" endtime="20260412 16:23:49.524"/>
+</kw>
+<kw name="Create Terminal Tester" library="Remote">
+<arg>sysbus.uart0</arg>
+<status status="NOT RUN" starttime="20260412 16:23:49.524" endtime="20260412 16:23:49.524"/>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arg>machine LoadPlatformDescriptionFromString "led: Miscellaneous.LED @ gpio0 0"</arg>
+<status status="NOT RUN" starttime="20260412 16:23:49.524" endtime="20260412 16:23:49.524"/>
+</kw>
+<kw name="Create Log Tester" library="Remote">
+<arg>20</arg>
+<status status="NOT RUN" starttime="20260412 16:23:49.525" endtime="20260412 16:23:49.525"/>
+</kw>
+<kw name="Start Emulation" library="Remote">
+<status status="NOT RUN" starttime="20260412 16:23:49.525" endtime="20260412 16:23:49.525"/>
+</kw>
+<kw name="Wait For Line On Uart" library="Remote">
+<arg>M3 External Flash Boot Example</arg>
+<status status="NOT RUN" starttime="20260412 16:23:49.525" endtime="20260412 16:23:49.525"/>
+</kw>
+<kw name="Wait For Log Entry" library="Remote">
+<arg>led: State changed to True</arg>
+<arg>timeout=20</arg>
+<status status="NOT RUN" starttime="20260412 16:23:49.525" endtime="20260412 16:23:49.525"/>
+</kw>
+<kw name="Wait For Log Entry" library="Remote">
+<arg>led: State changed to False</arg>
+<arg>timeout=10</arg>
+<status status="NOT RUN" starttime="20260412 16:23:49.526" endtime="20260412 16:23:49.526"/>
+</kw>
+<kw name="Wait For Log Entry" library="Remote">
+<arg>led: State changed to True</arg>
+<arg>timeout=10</arg>
+<status status="NOT RUN" starttime="20260412 16:23:49.526" endtime="20260412 16:23:49.526"/>
+</kw>
+<kw name="Test Teardown" library="renode-keywords" type="TEARDOWN">
+<msg timestamp="20260412 16:23:49.527" level="TRACE">Arguments: [  ]</msg>
+<kw name="Stop Profiler" library="renode-keywords">
+<msg timestamp="20260412 16:23:49.527" level="TRACE">Arguments: [  ]</msg>
+<if>
+<branch type="IF" condition="${PROFILER_PROCESS}">
+<kw name="Terminate Process" library="Process">
+<arg>${PROFILER_PROCESS}</arg>
+<doc>Stops the process gracefully or forcefully.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:49.527" endtime="20260412 16:23:49.527"/>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<arg>${PROFILER_PROCESS}</arg>
+<arg>None</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:49.528" endtime="20260412 16:23:49.528"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:49.527" endtime="20260412 16:23:49.528"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:49.527" endtime="20260412 16:23:49.528"/>
+</if>
+<msg timestamp="20260412 16:23:49.528" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:49.527" endtime="20260412 16:23:49.528"/>
+</kw>
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<var>${failed}</var>
+<arg>Set Variable</arg>
+<arg>True</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<msg timestamp="20260412 16:23:49.528" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<arg>True</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20260412 16:23:49.528" level="TRACE">Arguments: [ 'True' ]</msg>
+<msg timestamp="20260412 16:23:49.528" level="TRACE">Return: 'True'</msg>
+<status status="PASS" starttime="20260412 16:23:49.528" endtime="20260412 16:23:49.528"/>
+</kw>
+<msg timestamp="20260412 16:23:49.528" level="TRACE">Return: 'True'</msg>
+<msg timestamp="20260412 16:23:49.529" level="INFO">${failed} = True</msg>
+<status status="PASS" starttime="20260412 16:23:49.528" endtime="20260412 16:23:49.529"/>
+</kw>
+<if>
+<branch type="IF" condition="${failed}">
+<kw name="Strip String" library="String">
+<var>${message}</var>
+<arg>${TEST_MESSAGE}</arg>
+<arg>mode=right</arg>
+<doc>Remove leading and/or trailing whitespaces from the given string.</doc>
+<msg timestamp="20260412 16:23:49.529" level="TRACE">Arguments: [ "KeywordException: Could not execute command 'include @/app/examples/m3_baremetal/m3_ext_flash_boot/sim/ext_flash_boot.resc': There was an error executing command 'sysbus LoadELF $bin'Error while loading ELF: Could not load ELF from path: /app/examples/m3_baremetal/m3_ext_flash_boot/firmware.elfCould not load ELF from path: /app/examples/m3_baremetal/m3_ext_flash_boot/firmware.elfThere was an error executing command 'runMacro $reset'Parsing line 'sysbus LoadELF $bin' failed.\n" | mode='right' ]</msg>
+<msg timestamp="20260412 16:23:49.529" level="TRACE">Return: "KeywordException: Could not execute command 'include @/app/examples/m3_baremetal/m3_ext_flash_boot/sim/ext_flash_boot.resc': There was an error executing command 'sysbus LoadELF $bin'Error while loading ELF: Could not load ELF from path: /app/examples/m3_baremetal/m3_ext_flash_boot/firmware.elfCould not load ELF from path: /app/examples/m3_baremetal/m3_ext_flash_boot/firmware.elfThere was an error executing command 'runMacro $reset'Parsing line 'sysbus LoadELF $bin' failed."</msg>
+<msg timestamp="20260412 16:23:49.529" level="INFO">${message} = KeywordException: Could not execute command 'include @/app/examples/m3_baremetal/m3_ext_flash_boot/sim/ext_flash_boot.resc': There was an error executing command 'sysbus LoadELF $bin'Error while loadi...</msg>
+<status status="PASS" starttime="20260412 16:23:49.529" endtime="20260412 16:23:49.529"/>
+</kw>
+<kw name="Set Test Message" library="BuiltIn">
+<arg>${message}</arg>
+<doc>Sets message for the current test case.</doc>
+<msg timestamp="20260412 16:23:49.530" level="TRACE">Arguments: [ "KeywordException: Could not execute command 'include @/app/examples/m3_baremetal/m3_ext_flash_boot/sim/ext_flash_boot.resc': There was an error executing command 'sysbus LoadELF $bin'Error while loading ELF: Could not load ELF from path: /app/examples/m3_baremetal/m3_ext_flash_boot/firmware.elfCould not load ELF from path: /app/examples/m3_baremetal/m3_ext_flash_boot/firmware.elfThere was an error executing command 'runMacro $reset'Parsing line 'sysbus LoadELF $bin' failed." ]</msg>
+<msg timestamp="20260412 16:23:49.530" level="INFO">Set test message to:
+KeywordException: Could not execute command 'include @/app/examples/m3_baremetal/m3_ext_flash_boot/sim/ext_flash_boot.resc': There was an error executing command 'sysbus LoadELF $bin'Error while loading ELF: Could not load ELF from path: /app/examples/m3_baremetal/m3_ext_flash_boot/firmware.elfCould not load ELF from path: /app/examples/m3_baremetal/m3_ext_flash_boot/firmware.elfThere was an error executing command 'runMacro $reset'Parsing line 'sysbus LoadELF $bin' failed.</msg>
+<msg timestamp="20260412 16:23:49.530" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:49.529" endtime="20260412 16:23:49.530"/>
+</kw>
+<status status="PASS" starttime="20260412 16:23:49.529" endtime="20260412 16:23:49.530"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:49.529" endtime="20260412 16:23:49.530"/>
+</if>
+<kw name="Run Keyword If Timeout Occurred" library="BuiltIn">
+<var>${timed_out}</var>
+<arg>Set Variable</arg>
+<arg>True</arg>
+<doc>Runs the given keyword if either a test or a keyword timeout has occurred.</doc>
+<msg timestamp="20260412 16:23:49.530" level="TRACE">Arguments: [ 'Set Variable' | 'True' ]</msg>
+<msg timestamp="20260412 16:23:49.530" level="TRACE">Return: None</msg>
+<msg timestamp="20260412 16:23:49.530" level="INFO">${timed_out} = None</msg>
+<status status="PASS" starttime="20260412 16:23:49.530" endtime="20260412 16:23:49.530"/>
+</kw>
+<if>
+<branch type="IF" condition="${timed_out}">
+<return>
+<status status="NOT RUN" starttime="20260412 16:23:49.531" endtime="20260412 16:23:49.531"/>
+</return>
+<status status="NOT RUN" starttime="20260412 16:23:49.531" endtime="20260412 16:23:49.531"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:49.531" endtime="20260412 16:23:49.531"/>
+</if>
+<if>
+<branch type="IF" condition="${CREATE_SNAPSHOT_ON_FAIL}">
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<arg>Create Snapshot Of Failed Test</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<msg timestamp="20260412 16:23:49.531" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<kw name="Create Snapshot Of Failed Test" library="renode-keywords">
+<msg timestamp="20260412 16:23:49.531" level="TRACE">Arguments: [  ]</msg>
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'skipped' in @{TEST TAGS}</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<msg timestamp="20260412 16:23:49.532" level="TRACE">Arguments: [ "'skipped' in []" ]</msg>
+<msg timestamp="20260412 16:23:49.532" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:49.532" endtime="20260412 16:23:49.532"/>
+</kw>
+<kw name="Get Variable Value" library="BuiltIn">
+<var>${retry_index}</var>
+<arg>\${RETRYFAILED_RETRY_INDEX}</arg>
+<arg>0</arg>
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<msg timestamp="20260412 16:23:49.532" level="TRACE">Arguments: [ '\\${RETRYFAILED_RETRY_INDEX}' | '0' ]</msg>
+<msg timestamp="20260412 16:23:49.534" level="TRACE">Return: '0'</msg>
+<msg timestamp="20260412 16:23:49.534" level="INFO">${retry_index} = 0</msg>
+<status status="PASS" starttime="20260412 16:23:49.532" endtime="20260412 16:23:49.534"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${test_name}</var>
+<arg>${SUITE NAME}.${TEST NAME}.fail${retry_index}.save</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20260412 16:23:49.535" level="TRACE">Arguments: [ 'ext_flash_boot.Verify External Flash Boot Blink.fail0.save' ]</msg>
+<msg timestamp="20260412 16:23:49.535" level="TRACE">Return: 'ext_flash_boot.Verify External Flash Boot Blink.fail0.save'</msg>
+<msg timestamp="20260412 16:23:49.535" level="INFO">${test_name} = ext_flash_boot.Verify External Flash Boot Blink.fail0.save</msg>
+<status status="PASS" starttime="20260412 16:23:49.535" endtime="20260412 16:23:49.535"/>
+</kw>
+<kw name="Sanitize Test Name" library="renode-keywords">
+<var>${test_name}</var>
+<arg>${test_name}</arg>
+<msg timestamp="20260412 16:23:49.535" level="TRACE">Arguments: [ ${test_name}='ext_flash_boot.Verify External Flash Boot Blink.fail0.save' ]</msg>
+<kw name="Replace String" library="String">
+<var>${test_name}</var>
+<arg>${test_name}</arg>
+<arg>${SPACE}</arg>
+<arg>_</arg>
+<doc>Replaces ``search_for`` in the given ``string`` with ``replace_with``.</doc>
+<msg timestamp="20260412 16:23:49.536" level="TRACE">Arguments: [ 'ext_flash_boot.Verify External Flash Boot Blink.fail0.save' | ' ' | '_' ]</msg>
+<msg timestamp="20260412 16:23:49.536" level="TRACE">Return: 'ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.save'</msg>
+<msg timestamp="20260412 16:23:49.536" level="INFO">${test_name} = ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.save</msg>
+<status status="PASS" starttime="20260412 16:23:49.536" endtime="20260412 16:23:49.536"/>
+</kw>
+<kw name="Replace String Using Regexp" library="String">
+<var>${test_name}</var>
+<arg>${test_name}</arg>
+<arg>[/""]</arg>
+<arg>-</arg>
+<doc>Replaces ``pattern`` in the given ``string`` with ``replace_with``.</doc>
+<msg timestamp="20260412 16:23:49.536" level="TRACE">Arguments: [ 'ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.save' | '[/""]' | '-' ]</msg>
+<msg timestamp="20260412 16:23:49.537" level="TRACE">Return: 'ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.save'</msg>
+<msg timestamp="20260412 16:23:49.537" level="INFO">${test_name} = ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.save</msg>
+<status status="PASS" starttime="20260412 16:23:49.536" endtime="20260412 16:23:49.537"/>
+</kw>
+<return>
+<value>${test_name}</value>
+<status status="PASS" starttime="20260412 16:23:49.537" endtime="20260412 16:23:49.537"/>
+</return>
+<msg timestamp="20260412 16:23:49.537" level="TRACE">Return: 'ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.save'</msg>
+<msg timestamp="20260412 16:23:49.537" level="INFO">${test_name} = ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.save</msg>
+<status status="PASS" starttime="20260412 16:23:49.535" endtime="20260412 16:23:49.537"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${snapshots_dir}</var>
+<arg>${RESULTS_DIRECTORY}/snapshots</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20260412 16:23:49.538" level="TRACE">Arguments: [ '/app//snapshots' ]</msg>
+<msg timestamp="20260412 16:23:49.538" level="TRACE">Return: '/app//snapshots'</msg>
+<msg timestamp="20260412 16:23:49.538" level="INFO">${snapshots_dir} = /app//snapshots</msg>
+<status status="PASS" starttime="20260412 16:23:49.537" endtime="20260412 16:23:49.538"/>
+</kw>
+<kw name="Create Directory" library="OperatingSystem">
+<arg>${snapshots_dir}</arg>
+<doc>Creates the specified directory.</doc>
+<msg timestamp="20260412 16:23:49.538" level="TRACE">Arguments: [ '/app//snapshots' ]</msg>
+<msg timestamp="20260412 16:23:49.538" level="INFO" html="true">Directory '&lt;a href="file:///app/snapshots"&gt;/app/snapshots&lt;/a&gt;' already exists.</msg>
+<msg timestamp="20260412 16:23:49.538" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:49.538" endtime="20260412 16:23:49.538"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${snapshot_path}</var>
+<arg>"${snapshots_dir}/${test_name}"</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20260412 16:23:49.539" level="TRACE">Arguments: [ '"/app//snapshots/ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.save"' ]</msg>
+<msg timestamp="20260412 16:23:49.539" level="TRACE">Return: '"/app//snapshots/ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.save"'</msg>
+<msg timestamp="20260412 16:23:49.539" level="INFO">${snapshot_path} = "/app//snapshots/ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.save"</msg>
+<status status="PASS" starttime="20260412 16:23:49.538" endtime="20260412 16:23:49.539"/>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arg>Save ${snapshot_path}</arg>
+<msg timestamp="20260412 16:23:49.539" level="TRACE">Arguments: [ 'Save "/app//snapshots/ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.save"' ]</msg>
+<msg timestamp="20260412 16:23:50.479" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20260412 16:23:49.539" endtime="20260412 16:23:50.479"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>!!!!! Emulation's state saved to ${snapshot_path}</arg>
+<doc>Logs the given message to the console.</doc>
+<msg timestamp="20260412 16:23:50.480" level="TRACE">Arguments: [ '!!!!! Emulation\'s state saved to "/app//snapshots/ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.save"' ]</msg>
+<msg timestamp="20260412 16:23:50.480" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:50.479" endtime="20260412 16:23:50.480"/>
+</kw>
+<msg timestamp="20260412 16:23:50.480" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:49.531" endtime="20260412 16:23:50.480"/>
+</kw>
+<msg timestamp="20260412 16:23:50.480" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:49.531" endtime="20260412 16:23:50.480"/>
+</kw>
+<status status="PASS" starttime="20260412 16:23:49.531" endtime="20260412 16:23:50.480"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:49.531" endtime="20260412 16:23:50.480"/>
+</if>
+<if>
+<branch type="IF" condition="${SAVE_LOGS}">
+<if>
+<branch type="IF" condition="&quot;${SAVE_LOGS_WHEN}&quot; == &quot;Always&quot;">
+<kw name="Save Test Log" library="renode-keywords">
+<status status="NOT RUN" starttime="20260412 16:23:50.481" endtime="20260412 16:23:50.481"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:50.481" endtime="20260412 16:23:50.481"/>
+</branch>
+<branch type="ELSE IF" condition="&quot;${SAVE_LOGS_WHEN}&quot; == &quot;Fail&quot;">
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<arg>Save Test Log</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<msg timestamp="20260412 16:23:50.481" level="TRACE">Arguments: [ 'Save Test Log' ]</msg>
+<kw name="Save Test Log" library="renode-keywords">
+<msg timestamp="20260412 16:23:50.482" level="TRACE">Arguments: [  ]</msg>
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'skipped' in @{TEST TAGS}</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<msg timestamp="20260412 16:23:50.482" level="TRACE">Arguments: [ "'skipped' in []" ]</msg>
+<msg timestamp="20260412 16:23:50.482" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:50.482" endtime="20260412 16:23:50.482"/>
+</kw>
+<kw name="Get Variable Value" library="BuiltIn">
+<var>${retry_index}</var>
+<arg>\${RETRYFAILED_RETRY_INDEX}</arg>
+<arg>0</arg>
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<msg timestamp="20260412 16:23:50.483" level="TRACE">Arguments: [ '\\${RETRYFAILED_RETRY_INDEX}' | '0' ]</msg>
+<msg timestamp="20260412 16:23:50.484" level="TRACE">Return: '0'</msg>
+<msg timestamp="20260412 16:23:50.484" level="INFO">${retry_index} = 0</msg>
+<status status="PASS" starttime="20260412 16:23:50.482" endtime="20260412 16:23:50.484"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${test_name}</var>
+<arg>${SUITE NAME}.${TEST NAME}.fail${retry_index}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20260412 16:23:50.484" level="TRACE">Arguments: [ 'ext_flash_boot.Verify External Flash Boot Blink.fail0' ]</msg>
+<msg timestamp="20260412 16:23:50.484" level="TRACE">Return: 'ext_flash_boot.Verify External Flash Boot Blink.fail0'</msg>
+<msg timestamp="20260412 16:23:50.484" level="INFO">${test_name} = ext_flash_boot.Verify External Flash Boot Blink.fail0</msg>
+<status status="PASS" starttime="20260412 16:23:50.484" endtime="20260412 16:23:50.484"/>
+</kw>
+<kw name="Sanitize Test Name" library="renode-keywords">
+<var>${test_name}</var>
+<arg>${test_name}</arg>
+<msg timestamp="20260412 16:23:50.485" level="TRACE">Arguments: [ ${test_name}='ext_flash_boot.Verify External Flash Boot Blink.fail0' ]</msg>
+<kw name="Replace String" library="String">
+<var>${test_name}</var>
+<arg>${test_name}</arg>
+<arg>${SPACE}</arg>
+<arg>_</arg>
+<doc>Replaces ``search_for`` in the given ``string`` with ``replace_with``.</doc>
+<msg timestamp="20260412 16:23:50.485" level="TRACE">Arguments: [ 'ext_flash_boot.Verify External Flash Boot Blink.fail0' | ' ' | '_' ]</msg>
+<msg timestamp="20260412 16:23:50.485" level="TRACE">Return: 'ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0'</msg>
+<msg timestamp="20260412 16:23:50.485" level="INFO">${test_name} = ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0</msg>
+<status status="PASS" starttime="20260412 16:23:50.485" endtime="20260412 16:23:50.485"/>
+</kw>
+<kw name="Replace String Using Regexp" library="String">
+<var>${test_name}</var>
+<arg>${test_name}</arg>
+<arg>[/""]</arg>
+<arg>-</arg>
+<doc>Replaces ``pattern`` in the given ``string`` with ``replace_with``.</doc>
+<msg timestamp="20260412 16:23:50.486" level="TRACE">Arguments: [ 'ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0' | '[/""]' | '-' ]</msg>
+<msg timestamp="20260412 16:23:50.486" level="TRACE">Return: 'ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0'</msg>
+<msg timestamp="20260412 16:23:50.486" level="INFO">${test_name} = ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0</msg>
+<status status="PASS" starttime="20260412 16:23:50.485" endtime="20260412 16:23:50.486"/>
+</kw>
+<return>
+<value>${test_name}</value>
+<status status="PASS" starttime="20260412 16:23:50.486" endtime="20260412 16:23:50.486"/>
+</return>
+<msg timestamp="20260412 16:23:50.486" level="TRACE">Return: 'ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0'</msg>
+<msg timestamp="20260412 16:23:50.486" level="INFO">${test_name} = ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0</msg>
+<status status="PASS" starttime="20260412 16:23:50.484" endtime="20260412 16:23:50.486"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${logs_dir}</var>
+<arg>${RESULTS_DIRECTORY}/logs</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20260412 16:23:50.486" level="TRACE">Arguments: [ '/app//logs' ]</msg>
+<msg timestamp="20260412 16:23:50.487" level="TRACE">Return: '/app//logs'</msg>
+<msg timestamp="20260412 16:23:50.487" level="INFO">${logs_dir} = /app//logs</msg>
+<status status="PASS" starttime="20260412 16:23:50.486" endtime="20260412 16:23:50.487"/>
+</kw>
+<kw name="Create Directory" library="OperatingSystem">
+<arg>${logs_dir}</arg>
+<doc>Creates the specified directory.</doc>
+<msg timestamp="20260412 16:23:50.487" level="TRACE">Arguments: [ '/app//logs' ]</msg>
+<msg timestamp="20260412 16:23:50.487" level="INFO" html="true">Directory '&lt;a href="file:///app/logs"&gt;/app/logs&lt;/a&gt;' already exists.</msg>
+<msg timestamp="20260412 16:23:50.487" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:50.487" endtime="20260412 16:23:50.487"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${log_path}</var>
+<arg>${logs_dir}/${test_name}.log</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20260412 16:23:50.487" level="TRACE">Arguments: [ '/app//logs/ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.log' ]</msg>
+<msg timestamp="20260412 16:23:50.487" level="TRACE">Return: '/app//logs/ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.log'</msg>
+<msg timestamp="20260412 16:23:50.488" level="INFO">${log_path} = /app//logs/ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.log</msg>
+<status status="PASS" starttime="20260412 16:23:50.487" endtime="20260412 16:23:50.488"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>!!!!! Log saved to "${log_path}"</arg>
+<doc>Logs the given message to the console.</doc>
+<msg timestamp="20260412 16:23:50.488" level="TRACE">Arguments: [ '!!!!! Log saved to "/app//logs/ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.log"' ]</msg>
+<msg timestamp="20260412 16:23:50.488" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:50.488" endtime="20260412 16:23:50.488"/>
+</kw>
+<kw name="Save Cached Log" library="Remote">
+<arg>${log_path}</arg>
+<msg timestamp="20260412 16:23:50.488" level="TRACE">Arguments: [ '/app//logs/ext_flash_boot.Verify_External_Flash_Boot_Blink.fail0.log' ]</msg>
+<msg timestamp="20260412 16:23:50.493" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20260412 16:23:50.488" endtime="20260412 16:23:50.493"/>
+</kw>
+<msg timestamp="20260412 16:23:50.494" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:50.482" endtime="20260412 16:23:50.494"/>
+</kw>
+<msg timestamp="20260412 16:23:50.494" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:50.481" endtime="20260412 16:23:50.494"/>
+</kw>
+<status status="PASS" starttime="20260412 16:23:50.481" endtime="20260412 16:23:50.494"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:50.481" endtime="20260412 16:23:50.494"/>
+</if>
+<status status="PASS" starttime="20260412 16:23:50.480" endtime="20260412 16:23:50.494"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:50.480" endtime="20260412 16:23:50.494"/>
+</if>
+<if>
+<branch type="IF" condition="${HOLD_ON_ERROR}">
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<var>${res}</var>
+<arg>Run Keyword And Ignore Error</arg>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:50.494" endtime="20260412 16:23:50.494"/>
+</kw>
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:50.494" endtime="20260412 16:23:50.495"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:50.494" endtime="20260412 16:23:50.495"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:50.494" endtime="20260412 16:23:50.495"/>
+</if>
+<kw name="Reset Emulation" library="Remote">
+<msg timestamp="20260412 16:23:50.495" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20260412 16:23:50.553" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20260412 16:23:50.495" endtime="20260412 16:23:50.553"/>
+</kw>
+<kw name="Clear Cached Log" library="Remote">
+<msg timestamp="20260412 16:23:50.553" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20260412 16:23:50.567" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20260412 16:23:50.553" endtime="20260412 16:23:50.567"/>
+</kw>
+<msg timestamp="20260412 16:23:50.567" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:49.526" endtime="20260412 16:23:50.567"/>
+</kw>
+<doc>Verifies that the M3 can boot from external flash and blink the LED.</doc>
+<status status="FAIL" starttime="20260412 16:23:47.071" endtime="20260412 16:23:50.567">KeywordException: Could not execute command 'include @/app/examples/m3_baremetal/m3_ext_flash_boot/sim/ext_flash_boot.resc': There was an error executing command 'sysbus LoadELF $bin'Error while loading ELF: Could not load ELF from path: /app/examples/m3_baremetal/m3_ext_flash_boot/firmware.elfCould not load ELF from path: /app/examples/m3_baremetal/m3_ext_flash_boot/firmware.elfThere was an error executing command 'runMacro $reset'Parsing line 'sysbus LoadELF $bin' failed.</status>
+</test>
+<kw name="Teardown" library="renode-keywords" type="TEARDOWN">
+<msg timestamp="20260412 16:23:50.568" level="TRACE">Arguments: [  ]</msg>
+<if>
+<branch type="IF" condition="not ${SKIP_RUNNING_SERVER}">
+<kw name="Stop Remote Server" library="Remote">
+<status status="NOT RUN" starttime="20260412 16:23:50.569" endtime="20260412 16:23:50.569"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:50.569" endtime="20260412 16:23:50.569"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:50.569" endtime="20260412 16:23:50.569"/>
+</if>
+<if>
+<branch type="IF" condition="not ${SKIP_RUNNING_SERVER}">
+<kw name="Wait For Process" library="Process">
+<doc>Waits for the process to complete or to reach the given timeout.</doc>
+<status status="NOT RUN" starttime="20260412 16:23:50.570" endtime="20260412 16:23:50.570"/>
+</kw>
+<status status="NOT RUN" starttime="20260412 16:23:50.569" endtime="20260412 16:23:50.570"/>
+</branch>
+<status status="PASS" starttime="20260412 16:23:50.569" endtime="20260412 16:23:50.570"/>
+</if>
+<msg timestamp="20260412 16:23:50.570" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20260412 16:23:50.568" endtime="20260412 16:23:50.570"/>
+</kw>
+<meta name="HotSpot_Action">-</meta>
+<status status="FAIL" starttime="20260412 16:23:46.278" endtime="20260412 16:23:50.570"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="1" skip="0" id="s1" name="Test Suite">Test Suite</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
