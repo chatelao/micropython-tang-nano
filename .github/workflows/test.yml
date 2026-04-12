@@ -23,6 +23,7 @@ jobs:
           # Bare-metal examples
           cp dist/m3_ext_flash_int.bin examples/m3_baremetal/m3_ext_flash_boot/int_blink.bin
           cp dist/m3_ext_flash_ext.bin examples/m3_baremetal/m3_ext_flash_boot/ext_blink.bin
+          cp dist/m3_ext_flash_boot.elf examples/m3_baremetal/m3_ext_flash_boot/firmware.elf
 
       - name: Set up Python
         uses: actions/setup-python@v5

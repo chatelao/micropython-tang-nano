@@ -17,12 +17,17 @@ Verify External Flash Boot Blink
     Execute Command         $ext_bin = @${EXT_BIN}
     Execute Command         include @${RESC}
 
+    Create Terminal Tester  sysbus.uart0
+
     # Attach an LED to GPIO 0 to ensure we get clear log messages
     Execute Command         machine LoadPlatformDescriptionFromString "led: Miscellaneous.LED @ gpio0 0"
 
     Create Log Tester       20
 
     Start Emulation
+
+    # Wait for UART boot message
+    Wait For Line On Uart   M3 External Flash Boot Example
 
     # The blinky example toggles the LED.
     # We wait for the LED state change log messages.

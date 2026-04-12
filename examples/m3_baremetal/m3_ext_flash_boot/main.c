@@ -7,7 +7,22 @@ void delay(volatile uint32_t count) {
     }
 }
 
+void uart_putc(char c) {
+    while (REG_UART0_STATE & (1 << 0)); // Wait if TX buffer full
+    REG_UART0_DATA = c;
+}
+
+void uart_puts(const char *s) {
+    while (*s) uart_putc(*s++);
+}
+
 int main(void) {
+    // Configure UART0
+    REG_UART0_BAUDDIV = 27000000 / 115200;
+    REG_UART0_CTRL = 0x01; // Enable TX
+
+    uart_puts("M3 External Flash Boot Example\r\n");
+
     // Configure GPIO0 (LED) as output
     REG_GPIO_OUTENSET = (1 << 0);
 

@@ -21,6 +21,8 @@ sysbus LoadBinary $ext_bin 0x60000000
 sysbus.cpu VectorTableOffset 0x00000000
 sysbus.cpu SP `sysbus ReadDoubleWord 0x00000000`
 sysbus.cpu PC `sysbus ReadDoubleWord 0x00000004`
+# Patch PC for Thumb mode if it was loaded from a word
+sysbus.cpu PC (`sysbus.cpu PC` | 1)
 """
 
 runMacro $reset

@@ -79,6 +79,7 @@ jobs:
           cp src/ports/tang_nano_4k/build_split/firmware.elf dist/firmware_split.elf
           cp examples/m3_baremetal/m3_ext_flash_boot/int_blink.bin dist/m3_ext_flash_int.bin
           cp examples/m3_baremetal/m3_ext_flash_boot/ext_blink.bin dist/m3_ext_flash_ext.bin
+          cp examples/m3_baremetal/m3_ext_flash_boot/firmware.elf dist/m3_ext_flash_boot.elf
           cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/tang_nano_4k_m3.fs
 
       - name: Upload artifacts

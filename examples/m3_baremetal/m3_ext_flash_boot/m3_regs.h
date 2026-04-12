@@ -3,6 +3,13 @@
 
 #include <stdint.h>
 
+// --- UART0 ---
+#define UART0_BASE          (0x40004000)
+#define REG_UART0_DATA      (*(volatile uint32_t *)(UART0_BASE + 0x00))
+#define REG_UART0_STATE     (*(volatile uint32_t *)(UART0_BASE + 0x04))
+#define REG_UART0_CTRL      (*(volatile uint32_t *)(UART0_BASE + 0x08))
+#define REG_UART0_BAUDDIV   (*(volatile uint32_t *)(UART0_BASE + 0x10))
+
 // --- GPIO (CMSDK) ---
 #define GPIO_BASE           (0x40010000)
 #define REG_GPIO_DATA       (*(volatile uint32_t *)(GPIO_BASE + 0x00))
