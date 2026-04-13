@@ -45,11 +45,11 @@ jobs:
         uses: antmicro/renode-test-action@v5
         with:
           tests-to-run: |
-            test/tang_nano_4k.robot \
-            test/examples/test_blink.robot \
-            test/examples/test_tt_echo.robot \
-            test/examples/test_neorv32.robot \
-            test/examples/test_serv.robot \
+            test/tang_nano_4k.robot
+            test/examples/test_blink.robot
+            test/examples/test_tt_echo.robot
+            test/examples/test_neorv32.robot
+            test/examples/test_serv.robot
             examples/m3_baremetal/m3_ext_flash_boot/sim/ext_flash_boot.robot
 
       - name: Upload test results

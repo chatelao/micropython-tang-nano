@@ -65,7 +65,7 @@ jobs:
 
       - name: Build M3 External Flash Boot Example
         run: |
-          make -C examples/m3_baremetal/m3_ext_flash_boot
+          make -C examples/m3_baremetal/m3_ext_flash_boot int_blink.bin ext_blink.bin
 
       - name: Prepare artifacts
         run: |
