@@ -63,6 +63,10 @@ jobs:
         run: |
           make -C src/ports/tang_nano_4k/ BUILD=build_split SPLIT_FLASH=1
 
+      - name: Build M3 External Flash Boot Example
+        run: |
+          make -C examples/m3_baremetal/m3_ext_flash_boot
+
       - name: Prepare artifacts
         run: |
           mkdir dist
@@ -74,6 +78,8 @@ jobs:
           cp src/ports/tang_nano_4k/build_split/firmware_ext.bin dist/firmware_split_ext.bin
           cp src/ports/tang_nano_4k/build_split/firmware.elf dist/firmware_split.elf
           cp src/fpga/bitstream/tang_nano_4k_m3.fs dist/tang_nano_4k_m3.fs
+          cp examples/m3_baremetal/m3_ext_flash_boot/int_blink.bin dist/m3_ext_flash_int.bin
+          cp examples/m3_baremetal/m3_ext_flash_boot/ext_blink.bin dist/m3_ext_flash_ext.bin
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

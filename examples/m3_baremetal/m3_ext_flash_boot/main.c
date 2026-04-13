@@ -7,7 +7,7 @@ void delay(volatile uint32_t count) {
     }
 }
 
-void main(void) {
+int main(void) {
     // Configure GPIO0 (LED) as output
     REG_GPIO_OUTENSET = (1 << 0);
 
@@ -31,4 +31,6 @@ void main(void) {
         REG_GPIO_DATAOUT ^= (1 << 0);
         delay(delay_val);
     }
+
+    return 0;
 }

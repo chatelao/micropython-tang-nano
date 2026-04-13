@@ -1,0 +1,29 @@
+# ext_flash_boot.resc
+
+using sysbus
+mach create "tang_nano_4k"
+
+# Paths are relative to this script's location: examples/m3_baremetal/m3_ext_flash_boot/sim/
+$repl?=@../../../../test/tang_nano_4k.repl
+$int_bin?=@../int_blink.bin
+$ext_bin?=@../ext_blink.bin
+
+machine LoadPlatformDescription $repl
+
+# Set CPU performance to match 27MHz hardware for accurate SysTick timing
+sysbus.cpu PerformanceInMips 27
+
+macro reset
+"""
+    # Load ISR vector to Internal Flash
+    sysbus LoadBinary $int_bin 0x00000000
+    # Load Code to External Flash
+    sysbus LoadBinary $ext_bin 0x60000000
+
+    # Set PC and SP from the vector table
+    sysbus.cpu VectorTableOffset 0x00000000
+    sysbus.cpu SP `sysbus ReadDoubleWord 0x00000000`
+    sysbus.cpu PC `sysbus ReadDoubleWord 0x00000004`
+"""
+
+runMacro $reset
