@@ -7,7 +7,7 @@ SIZE = $(CROSS_COMPILE)size
 CFLAGS = -mthumb -mcpu=cortex-m3 -O2 -Wall -g
 LDFLAGS = -T m3.ld -Wl,-Map=firmware.map,--cref,--gc-sections --specs=nano.specs --specs=nosys.specs
 
-SRC = main.c startup.c
+SRC = main.c startup.c paged_code.c
 OBJ = $(SRC:.c=.o)
 
 # FPGA Tools
@@ -25,7 +25,7 @@ int_blink.bin: firmware.elf
 	$(OBJCOPY) -O binary -j .isr_vector $< $@
 
 ext_blink.bin: firmware.elf
-	$(OBJCOPY) -O binary -j .text -j .ARM.exidx -j .data $< $@
+	$(OBJCOPY) -O binary -j .text -j .far_code -j .ARM.exidx -j .data $< $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

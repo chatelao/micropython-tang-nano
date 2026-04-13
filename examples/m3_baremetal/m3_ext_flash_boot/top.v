@@ -4,6 +4,10 @@
 module top (
     input  wire clk_27m,      // Pin 45
 
+    // UART0
+    output wire uart_tx,      // Pin 18
+    input  wire uart_rx,      // Pin 19
+
     // SPI Flash (XIP)
     output wire flash_cs_n,   // Pin 36
     output wire flash_sclk,   // Pin 37
@@ -29,14 +33,46 @@ module top (
     wire        ahb_ready;
     wire        ahb_hsel_flash;
 
-    // AHB Address Decoding (Flash: 0x60000000)
+    // AHB Address Decoding
+    // Flash: 0x60000000
+    // Bank Reg: 0x40000000
     assign ahb_hsel_flash = (ahb_addr[31:28] == 4'h6);
+    wire ahb_hsel_bank = (ahb_addr == 32'h40000000);
+
+    // AHB Data Phase Registers (1 cycle delay)
+    // AHB protocol requires that data is sampled/driven in the cycle after the address phase.
+    reg ahb_hsel_bank_d1;
+    reg ahb_write_d1;
+    reg [1:0] ahb_trans_d1;
+
+    always @(posedge clk_27m or negedge sys_reset_n) begin
+        if (!sys_reset_n) begin
+            ahb_hsel_bank_d1 <= 1'b0;
+            ahb_write_d1 <= 1'b0;
+            ahb_trans_d1 <= 2'b0;
+        end else if (ahb_ready) begin
+            ahb_hsel_bank_d1 <= ahb_hsel_bank;
+            ahb_write_d1 <= ahb_write;
+            ahb_trans_d1 <= ahb_trans;
+        end
+    end
+
+    // Bank Register logic (Update in data phase)
+    // This register holds the upper bits of the Flash address to allow
+    // the M3 to access the full 8MB via a 64KB window.
+    reg [7:0] flash_bank = 8'h0;
+    always @(posedge clk_27m or negedge sys_reset_n) begin
+        if (!sys_reset_n)
+            flash_bank <= 8'h0;
+        else if (ahb_hsel_bank_d1 && ahb_write_d1 && (ahb_trans_d1[1]))
+            flash_bank <= ahb_wdata[7:0];
+    end
 
     wire [31:0] flash_rdata;
     wire        flash_ready;
 
     // AHB Data Phase Multiplexing
-    assign ahb_rdata = flash_rdata;
+    assign ahb_rdata = ahb_hsel_bank_d1 ? {24'h0, flash_bank} : flash_rdata;
     assign ahb_ready = ahb_hsel_flash ? flash_ready : 1'b1;
 
     // GPIO
@@ -68,7 +104,9 @@ module top (
         .hclk        (clk_27m),
         .hreset_n    (sys_reset_n),
         .hsel        (ahb_hsel_flash),
-        .haddr       (ahb_addr),
+        // Use bank register for address mapping (64KB chunks).
+        // This allows the software to "slide" the 64KB window across the 8MB Flash.
+        .haddr       ({8'h0, flash_bank, ahb_addr[15:0]}),
         .hwrite      (ahb_write),
         .htrans      (ahb_trans),
         .hwdata      (ahb_wdata),

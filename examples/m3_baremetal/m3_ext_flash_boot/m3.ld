@@ -4,7 +4,7 @@ ENTRY(Reset_Handler)
 MEMORY
 {
     INT_FLASH (rx)  : ORIGIN = 0x00000000, LENGTH = 32K
-    EXT_FLASH (rx)  : ORIGIN = 0x60000000, LENGTH = 64K
+    EXT_FLASH (rx)  : ORIGIN = 0x60000000, LENGTH = 8M
     SRAM      (rwx) : ORIGIN = 0x20000000, LENGTH = 22K
 }
 
@@ -26,10 +26,24 @@ SECTIONS
     .text :
     {
         . = ALIGN(4);
-        *(.text*)
+        *(.text.main)
+        *(.text.delay)
+        *(.text.uart_print)
+        *(EXCLUDE_FILE (*paged_code.o) .text*)
         *(.rodata*)
         . = ALIGN(4);
     } > MAIN_FLASH
+
+    /*
+     * Automatic mapping test: place the paged_code object
+     * at a high memory address (4MB offset)
+     */
+    .far_code 0x60400000 :
+    {
+        . = ALIGN(4);
+        *paged_code.o(.text*)
+        . = ALIGN(4);
+    } > EXT_FLASH
 
     .ARM.exidx :
     {
@@ -42,6 +56,7 @@ SECTIONS
         . = ALIGN(4);
         _sdata = .;
         *(.data*)
+        *(.ramfunc*)
         . = ALIGN(4);
         _edata = .;
     } > SRAM

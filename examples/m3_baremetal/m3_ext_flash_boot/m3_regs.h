@@ -35,4 +35,7 @@
 #define PSRAM_SIZE          (8 * 1024 * 1024)
 #define EXT_FLASH_BASE      (0x60000000)
 
+/* Physical address of the Custom AHB Bank Register in your FPGA fabric */
+#define HW_BANK_REG ((volatile uint32_t*)0x40000000)
+
 #endif // M3_REGS_H
