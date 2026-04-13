@@ -4,7 +4,7 @@ ENTRY(Reset_Handler)
 MEMORY
 {
     INT_FLASH (rx)  : ORIGIN = 0x00000000, LENGTH = 32K
-    EXT_FLASH (rx)  : ORIGIN = 0x60000000, LENGTH = 1M
+    EXT_FLASH (rx)  : ORIGIN = 0x60000000, LENGTH = 8M
     SRAM      (rwx) : ORIGIN = 0x20000000, LENGTH = 22K
 }
 
@@ -34,19 +34,20 @@ SECTIONS
         . = ALIGN(4);
     } > MAIN_FLASH
 
-    /*
-     * Definition of overlapping XIP pages (Banks 1 and 2).
-     * VMA is 0x60008000 for both, but LMA is at 64KB boundaries in Flash.
-     */
-    .page_1 0x60008000 : AT(0x60018000)
+    /* Linear placement of large code sections in external flash */
+    .page_1 0x60100000 :
     {
+        . = ALIGN(4);
         *(.page_1_code)
-    }
+        . = ALIGN(4);
+    } > EXT_FLASH
 
-    .page_2 0x60008000 : AT(0x60028000)
+    .page_2 0x60200000 :
     {
+        . = ALIGN(4);
         *(.page_2_code)
-    }
+        . = ALIGN(4);
+    } > EXT_FLASH
 
     .ARM.exidx :
     {

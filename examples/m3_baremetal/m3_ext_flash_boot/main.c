@@ -16,49 +16,7 @@ static inline void __disable_irq(void) {
     __asm volatile ("cpsid i" : : : "memory");
 }
 
-// --- Trampoline (Must run from SRAM) ---
-__attribute__((section(".ramfunc"), noinline))
-uint32_t trampoline(uint32_t bank, uint32_t (*func)(uint32_t, uint32_t), uint32_t arg1, uint32_t arg2) {
-    // 1. Save and disable interrupts
-    uint32_t pri = __get_PRIMASK();
-    __disable_irq();
-
-    // 2. Save current bank and switch to the target page
-    uint32_t old_bank = *HW_BANK_REG;
-    *HW_BANK_REG = bank;
-
-    // 3. Synchronization barriers
-    __asm volatile("dsb" : : : "memory");
-    __asm volatile("isb" : : : "memory");
-
-    // 4. Execute the actual function in the paged flash window
-    uint32_t result = func(arg1, arg2);
-
-    // 5. Restore original bank state
-    *HW_BANK_REG = old_bank;
-
-    // 6. Re-synchronize
-    __asm volatile("dsb" : : : "memory");
-    __asm volatile("isb" : : : "memory");
-
-    // 7. Restore interrupt state
-    __set_PRIMASK(pri);
-
-    return result;
-}
-
-// --- Wrappers using the trampoline ---
-extern uint32_t __real_paged_function_1(uint32_t, uint32_t);
-uint32_t __wrap_paged_function_1(uint32_t a, uint32_t b) {
-    return trampoline(1, __real_paged_function_1, a, b);
-}
-
-extern uint32_t __real_paged_function_2(uint32_t, uint32_t);
-uint32_t __wrap_paged_function_2(uint32_t a, uint32_t b) {
-    return trampoline(2, __real_paged_function_2, a, b);
-}
-
-// Declare the paged functions (will be wrapped by the linker)
+// Declare the paged functions
 uint32_t paged_function_1(uint32_t a, uint32_t b);
 uint32_t paged_function_2(uint32_t a, uint32_t b);
 
@@ -100,15 +58,15 @@ int main(void) {
         const char *led_msg = (REG_GPIO_DATAOUT & 1) ? "LED ON\r\n" : "LED OFF\r\n";
         uart_print(led_msg);
 
-        // Call paged functions
+        // Call paged functions (now automatically mapped)
         uint32_t res1 = paged_function_1(0x10, 0x20);
         uint32_t res2 = paged_function_2(0x30, 0x40);
 
-        uart_print("Res 1 (Bank 1): 0x");
+        uart_print("Res 1: 0x");
         print_hex(res1);
         uart_print("\r\n");
 
-        uart_print("Res 2 (Bank 2): 0x");
+        uart_print("Res 2: 0x");
         print_hex(res2);
         uart_print("\r\n");
 
