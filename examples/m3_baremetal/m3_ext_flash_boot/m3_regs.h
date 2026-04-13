@@ -17,6 +17,13 @@
 #define REG_GPIO_INTPOLCLR  (*(volatile uint32_t *)(GPIO_BASE + 0x34))
 #define REG_GPIO_INTSTATUS  (*(volatile uint32_t *)(GPIO_BASE + 0x38))
 
+// --- UART0 (CMSDK) ---
+#define UART0_BASE          (0x40004000)
+#define REG_UART0_DATA      (*(volatile uint32_t *)(UART0_BASE + 0x00))
+#define REG_UART0_STATE     (*(volatile uint32_t *)(UART0_BASE + 0x04))
+#define REG_UART0_CTRL      (*(volatile uint32_t *)(UART0_BASE + 0x08))
+#define REG_UART0_BAUDDIV   (*(volatile uint32_t *)(UART0_BASE + 0x10))
+
 // --- NVIC ---
 #define NVIC_ISER0          (*(volatile uint32_t *)(0xE000E100))
 #define NVIC_ICER0          (*(volatile uint32_t *)(0xE000E180))

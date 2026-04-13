@@ -1,0 +1,28 @@
+# ext_flash_boot.resc
+
+using sysbus
+mach create "tang_nano_4k"
+
+# Paths are relative to CWD if not prefixed with @, or relative to this script if prefixed with @
+# We use variables passed from the Robot file for maximum flexibility
+$repl?=@../../../../test/tang_nano_4k.repl
+$bin?=@../firmware.elf
+
+machine LoadPlatformDescription $repl
+
+# Set CPU performance to match 27MHz hardware for accurate SysTick timing
+sysbus.cpu PerformanceInMips 27
+
+macro reset
+"""
+    # Load the ELF file. Renode will place segments in INT_FLASH (0x0) and EXT_FLASH (0x60000000)
+    # based on the VMA/LMA in the ELF file.
+    sysbus LoadELF $bin
+
+    # Set PC and SP from the vector table at 0x0 (Internal Flash)
+    sysbus.cpu VectorTableOffset 0x00000000
+    sysbus.cpu SP `sysbus ReadDoubleWord 0x00000000`
+    sysbus.cpu PC `sysbus ReadDoubleWord 0x00000004`
+"""
+
+runMacro $reset
