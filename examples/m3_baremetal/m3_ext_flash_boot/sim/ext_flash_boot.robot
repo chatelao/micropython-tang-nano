@@ -5,10 +5,12 @@ Resource        ${RENODEKEYWORDS}
 
 *** Variables ***
 ${RESC}         ${CURDIR}/ext_flash_boot.resc
+${BIN}          ${CURDIR}/../firmware.elf
 
 *** Test Cases ***
 Verify External Flash Boot
     [Documentation]    Verifies the external flash boot example by checking LED toggling.
+    Execute Command         $bin = @${BIN}
     Execute Command         include @${RESC}
 
     # Configure GPIO0 (LED) to log its state changes
