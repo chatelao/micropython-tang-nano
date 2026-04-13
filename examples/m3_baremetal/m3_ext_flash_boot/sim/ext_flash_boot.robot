@@ -18,6 +18,13 @@ Verify External Flash Boot
 
     # Check for UART output indicating code execution
     Wait For Line On Uart   LED ON
+    Wait For Line On Uart   Res 1 (Bank 1): 0x00001141
+    Wait For Line On Uart   Res 2 (Bank 2): 0x00001181
+
     Wait For Line On Uart   LED OFF
+    Wait For Line On Uart   Res 1 (Bank 1): 0x00001141
+    Wait For Line On Uart   Res 2 (Bank 2): 0x00001181
+
     Wait For Line On Uart   LED ON
-    Wait For Line On Uart   LED OFF
+    Wait For Line On Uart   Res 1 (Bank 1): 0x00001141
+    Wait For Line On Uart   Res 2 (Bank 2): 0x00001181

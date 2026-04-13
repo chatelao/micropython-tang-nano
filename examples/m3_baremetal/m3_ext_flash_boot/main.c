@@ -97,6 +97,8 @@ int main(void) {
     while (1) {
         // Toggle LED
         REG_GPIO_DATAOUT ^= (1 << 0);
+        const char *led_msg = (REG_GPIO_DATAOUT & 1) ? "LED ON\r\n" : "LED OFF\r\n";
+        uart_print(led_msg);
 
         // Call paged functions
         uint32_t res1 = paged_function_1(0x10, 0x20);
