@@ -1,0 +1,20 @@
+
+(Renode:475755): Gdk-CRITICAL **: 16:03:51.092: gdk_keymap_get_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+16:03:51.1045 [WARNING] Couldn't start UI - falling back to console mode
+16:03:51.8641 [INFO] Loaded monitor commands from: /opt/renode/scripts/monitor.py
+[0mRenode, version 1.16.1 (d66b0c2a-202602160923)
+
+[31;1m(monitor) [0mi $CWD/test_paging.resc
+16:03:52.1355 [INFO] Including script(s): /app/examples/m3_baremetal/m3_ext_flash_boot/sim/test_paging.resc
+16:03:52.1709 [INFO] System bus created.
+0x0000000000400000
+16:03:54.2380 [INFO] sysbus: Loading block of 176 bytes length at 0x0.
+16:03:54.2548 [INFO] sysbus: Loading block of 2048 bytes length at 0x20000000.
+16:03:54.2549 [INFO] sysbus: Loading block of 920 bytes length at 0x60000000.
+16:03:54.2553 [INFO] sysbus: Loading block of 32 bytes length at 0x60400000.
+16:03:54.2575 [WARNING] sysbus: Tried to access bytes at non-existing peripheral in range <0x60400000, 0x6040001F>.
+16:03:54.5065 [INFO] tang_nano_4k: Machine started.
+16:03:54.5665 [INFO] uart0: [host: 0.23s (+0.23s)|virt: 0s (+0s)] M3 External Flash Paging Demo
+16:03:54.5699 [INFO] uart0: [host: 0.23s (+3.69ms)|virt: 0s (+0s)] LED ON
+16:03:54.5742 [WARNING] sysbus: [cpu: 0x60400000] ReadByte from non existing peripheral at 0x60400000.
+16:03:54.5772 [ERROR] cpu: CPU abort [PC=0x60400000]: Trying to execute code outside RAM or ROM at 0x60400000.//usr/bin/renode: line 11: 475755 Killed                  $LAUNCHER /opt/renode/bin/Renode.dll "$@"

@@ -25,7 +25,7 @@ int_blink.bin: firmware.elf
 	$(OBJCOPY) -O binary -j .isr_vector $< $@
 
 ext_blink.bin: firmware.elf
-	$(OBJCOPY) -O binary -j .text -j .page_1 -j .page_2 -j .ARM.exidx -j .data $< $@
+	$(OBJCOPY) -O binary -j .text -j .far_code -j .ARM.exidx -j .data $< $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

@@ -29,23 +29,19 @@ SECTIONS
         *(.text.main)
         *(.text.delay)
         *(.text.uart_print)
-        *(.text*)
+        *(EXCLUDE_FILE (*paged_code.o) .text*)
         *(.rodata*)
         . = ALIGN(4);
     } > MAIN_FLASH
 
-    /* Linear placement of large code sections in external flash */
-    .page_1 0x60100000 :
+    /*
+     * Automatic mapping test: place the paged_code object
+     * at a high memory address (4MB offset)
+     */
+    .far_code 0x60400000 :
     {
         . = ALIGN(4);
-        *(.page_1_code)
-        . = ALIGN(4);
-    } > EXT_FLASH
-
-    .page_2 0x60200000 :
-    {
-        . = ALIGN(4);
-        *(.page_2_code)
+        *paged_code.o(.text*)
         . = ALIGN(4);
     } > EXT_FLASH
 
