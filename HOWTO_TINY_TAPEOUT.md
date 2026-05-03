@@ -129,4 +129,4 @@ Ensure your Gowin Floor Planner (CST) matches these pins:
 
 ### Firmware Architecture (Split Flash)
 - `firmware_int.bin`: Bootloader/Vectors (Internal Flash at `0x0`).
-- `firmware_ext.bin`: MicroPython Runtime (External SPI Flash at `0x60000000`).
+- `firmware_ext.bin`: MicroPython Runtime (External SPI Flash at `0xA0000000`).

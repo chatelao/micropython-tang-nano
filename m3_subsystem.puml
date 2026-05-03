@@ -10,8 +10,8 @@ Container_Boundary(soc, "GW1NSR-4C SoC") {
 
     Boundary(fabric, "FPGA Fabric") {
         Component(apb_slots, "APB2 Slots (0x40002400)", "Register-mapped", "Slot 1-12")
-        Component(psram_ctrl, "PSRAM Controller", "AHB (0xA0000000)", "W955D8MBYA (8MB)")
-        Component(flash_ctrl, "SPI Flash Interface", "AHB (0x60000000)", "XIP (4MB)")
+        Component(psram_ctrl, "PSRAM Controller", "AHB (0x60000000)", "W955D8MBYA (8MB)")
+        Component(flash_ctrl, "SPI Flash Interface", "AHB (0xA0000000)", "XIP (4MB)")
 
         Rel(m3, apb_slots, "APB2 Expansion")
         Rel(m3, psram_ctrl, "AHB Expansion")

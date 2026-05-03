@@ -5,10 +5,10 @@
 #include "extmod/vfs.h"
 #include "flash.h"
 
-// For simulation, we use the external flash mapped at 0x60000000.
+// For simulation, we use the external flash mapped at 0xA0000000.
 // To avoid corrupting any potential firmware, we start at a 1MB offset.
 // In SPLIT_FLASH mode, we use the first 256KB for code, so we can start the FS at 256KB.
-#define FLASH_BASE_ADDR      (0x60000000)
+#define FLASH_BASE_ADDR      (0xA0000000)
 #ifdef SPLIT_FLASH
 #define FS_OFFSET            (0x40000)  // 256KB offset
 #else

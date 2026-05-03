@@ -45,8 +45,8 @@ For a comprehensive overview of the port, including hardware details, installati
 | **M3 Int. Boot-Flash**  |   32 KB* | `0x00000000` | `firmware_int.bin` | Vector Table & Reset Handler                 |
 | **M3 Internal SRAM**    |   22 KB  | `0x20000000` | -                  | Stack (2KB) & Fast Heap (~18KB)              |
 | **M3 APB2 Devices** |   16 B   | `0x40002400` | -                  | TT Wrapper, Slot (1/12): TT Control and Data |
-| **M3 Ext. Run-Flash**   |    4 MB  | `0x60000000` | `firmware_ext.bin` | SPI Flash Access (XIP) & VFS                 |
-| **M3 Ext. PSRAM**       |    8 MB  | `0xA0000000` | -                  | Primary Heap (External PSRAM)                |
+| **M3 Ext. Run-Flash**   |    4 MB  | `0xA0000000` | `firmware_ext.bin` | SPI Flash Access (XIP) & VFS                 |
+| **M3 Ext. PSRAM**       |    8 MB  | `0x60000000` | -                  | Primary Heap (External PSRAM)                |
 
 *\* Note: Internal Flash address space is 128 KB, but physical hardware on Tang Nano 4K is limited to 32 KB.*
 
@@ -142,8 +142,8 @@ Setting up the SoC subsystem on the Tang Nano 4K requires specific IP core confi
 | :--- | :--- |
 | **Cortex-M3 (Gowin_EMPU_M3)** | Enable APB and AHB expansion to allow the M3 to communicate with logic and memory in the FPGA fabric |
 | **APB2 Expansion** | Each slot (256 bytes) is mapped starting at `0x40002400` |
-| **External PSRAM** | Requires the `PSRAM Memory Interface` IP (Model: W955D8MBYA) mapped to `0xA0000000` |
-| **External SPI Flash (XIP)** | Requires the `SPI Flash Interface` IP mapped to `0x60000000` |
+| **External PSRAM** | Requires the `PSRAM Memory Interface` IP (Model: W955D8MBYA) mapped to `0x60000000` |
+| **External SPI Flash (XIP)** | Requires the `SPI Flash Interface` IP mapped to `0xA0000000` |
 
 For step-by-step instructions and pin constraints, see the **[M3-FPGA Integration Guide](M3_FPGA_INTEGRATIONS.md#3-apb2-expansion-slots)**.
 
@@ -154,7 +154,7 @@ For step-by-step instructions and pin constraints, see the **[M3-FPGA Integratio
 | 1 | **Build** | Compile firmware with `SPLIT_FLASH=1` |
 | 2 | **Flash FPGA Bitstream** | Flash the `.fs` file containing the SPI Flash Interface IP |
 | 3 | **Flash Internal Flash** | Access Mode: `MCU Mode`<br>Operation: `Flash Erase, Program, Verify`<br>File: `build/firmware_int.bin` |
-| 4 | **Flash External Flash** | Access Mode: `External Flash Mode`<br>Operation: `exFlash Erase, Program, Verify`<br>File: `build/firmware_ext.bin`<br>Address: `0x000000` (Mapped to `0x60000000`) |
+| 4 | **Flash External Flash** | Access Mode: `External Flash Mode`<br>Operation: `exFlash Erase, Program, Verify`<br>File: `build/firmware_ext.bin`<br>Address: `0x000000` (Mapped to `0xA0000000`) |
 
 For more details on M3-FPGA integration, see [M3_FPGA_INTEGRATIONS.md](M3_FPGA_INTEGRATIONS.md).
 

@@ -11,8 +11,8 @@ module psram_memory (
     output wire        hready
 );
 
-    // AHB Address Decoding (PSRAM: 0xA0000000)
-    wire ahb_hsel_psram = (haddr[31:28] == 4'hA);
+    // AHB Address Decoding (PSRAM: 0x60000000)
+    wire ahb_hsel_psram = (haddr[31:28] == 4'h6);
 
     wire [31:0] psram_rdata;
     wire        psram_ready;

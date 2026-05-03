@@ -31,8 +31,8 @@
 // --- Memory Regions ---
 #define SRAM_BASE           (0x20000000)
 #define SRAM_SIZE           (22 * 1024)
-#define PSRAM_BASE          (0xA0000000)
+#define PSRAM_BASE          (0x60000000)
 #define PSRAM_SIZE          (8 * 1024 * 1024)
-#define EXT_FLASH_BASE      (0x60000000)
+#define EXT_FLASH_BASE      (0xA0000000)
 
 #endif // M3_REGS_H
